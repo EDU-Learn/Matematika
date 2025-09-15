@@ -510,6 +510,23 @@
             position: relative;
         }
 
+        #connectionSvg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .matched-green { background-color: #dcfce7 !important; border-color: #10b981 !important; }
+        .matched-blue { background-color: #dbeafe !important; border-color: #3b82f6 !important; }
+        .matched-orange { background-color: #fed7aa !important; border-color: #f97316 !important; }
+        .matched-purple { background-color: #e9d5ff !important; border-color: #8b5cf6 !important; }
+        .matched-pink { background-color: #fce7f3 !important; border-color: #ec4899 !important; }
+        .matched-red { background-color: #fef2f2 !important; border-color: #ef4444 !important; }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -1051,29 +1068,57 @@
 
         function drag(ev) {
             draggedElement = ev.target;
+            ev.dataTransfer.effectAllowed = 'move';
         }
 
         function allowDrop(ev) {
             ev.preventDefault();
-            ev.target.classList.add('drag-over');
+            ev.dataTransfer.dropEffect = 'move';
+            if (ev.target.classList.contains('drop-zone')) {
+                ev.target.classList.add('drag-over');
+            }
         }
 
         function drop(ev) {
             ev.preventDefault();
-            ev.target.classList.remove('drag-over');
+            const dropZone = ev.target.classList.contains('drop-zone') ? ev.target : ev.target.closest('.drop-zone');
             
-            if (draggedElement && ev.target.classList.contains('drop-zone')) {
-                const clone = draggedElement.cloneNode(true);
-                clone.ondragstart = null;
-                clone.draggable = false;
-                clone.style.cursor = 'default';
+            if (dropZone) {
+                dropZone.classList.remove('drag-over');
                 
-                if (ev.target.querySelector('p')) {
-                    ev.target.innerHTML = '';
+                if (draggedElement) {
+                    const clone = draggedElement.cloneNode(true);
+                    clone.draggable = false;
+                    clone.style.cursor = 'default';
+                    clone.onclick = function() { removeFromDropZone(this); };
+                    
+                    if (dropZone.querySelector('p')) {
+                        dropZone.innerHTML = '';
+                    }
+                    
+                    dropZone.appendChild(clone);
+                    draggedElement.style.opacity = '0.3';
+                    draggedElement.style.pointerEvents = 'none';
                 }
-                
-                ev.target.appendChild(clone);
-                draggedElement.style.display = 'none';
+            }
+        }
+
+        function removeFromDropZone(element) {
+            const number = element.textContent;
+            element.remove();
+            
+            // Show the original draggable element again
+            document.querySelectorAll('.draggable-number').forEach(el => {
+                if (el.textContent === number) {
+                    el.style.opacity = '1';
+                    el.style.pointerEvents = 'auto';
+                }
+            });
+            
+            // If drop zone is empty, show placeholder
+            const dropZone = document.getElementById('sortingDropZone');
+            if (dropZone.children.length === 0) {
+                dropZone.innerHTML = '<p>Seret angka ke sini untuk mengurutkan</p>';
             }
         }
 
@@ -1525,14 +1570,32 @@
         function generateMatchingQuestion() {
             const operations = [];
             const results = [];
+            const usedResults = new Set();
             
             for (let i = 0; i < 4; i++) {
-                const num1 = randomInt(-10, 10);
-                const num2 = randomInt(-10, 10);
-                const op = Math.random() > 0.5 ? '+' : '-';
-                const result = op === '+' ? num1 + num2 : num1 - num2;
+                let num1, num2, op, result, expression;
+                let attempts = 0;
                 
-                const expression = op === '+' ? 
+                // Keep generating until we get a unique result
+                do {
+                    num1 = randomInt(-10, 10);
+                    num2 = randomInt(-10, 10);
+                    op = Math.random() > 0.5 ? '+' : '-';
+                    result = op === '+' ? num1 + num2 : num1 - num2;
+                    attempts++;
+                    
+                    // If too many attempts, adjust the range to ensure uniqueness
+                    if (attempts > 20) {
+                        num1 = randomInt(-15, 15);
+                        num2 = randomInt(-15, 15);
+                        result = op === '+' ? num1 + num2 : num1 - num2;
+                    }
+                } while (usedResults.has(result) && attempts < 50);
+                
+                // Add result to used set
+                usedResults.add(result);
+                
+                expression = op === '+' ? 
                     (num2 >= 0 ? `${num1} + ${num2}` : `${num1} + (${num2})`) :
                     (num2 >= 0 ? `${num1} - ${num2}` : `${num1} - (${num2})`);
                 
@@ -1552,12 +1615,13 @@
             
             const matchingArea = document.getElementById('matchingArea');
             matchingArea.innerHTML = `
-                <div class="matching-area" style="position: relative;">
+                <div class="matching-area" id="matchingContainer" style="position: relative;">
+                    <svg id="connectionSvg" width="100%" height="100%"></svg>
                     <div class="matching-container">
                         <div>
                             <h4>Operasi:</h4>
                             ${operations.map((op, i) => `
-                                <div class="matching-item operation" data-id="${op.id}" data-result="${op.result}" onclick="selectOperation(${op.id}, '${op.expression}', ${op.result})">
+                                <div class="matching-item operation" data-type="left" data-id="${op.id}" data-result="${op.result}" data-color="${['green', 'blue', 'orange', 'purple'][i]}">
                                     ${op.expression}
                                 </div>
                             `).join('')}
@@ -1565,7 +1629,7 @@
                         <div>
                             <h4>Hasil:</h4>
                             ${currentQuestion.shuffledResults.map((result, i) => `
-                                <div class="matching-item result" data-id="${result.id}" data-value="${result.value}" onclick="selectResult(${result.id}, ${result.value})">
+                                <div class="matching-item result" data-type="right" data-id="${result.id}" data-value="${result.value}">
                                     ${result.value}
                                 </div>
                             `).join('')}
@@ -1577,96 +1641,110 @@
             hideResults('matching');
         }
 
-        function selectOperation(id, expression, result) {
-            // Remove previous selection
-            document.querySelectorAll('.matching-item.operation').forEach(item => {
-                item.classList.remove('selected');
-            });
-            
-            // Select current operation
-            event.target.classList.add('selected');
-            selectedOperations = [{id, expression, result}];
-            
-            // Check if we can make a connection
-            if (selectedResults.length > 0) {
-                const selectedResult = selectedResults[0];
-                const isCorrect = result === selectedResult.value;
-                const resultElement = document.querySelector(`[data-id="${selectedResult.id}"][data-value="${selectedResult.value}"]`);
-                
-                makeConnection(event.target, resultElement, isCorrect);
-                connections.push({operationId: id, resultId: selectedResult.id, correct: isCorrect});
-                
-                // Clear selections
-                selectedOperations = [];
-                selectedResults = [];
-                document.querySelectorAll('.matching-item').forEach(item => {
-                    item.classList.remove('selected');
-                });
+        let selectedLeft = null;
+        let selectedRight = null;
+        let matches = {};
+
+        function drawConnection(leftElement, rightElement, color) {
+            const svg = document.getElementById('connectionSvg');
+            const container = document.getElementById('matchingContainer');
+            const containerRect = container.getBoundingClientRect();
+            const leftRect = leftElement.getBoundingClientRect();
+            const rightRect = rightElement.getBoundingClientRect();
+
+            const x1 = leftRect.right - containerRect.left;
+            const y1 = leftRect.top + leftRect.height / 2 - containerRect.top;
+            const x2 = rightRect.left - containerRect.left;
+            const y2 = rightRect.top + rightRect.height / 2 - containerRect.top;
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+            line.setAttribute('stroke', getColorHex(color));
+            line.setAttribute('stroke-width', '3');
+            line.setAttribute('data-connection', `${leftElement.getAttribute('data-id')}-${rightElement.getAttribute('data-id')}`);
+            svg.appendChild(line);
+        }
+
+        function getColorHex(color) {
+            const colors = {
+                'green': '#10b981',
+                'blue': '#3b82f6',
+                'orange': '#f97316',
+                'purple': '#8b5cf6',
+                'pink': '#ec4899',
+                'red': '#ef4444',
+                'yellow': '#eab308',
+                'indigo': '#6366f1',
+                'teal': '#14b8a6',
+                'cyan': '#06b6d4'
+            };
+            return colors[color] || '#3b82f6';
+        }
+
+        function clearConnections() {
+            const svg = document.getElementById('connectionSvg');
+            if (svg) {
+                svg.innerHTML = '';
             }
         }
 
-        function selectResult(id, value) {
-            // Remove previous selection
-            document.querySelectorAll('.matching-item.result').forEach(item => {
-                item.classList.remove('selected');
-            });
-            
-            // Select current result
-            event.target.classList.add('selected');
-            selectedResults = [{id, value}];
-            
-            // Check if we can make a connection
-            if (selectedOperations.length > 0) {
-                const selectedOperation = selectedOperations[0];
-                const isCorrect = selectedOperation.result === value;
-                const operationElement = document.querySelector(`[data-id="${selectedOperation.id}"][data-result="${selectedOperation.result}"]`);
+        // Add event listener for matching items
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('matching-item')) {
+                const type = e.target.getAttribute('data-type');
+                const id = e.target.getAttribute('data-id');
                 
-                makeConnection(operationElement, event.target, isCorrect);
-                connections.push({operationId: selectedOperation.id, resultId: id, correct: isCorrect});
+                if (type === 'left') {
+                    if (selectedLeft) {
+                        selectedLeft.classList.remove('selected');
+                    }
+                    selectedLeft = e.target;
+                    e.target.classList.add('selected');
+                } else if (type === 'right') {
+                    if (selectedRight) {
+                        selectedRight.classList.remove('selected');
+                    }
+                    selectedRight = e.target;
+                    e.target.classList.add('selected');
+                }
                 
-                // Clear selections
-                selectedOperations = [];
-                selectedResults = [];
-                document.querySelectorAll('.matching-item').forEach(item => {
-                    item.classList.remove('selected');
-                });
+                if (selectedLeft && selectedRight) {
+                    const leftId = selectedLeft.getAttribute('data-id');
+                    const rightId = selectedRight.getAttribute('data-id');
+                    const color = selectedLeft.getAttribute('data-color');
+                    
+                    matches[leftId] = rightId;
+                    
+                    selectedLeft.classList.remove('selected');
+                    selectedRight.classList.remove('selected');
+                    selectedLeft.classList.add(`matched-${color}`);
+                    selectedRight.classList.add(`matched-${color}`);
+                    
+                    drawConnection(selectedLeft, selectedRight, color);
+                    
+                    selectedLeft = null;
+                    selectedRight = null;
+                }
             }
-        }
-
-        function makeConnection(operationElement, resultElement, isCorrect = true) {
-            const matchingArea = document.querySelector('.matching-area');
-            const line = document.createElement('div');
-            line.className = `connection-line ${isCorrect ? 'correct' : 'incorrect'}`;
-            
-            const opRect = operationElement.getBoundingClientRect();
-            const resRect = resultElement.getBoundingClientRect();
-            const areaRect = matchingArea.getBoundingClientRect();
-            
-            // Connect from the dot on the right of operation to the dot on the left of result
-            const startX = opRect.right - areaRect.left;
-            const startY = opRect.top + opRect.height/2 - areaRect.top;
-            const endX = resRect.left - areaRect.left;
-            const endY = resRect.top + resRect.height/2 - areaRect.top;
-            
-            const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
-            const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
-            
-            line.style.left = startX + 'px';
-            line.style.top = startY + 'px';
-            line.style.width = length + 'px';
-            line.style.transform = `rotate(${angle}deg)`;
-            
-            matchingArea.appendChild(line);
-            return line;
-        }
+        });
 
         function checkMatchingAnswer() {
-            if (connections.length !== 4) {
+            if (Object.keys(matches).length !== 4) {
                 alert('Silakan cocokkan semua operasi dengan hasilnya terlebih dahulu!');
                 return;
             }
             
-            const correctConnections = connections.filter(conn => conn.correct).length;
+            let correctConnections = 0;
+            currentQuestion.operations.forEach(op => {
+                const matchedResultId = matches[op.id];
+                if (matchedResultId && matchedResultId == op.id) {
+                    correctConnections++;
+                }
+            });
+            
             const isCorrect = correctConnections === 4;
             
             showResult('matching', isCorrect,
@@ -1705,74 +1783,52 @@
             }
             
             let num1, num2, num3, op1, op2, step1, finalResult;
-            let attempts = 0;
             
-            // Keep generating until we get whole number results
-            do {
+            // Generate simpler operations that guarantee whole numbers
+            op1 = availableOps[randomInt(0, availableOps.length - 1)];
+            op2 = availableOps[randomInt(0, availableOps.length - 1)];
+            
+            // Generate numbers based on operations
+            if (op1 === '÷') {
+                // For division, ensure dividend is divisible by divisor
+                const divisors = [2, 3, 4, 5];
+                num2 = divisors[randomInt(0, divisors.length - 1)];
+                const quotient = randomInt(2, 8);
+                num1 = quotient * num2;
+                step1 = quotient;
+            } else if (op1 === '×') {
+                num1 = randomInt(-5, 5);
+                num2 = randomInt(-5, 5);
+                if (num1 === 0) num1 = 1;
+                if (num2 === 0) num2 = 1;
+                step1 = num1 * num2;
+            } else {
                 num1 = randomInt(-10, 10);
                 num2 = randomInt(-10, 10);
+                step1 = op1 === '+' ? num1 + num2 : num1 - num2;
+            }
+            
+            // Generate third number based on second operation
+            if (op2 === '÷') {
+                const divisors = [2, 3, 4, 5];
+                num3 = divisors[randomInt(0, divisors.length - 1)];
+                // Adjust step1 to be divisible by num3
+                step1 = Math.round(step1 / num3) * num3;
+                finalResult = step1 / num3;
+            } else if (op2 === '×') {
+                num3 = randomInt(-5, 5);
+                if (num3 === 0) num3 = 2;
+                finalResult = step1 * num3;
+            } else {
                 num3 = randomInt(-10, 10);
-                
-                op1 = availableOps[randomInt(0, availableOps.length - 1)];
-                op2 = availableOps[randomInt(0, availableOps.length - 1)];
-                
-                // Special handling for division to ensure whole numbers
-                if (op1 === '÷') {
-                    const divisors = [-5, -4, -3, -2, 2, 3, 4, 5];
-                    num2 = divisors[randomInt(0, divisors.length - 1)];
-                    const multiplier = randomInt(-8, 8);
-                    if (multiplier !== 0) {
-                        num1 = multiplier * num2;
-                    } else {
-                        num1 = num2; // This will result in 1
-                    }
-                }
-                
-                // Avoid zero for multiplication and division
-                if ((op1 === '×' || op1 === '÷') && num2 === 0) num2 = randomInt(1, 5);
-                if ((op2 === '×' || op2 === '÷') && num3 === 0) num3 = randomInt(1, 5);
-                
-                // Calculate step 1
-                switch(op1) {
-                    case '+': step1 = num1 + num2; break;
-                    case '-': step1 = num1 - num2; break;
-                    case '×': step1 = num1 * num2; break;
-                    case '÷': step1 = num1 / num2; break;
-                }
-                
-                // Special handling for second division
-                if (op2 === '÷') {
-                    const divisors = [-5, -4, -3, -2, 2, 3, 4, 5];
-                    num3 = divisors[randomInt(0, divisors.length - 1)];
-                    // Ensure step1 is divisible by num3
-                    if (step1 % num3 !== 0) {
-                        step1 = Math.round(step1 / num3) * num3;
-                    }
-                }
-                
-                // Calculate final result
-                switch(op2) {
-                    case '+': finalResult = step1 + num3; break;
-                    case '-': finalResult = step1 - num3; break;
-                    case '×': finalResult = step1 * num3; break;
-                    case '÷': finalResult = step1 / num3; break;
-                }
-                
-                attempts++;
-            } while ((finalResult !== Math.floor(finalResult) || step1 !== Math.floor(step1)) && attempts < 20);
-            
-            // If still not whole numbers after 20 attempts, force whole numbers
-            if (finalResult !== Math.floor(finalResult)) {
-                finalResult = Math.floor(finalResult);
-            }
-            if (step1 !== Math.floor(step1)) {
-                step1 = Math.floor(step1);
+                finalResult = op2 === '+' ? step1 + num3 : step1 - num3;
             }
             
-            let expression = `${num1} ${op1} `;
-            expression += (num2 >= 0 && op1 !== '×' && op1 !== '÷') ? `${num2}` : `(${num2})`;
-            expression += ` ${op2} `;
-            expression += (num3 >= 0 && op2 !== '×' && op2 !== '÷') ? `${num3}` : `(${num3})`;
+            // Ensure all results are integers
+            step1 = Math.round(step1);
+            finalResult = Math.round(finalResult);
+            
+            let expression = `${num1} ${op1} ${num2} ${op2} ${num3}`;
             
             currentQuestion = {
                 num1, num2, num3, op1, op2,
@@ -2122,7 +2178,8 @@
         function resetSortingAnswer() {
             document.getElementById('sortingDropZone').innerHTML = '<p>Seret angka ke sini untuk mengurutkan</p>';
             document.querySelectorAll('.draggable-number').forEach(el => {
-                el.style.display = 'block';
+                el.style.opacity = '1';
+                el.style.pointerEvents = 'auto';
             });
             hideResults('sorting');
         }
@@ -2159,15 +2216,15 @@
         }
 
         function resetMatchingAnswer() {
-            selectedOperations = [];
-            selectedResults = [];
-            connections = [];
-            document.querySelectorAll('.matching-item').forEach(item => {
-                item.classList.remove('selected');
+            matches = {};
+            selectedLeft = null;
+            selectedRight = null;
+            
+            const matchingItems = document.querySelectorAll('.matching-item');
+            matchingItems.forEach(item => {
+                item.classList.remove('selected', 'matched-green', 'matched-blue', 'matched-orange', 'matched-purple', 'matched-pink', 'matched-red', 'matched-yellow', 'matched-indigo', 'matched-teal', 'matched-cyan');
             });
-            document.querySelectorAll('.connection-line').forEach(line => {
-                line.remove();
-            });
+            clearConnections();
             hideResults('matching');
         }
 
