@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembelajaran Fungsi Invers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        .fraction {
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            margin: 0 2px;
+        }
+        .fraction-top {
+            border-bottom: 2px solid #000;
+            padding: 2px 5px;
+            min-width: 20px;
+        }
+        .fraction-bottom {
+            padding: 2px 5px;
+            min-width: 20px;
+        }
+        .contenteditable {
+            outline: none;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 2px;
+        }
+        .contenteditable:focus {
+            background: rgba(59, 130, 246, 0.2);
+        }
+        .math-keyboard {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .keyboard-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            justify-content: center;
+        }
+        .keyboard-btn {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Times New Roman', serif;
+            font-size: 16px;
+            min-width: 40px;
+            text-align: center;
+        }
+        .keyboard-btn:hover {
+            background: #e5e7eb;
+            transform: translateY(-1px);
+        }
+        .keyboard-btn:active {
+            transform: translateY(0);
+            background: #d1d5db;
+        }
+        .keyboard-btn.wide {
+            min-width: 80px;
+        }
+        .keyboard-btn.fraction-btn {
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+        .keyboard-btn.fraction-btn:hover {
+            background: #bfdbfe;
+        }
+        .input-with-keyboard {
+            position: relative;
+        }
+        .keyboard-toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .keyboard-toggle:hover {
+            background: #4f46e5;
+        }
+        .math-input {
+            min-height: 40px;
+            padding: 8px 40px 8px 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            font-family: 'Times New Roman', serif;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .math-input:focus {
+            border-color: #3b82f6;
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">Pembelajaran Fungsi Invers</h1>
+            <p class="text-lg text-gray-600">Memvalidasi Dua Fungsi Merupakan Saling Invers</p>
+        </div>
+
+        <!-- Materi -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-indigo-700 mb-4">📚 Materi Pembelajaran</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-800 mb-2">Definisi Fungsi Invers</h3>
+                    <p class="text-gray-700">Dua fungsi $f(x)$ dan $g(x)$ dikatakan saling invers jika dan hanya jika:</p>
+                    <div class="mt-2 text-center">
+                        <p class="font-mono bg-white p-2 rounded">$f(g(x)) = x$ dan $g(f(x)) = x$</p>
+                    </div>
+                </div>
+
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-green-800 mb-2">Langkah-langkah Validasi</h3>
+                    <ol class="list-decimal list-inside space-y-1 text-gray-700">
+                        <li>Hitung komposisi $f(g(x))$</li>
+                        <li>Sederhanakan hasil hingga bentuk paling sederhana</li>
+                        <li>Periksa apakah hasilnya sama dengan $x$</li>
+                        <li>Hitung komposisi $g(f(x))$</li>
+                        <li>Sederhanakan hasil hingga bentuk paling sederhana</li>
+                        <li>Periksa apakah hasilnya sama dengan $x$</li>
+                        <li>Jika kedua komposisi menghasilkan $x$, maka fungsi tersebut saling invers</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pilihan Tipe Soal -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-indigo-700 mb-4">🎯 Pilih Tipe Soal</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="setFunctionType('linear')" id="btn-linear" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                    Fungsi Linear
+                </button>
+                <button onclick="setFunctionType('quadratic')" id="btn-quadratic" class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                    Fungsi Kuadrat
+                </button>
+                <button onclick="setFunctionType('rational')" id="btn-rational" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                    Fungsi Pecahan
+                </button>
+            </div>
+        </div>
+
+        <!-- Container untuk Contoh dan Latihan -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Contoh Soal -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-green-700">💡 Contoh Soal</h2>
+                    <button onclick="generateExample()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        Soal Baru
+                    </button>
+                </div>
+                
+                <div id="example-content" class="space-y-4">
+                    <!-- Contoh soal akan dimuat di sini -->
+                </div>
+            </div>
+
+            <!-- Latihan Soal -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-orange-700">✏️ Latihan Soal</h2>
+                    <button onclick="generatePractice()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        Soal Baru
+                    </button>
+                </div>
+                
+                <div id="practice-content" class="space-y-4">
+                    <!-- Latihan soal akan dimuat di sini -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFunctionType = 'linear';
+        let practiceStep = 0;
+        let currentPracticeData = {};
+
+        function setFunctionType(type) {
+            currentFunctionType = type;
+            
+            // Update button styles
+            document.querySelectorAll('[id^="btn-"]').forEach(btn => {
+                btn.className = btn.className.replace('bg-indigo-600', 'bg-gray-400');
+            });
+            
+            const activeBtn = document.getElementById(`btn-${type}`);
+            if (activeBtn) {
+                activeBtn.className = activeBtn.className.replace('bg-gray-400', 'bg-indigo-600');
+            }
+            
+            generateExample();
+            generatePractice();
+        }
+
+        function formatCoefficient(coeff) {
+            if (coeff === 1) return '';
+            if (coeff === -1) return '-';
+            return coeff.toString();
+        }
+
+        function formatTerm(coeff, variable = 'x') {
+            if (coeff === 0) return '';
+            if (coeff === 1) return variable;
+            if (coeff === -1) return `-${variable}`;
+            return `${coeff}${variable}`;
+        }
+
+        function formatConstant(num) {
+            if (num === 0) return '';
+            if (num > 0) return ` + ${num}`;
+            return ` + (${num})`;
+        }
+
+        function generateLinearFunctions() {
+            const a = Math.floor(Math.random() * 5) + 1;
+            let b = Math.floor(Math.random() * 10) - 5;
+            if (b === 0) b = Math.floor(Math.random() * 5) + 1; // Avoid b = 0
+            
+            const aCoeff = formatCoefficient(a);
+            const bTerm = formatConstant(b);
+            const f = `${aCoeff}x${bTerm}`.replace(/^\s*\+\s*/, '');
+            
+            const minusB = -b;
+            const bSubtract = minusB >= 0 ? `x - ${minusB}` : `x + (${b})`;
+            const g = `\\frac{${bSubtract}}{${a}}`;
+            
+            return {
+                f: f,
+                g: g,
+                fLatex: `f(x) = ${f}`,
+                gLatex: `g(x) = ${g}`,
+                isInverse: true,
+                a: a,
+                b: b,
+                steps: {
+                    fg: `f(g(x)) = ${aCoeff} \\cdot \\frac{${bSubtract}}{${a}}${bTerm} = ${bSubtract}${bTerm} = x`,
+                    gf: `g(f(x)) = \\frac{(${f}) + (${-b})}{${a}} = \\frac{${aCoeff}x}{${a}} = x`
+                }
+            };
+        }
+
+        function generateQuadraticFunctions() {
+            const a = Math.floor(Math.random() * 3) + 1;
+            let b = Math.floor(Math.random() * 6) - 3;
+            if (b === 0) b = Math.floor(Math.random() * 5) + 1;
+            
+            const bTerm = formatConstant(b);
+            const f = `x^2${bTerm}`.replace(/^\s*\+\s*/, '');
+            
+            const minusB = -b;
+            const bSubtract = minusB >= 0 ? `x - ${minusB}` : `x + (${b})`;
+            const g = `\\sqrt{${bSubtract}}`;
+            
+            return {
+                f: f,
+                g: g,
+                fLatex: `f(x) = ${f}`,
+                gLatex: `g(x) = ${g}`,
+                isInverse: true,
+                a: a,
+                b: b,
+                steps: {
+                    fg: `f(g(x)) = (\\sqrt{${bSubtract}})^2${bTerm} = (${bSubtract})${bTerm} = x`,
+                    gf: `g(f(x)) = \\sqrt{(${f}) + (${-b})} = \\sqrt{x^2} = x`
+                }
+            };
+        }
+
+        function generateRationalFunctions() {
+            const a = Math.floor(Math.random() * 4) + 1;
+            const b = Math.floor(Math.random() * 6) + 1;
+            
+            const aCoeff = formatCoefficient(a);
+            const numerator = `${aCoeff}x + ${b}`;
+            const f = `\\frac{${numerator}}{x + 1}`;
+            const g = `\\frac{x - ${b}}{${a} - x}`;
+            
+            return {
+                f: f,
+                g: g,
+                fLatex: `f(x) = ${f}`,
+                gLatex: `g(x) = ${g}`,
+                isInverse: true,
+                a: a,
+                b: b,
+                steps: {
+                    fg: `f(g(x)) = \\frac{${aCoeff} \\cdot \\frac{x - ${b}}{${a} - x} + ${b}}{\\frac{x - ${b}}{${a} - x} + 1} = x`,
+                    gf: `g(f(x)) = \\frac{\\frac{${numerator}}{x + 1} - ${b}}{${a} - \\frac{${numerator}}{x + 1}} = x`
+                }
+            };
+        }
+
+        function generateFunctions() {
+            switch(currentFunctionType) {
+                case 'linear':
+                    return generateLinearFunctions();
+                case 'quadratic':
+                    return generateQuadraticFunctions();
+                case 'rational':
+                    return generateRationalFunctions();
+                default:
+                    return generateLinearFunctions();
+            }
+        }
+
+        function generateExample() {
+            const data = generateFunctions();
+            
+            const content = `
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold mb-2">Soal:</h3>
+                    <p>Periksa apakah fungsi berikut saling invers:</p>
+                    <div class="mt-2 space-y-1">
+                        <p>$${data.fLatex}$</p>
+                        <p>$${data.gLatex}$</p>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-800 mb-2">Penyelesaian:</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <p class="font-medium">Langkah 1: Hitung $f(g(x))$</p>
+                            <p class="ml-4">$${data.steps.fg}$</p>
+                        </div>
+                        <div>
+                            <p class="font-medium">Langkah 2: Hitung $g(f(x))$</p>
+                            <p class="ml-4">$${data.steps.gf}$</p>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded">
+                            <p class="font-semibold text-green-800">Kesimpulan:</p>
+                            <p>Karena $f(g(x)) = x$ dan $g(f(x)) = x$, maka kedua fungsi tersebut saling invers.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('example-content').innerHTML = content;
+            MathJax.typesetPromise();
+        }
+
+        function generatePractice() {
+            practiceStep = 0;
+            currentPracticeData = generateFunctions();
+            showPracticeStep();
+        }
+
+        function showPracticeStep() {
+            let content = '';
+            
+            if (practiceStep === 0) {
+                content = `
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold mb-2">Soal:</h3>
+                        <p>Periksa apakah fungsi berikut saling invers:</p>
+                        <div class="mt-2 space-y-1">
+                            <p>$${currentPracticeData.fLatex}$</p>
+                            <p>$${currentPracticeData.gLatex}$</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-yellow-800 mb-2">Langkah 1: Hitung f(g(x))</h3>
+                        <p class="mb-3">Substitusikan $g(x) = ${currentPracticeData.g}$ ke dalam $f(x)$:</p>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">1a. Tulis substitusi awal f(g(x)):</label>
+                                <div class="input-with-keyboard">
+                                    <div id="fg-substitution" class="math-input w-full" contenteditable="true"></div>
+                                    <button type="button" class="keyboard-toggle" onclick="toggleKeyboard('fg-substitution')">⌨️</button>
+                                </div>
+                                <div id="keyboard-fg-substitution" class="math-keyboard mt-2" style="display: none;"></div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">1b. Tulis langkah penyederhanaan:</label>
+                                <div class="input-with-keyboard">
+                                    <div id="fg-simplification" class="math-input w-full" contenteditable="true"></div>
+                                    <button type="button" class="keyboard-toggle" onclick="toggleKeyboard('fg-simplification')">⌨️</button>
+                                </div>
+                                <div id="keyboard-fg-simplification" class="math-keyboard mt-2" style="display: none;"></div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">1c. Tulis hasil akhir:</label>
+                                <div class="input-with-keyboard">
+                                    <div id="fg-final" class="math-input w-full" contenteditable="true"></div>
+                                    <button type="button" class="keyboard-toggle" onclick="toggleKeyboard('fg-final')">⌨️</button>
+                                </div>
+                                <div id="keyboard-fg-final" class="math-keyboard mt-2" style="display: none;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="checkFGAnswer()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">
+                                Periksa Jawaban
+                            </button>
+                            <button onclick="showFGHint()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors">
+                                Bantuan
+                            </button>
+                        </div>
+                        <div id="fg-feedback" class="mt-3"></div>
+                    </div>
+                `;
+            } else if (practiceStep === 1) {
+                content = `
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold mb-2">Soal:</h3>
+                        <p>Periksa apakah fungsi berikut saling invers:</p>
+                        <div class="mt-2 space-y-1">
+                            <p>$${currentPracticeData.fLatex}$</p>
+                            <p>$${currentPracticeData.gLatex}$</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">✓ Langkah 1: f(g(x)) = x</h3>
+                        <p>Bagus! Anda berhasil menghitung f(g(x)) = x</p>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-yellow-800 mb-2">Langkah 2: Hitung g(f(x))</h3>
+                        <p class="mb-3">Substitusikan $f(x) = ${currentPracticeData.f}$ ke dalam $g(x)$:</p>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">2a. Tulis substitusi awal g(f(x)):</label>
+                                <div class="input-with-keyboard">
+                                    <div id="gf-substitution" class="math-input w-full" contenteditable="true"></div>
+                                    <button type="button" class="keyboard-toggle" onclick="toggleKeyboard('gf-substitution')">⌨️</button>
+                                </div>
+                                <div id="keyboard-gf-substitution" class="math-keyboard mt-2" style="display: none;"></div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">2b. Tulis langkah penyederhanaan:</label>
+                                <div class="input-with-keyboard">
+                                    <div id="gf-simplification" class="math-input w-full" contenteditable="true"></div>
+                                    <button type="button" class="keyboard-toggle" onclick="toggleKeyboard('gf-simplification')">⌨️</button>
+                                </div>
+                                <div id="keyboard-gf-simplification" class="math-keyboard mt-2" style="display: none;"></div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">2c. Tulis hasil akhir:</label>
+                                <div class="input-with-keyboard">
+                                    <div id="gf-final" class="math-input w-full" contenteditable="true"></div>
+                                    <button type="button" class="keyboard-toggle" onclick="toggleKeyboard('gf-final')">⌨️</button>
+                                </div>
+                                <div id="keyboard-gf-final" class="math-keyboard mt-2" style="display: none;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="checkGFAnswer()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">
+                                Periksa Jawaban
+                            </button>
+                            <button onclick="showGFHint()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors">
+                                Bantuan
+                            </button>
+                        </div>
+                        <div id="gf-feedback" class="mt-3"></div>
+                    </div>
+                `;
+            } else if (practiceStep === 2) {
+                content = `
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold mb-2">Soal:</h3>
+                        <p>Periksa apakah fungsi berikut saling invers:</p>
+                        <div class="mt-2 space-y-1">
+                            <p>$${currentPracticeData.fLatex}$</p>
+                            <p>$${currentPracticeData.gLatex}$</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">✓ Langkah 1: f(g(x)) = x</h3>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">✓ Langkah 2: g(f(x)) = x</h3>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-yellow-800 mb-2">Langkah 3: Kesimpulan</h3>
+                        <p class="mb-3">Karena f(g(x)) = x dan g(f(x)) = x, apakah kedua fungsi saling invers?</p>
+                        <div class="flex gap-2">
+                            <button onclick="showConclusion(true)" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition-colors">
+                                Ya, Saling Invers
+                            </button>
+                            <button onclick="showConclusion(false)" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition-colors">
+                                Tidak Saling Invers
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('practice-content').innerHTML = content;
+            MathJax.typesetPromise();
+        }
+
+        function checkFGAnswer() {
+            const substitution = document.getElementById('fg-substitution').textContent.trim();
+            const simplification = document.getElementById('fg-simplification').textContent.trim();
+            const final = document.getElementById('fg-final').textContent.trim().toLowerCase();
+            
+            let score = 0;
+            let feedback = [];
+            
+            // Check if all fields are filled
+            if (!substitution || !simplification || !final) {
+                document.getElementById('fg-feedback').innerHTML = `
+                    <div class="bg-yellow-100 text-yellow-800 p-3 rounded">
+                        <p class="font-semibold">⚠️ Lengkapi semua langkah</p>
+                        <p>Mohon isi semua kotak input (substitusi, penyederhanaan, dan hasil akhir).</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Check final answer (most important)
+            if (final === 'x' || final === '= x' || final === 'x ') {
+                score += 3;
+                feedback.push("✓ Hasil akhir benar");
+            } else {
+                feedback.push("✗ Hasil akhir belum tepat (harus = x)");
+            }
+            
+            // Check if substitution contains g(x) elements
+            if (substitution.includes('g(x)') || substitution.includes('f(') || substitution.length > 5) {
+                score += 1;
+                feedback.push("✓ Substitusi terlihat benar");
+            } else {
+                feedback.push("✗ Substitusi perlu diperbaiki");
+            }
+            
+            // Check if simplification shows work
+            if (simplification.includes('=') && simplification.length > 3) {
+                score += 1;
+                feedback.push("✓ Penyederhanaan terlihat baik");
+            } else {
+                feedback.push("✗ Penyederhanaan perlu lebih detail");
+            }
+            
+            if (score >= 4) {
+                document.getElementById('fg-feedback').innerHTML = `
+                    <div class="bg-green-100 text-green-800 p-3 rounded">
+                        <p class="font-semibold">🎉 Excellent!</p>
+                        <p>Semua langkah benar. f(g(x)) = x. Lanjut ke langkah berikutnya!</p>
+                        <ul class="text-sm mt-2">
+                            ${feedback.map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                setTimeout(() => {
+                    practiceStep = 1;
+                    showPracticeStep();
+                }, 2000);
+            } else if (score >= 3) {
+                document.getElementById('fg-feedback').innerHTML = `
+                    <div class="bg-blue-100 text-blue-800 p-3 rounded">
+                        <p class="font-semibold">👍 Bagus!</p>
+                        <p>Hasil akhir benar, tapi coba perbaiki langkah-langkah lainnya.</p>
+                        <ul class="text-sm mt-2">
+                            ${feedback.map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                        <button onclick="practiceStep = 1; showPracticeStep();" class="mt-2 bg-blue-500 text-white px-3 py-1 rounded text-sm">
+                            Lanjut ke Langkah 2
+                        </button>
+                    </div>
+                `;
+            } else {
+                document.getElementById('fg-feedback').innerHTML = `
+                    <div class="bg-red-100 text-red-800 p-3 rounded">
+                        <p class="font-semibold">🤔 Perlu diperbaiki</p>
+                        <p>Beberapa langkah belum tepat. Coba lagi atau klik Bantuan.</p>
+                        <ul class="text-sm mt-2">
+                            ${feedback.map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        function checkGFAnswer() {
+            const substitution = document.getElementById('gf-substitution').textContent.trim();
+            const simplification = document.getElementById('gf-simplification').textContent.trim();
+            const final = document.getElementById('gf-final').textContent.trim().toLowerCase();
+            
+            let score = 0;
+            let feedback = [];
+            
+            // Check if all fields are filled
+            if (!substitution || !simplification || !final) {
+                document.getElementById('gf-feedback').innerHTML = `
+                    <div class="bg-yellow-100 text-yellow-800 p-3 rounded">
+                        <p class="font-semibold">⚠️ Lengkapi semua langkah</p>
+                        <p>Mohon isi semua kotak input (substitusi, penyederhanaan, dan hasil akhir).</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Check final answer (most important)
+            if (final === 'x' || final === '= x' || final === 'x ') {
+                score += 3;
+                feedback.push("✓ Hasil akhir benar");
+            } else {
+                feedback.push("✗ Hasil akhir belum tepat (harus = x)");
+            }
+            
+            // Check if substitution contains f(x) elements
+            if (substitution.includes('f(x)') || substitution.includes('g(') || substitution.length > 5) {
+                score += 1;
+                feedback.push("✓ Substitusi terlihat benar");
+            } else {
+                feedback.push("✗ Substitusi perlu diperbaiki");
+            }
+            
+            // Check if simplification shows work
+            if (simplification.includes('=') && simplification.length > 3) {
+                score += 1;
+                feedback.push("✓ Penyederhanaan terlihat baik");
+            } else {
+                feedback.push("✗ Penyederhanaan perlu lebih detail");
+            }
+            
+            if (score >= 4) {
+                document.getElementById('gf-feedback').innerHTML = `
+                    <div class="bg-green-100 text-green-800 p-3 rounded">
+                        <p class="font-semibold">🎉 Excellent!</p>
+                        <p>Semua langkah benar. g(f(x)) = x. Sekarang buat kesimpulan!</p>
+                        <ul class="text-sm mt-2">
+                            ${feedback.map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                setTimeout(() => {
+                    practiceStep = 2;
+                    showPracticeStep();
+                }, 2000);
+            } else if (score >= 3) {
+                document.getElementById('gf-feedback').innerHTML = `
+                    <div class="bg-blue-100 text-blue-800 p-3 rounded">
+                        <p class="font-semibold">👍 Bagus!</p>
+                        <p>Hasil akhir benar, tapi coba perbaiki langkah-langkah lainnya.</p>
+                        <ul class="text-sm mt-2">
+                            ${feedback.map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                        <button onclick="practiceStep = 2; showPracticeStep();" class="mt-2 bg-blue-500 text-white px-3 py-1 rounded text-sm">
+                            Lanjut ke Kesimpulan
+                        </button>
+                    </div>
+                `;
+            } else {
+                document.getElementById('gf-feedback').innerHTML = `
+                    <div class="bg-red-100 text-red-800 p-3 rounded">
+                        <p class="font-semibold">🤔 Perlu diperbaiki</p>
+                        <p>Beberapa langkah belum tepat. Coba lagi atau klik Bantuan.</p>
+                        <ul class="text-sm mt-2">
+                            ${feedback.map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        function showFGHint() {
+            document.getElementById('fg-feedback').innerHTML = `
+                <div class="bg-blue-100 text-blue-800 p-3 rounded">
+                    <p class="font-semibold">💡 Bantuan:</p>
+                    <p class="mb-2">Langkah-langkah menghitung f(g(x)):</p>
+                    <div class="text-sm">$${currentPracticeData.steps.fg}$</div>
+                </div>
+            `;
+            MathJax.typesetPromise();
+        }
+
+        function showGFHint() {
+            document.getElementById('gf-feedback').innerHTML = `
+                <div class="bg-blue-100 text-blue-800 p-3 rounded">
+                    <p class="font-semibold">💡 Bantuan:</p>
+                    <p class="mb-2">Langkah-langkah menghitung g(f(x)):</p>
+                    <div class="text-sm">$${currentPracticeData.steps.gf}$</div>
+                </div>
+            `;
+            MathJax.typesetPromise();
+        }
+
+        function nextStep() {
+            practiceStep++;
+            showPracticeStep();
+        }
+
+        function showConclusion(userAnswer) {
+            const isCorrect = userAnswer === currentPracticeData.isInverse;
+            const resultClass = isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+            const resultText = isCorrect ? '🎉 Excellent! Jawaban Anda benar!' : '🤔 Coba pikirkan lagi...';
+            
+            const content = `
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold mb-2">Soal:</h3>
+                    <p>Periksa apakah fungsi berikut saling invers:</p>
+                    <div class="mt-2 space-y-1">
+                        <p>$${currentPracticeData.fLatex}$</p>
+                        <p>$${currentPracticeData.gLatex}$</p>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-800 mb-2">Penyelesaian Lengkap:</h3>
+                    <div class="space-y-2">
+                        <p><strong>f(g(x)):</strong> $${currentPracticeData.steps.fg}$</p>
+                        <p><strong>g(f(x)):</strong> $${currentPracticeData.steps.gf}$</p>
+                    </div>
+                </div>
+                
+                <div class="${resultClass} p-4 rounded-lg">
+                    <h3 class="font-semibold mb-2">${resultText}</h3>
+                    <p>Karena f(g(x)) = x dan g(f(x)) = x, maka kedua fungsi tersebut saling invers.</p>
+                </div>
+                
+                <div class="flex gap-2">
+                    <button onclick="generatePractice()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded transition-colors">
+                        Soal Baru
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('practice-content').innerHTML = content;
+            MathJax.typesetPromise();
+        }
+
+        // Virtual keyboard functionality
+        let currentInput = null;
+
+        function createMathKeyboard(targetId) {
+            return `
+                <div class="keyboard-row">
+                    <button class="keyboard-btn btn-math" data-function="text" data-value="(">(</button>
+                    <button class="keyboard-btn btn-math" data-function="text" data-value=")">)</button>
+                    <button class="keyboard-btn btn-math" data-function="operator" data-value="+">+</button>
+                    <button class="keyboard-btn btn-math" data-function="operator" data-value="-">-</button>
+                    <button class="keyboard-btn btn-math" data-function="operator" data-value="=">=</button>
+                </div>
+                <div class="keyboard-row">
+                    <button class="keyboard-btn btn-math" data-function="number" data-value="1">1</button>
+                    <button class="keyboard-btn btn-math" data-function="number" data-value="2">2</button>
+                    <button class="keyboard-btn btn-math" data-function="number" data-value="3">3</button>
+                    <button class="keyboard-btn btn-math" data-function="number" data-value="4">4</button>
+                    <button class="keyboard-btn btn-math" data-function="number" data-value="5">5</button>
+                </div>
+                <div class="keyboard-row">
+                    <button class="keyboard-btn btn-math" data-function="number" data-value="6">6</button>
+                    <button class="keyboard-btn btn-math" data-function="number" data-value="7">7</button>
+                    <button class="keyboard-btn btn-math" data-function="number" data-value="8">8</button>
+                    <button class="keyboard-btn btn-math" data-function="number" data-value="9">9</button>
+                    <button class="keyboard-btn btn-math" data-function="number" data-value="0">0</button>
+                </div>
+                <div class="keyboard-row">
+                    <button class="keyboard-btn btn-math" data-function="letter" data-value="x">x</button>
+                    <button class="keyboard-btn btn-math" data-function="letter" data-value="f">f</button>
+                    <button class="keyboard-btn btn-math" data-function="letter" data-value="g">g</button>
+                    <button class="keyboard-btn fraction-btn btn-math" data-function="fraction">a/b</button>
+                    <button class="keyboard-btn btn-math" data-function="sqrt-x">√x</button>
+                </div>
+                <div class="keyboard-row">
+                    <button class="keyboard-btn btn-math" data-function="power-n">x^n</button>
+                    <button class="keyboard-btn wide btn-math" data-function="text" data-value=" ">Spasi</button>
+                    <button class="keyboard-btn btn-math" data-function="backspace">⌫</button>
+                    <button class="keyboard-btn wide btn-math" data-function="clear">Hapus</button>
+                </div>
+                <div class="keyboard-row">
+                    <button class="keyboard-btn wide btn-math" data-function="exit-fraction">Keluar Pecahan</button>
+                </div>
+            `;
+        }
+
+        function toggleKeyboard(inputId) {
+            const keyboardDiv = document.getElementById(`keyboard-${inputId}`);
+            const isVisible = keyboardDiv.style.display !== 'none';
+            
+            // Hide all keyboards first
+            document.querySelectorAll('.math-keyboard').forEach(kb => {
+                kb.style.display = 'none';
+            });
+            
+            if (!isVisible) {
+                keyboardDiv.innerHTML = createMathKeyboard(inputId);
+                keyboardDiv.style.display = 'block';
+                currentInput = document.getElementById(inputId);
+                currentInput.focus();
+            } else {
+                currentInput = null;
+            }
+        }
+
+        // Math input functions
+        function insertHTMLAtCursor(mathInput, html) {
+            mathInput.focus();
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                range.deleteContents();
+                const div = document.createElement('div');
+                div.innerHTML = html;
+                const fragment = document.createDocumentFragment();
+                while (div.firstChild) {
+                    fragment.appendChild(div.firstChild);
+                }
+                range.insertNode(fragment);
+                const editableElement = fragment.querySelector('.contenteditable');
+                if (editableElement) {
+                    const newRange = document.createRange();
+                    newRange.selectNodeContents(editableElement);
+                    newRange.collapse(false);
+                    selection.removeAllRanges();
+                    selection.addRange(newRange);
+                } else {
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+            } else {
+                const div = document.createElement('div');
+                div.innerHTML = html;
+                while (div.firstChild) {
+                    mathInput.appendChild(div.firstChild);
+                }
+            }
+            mathInput.focus();
+        }
+
+        function insertTextAtCursor(mathInput, text) {
+            mathInput.focus();
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                range.deleteContents();
+                range.insertNode(document.createTextNode(text));
+                range.collapse(false);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            } else {
+                mathInput.appendChild(document.createTextNode(text));
+            }
+        }
+
+        function exitFraction() {
+            if (!currentInput) return;
+            
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                let node = range.startContainer;
+                
+                // Find the fraction container
+                while (node && node !== currentInput) {
+                    if (node.classList && node.classList.contains('fraction')) {
+                        // Move cursor after the fraction
+                        const newRange = document.createRange();
+                        newRange.setStartAfter(node);
+                        newRange.collapse(true);
+                        
+                        // Add a space after fraction for better UX
+                        const spaceNode = document.createTextNode(' ');
+                        newRange.insertNode(spaceNode);
+                        newRange.setStartAfter(spaceNode);
+                        
+                        selection.removeAllRanges();
+                        selection.addRange(newRange);
+                        break;
+                    }
+                    node = node.parentNode;
+                }
+            }
+            currentInput.focus();
+        }
+
+        // Keyboard event handlers
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-math')) {
+                if (!currentInput) return;
+                
+                const func = e.target.getAttribute('data-function');
+                const value = e.target.getAttribute('data-value');
+                
+                switch(func) {
+                    case 'number':
+                    case 'operator':
+                    case 'letter':
+                    case 'text':
+                        insertTextAtCursor(currentInput, value);
+                        break;
+                    case 'fraction':
+                        insertHTMLAtCursor(currentInput, 
+                            '<span class="fraction">' +
+                                '<div class="fraction-top contenteditable" contenteditable="true">a</div>' +
+                                '<div class="fraction-bottom contenteditable" contenteditable="true">b</div>' +
+                            '</span>&nbsp;');
+                        break;
+                    case 'power-n':
+                        insertHTMLAtCursor(currentInput, 'x<sup contenteditable="true" class="contenteditable">n</sup>');
+                        break;
+                    case 'sqrt-x':
+                        insertHTMLAtCursor(currentInput, '√<span contenteditable="true" class="contenteditable" style="text-decoration: overline;">x</span>');
+                        break;
+                    case 'exit-fraction':
+                        exitFraction();
+                        break;
+                    case 'backspace':
+                        const selection = window.getSelection();
+                        if (selection.rangeCount > 0) {
+                            const range = selection.getRangeAt(0);
+                            if (range.collapsed) {
+                                range.setStart(range.startContainer, Math.max(0, range.startOffset - 1));
+                            }
+                            range.deleteContents();
+                        }
+                        break;
+                    case 'clear':
+                        currentInput.innerHTML = '';
+                        break;
+                }
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setFunctionType('linear');
+        });
+    </script>
+</body>
+</html>
