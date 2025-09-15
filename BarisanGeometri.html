@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barisan Geometri - Pembelajaran Interaktif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+</head>
+<body class="bg-white text-gray-900 font-sans">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white py-6 shadow-lg">
+        <div class="container mx-auto px-6">
+            <h1 class="text-3xl font-bold text-center">Barisan Geometri</h1>
+            <p class="text-center mt-2 text-blue-100">Pembelajaran Interaktif - Kelas 10 SMA</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-gray-100 border-b border-gray-200">
+        <div class="container mx-auto px-6">
+            <div class="flex space-x-1">
+                <button onclick="showSection('inquiry')" class="nav-btn px-6 py-3 text-blue-600 border-b-2 border-blue-600 font-semibold">Eksplorasi</button>
+                <button onclick="showSection('theory')" class="nav-btn px-6 py-3 text-gray-600 hover:text-blue-600 font-semibold">Teori</button>
+                <button onclick="showSection('practice')" class="nav-btn px-6 py-3 text-gray-600 hover:text-blue-600 font-semibold">Latihan</button>
+                <button onclick="showSection('quiz')" class="nav-btn px-6 py-3 text-gray-600 hover:text-blue-600 font-semibold">Kuis</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-6 py-8">
+        <!-- Inquiry Section -->
+        <div id="inquiry" class="section">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">🔍 Mari Kita Eksplorasi!</h2>
+                <p class="text-blue-700">Perhatikan pola-pola berikut dan temukan aturannya!</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Pola 1: Pertumbuhan Bakteri</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-blue-100 px-3 py-1 rounded text-blue-800 font-semibold">Jam ke-1:</span>
+                            <span class="text-lg">2 bakteri</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-blue-100 px-3 py-1 rounded text-blue-800 font-semibold">Jam ke-2:</span>
+                            <span class="text-lg">6 bakteri</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-blue-100 px-3 py-1 rounded text-blue-800 font-semibold">Jam ke-3:</span>
+                            <span class="text-lg">18 bakteri</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-blue-100 px-3 py-1 rounded text-blue-800 font-semibold">Jam ke-4:</span>
+                            <input type="number" id="bacteria-4" class="border border-gray-300 rounded px-3 py-1 w-20" placeholder="?">
+                            <button onclick="checkBacteria()" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Cek</button>
+                        </div>
+                        <div id="bacteria-feedback" class="text-sm"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Pola 2: Tabungan Bunga Majemuk</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-blue-100 px-3 py-1 rounded text-blue-800 font-semibold">Bulan 1:</span>
+                            <span class="text-lg">Rp 1.000.000</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-blue-100 px-3 py-1 rounded text-blue-800 font-semibold">Bulan 2:</span>
+                            <span class="text-lg">Rp 1.200.000</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-blue-100 px-3 py-1 rounded text-blue-800 font-semibold">Bulan 3:</span>
+                            <span class="text-lg">Rp 1.440.000</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-blue-100 px-3 py-1 rounded text-blue-800 font-semibold">Bulan 4:</span>
+                            <input type="number" id="savings-4" class="border border-gray-300 rounded px-3 py-1 w-32" placeholder="?">
+                            <button onclick="checkSavings()" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Cek</button>
+                        </div>
+                        <div id="savings-feedback" class="text-sm"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-gray-50 border border-gray-200 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">🤔 Pertanyaan Refleksi:</h3>
+                <div class="space-y-4">
+                    <div>
+                        <p class="font-medium text-gray-700">1. Apa pola yang kamu temukan dari kedua contoh di atas?</p>
+                        <textarea id="reflection-1" class="w-full mt-2 p-3 border border-gray-300 rounded-lg" rows="3" placeholder="Tuliskan pengamatanmu..."></textarea>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-700">2. Bagaimana cara menghitung suku berikutnya?</p>
+                        <textarea id="reflection-2" class="w-full mt-2 p-3 border border-gray-300 rounded-lg" rows="3" placeholder="Tuliskan cara yang kamu temukan..."></textarea>
+                    </div>
+                    <button onclick="saveReflection()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Simpan Refleksi</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theory Section -->
+        <div id="theory" class="section hidden">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">📚 Teori Barisan Geometri</h2>
+            </div>
+
+            <div class="space-y-8">
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Definisi Barisan Geometri</h3>
+                    <p class="text-gray-700 mb-4">Barisan geometri adalah barisan bilangan dimana setiap suku (kecuali suku pertama) diperoleh dengan mengalikan suku sebelumnya dengan suatu bilangan tetap yang disebut <strong>rasio (r)</strong>.</p>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                        <p class="font-semibold text-blue-800">Bentuk Umum:</p>
+                        <p class="text-lg text-center">$$a, ar, ar^2, ar^3, ar^4, \ldots, ar^{n-1}$$</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="font-semibold text-gray-800">Dimana:</p>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1">
+                                <li>$a$ = suku pertama</li>
+                                <li>$r$ = rasio (pembanding)</li>
+                                <li>$n$ = nomor suku</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">Rumus Rasio:</p>
+                            <div class="bg-gray-100 p-4 rounded text-center">
+                                $$r = \frac{U_2}{U_1} = \frac{U_3}{U_2} = \frac{U_{n+1}}{U_n}$$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Rumus Suku ke-n</h3>
+                    <div class="bg-yellow-50 border border-yellow-200 p-6 rounded-lg">
+                        <div class="text-center text-3xl font-bold text-gray-800 mb-4">
+                            $$U_n = a \times r^{n-1}$$
+                        </div>
+                        <p class="text-center text-gray-600 text-lg">Rumus untuk mencari suku ke-n barisan geometri</p>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Contoh Penyelesaian</h3>
+                    <div class="space-y-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-semibold text-gray-800 mb-2">Contoh 1:</p>
+                            <p class="text-gray-700">Diketahui barisan: 3, 6, 12, 24, ...</p>
+                            <p class="text-gray-700">Tentukan suku ke-8!</p>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="font-semibold text-blue-800 mb-4">Penyelesaian:</p>
+                            <div class="space-y-3 text-gray-700">
+                                <p>• Suku pertama: $$a = 3$$</p>
+                                <p>• Rasio: $$r = \frac{6}{3} = 2$$</p>
+                                <p>• Suku ke-8: $$U_8 = 3 \times 2^{8-1} = 3 \times 2^7 = 3 \times 128 = 384$$</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Section -->
+        <div id="practice" class="section hidden">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">💪 Latihan Soal</h2>
+                <div class="flex space-x-4">
+                    <button onclick="showGuidedPractice()" class="practice-nav-btn bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Latihan Terbimbing</button>
+                    <button onclick="showIndependentPractice()" class="practice-nav-btn bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">Latihan Mandiri</button>
+                </div>
+            </div>
+
+            <!-- Latihan Terbimbing -->
+            <div id="guided-practice" class="practice-section">
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+                    <h3 class="text-lg font-semibold text-green-800 mb-2">🎯 Latihan Terbimbing</h3>
+                    <p class="text-green-700">Ikuti panduan langkah demi langkah untuk menyelesaikan soal barisan geometri.</p>
+                    <div class="mt-4 flex space-x-3">
+                        <button onclick="setGuidedDifficulty('easy')" class="guided-difficulty-btn bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm">🟢 Mudah</button>
+                        <button onclick="setGuidedDifficulty('medium')" class="guided-difficulty-btn bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm">🟡 Sedang</button>
+                        <button onclick="setGuidedDifficulty('hard')" class="guided-difficulty-btn bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm">🔴 Sulit</button>
+                    </div>
+                </div>
+                <div id="guided-content" class="space-y-6">
+                    <!-- Guided practice will be generated here -->
+                </div>
+            </div>
+
+            <!-- Latihan Mandiri -->
+            <div id="independent-practice" class="practice-section hidden">
+                <div class="bg-orange-50 border-l-4 border-orange-500 p-4 mb-6">
+                    <h3 class="text-lg font-semibold text-orange-800 mb-2">🚀 Latihan Mandiri</h3>
+                    <p class="text-orange-700">Kerjakan soal-soal berikut secara mandiri untuk menguji pemahamanmu.</p>
+                    <div class="mt-4 flex space-x-3">
+                        <button onclick="setIndependentDifficulty('easy')" class="independent-difficulty-btn bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm">🟢 Mudah</button>
+                        <button onclick="setIndependentDifficulty('medium')" class="independent-difficulty-btn bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm">🟡 Sedang</button>
+                        <button onclick="setIndependentDifficulty('hard')" class="independent-difficulty-btn bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm">🔴 Sulit</button>
+                    </div>
+                    <button onclick="generateIndependentPractice()" class="mt-3 bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">Generate Soal Baru</button>
+                </div>
+                <div id="independent-content" class="space-y-6">
+                    <!-- Independent practice will be generated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quiz" class="section hidden">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">🎯 Kuis Evaluasi</h2>
+                <div class="flex items-center space-x-4">
+                    <button onclick="startQuiz()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Mulai Kuis</button>
+                    <span id="quiz-score" class="text-gray-600"></span>
+                </div>
+            </div>
+
+            <div id="quiz-content">
+                <!-- Quiz will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'inquiry';
+        let practiceProblems = [];
+        let quizQuestions = [];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let guidedDifficulty = 'easy';
+        let independentDifficulty = 'easy';
+
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            
+            // Show selected section
+            document.getElementById(section).classList.remove('hidden');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+                btn.classList.add('text-gray-600');
+            });
+            
+            event.target.classList.remove('text-gray-600');
+            event.target.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+            
+            currentSection = section;
+        }
+
+        function checkBacteria() {
+            const answer = parseInt(document.getElementById('bacteria-4').value);
+            const correct = 54; // 18 * 3
+            const feedback = document.getElementById('bacteria-feedback');
+            
+            if (answer === correct) {
+                feedback.innerHTML = '<span class="text-green-600 font-semibold">✓ Benar! Setiap jam bakteri bertambah 3 kali lipat.</span>';
+            } else {
+                feedback.innerHTML = '<span class="text-red-600 font-semibold">✗ Coba lagi. Perhatikan pola: 2 → 6 → 18 → ?</span>';
+            }
+        }
+
+        function checkSavings() {
+            const answer = parseInt(document.getElementById('savings-4').value);
+            const correct = 1728000; // 1440000 * 1.2
+            const feedback = document.getElementById('savings-feedback');
+            
+            if (answer === correct) {
+                feedback.innerHTML = '<span class="text-green-600 font-semibold">✓ Benar! Setiap bulan tabungan bertambah 20% (dikali 1,2).</span>';
+            } else {
+                feedback.innerHTML = '<span class="text-red-600 font-semibold">✗ Coba lagi. Perhatikan pola: setiap bulan dikali 1,2</span>';
+            }
+        }
+
+        function saveReflection() {
+            const reflection1 = document.getElementById('reflection-1').value;
+            const reflection2 = document.getElementById('reflection-2').value;
+            
+            if (reflection1.trim() && reflection2.trim()) {
+                alert('Refleksi tersimpan! Bagus sekali, kamu sudah mulai memahami pola barisan geometri.');
+            } else {
+                alert('Mohon isi kedua pertanyaan refleksi terlebih dahulu.');
+            }
+        }
+
+        function showGuidedPractice() {
+            document.getElementById('guided-practice').classList.remove('hidden');
+            document.getElementById('independent-practice').classList.add('hidden');
+            
+            // Update button styles
+            document.querySelectorAll('.practice-nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600');
+                btn.classList.add('bg-gray-600');
+            });
+            event.target.classList.remove('bg-gray-600');
+            event.target.classList.add('bg-blue-600');
+            
+            generateGuidedPractice();
+        }
+
+        function showIndependentPractice() {
+            document.getElementById('guided-practice').classList.add('hidden');
+            document.getElementById('independent-practice').classList.remove('hidden');
+            
+            // Update button styles
+            document.querySelectorAll('.practice-nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600');
+                btn.classList.add('bg-gray-600');
+            });
+            event.target.classList.remove('bg-gray-600');
+            event.target.classList.add('bg-blue-600');
+            
+            generateIndependentPractice();
+        }
+
+        function setGuidedDifficulty(difficulty) {
+            guidedDifficulty = difficulty;
+            
+            // Update button styles
+            document.querySelectorAll('.guided-difficulty-btn').forEach(btn => {
+                btn.classList.remove('bg-green-600', 'bg-yellow-600', 'bg-red-600');
+                btn.classList.add('bg-gray-600');
+            });
+            
+            const colors = { easy: 'bg-green-600', medium: 'bg-yellow-600', hard: 'bg-red-600' };
+            event.target.classList.remove('bg-gray-600');
+            event.target.classList.add(colors[difficulty]);
+            
+            generateGuidedPractice();
+        }
+
+        function setIndependentDifficulty(difficulty) {
+            independentDifficulty = difficulty;
+            
+            // Update button styles
+            document.querySelectorAll('.independent-difficulty-btn').forEach(btn => {
+                btn.classList.remove('bg-green-600', 'bg-yellow-600', 'bg-red-600');
+                btn.classList.add('bg-gray-600');
+            });
+            
+            const colors = { easy: 'bg-green-600', medium: 'bg-yellow-600', hard: 'bg-red-600' };
+            event.target.classList.remove('bg-gray-600');
+            event.target.classList.add(colors[difficulty]);
+            
+            generateIndependentPractice();
+        }
+
+        function generateGuidedPractice() {
+            let guidedProblems, problemType;
+            
+            if (guidedDifficulty === 'easy') {
+                // Mudah: Diketahui a, r, n - cari suku ke-n
+                guidedProblems = [
+                    { a: 2, r: 3, n: 5, type: 'easy' },
+                    { a: 4, r: 2, n: 6, type: 'easy' },
+                    { a: 3, r: 4, n: 4, type: 'easy' },
+                    { a: 5, r: 2, n: 5, type: 'easy' },
+                    { a: 1, r: 5, n: 4, type: 'easy' }
+                ];
+                problemType = 'easy';
+            } else if (guidedDifficulty === 'medium') {
+                // Sedang: Diketahui barisan - cari suku ke-n
+                guidedProblems = [
+                    { a: 4, r: 3, n: 6, sequence: "4, 12, 36, 108", type: 'medium' },
+                    { a: 2, r: 4, n: 5, sequence: "2, 8, 32, 128", type: 'medium' },
+                    { a: 3, r: 2, n: 7, sequence: "3, 6, 12, 24", type: 'medium' },
+                    { a: 5, r: 3, n: 4, sequence: "5, 15, 45, 135", type: 'medium' },
+                    { a: 1, r: 5, n: 6, sequence: "1, 5, 25, 125", type: 'medium' }
+                ];
+                problemType = 'medium';
+            } else {
+                // Sulit: Diketahui dua suku - cari rasio dan suku tertentu
+                guidedProblems = [
+                    { u1: 3, u3: 12, n: 5, type: 'hard' },
+                    { u2: 6, u4: 24, n: 6, type: 'hard' },
+                    { u1: 2, u4: 16, n: 7, type: 'hard' },
+                    { u2: 4, u5: 32, n: 8, type: 'hard' },
+                    { u1: 5, u3: 20, n: 6, type: 'hard' }
+                ];
+                problemType = 'hard';
+            }
+            
+            const randomProblem = guidedProblems[Math.floor(Math.random() * guidedProblems.length)];
+
+            // Generate content based on difficulty
+            const content = document.getElementById('guided-content');
+            
+            if (problemType === 'easy') {
+                generateEasyGuidedContent(randomProblem, content);
+            } else if (problemType === 'medium') {
+                generateMediumGuidedContent(randomProblem, content);
+            } else {
+                generateHardGuidedContent(randomProblem, content);
+            }
+            
+            // Store problem data for step 2 content generation
+            window.currentHardProblem = {
+                step2Method: step2Method,
+                step2Explanation: step2Explanation,
+                a: a,
+                r: r,
+                problem: problem
+            };
+            
+            // Re-render KaTeX for the new content
+            setTimeout(renderMath, 100);
+        }
+
+        function generateEasyGuidedContent(problem, content) {
+            const question = `Diketahui suku pertama (a) = ${problem.a}, rasio (r) = ${problem.r}. Tentukan suku ke-${problem.n}!`;
+            
+            content.innerHTML = `
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Soal Terbimbing - Level Mudah 🟢</h3>
+                    <p class="text-gray-700 mb-6 text-lg">${question}</p>
+                    
+                    <div class="space-y-6">
+                        <!-- Langkah 1 -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-800 mb-3">Langkah 1: Identifikasi yang diketahui dan rumus yang akan digunakan</h4>
+                            
+                            <div class="mb-4">
+                                <p class="text-gray-700 mb-3 font-medium">📋 Dari soal diketahui:</p>
+                                <div class="bg-white p-3 rounded border-l-4 border-blue-400 mb-3">
+                                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                                        <li><strong>Suku pertama (a):</strong> $$a = ${problem.a}$$</li>
+                                        <li><strong>Rasio (r):</strong> $$r = ${problem.r}$$</li>
+                                        <li><strong>Yang dicari:</strong> Suku ke-${problem.n} atau $$U_{${problem.n}}$$</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="text-gray-700 mb-3 font-medium">📐 Rumus yang akan digunakan:</p>
+                                <div class="bg-yellow-50 p-4 rounded border border-yellow-200 text-center">
+                                    <div class="text-lg font-bold text-gray-800 mb-2">$$U_n = a \\times r^{n-1}$$</div>
+                                    <p class="text-sm text-gray-600">Rumus suku ke-n barisan geometri</p>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="text-gray-700 mb-3 font-medium">🔍 Penjelasan rumus:</p>
+                                <div class="bg-gray-50 p-3 rounded text-sm text-gray-700">
+                                    <ul class="space-y-1">
+                                        <li>• $$U_n$$ = suku ke-n yang dicari</li>
+                                        <li>• $$a$$ = suku pertama (${problem.a})</li>
+                                        <li>• $$r$$ = rasio (${problem.r})</li>
+                                        <li>• $$n$$ = nomor suku (${problem.n})</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="text-gray-700 mb-3 font-medium">💡 Langkah selanjutnya:</p>
+                                <p class="text-sm text-gray-600 bg-blue-100 p-3 rounded">
+                                    Kita akan mensubstitusikan nilai-nilai yang diketahui ke dalam rumus $$U_n = a \\times r^{n-1}$$
+                                </p>
+                            </div>
+
+                            <div class="flex items-center space-x-4">
+                                <span class="text-gray-700 font-medium">Apakah kamu sudah memahami informasi di atas?</span>
+                                <button onclick="checkGuidedStep(1, 'continue')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 font-medium">Ya, Lanjut ke Langkah 2</button>
+                            </div>
+                            <div id="guided-feedback-1" class="mt-2 text-sm"></div>
+                        </div>
+
+                        <!-- Langkah 2 -->
+                        <div id="guided-step-2" class="bg-green-50 border border-green-200 rounded-lg p-4 hidden">
+                            <h4 class="font-semibold text-green-800 mb-3">Langkah 2: Gunakan rumus $$U_n = a \\times r^{n-1}$$</h4>
+                            <p class="text-gray-700 mb-3">Substitusikan nilai yang diketahui:</p>
+                            <div class="text-center mb-3">$$U_{${problem.n}} = ${problem.a} \\times ${problem.r}^{${problem.n}-1} = ${problem.a} \\times ${problem.r}^{${problem.n-1}} = ?$$</div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-gray-700">$$${problem.r}^{${problem.n-1}} =$$</span>
+                                <input type="number" id="guided-step2" class="border border-gray-300 rounded px-3 py-2 w-20" placeholder="?">
+                                <button onclick="checkGuidedStep(2, ${Math.pow(problem.r, problem.n-1)})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Cek</button>
+                            </div>
+                            <div id="guided-feedback-2" class="mt-2 text-sm"></div>
+                        </div>
+
+                        <!-- Langkah 3 -->
+                        <div id="guided-step-3" class="bg-purple-50 border border-purple-200 rounded-lg p-4 hidden">
+                            <h4 class="font-semibold text-purple-800 mb-3">Langkah 3: Hitung hasil akhir</h4>
+                            <p class="text-gray-700 mb-3">Sekarang kalikan dengan suku pertama:</p>
+                            <div class="text-center mb-3">$$U_{${problem.n}} = ${problem.a} \\times ${Math.pow(problem.r, problem.n-1)} = ?$$</div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-gray-700">$$U_{${problem.n}} =$$</span>
+                                <input type="number" id="guided-step3" class="border border-gray-300 rounded px-3 py-2 w-32" placeholder="?">
+                                <button onclick="checkGuidedStep(3, ${calculateAnswer(problem.a, problem.r, problem.n)})" class="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600">Cek</button>
+                            </div>
+                            <div id="guided-feedback-3" class="mt-2 text-sm"></div>
+                        </div>
+
+                        <!-- Kesimpulan -->
+                        <div id="guided-conclusion" class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 hidden">
+                            <h4 class="font-semibold text-yellow-800 mb-3">🎉 Selamat! Kamu berhasil menyelesaikan soal mudah!</h4>
+                            <p class="text-gray-700 mb-3">Langkah-langkah yang telah kamu pelajari:</p>
+                            <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                                <li>Identifikasi yang diketahui: $$a = ${problem.a}$$, $$r = ${problem.r}$$</li>
+                                <li>Hitung pangkat: $$${problem.r}^{${problem.n-1}} = ${Math.pow(problem.r, problem.n-1)}$$</li>
+                                <li>Kalikan dengan suku pertama: $$U_{${problem.n}} = ${problem.a} \\times ${Math.pow(problem.r, problem.n-1)} = ${calculateAnswer(problem.a, problem.r, problem.n)}$$</li>
+                            </ol>
+                            <button onclick="generateGuidedPractice()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Coba Soal Lain</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateMediumGuidedContent(problem, content) {
+            const question = `Diketahui barisan geometri: ${problem.sequence}, ... Tentukan suku ke-${problem.n}!`;
+            
+            content.innerHTML = `
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Soal Terbimbing - Level Sedang 🟡</h3>
+                    <p class="text-gray-700 mb-6 text-lg">${question}</p>
+                    
+                    <div class="space-y-6">
+                        <!-- Langkah 1 -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-800 mb-3">Langkah 1: Identifikasi suku pertama (a)</h4>
+                            <p class="text-gray-700 mb-3">Dari barisan ${problem.sequence}, ... suku pertama adalah:</p>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-gray-700">$$a =$$</span>
+                                <input type="number" id="guided-step1" class="border border-gray-300 rounded px-3 py-2 w-20" placeholder="?">
+                                <button onclick="checkGuidedStep(1, ${problem.a})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Cek</button>
+                            </div>
+                            <div id="guided-feedback-1" class="mt-2 text-sm"></div>
+                        </div>
+
+                        <!-- Langkah 2 -->
+                        <div id="guided-step-2" class="bg-green-50 border border-green-200 rounded-lg p-4 hidden">
+                            <h4 class="font-semibold text-green-800 mb-3">Langkah 2: Tentukan rasio (r)</h4>
+                            <p class="text-gray-700 mb-3">Rasio diperoleh dengan membagi suku kedua dengan suku pertama:</p>
+                            <div class="text-center mb-3">$$r = \\frac{U_2}{U_1} = \\frac{${problem.sequence.split(', ')[1]}}{${problem.a}} = ?$$</div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-gray-700">$$r =$$</span>
+                                <input type="number" id="guided-step2" class="border border-gray-300 rounded px-3 py-2 w-20" placeholder="?">
+                                <button onclick="checkGuidedStep(2, ${problem.r})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Cek</button>
+                            </div>
+                            <div id="guided-feedback-2" class="mt-2 text-sm"></div>
+                        </div>
+
+                        <!-- Langkah 3 -->
+                        <div id="guided-step-3" class="bg-purple-50 border border-purple-200 rounded-lg p-4 hidden">
+                            <h4 class="font-semibold text-purple-800 mb-3">Langkah 3: Gunakan rumus $$U_n = a \\times r^{n-1}$$</h4>
+                            <p class="text-gray-700 mb-3">Untuk mencari $$U_{${problem.n}}$$, kita substitusikan:</p>
+                            <div class="text-center mb-3">$$U_{${problem.n}} = ${problem.a} \\times ${problem.r}^{${problem.n}-1} = ${problem.a} \\times ${problem.r}^{${problem.n-1}} = ${problem.a} \\times ${Math.pow(problem.r, problem.n-1)} = ?$$</div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-gray-700">$$U_{${problem.n}} =$$</span>
+                                <input type="number" id="guided-step3" class="border border-gray-300 rounded px-3 py-2 w-32" placeholder="?">
+                                <button onclick="checkGuidedStep(3, ${calculateAnswer(problem.a, problem.r, problem.n)})" class="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600">Cek</button>
+                            </div>
+                            <div id="guided-feedback-3" class="mt-2 text-sm"></div>
+                        </div>
+
+                        <!-- Kesimpulan -->
+                        <div id="guided-conclusion" class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 hidden">
+                            <h4 class="font-semibold text-yellow-800 mb-3">🎉 Selamat! Kamu berhasil menyelesaikan soal sedang!</h4>
+                            <p class="text-gray-700 mb-3">Langkah-langkah yang telah kamu pelajari:</p>
+                            <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                                <li>Identifikasi suku pertama: $$a = ${problem.a}$$</li>
+                                <li>Tentukan rasio: $$r = ${problem.r}$$</li>
+                                <li>Gunakan rumus $$U_n = a \\times r^{n-1}$$ untuk mendapatkan $$U_{${problem.n}} = ${calculateAnswer(problem.a, problem.r, problem.n)}$$</li>
+                            </ol>
+                            <button onclick="generateGuidedPractice()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Coba Soal Lain</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateHardGuidedContent(problem, content) {
+            let question, step1Text, step2Text, step3Text, a, r, step2Method, step2Explanation;
+            
+            if (problem.u1 !== undefined && problem.u3 !== undefined) {
+                // U1 dan U3 diketahui
+                question = `Diketahui $$U_1 = ${problem.u1}$$ dan $$U_3 = ${problem.u3}$$. Tentukan suku ke-${problem.n}!`;
+                step1Text = `Dari $$U_3 = a \\times r^2$$, kita dapat mencari rasio:`;
+                step2Text = `$$${problem.u3} = ${problem.u1} \\times r^2$$`;
+                a = problem.u1;
+                r = Math.sqrt(problem.u3 / problem.u1);
+                step2Method = "cara1";
+                step2Explanation = `Karena $$U_1 = ${problem.u1}$$ sudah diketahui langsung dari soal, maka:`;
+            } else if (problem.u2 !== undefined && problem.u4 !== undefined) {
+                // U2 dan U4 diketahui
+                question = `Diketahui $$U_2 = ${problem.u2}$$ dan $$U_4 = ${problem.u4}$$. Tentukan suku ke-${problem.n}!`;
+                step1Text = `Dari $$\\frac{U_4}{U_2} = r^2$$, kita dapat mencari rasio:`;
+                step2Text = `$$r^2 = \\frac{${problem.u4}}{${problem.u2}} = ${problem.u4/problem.u2}$$`;
+                r = Math.sqrt(problem.u4 / problem.u2);
+                a = problem.u2 / r; // U2 = a * r, jadi a = U2/r
+                step2Method = "cara2";
+                step2Explanation = `Karena $$U_1$$ tidak diketahui langsung, kita gunakan $$U_2 = a \\times r$$:`;
+            } else if (problem.u1 !== undefined && problem.u4 !== undefined) {
+                // U1 dan U4 diketahui
+                question = `Diketahui $$U_1 = ${problem.u1}$$ dan $$U_4 = ${problem.u4}$$. Tentukan suku ke-${problem.n}!`;
+                step1Text = `Dari $$U_4 = a \\times r^3$$, kita dapat mencari rasio:`;
+                step2Text = `$$${problem.u4} = ${problem.u1} \\times r^3$$`;
+                a = problem.u1;
+                r = Math.cbrt(problem.u4 / problem.u1);
+                step2Method = "cara1";
+                step2Explanation = `Karena $$U_1 = ${problem.u1}$$ sudah diketahui langsung dari soal, maka:`;
+            } else {
+                // U2 dan U5 diketahui
+                question = `Diketahui $$U_2 = ${problem.u2}$$ dan $$U_5 = ${problem.u5}$$. Tentukan suku ke-${problem.n}!`;
+                step1Text = `Dari $$\\frac{U_5}{U_2} = r^3$$, kita dapat mencari rasio:`;
+                step2Text = `$$r^3 = \\frac{${problem.u5}}{${problem.u2}} = ${problem.u5/problem.u2}$$`;
+                r = Math.cbrt(problem.u5 / problem.u2);
+                a = problem.u2 / r; // U2 = a * r, jadi a = U2/r
+                step2Method = "cara2";
+                step2Explanation = `Karena $$U_1$$ tidak diketahui langsung, kita gunakan $$U_2 = a \\times r$$:`;
+            }
+            
+            content.innerHTML = `
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Soal Terbimbing - Level Sulit 🔴</h3>
+                    <p class="text-gray-700 mb-6 text-lg">${question}</p>
+                    
+                    <div class="space-y-6">
+                        <!-- Langkah 1 -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-800 mb-3">Langkah 1: Cari rasio (r)</h4>
+                            <p class="text-gray-700 mb-3">${step1Text}</p>
+                            <div class="text-center mb-3">${step2Text}</div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-gray-700">$$r =$$</span>
+                                <input type="number" step="0.1" id="guided-step1" class="border border-gray-300 rounded px-3 py-2 w-20" placeholder="?">
+                                <button onclick="checkGuidedStep(1, ${r})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Cek</button>
+                            </div>
+                            <div id="guided-feedback-1" class="mt-2 text-sm"></div>
+                        </div>
+
+                        <!-- Langkah 2 -->
+                        <div id="guided-step-2" class="bg-green-50 border border-green-200 rounded-lg p-4 hidden">
+                            <h4 class="font-semibold text-green-800 mb-3">Langkah 2: Cari suku pertama (a)</h4>
+                            <div id="step2-method-selection" class="mb-4">
+                                <p class="text-gray-700 mb-3">Ada dua cara untuk mencari suku pertama:</p>
+                                <div class="space-y-3">
+                                    <div class="bg-white p-3 rounded border-l-4 border-blue-400">
+                                        <p class="font-medium text-blue-800 mb-2">📋 Cara 1: Jika U₁ diketahui langsung</p>
+                                        <p class="text-gray-700 text-sm">Jika soal memberikan U₁ = nilai, maka a = U₁</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border-l-4 border-orange-400">
+                                        <p class="font-medium text-orange-800 mb-2">🔍 Cara 2: Jika U₁ tidak diketahui</p>
+                                        <p class="text-gray-700 text-sm">Gunakan rumus Uₙ = a × r^(n-1) dengan suku yang diketahui</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="step2-solution" class="mb-4">
+                                <!-- Content will be filled by JavaScript based on problem type -->
+                            </div>
+
+                            <div class="flex items-center space-x-4">
+                                <span class="text-gray-700">$$a =$$</span>
+                                <input type="number" step="0.1" id="guided-step2" class="border border-gray-300 rounded px-3 py-2 w-20" placeholder="?">
+                                <button onclick="checkGuidedStep(2, ${a})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Cek</button>
+                            </div>
+                            <div id="guided-feedback-2" class="mt-2 text-sm"></div>
+                        </div>
+
+                        <!-- Langkah 3 -->
+                        <div id="guided-step-3" class="bg-purple-50 border border-purple-200 rounded-lg p-4 hidden">
+                            <h4 class="font-semibold text-purple-800 mb-3">Langkah 3: Hitung $$U_{${problem.n}}$$</h4>
+                            <p class="text-gray-700 mb-3">Sekarang gunakan rumus $$U_n = a \\times r^{n-1}$$:</p>
+                            <div class="text-center mb-3">$$U_{${problem.n}} = ${a.toFixed(1)} \\times ${r.toFixed(1)}^{${problem.n}-1} = ?$$</div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-gray-700">$$U_{${problem.n}} =$$</span>
+                                <input type="number" step="0.1" id="guided-step3" class="border border-gray-300 rounded px-3 py-2 w-32" placeholder="?">
+                                <button onclick="checkGuidedStep(3, ${calculateAnswer(a, r, problem.n)})" class="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600">Cek</button>
+                            </div>
+                            <div id="guided-feedback-3" class="mt-2 text-sm"></div>
+                        </div>
+
+                        <!-- Kesimpulan -->
+                        <div id="guided-conclusion" class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 hidden">
+                            <h4 class="font-semibold text-yellow-800 mb-3">🎉 Luar biasa! Kamu berhasil menyelesaikan soal sulit!</h4>
+                            <p class="text-gray-700 mb-3">Langkah-langkah yang telah kamu pelajari:</p>
+                            <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                                <li>Mencari rasio dari dua suku yang diketahui: $$r = ${r.toFixed(1)}$$</li>
+                                <li>Mencari suku pertama: $$a = ${a.toFixed(1)}$$</li>
+                                <li>Menghitung suku yang diminta: $$U_{${problem.n}} = ${calculateAnswer(a, r, problem.n).toFixed(1)}$$</li>
+                            </ol>
+                            <button onclick="generateGuidedPractice()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Coba Soal Lain</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Store problem data for step 2 content generation
+            window.currentHardProblem = {
+                step2Method: step2Method,
+                step2Explanation: step2Explanation,
+                a: a,
+                r: r,
+                problem: problem
+            };
+            
+            // Re-render KaTeX for the new content
+            setTimeout(renderMath, 100);
+        }
+
+        function generateIndependentPractice() {
+            let problems;
+            
+            if (independentDifficulty === 'easy') {
+                // Mudah: Diketahui a, r, n - cari suku ke-n
+                problems = [
+                    {
+                        question: "Diketahui suku pertama = 3, rasio = 2. Tentukan suku ke-5!",
+                        a: 3, r: 2, n: 5,
+                        solution: "$$a = 3, \\quad r = 2$$ $$U_5 = 3 \\times 2^{5-1} = 3 \\times 2^4 = 3 \\times 16 = 48$$"
+                    },
+                    {
+                        question: "Barisan geometri dengan suku pertama 5 dan rasio 3. Tentukan suku ke-4!",
+                        a: 5, r: 3, n: 4,
+                        solution: "$$a = 5, \\quad r = 3$$ $$U_4 = 5 \\times 3^{4-1} = 5 \\times 3^3 = 5 \\times 27 = 135$$"
+                    },
+                    {
+                        question: "Diketahui a = 2, r = 4. Tentukan suku ke-6!",
+                        a: 2, r: 4, n: 6,
+                        solution: "$$a = 2, \\quad r = 4$$ $$U_6 = 2 \\times 4^{6-1} = 2 \\times 4^5 = 2 \\times 1024 = 2048$$"
+                    },
+                    {
+                        question: "Suku pertama = 4, rasio = $$\\frac{1}{2}$$. Tentukan suku ke-5!",
+                        a: 4, r: 0.5, n: 5,
+                        solution: "$$a = 4, \\quad r = \\frac{1}{2}$$ $$U_5 = 4 \\times \\left(\\frac{1}{2}\\right)^{5-1} = 4 \\times \\left(\\frac{1}{2}\\right)^4 = 4 \\times \\frac{1}{16} = \\frac{1}{4} = 0.25$$"
+                    },
+                    {
+                        question: "Diketahui a = 1, r = 5. Tentukan suku ke-4!",
+                        a: 1, r: 5, n: 4,
+                        solution: "$$a = 1, \\quad r = 5$$ $$U_4 = 1 \\times 5^{4-1} = 1 \\times 5^3 = 1 \\times 125 = 125$$"
+                    }
+                ];
+            } else if (independentDifficulty === 'medium') {
+                // Sedang: Diketahui barisan - cari suku ke-n
+                problems = [
+                    {
+                        question: "Diketahui barisan geometri: 2, 6, 18, 54, ... Tentukan suku ke-7!",
+                        a: 2, r: 3, n: 7,
+                        solution: "$$a = 2, \\quad r = \\frac{6}{2} = 3$$ $$U_7 = 2 \\times 3^{7-1} = 2 \\times 3^6 = 2 \\times 729 = 1458$$"
+                    },
+                    {
+                        question: "Barisan: 1, 4, 16, 64, ... Tentukan suku ke-6!",
+                        a: 1, r: 4, n: 6,
+                        solution: "$$a = 1, \\quad r = \\frac{4}{1} = 4$$ $$U_6 = 1 \\times 4^{6-1} = 1 \\times 4^5 = 1 \\times 1024 = 1024$$"
+                    },
+                    {
+                        question: "Diketahui barisan: 3, 12, 48, 192, ... Tentukan suku ke-5!",
+                        a: 3, r: 4, n: 5,
+                        solution: "$$a = 3, \\quad r = \\frac{12}{3} = 4$$ $$U_5 = 3 \\times 4^{5-1} = 3 \\times 4^4 = 3 \\times 256 = 768$$"
+                    },
+                    {
+                        question: "Barisan geometri: 5, 15, 45, 135, ... Tentukan suku ke-6!",
+                        a: 5, r: 3, n: 6,
+                        solution: "$$a = 5, \\quad r = \\frac{15}{5} = 3$$ $$U_6 = 5 \\times 3^5 = 5 \\times 243 = 1215$$"
+                    },
+                    {
+                        question: "Diketahui barisan: 8, 4, 2, 1, ... Tentukan suku ke-7!",
+                        a: 8, r: 0.5, n: 7,
+                        solution: "$$a = 8, \\quad r = \\frac{4}{8} = \\frac{1}{2}$$ $$U_7 = 8 \\times \\left(\\frac{1}{2}\\right)^6 = 8 \\times \\frac{1}{64} = \\frac{1}{8} = 0.125$$"
+                    }
+                ];
+            } else {
+                // Sulit: Diketahui dua suku - cari rasio dan suku tertentu
+                problems = [
+                    {
+                        question: "Diketahui $$U_1 = 3$$ dan $$U_3 = 12$$. Tentukan suku ke-5!",
+                        a: 3, r: 2, n: 5,
+                        solution: "$$U_3 = a \\times r^2 \\Rightarrow 12 = 3 \\times r^2 \\Rightarrow r^2 = 4 \\Rightarrow r = 2$$ $$U_5 = 3 \\times 2^4 = 3 \\times 16 = 48$$"
+                    },
+                    {
+                        question: "Diketahui $$U_2 = 6$$ dan $$U_4 = 24$$. Tentukan suku ke-6!",
+                        a: 3, r: 2, n: 6,
+                        solution: "$$\\frac{U_4}{U_2} = r^2 \\Rightarrow \\frac{24}{6} = 4 \\Rightarrow r = 2$$ $$U_2 = a \\times r \\Rightarrow 6 = a \\times 2 \\Rightarrow a = 3$$ $$U_6 = 3 \\times 2^5 = 3 \\times 32 = 96$$"
+                    },
+                    {
+                        question: "Diketahui $$U_1 = 2$$ dan $$U_4 = 16$$. Tentukan suku ke-7!",
+                        a: 2, r: 2, n: 7,
+                        solution: "$$U_4 = a \\times r^3 \\Rightarrow 16 = 2 \\times r^3 \\Rightarrow r^3 = 8 \\Rightarrow r = 2$$ $$U_7 = 2 \\times 2^6 = 2 \\times 64 = 128$$"
+                    },
+                    {
+                        question: "Diketahui $$U_2 = 4$$ dan $$U_5 = 32$$. Tentukan suku ke-8!",
+                        a: 2, r: 2, n: 8,
+                        solution: "$$\\frac{U_5}{U_2} = r^3 \\Rightarrow \\frac{32}{4} = 8 \\Rightarrow r = 2$$ $$U_2 = a \\times r \\Rightarrow 4 = a \\times 2 \\Rightarrow a = 2$$ $$U_8 = 2 \\times 2^7 = 2 \\times 128 = 256$$"
+                    },
+                    {
+                        question: "Diketahui $$U_1 = 5$$ dan $$U_3 = 20$$. Tentukan suku ke-6!",
+                        a: 5, r: 2, n: 6,
+                        solution: "$$U_3 = a \\times r^2 \\Rightarrow 20 = 5 \\times r^2 \\Rightarrow r^2 = 4 \\Rightarrow r = 2$$ $$U_6 = 5 \\times 2^5 = 5 \\times 32 = 160$$"
+                    }
+                ];
+            }
+
+            // Shuffle and select 3 problems
+            const selectedProblems = problems.sort(() => 0.5 - Math.random()).slice(0, 3);
+            practiceProblems = selectedProblems;
+
+            const difficultyLabels = {
+                easy: '🟢 Mudah',
+                medium: '🟡 Sedang', 
+                hard: '🔴 Sulit'
+            };
+
+            const content = document.getElementById('independent-content');
+            content.innerHTML = selectedProblems.map((problem, index) => `
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Soal ${index + 1} - Level ${difficultyLabels[independentDifficulty]}</h3>
+                    <p class="text-gray-700 mb-4">${problem.question}</p>
+                    <div class="flex items-center space-x-4 mb-4">
+                        <input type="number" step="0.01" id="independent-${index}" class="border border-gray-300 rounded px-3 py-2 w-32" placeholder="Jawaban">
+                        <button onclick="checkIndependentPractice(${index})" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Periksa</button>
+                        <button onclick="showIndependentSolution(${index})" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Lihat Pembahasan</button>
+                    </div>
+                    <div id="independent-feedback-${index}" class="text-sm"></div>
+                    <div id="independent-solution-${index}" class="hidden mt-4 bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                        <p class="font-semibold text-yellow-800 mb-2">Pembahasan:</p>
+                        <p class="text-gray-700">${problem.solution}</p>
+                        <p class="text-gray-700 mt-2"><strong>Jawaban: ${calculateAnswer(problem.a, problem.r, problem.n)}</strong></p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Re-render KaTeX
+            setTimeout(renderMath, 100);
+        }
+
+        function calculateAnswer(a, r, n) {
+            return a * Math.pow(r, n - 1);
+        }
+
+        function checkGuidedStep(step, correctAnswer) {
+            const feedback = document.getElementById(`guided-feedback-${step}`);
+
+            // Special handling for "continue" button in easy mode step 1
+            if (correctAnswer === 'continue') {
+                feedback.innerHTML = '<span class="text-green-600 font-semibold">✓ Bagus! Mari lanjut ke langkah berikutnya.</span>';
+                
+                // Show next step
+                setTimeout(() => {
+                    document.getElementById(`guided-step-${step + 1}`).classList.remove('hidden');
+                }, 1000);
+                return;
+            }
+
+            const userAnswer = parseFloat(document.getElementById(`guided-step${step}`).value);
+
+            // Allow small tolerance for floating point numbers
+            const tolerance = 0.01;
+            const isCorrect = Math.abs(userAnswer - correctAnswer) < tolerance || userAnswer === correctAnswer;
+
+            if (isCorrect) {
+                feedback.innerHTML = '<span class="text-green-600 font-semibold">✓ Benar! Lanjut ke langkah berikutnya.</span>';
+                
+                // Show next step
+                if (step < 3) {
+                    setTimeout(() => {
+                        document.getElementById(`guided-step-${step + 1}`).classList.remove('hidden');
+                        
+                        // Fill step 2 content for hard difficulty
+                        if (step === 1 && guidedDifficulty === 'hard' && window.currentHardProblem) {
+                            fillStep2Content();
+                        }
+                    }, 1000);
+                } else {
+                    // Show conclusion
+                    setTimeout(() => {
+                        document.getElementById('guided-conclusion').classList.remove('hidden');
+                    }, 1000);
+                }
+            } else {
+                let hint = '';
+                if (guidedDifficulty === 'easy') {
+                    if (step === 1) hint = 'Klik "Ya, Lanjut" untuk melanjutkan.';
+                    if (step === 2) hint = `Hitung ${document.querySelector('#guided-step-2 .text-center').textContent.match(/\d+\^\d+/)?.[0] || 'pangkat'} terlebih dahulu.`;
+                    if (step === 3) hint = 'Kalikan hasil pangkat dengan suku pertama.';
+                } else if (guidedDifficulty === 'medium') {
+                    if (step === 1) hint = 'Suku pertama adalah angka pertama dalam barisan.';
+                    if (step === 2) hint = 'Bagi suku kedua dengan suku pertama.';
+                    if (step === 3) hint = 'Gunakan rumus Un = a × r^(n-1).';
+                } else {
+                    if (step === 1) hint = 'Gunakan hubungan antara dua suku yang diketahui.';
+                    if (step === 2) hint = 'Gunakan salah satu suku yang diketahui untuk mencari a.';
+                    if (step === 3) hint = 'Substitusikan a dan r ke rumus Un = a × r^(n-1).';
+                }
+                
+                feedback.innerHTML = `<span class="text-red-600 font-semibold">✗ Coba lagi. ${hint}</span>`;
+            }
+        }
+
+        function fillStep2Content() {
+            const data = window.currentHardProblem;
+            const step2Solution = document.getElementById('step2-solution');
+            
+            if (data.step2Method === 'cara1') {
+                // U1 diketahui langsung
+                step2Solution.innerHTML = `
+                    <div class="bg-blue-100 p-4 rounded border-l-4 border-blue-500">
+                        <p class="font-medium text-blue-800 mb-2">✅ Menggunakan Cara 1</p>
+                        <p class="text-gray-700 mb-2">${data.step2Explanation}</p>
+                        <div class="text-center text-lg">$$a = U_1 = ${data.problem.u1 || data.problem.u1}$$</div>
+                    </div>
+                `;
+            } else {
+                // U1 tidak diketahui, harus dihitung
+                let calculation = '';
+                if (data.problem.u2 !== undefined) {
+                    calculation = `$$U_2 = a \\times r \\Rightarrow ${data.problem.u2} = a \\times ${data.r % 1 === 0 ? data.r : data.r.toFixed(1)} \\Rightarrow a = \\frac{${data.problem.u2}}{${data.r % 1 === 0 ? data.r : data.r.toFixed(1)}} = ${data.a % 1 === 0 ? data.a : data.a.toFixed(1)}$$`;
+                } else if (data.problem.u5 !== undefined) {
+                    calculation = `$$U_2 = a \\times r \\Rightarrow ${data.problem.u2} = a \\times ${data.r % 1 === 0 ? data.r : data.r.toFixed(1)} \\Rightarrow a = \\frac{${data.problem.u2}}{${data.r % 1 === 0 ? data.r : data.r.toFixed(1)}} = ${data.a % 1 === 0 ? data.a : data.a.toFixed(1)}$$`;
+                }
+                
+                step2Solution.innerHTML = `
+                    <div class="bg-orange-100 p-4 rounded border-l-4 border-orange-500">
+                        <p class="font-medium text-orange-800 mb-2">✅ Menggunakan Cara 2</p>
+                        <p class="text-gray-700 mb-3">${data.step2Explanation}</p>
+                        <div class="text-center text-lg mb-2">${calculation}</div>
+                        <p class="text-sm text-gray-600 text-center">Substitusikan nilai r yang sudah ditemukan ke dalam rumus suku yang diketahui</p>
+                    </div>
+                `;
+            }
+            
+            // Re-render KaTeX for the new content
+            setTimeout(renderMath, 100);
+        }
+
+        function checkIndependentPractice(index) {
+            const userAnswer = parseFloat(document.getElementById(`independent-${index}`).value);
+            const problem = practiceProblems[index];
+            const correctAnswer = calculateAnswer(problem.a, problem.r, problem.n);
+            const feedback = document.getElementById(`independent-feedback-${index}`);
+
+            // Allow tolerance for floating point numbers
+            const tolerance = 0.01;
+            const isCorrect = Math.abs(userAnswer - correctAnswer) < tolerance;
+
+            if (isCorrect) {
+                feedback.innerHTML = '<span class="text-green-600 font-semibold">✓ Benar! Jawaban kamu tepat.</span>';
+            } else {
+                let hint = '';
+                if (independentDifficulty === 'easy') {
+                    hint = 'Pastikan kamu menggunakan rumus Un = a × r^(n-1) dengan benar.';
+                } else if (independentDifficulty === 'medium') {
+                    hint = 'Periksa kembali cara mencari suku pertama dan rasio dari barisan.';
+                } else {
+                    hint = 'Pastikan kamu sudah mencari rasio dan suku pertama dengan benar terlebih dahulu.';
+                }
+                feedback.innerHTML = `<span class="text-red-600 font-semibold">✗ Kurang tepat. ${hint}</span>`;
+            }
+        }
+
+        function showIndependentSolution(index) {
+            const solution = document.getElementById(`independent-solution-${index}`);
+            solution.classList.toggle('hidden');
+        }
+
+        function startQuiz() {
+            quizQuestions = [
+                {
+                    question: "🦠 **Pertumbuhan Bakteri (Mudah)** <br><br>Seorang peneliti mengamati pertumbuhan bakteri di laboratorium. Pada jam pertama terdapat 5 bakteri, jam kedua menjadi 15 bakteri, jam ketiga menjadi 45 bakteri. Jika pola pertumbuhan ini terus berlanjut, berapa jumlah bakteri pada jam ke-6?",
+                    options: ["405 bakteri", "675 bakteri", "1215 bakteri", "2025 bakteri"],
+                    correct: 2,
+                    explanation: "Pola pertumbuhan: 5, 15, 45, ... <br>$$a = 5, \\quad r = \\frac{15}{5} = 3$$ <br>$$U_6 = 5 \\times 3^{6-1} = 5 \\times 3^5 = 5 \\times 243 = 1215$$ bakteri"
+                },
+                {
+                    question: "💰 **Investasi Saham (Mudah)** <br><br>Pak Ahmad menginvestasikan uangnya dalam saham. Nilai investasinya pada bulan pertama Rp 2.000.000, bulan kedua Rp 2.400.000, bulan ketiga Rp 2.880.000. Jika pola kenaikan ini konsisten, berapa nilai investasi Pak Ahmad pada bulan ke-5?",
+                    options: ["Rp 3.456.000", "Rp 4.147.200", "Rp 4.976.640", "Rp 5.971.968"],
+                    correct: 1,
+                    explanation: "Pola investasi: 2.000.000, 2.400.000, 2.880.000, ... <br>$$a = 2.000.000, \\quad r = \\frac{2.400.000}{2.000.000} = 1,2$$ <br>$$U_5 = 2.000.000 \\times 1,2^{5-1} = 2.000.000 \\times 1,2^4 = 2.000.000 \\times 2,0736 = 4.147.200$$"
+                },
+                {
+                    question: "📱 **Penyebaran Berita Viral (Sedang)** <br><br>Sebuah video viral disebarkan melalui media sosial. Pada hari pertama, 3 orang menonton video tersebut. Setiap hari, jumlah penonton bertambah 4 kali lipat dari hari sebelumnya. Jika pola ini berlanjut, berapa total orang yang menonton video pada hari ke-7?",
+                    options: ["12.288 orang", "49.152 orang", "196.608 orang", "786.432 orang"],
+                    correct: 0,
+                    explanation: "Pola penonton: 3, 12, 48, 192, ... <br>$$a = 3, \\quad r = 4$$ <br>$$U_7 = 3 \\times 4^{7-1} = 3 \\times 4^6 = 3 \\times 4.096 = 12.288$$ orang"
+                },
+                {
+                    question: "🏠 **Harga Properti (Sedang)** <br><br>Harga sebuah rumah mengalami kenaikan setiap tahun. Pada tahun 2020 harganya Rp 500.000.000, tahun 2022 menjadi Rp 720.000.000. Jika kenaikan harga mengikuti pola barisan geometri, berapa perkiraan harga rumah tersebut pada tahun 2026?",
+                    options: ["Rp 1.036.800.000", "Rp 1.244.160.000", "Rp 1.492.992.000", "Rp 1.791.590.400"],
+                    correct: 2,
+                    explanation: "Diketahui: tahun 2020 (U₁) = 500.000.000, tahun 2022 (U₃) = 720.000.000 <br>$$U_3 = a \\times r^{3-1} = a \\times r^2 \\Rightarrow 720.000.000 = 500.000.000 \\times r^2$$ <br>$$r^2 = 1,44 \\Rightarrow r = 1,2$$ <br>Tahun 2026 adalah U₇: $$U_7 = 500.000.000 \\times 1,2^{7-1} = 500.000.000 \\times 1,2^6 = 500.000.000 \\times 2,985984 = 1.492.992.000$$"
+                },
+                {
+                    question: "🌱 **Pertumbuhan Tanaman (Sulit)** <br><br>Seorang petani menanam bibit pohon. Tinggi pohon pada minggu ke-2 adalah 8 cm, dan pada minggu ke-5 adalah 64 cm. Jika pertumbuhan tinggi pohon mengikuti pola barisan geometri, berapa tinggi pohon pada minggu ke-8?",
+                    options: ["256 cm", "512 cm", "1024 cm", "2048 cm"],
+                    correct: 1,
+                    explanation: "Diketahui: U₂ = 8 cm, U₅ = 64 cm <br>$$\\frac{U_5}{U_2} = \\frac{a \\times r^{5-1}}{a \\times r^{2-1}} = \\frac{a \\times r^4}{a \\times r^1} = r^3$$ <br>$$\\frac{64}{8} = 8 \\Rightarrow r^3 = 8 \\Rightarrow r = 2$$ <br>$$U_2 = a \\times r^{2-1} = a \\times r \\Rightarrow 8 = a \\times 2 \\Rightarrow a = 4$$ <br>$$U_8 = 4 \\times 2^{8-1} = 4 \\times 2^7 = 4 \\times 128 = 512$$ cm"
+                },
+                {
+                    question: "🏭 **Produksi Pabrik (Sulit)** <br><br>Sebuah pabrik meningkatkan produksinya setiap bulan. Pada bulan ke-1 memproduksi 100 unit, dan pada bulan ke-4 memproduksi 2.700 unit. Jika peningkatan produksi mengikuti pola barisan geometri, berapa unit yang diproduksi pada bulan ke-7?",
+                    options: ["72.900 unit", "218.700 unit", "656.100 unit", "1.968.300 unit"],
+                    correct: 0,
+                    explanation: "Diketahui: U₁ = 100 unit, U₄ = 2.700 unit <br>$$U_4 = a \\times r^{4-1} = a \\times r^3 \\Rightarrow 2.700 = 100 \\times r^3$$ <br>$$r^3 = 27 \\Rightarrow r = 3$$ <br>$$U_7 = 100 \\times 3^{7-1} = 100 \\times 3^6 = 100 \\times 729 = 72.900$$ unit"
+                }
+            ];
+
+            currentQuizIndex = 0;
+            quizScore = 0;
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            if (currentQuizIndex >= quizQuestions.length) {
+                showQuizResult();
+                return;
+            }
+
+            const question = quizQuestions[currentQuizIndex];
+            const content = document.getElementById('quiz-content');
+            
+            content.innerHTML = `
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Pertanyaan ${currentQuizIndex + 1} dari ${quizQuestions.length}</h3>
+                        <div class="text-sm text-gray-600">Skor: ${quizScore}/${currentQuizIndex}</div>
+                    </div>
+                    <div class="text-gray-700 mb-6 text-lg" style="line-height: 1.6;">${question.question}</div>
+                    <div class="space-y-3">
+                        ${question.options.map((option, index) => `
+                            <button onclick="selectAnswer(${index})" class="quiz-option w-full text-left p-4 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors">
+                                ${String.fromCharCode(65 + index)}. ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="quiz-feedback" class="mt-6"></div>
+                </div>
+            `;
+            
+            // Store problem data for step 2 content generation
+            window.currentHardProblem = {
+                step2Method: step2Method,
+                step2Explanation: step2Explanation,
+                a: a,
+                r: r,
+                problem: problem
+            };
+            
+            // Re-render KaTeX for the new content
+            setTimeout(renderMath, 100);
+        }
+
+        function selectAnswer(selectedIndex) {
+            const question = quizQuestions[currentQuizIndex];
+            const isCorrect = selectedIndex === question.correct;
+            
+            if (isCorrect) {
+                quizScore++;
+            }
+
+            // Show feedback
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.innerHTML = `
+                <div class="p-4 rounded-lg ${isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}">
+                    <p class="font-semibold ${isCorrect ? 'text-green-800' : 'text-red-800'} mb-2">
+                        ${isCorrect ? '✓ Benar!' : '✗ Kurang tepat'}
+                    </p>
+                    <div class="text-gray-700 mb-3" style="line-height: 1.6;"><strong>Pembahasan:</strong><br>${question.explanation}</div>
+                    <button onclick="nextQuestion()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        ${currentQuizIndex < quizQuestions.length - 1 ? 'Pertanyaan Selanjutnya' : 'Lihat Hasil'}
+                    </button>
+                </div>
+            `;
+
+            // Disable all options
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.disabled = true;
+                option.classList.add('cursor-not-allowed', 'opacity-50');
+            });
+        }
+
+        function nextQuestion() {
+            currentQuizIndex++;
+            showQuizQuestion();
+        }
+
+        function showQuizResult() {
+            const percentage = Math.round((quizScore / quizQuestions.length) * 100);
+            let grade, message, color;
+
+            if (percentage >= 80) {
+                grade = "Sangat Baik";
+                message = "Luar biasa! Kamu sudah menguasai materi barisan geometri dengan baik.";
+                color = "green";
+            } else if (percentage >= 60) {
+                grade = "Baik";
+                message = "Bagus! Kamu sudah memahami konsep dasar. Terus berlatih untuk hasil yang lebih baik.";
+                color = "blue";
+            } else {
+                grade = "Perlu Perbaikan";
+                message = "Jangan menyerah! Coba pelajari kembali materi dan ulangi latihan.";
+                color = "red";
+            }
+
+            const content = document.getElementById('quiz-content');
+            content.innerHTML = `
+                <div class="bg-white border border-gray-200 rounded-lg p-8 shadow-sm text-center">
+                    <div class="text-6xl mb-4">🎉</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Kuis Selesai!</h3>
+                    <div class="text-4xl font-bold text-${color}-600 mb-2">${quizScore}/${quizQuestions.length}</div>
+                    <div class="text-xl text-${color}-600 font-semibold mb-4">${percentage}% - ${grade}</div>
+                    <p class="text-gray-700 mb-6">${message}</p>
+                    <div class="space-x-4">
+                        <button onclick="startQuiz()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Ulangi Kuis</button>
+                        <button onclick="showSection('practice')" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">Latihan Lagi</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('quiz-score').textContent = `Skor Terakhir: ${quizScore}/${quizQuestions.length} (${percentage}%)`;
+        }
+
+        // KaTeX rendering function (robust + auto-update)
+        function renderMath() {
+            // Define a single renderer we can reuse
+            if (!window.__renderAllMath) {
+                window.__renderAllMath = function () {
+                    if (!window.renderMathInElement) return;
+                    renderMathInElement(document.body, {
+                        delimiters: [
+                            { left: '$$', right: '$$', display: true },
+                            { left: '$', right: '$', display: false }
+                        ],
+                        throwOnError: false
+                    });
+                };
+            }
+
+            // If KaTeX isn't ready yet, poll until available, then render once
+            if (!window.renderMathInElement) {
+                if (!window.__katexPoll) {
+                    window.__katexPoll = setInterval(() => {
+                        if (window.renderMathInElement) {
+                            clearInterval(window.__katexPoll);
+                            window.__katexPoll = null;
+                            window.__renderAllMath();
+                        }
+                    }, 100);
+                }
+            } else {
+                window.__renderAllMath();
+            }
+
+            // Observe DOM changes to automatically re-render new content
+            if (!window.__mathObserver) {
+                const observer = new MutationObserver((mutations) => {
+                    let changed = false;
+                    for (const m of mutations) {
+                        if (m.addedNodes && m.addedNodes.length) { changed = true; break; }
+                    }
+                    if (changed) {
+                        clearTimeout(window.__mathDebounce);
+                        window.__mathDebounce = setTimeout(() => {
+                            window.__renderAllMath && window.__renderAllMath();
+                        }, 80);
+                    }
+                });
+                observer.observe(document.body, { childList: true, subtree: true });
+                window.__mathObserver = observer;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            generateGuidedPractice();
+            // Render math once DOM and KaTeX are ready
+            setTimeout(() => {
+                renderMath();
+                // Extra render after a moment to catch late inserts
+                setTimeout(renderMath, 200);
+            }, 0);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97f6459702ddceca',t:'MTc1NzkxOTg4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
