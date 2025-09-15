@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deret Geometri Interaktif - Kelas 10</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+    .brand-grad { background: linear-gradient(135deg,#0ea5e9 0%, #1e3a8a 100%); }
+    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+    .chip { background:#e0f2fe; color:#075985; padding: 2px 10px; border-radius: 999px; font-weight: 600; }
+    .kbd { background:#0ea5e9; color:#fff; padding: 2px 8px; border-radius: 6px; font-weight:600; }
+    .btn { transition: all .2s ease; }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
+  <!-- Header -->
+  <header class="brand-grad text-white py-8">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <div class="text-sm tracking-wide uppercase opacity-90">Pembelajaran Online Satu-Siswa</div>
+      <h1 class="text-3xl md:text-4xl font-extrabold mt-1">Jumlah Deret Geometri Interaktif</h1>
+      <p class="mt-2 text-blue-100">Kelas 10 SMA • Inquiry & Deep Learning • Nuansa Putih-Biru-Hitam</p>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <nav class="border-b border-gray-200 bg-white sticky top-0 z-30">
+    <div class="max-w-5xl mx-auto px-2 sm:px-6">
+      <div class="flex overflow-x-auto no-scrollbar gap-1">
+        <button class="tab-btn px-5 py-3 text-blue-700 border-b-2 border-blue-700 font-semibold btn" data-target="inquiry">Eksplorasi</button>
+        <button class="tab-btn px-5 py-3 text-gray-600 hover:text-blue-700 btn" data-target="theory">Teori</button>
+        <button class="tab-btn px-5 py-3 text-gray-600 hover:text-blue-700 btn" data-target="practice">Latihan</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto px-6 py-8 space-y-10">
+
+    <!-- Inquiry -->
+    <section id="inquiry" class="space-y-6">
+      <div class="card p-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold text-sky-900">Eksplorasi: Temukan Pola dan Rumus</h2>
+          <span class="chip">Inquiry</span>
+        </div>
+        <p class="mt-2 text-gray-700">Kita mulai dari pola nyata, mengamati, lalu menyimpulkan rumus jumlah deret geometri.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Inquiry 1 -->
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold text-sky-900 mb-3">1) Penggandaan Koin</h3>
+          <p class="text-gray-700 mb-4">Seseorang menabung koin: hari pertama 2 koin, lalu setiap hari jumlahnya menjadi 3 kali lipat dari hari sebelumnya. Tulis total koin selama 4 hari pertama.</p>
+          <div class="space-y-2 text-gray-800">
+            <div>Hari per hari: <span class="kbd">2</span>, <span class="kbd">6</span>, <span class="kbd">18</span>, <span class="kbd">54</span></div>
+            <div class="flex items-center gap-2">
+              <span>Total 4 hari (S₄) =</span>
+              <input id="inq1" type="number" class="border rounded px-3 py-2 w-32" placeholder="Jawaban"/>
+              <button class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded btn" onclick="checkInquiry(1, 2+6+18+54)">Cek</button>
+            </div>
+            <div id="inq1-feedback" class="text-sm"></div>
+          </div>
+          <details class="mt-3">
+            <summary class="cursor-pointer text-sky-700 font-semibold">Tunjukkan Pembahasan</summary>
+            <div class="mt-2 text-gray-700">
+              Pola ini deret geometri dengan $$a=2,\\ r=3$$. Jumlah 4 hari:
+              $$S_4=a\\,\\frac{r^4-1}{r-1}=2\\,\\frac{3^4-1}{3-1}=2\\,\\frac{81-1}{2}=2\\cdot40=80$$
+            </div>
+          </details>
+        </div>
+
+        <!-- Inquiry 2 -->
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold text-sky-900 mb-3">2) Diskon Bertingkat</h3>
+          <p class="text-gray-700 mb-4">Sebuah voucher memberi potongan berurutan: 100.000, lalu 50.000, 25.000, 12.500, ... Berapa total potongan hingga 5 tahap?</p>
+          <div class="flex items-center gap-2">
+            <span>Total 5 tahap (S₅) =</span>
+            <input id="inq2" type="number" class="border rounded px-3 py-2 w-40" placeholder="Jawaban"/>
+            <button class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded btn" onclick="checkInquiry(2, 100000*(1-Math.pow(0.5,5))/(1-0.5))">Cek</button>
+          </div>
+          <div id="inq2-feedback" class="text-sm mt-2"></div>
+          <details class="mt-3">
+            <summary class="cursor-pointer text-sky-700 font-semibold">Tunjukkan Pembahasan</summary>
+            <div class="mt-2 text-gray-700">
+              Ini deret geometri dengan $$a=100{,}000,\\ r=\\tfrac12$$. Maka:
+              $$S_5=a\\,\\frac{1-r^5}{1-r}=100{,}000\\,\\frac{1-(\\tfrac12)^5}{1-\\tfrac12}=100{,}000\\cdot\\frac{1-\\tfrac{1}{32}}{\\tfrac12}=100{,}000\\cdot\\frac{\\tfrac{31}{32}}{\\tfrac12}=100{,}000\\cdot\\frac{31}{16}=193{,}750$$
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="card p-6">
+        <h3 class="text-lg font-semibold text-sky-900 mb-3">Refleksi Singkat</h3>
+        <p class="text-gray-700 mb-2">Dari dua konteks di atas, apa yang kamu amati tentang cara menghitung jumlah deret geometri?</p>
+        <textarea id="reflection" class="w-full border rounded p-3" rows="3" placeholder="Tulis kesimpulanmu..."></textarea>
+        <button class="mt-3 bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded btn" onclick="saveReflection()">Simpan Refleksi</button>
+      </div>
+    </section>
+
+    <!-- Theory -->
+    <section id="theory" class="hidden space-y-6">
+      <div class="card p-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold text-sky-900">Teori: Jumlah Deret Geometri</h2>
+          <span class="chip">Deep learning</span>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6 mt-4">
+          <div class="space-y-3 text-gray-800">
+            <p>Barisan geometri: $$a,\\ ar,\\ ar^2,\\ \\ldots,\\ ar^{n-1}$$</p>
+            <p>Jumlah n suku pertama (r≠1):
+              $$S_n=a\\,\\frac{r^n-1}{r-1}$$
+            </p>
+            <p>Kasus khusus (r=1):
+              $$S_n=a\\cdot n$$
+            </p>
+          </div>
+          <div class="space-y-3 text-gray-800">
+            <div class="bg-sky-50 border border-sky-200 rounded p-4">
+              <div class="font-semibold text-sky-900 mb-2">Menentukan r dari barisan</div>
+              <p>
+                $$r=\\frac{U_2}{U_1}=\\frac{U_3}{U_2}=\\cdots$$
+              </p>
+              <p class="mt-2">Jika diketahui dua suku tidak berurutan, contoh:
+                $$\\frac{U_5}{U_2}=\\frac{a\\,r^{4}}{a\\,r^{1}}=r^{3} \\Rightarrow r=\\sqrt[3]{\\tfrac{U_5}{U_2}}$$
+              </p>
+            </div>
+            <div class="bg-sky-50 border border-sky-200 rounded p-4">
+              <div class="font-semibold text-sky-900 mb-2">Contoh</div>
+              <p>Untuk $$a=3,\\ r=2,\\ n=5$$
+                $$S_5=3\\,\\frac{2^5-1}{2-1}=3\\,(32-1)=93$$
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Practice -->
+    <section id="practice" class="hidden space-y-8">
+      <div class="card p-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold text-sky-900">Latihan</h2>
+          <div class="flex gap-2">
+            <span class="chip">Latihan Terbimbing</span>
+            <span class="chip">Latihan Mandiri</span>
+          </div>
+        </div>
+        <p class="text-gray-700 mt-2">Tujuan: siswa dapat menentukan jumlah deret geometri Sₙ dengan tiga tingkat kesulitan.</p>
+      </div>
+
+      <!-- Guided Practice -->
+      <div class="card p-6">
+        <div class="flex flex-wrap items-center gap-3 justify-between">
+          <div>
+            <h3 class="text-xl font-semibold text-sky-900">Latihan Terbimbing</h3>
+            <p class="text-gray-700 text-sm">Langkah demi langkah, cek tiap tahapannya.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="guided-btn bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded btn" data-level="easy">🟢 Mudah</button>
+            <button class="guided-btn bg-gray-800 hover:bg-black text-white px-4 py-2 rounded btn" data-level="medium">🟡 Sedang</button>
+            <button class="guided-btn bg-gray-800 hover:bg-black text-white px-4 py-2 rounded btn" data-level="hard">🔴 Sulit</button>
+            <button id="guided-generate" class="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded btn">Generate Soal</button>
+          </div>
+        </div>
+
+        <div id="guided-container" class="mt-5 space-y-5"></div>
+      </div>
+
+      <!-- Independent Practice -->
+      <div class="card p-6">
+        <div class="flex flex-wrap items-center gap-3 justify-between">
+          <div>
+            <h3 class="text-xl font-semibold text-sky-900">Latihan Mandiri</h3>
+            <p class="text-gray-700 text-sm">Kerjakan sendiri, lalu cek kunci dan pembahasan lengkap.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="ind-btn bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded btn" data-level="easy">🟢 Mudah</button>
+            <button class="ind-btn bg-gray-800 hover:bg-black text-white px-4 py-2 rounded btn" data-level="medium">🟡 Sedang</button>
+            <button class="ind-btn bg-gray-800 hover:bg-black text-white px-4 py-2 rounded btn" data-level="hard">🔴 Sulit</button>
+            <button id="ind-generate" class="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded btn">Generate 3 Soal</button>
+          </div>
+        </div>
+
+        <div id="independent-list" class="mt-5 space-y-5"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Robust KaTeX auto-render + observer (hindari $$...$$ tampil mentah)
+    function renderAllMath() {
+      if (!window.renderMathInElement) return;
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+    }
+    const mathObserver = new MutationObserver(() => {
+      clearTimeout(window.__mathDebounce);
+      window.__mathDebounce = setTimeout(renderAllMath, 60);
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      mathObserver.observe(document.body, {childList: true, subtree: true});
+      // Initial render
+      setTimeout(renderAllMath, 80);
+      // Extra pass for late loads
+      setTimeout(renderAllMath, 300);
+    });
+
+    // Tabs
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(btn => btn.addEventListener('click', (e) => {
+      const target = btn.dataset.target;
+      document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+      document.getElementById(target).classList.remove('hidden');
+      tabs.forEach(b => { b.classList.remove('text-blue-700','border-b-2','border-blue-700'); b.classList.add('text-gray-600'); });
+      btn.classList.add('text-blue-700','border-b-2','border-blue-700');
+    }));
+
+    // Inquiry checks
+    function checkInquiry(id, correct) {
+      const val = parseFloat(document.getElementById('inq'+id).value);
+      const fb = document.getElementById('inq'+id+'-feedback');
+      if (Number.isFinite(val) && Math.abs(val - correct) < 0.01) {
+        fb.innerHTML = '<span class="text-green-700 font-semibold">✓ Benar!</span>';
+      } else {
+        fb.innerHTML = '<span class="text-red-700 font-semibold">✗ Coba lagi. Periksa pola dan gunakan rumus jumlah deret.</span>';
+      }
+    }
+    function saveReflection() {
+      const t = (document.getElementById('reflection').value || '').trim();
+      alert(t ? 'Refleksi tersimpan. Keren!' : 'Tulis refleksimu singkat dulu ya 🙂');
+    }
+
+    // Utility: formatting integer vs decimal nicely
+    function fmt(x){ return Math.abs(x - Math.round(x)) < 1e-9 ? String(Math.round(x)) : x.toString(); }
+
+    // Core formulas
+    function sumGeom(a, r, n){
+      if (Math.abs(r - 1) < 1e-9) return a * n;
+      return a * (Math.pow(r, n) - 1) / (r - 1);
+    }
+    function ratioFromTwo(u_k, k, u_m, m){ // r^(m-k)=U_m/U_k
+      if (m === k) return 1;
+      const exp = 1/(m - k);
+      return Math.pow(u_m/u_k, exp);
+    }
+
+    // Guided Practice
+    let guidedLevel = 'easy';
+    document.querySelectorAll('.guided-btn').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        guidedLevel = b.dataset.level;
+        document.querySelectorAll('.guided-btn').forEach(x=>{
+          x.classList.remove('bg-sky-600','hover:bg-sky-700');
+          x.classList.add('bg-gray-800','hover:bg-black');
+        });
+        b.classList.add('bg-sky-600','hover:bg-sky-700');
+        b.classList.remove('bg-gray-800','hover:bg-black');
+      });
+    });
+    document.getElementById('guided-generate').addEventListener('click', ()=>{
+      const container = document.getElementById('guided-container');
+      const prob = makeGuidedProblem(guidedLevel);
+      container.innerHTML = buildGuidedUI(prob);
+      setTimeout(renderAllMath,50);
+    });
+
+    function randomChoice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+    function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+    // Problem generators
+    // Easy: known a, r, n -> find S_n
+    function genEasy(){
+      const a = randomChoice([2,3,4,5,6,10]);
+      const r = randomChoice([2,3,0.5,1.5]);
+      const n = randInt(4,8);
+      return { type:'easy', a, r, n };
+    }
+    // Medium: given first few terms (sequence) and n, find S_n (need to infer a and r)
+    function genMedium(){
+      const a = randomChoice([2,3,4,5]);
+      const r = randomChoice([2,3,4,0.5]);
+      const seqLen = 4;
+      const seq = Array.from({length:seqLen}, (_,i)=> a*Math.pow(r,i));
+      const n = randInt(5,8);
+      return { type:'medium', sequence: seq, n, a, r };
+    }
+    // Hard: given two non-adjacent terms and n, find r first then S_n
+    function genHard(){
+      // choose a, r, then compute two terms
+      const a = randomChoice([2,3,5,8]);
+      const r = randomChoice([2,3,0.5]);
+      const k = randomChoice([1,2]); // starting index
+      const gap = randomChoice([2,3]); // difference in indices
+      const m = k + gap; // second index
+      const u_k = a * Math.pow(r, k-1);
+      const u_m = a * Math.pow(r, m-1);
+      const n = randInt(m+1, m+4);
+      return { type:'hard', u_k: Math.round(u_k*1000)/1000, k, u_m: Math.round(u_m*1000)/1000, m, n, trueA:a, trueR:r };
+    }
+
+    function makeGuidedProblem(level){
+      if (level==='easy') return genEasy();
+      if (level==='medium') return genMedium();
+      return genHard();
+    }
+
+    // Guided UI (step-by-step)
+    function buildGuidedUI(p){
+      if (p.type==='easy'){
+        const question = `Diketahui suku pertama $$a=${fmt(p.a)}$$, rasio $$r=${fmt(p.r)}$$, dan banyak suku $$n=${p.n}$$. Tentukan $$S_{${p.n}}$$.`;
+        const rpow = `r^{${p.n}}`;
+        const ans = sumGeom(p.a,p.r,p.n);
+        return `
+          <div class="bg-sky-50 border border-sky-200 rounded p-4">
+            <div class="text-gray-800 mb-2"><span class="chip">🟢 Mudah</span></div>
+            <p class="text-gray-900 text-lg mb-4">${question}</p>
+
+            <div class="space-y-4">
+              <div class="border-l-4 border-sky-400 pl-3">
+                <div class="font-semibold text-sky-900 mb-2">Langkah 1: Tulis rumus jumlah</div>
+                <div>$$S_n=a\\,\\frac{r^n-1}{r-1} \\quad (r\\neq 1)\\quad\\text{atau}\\quad S_n=a\\,n\\ (r=1)$$</div>
+                <button class="mt-2 bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded btn" onclick="reveal('g-easy-1')">Lanjut</button>
+                <div id="g-easy-1" class="hidden mt-2 text-gray-800">Kita gunakan bentuk umum dengan nilai yang diketahui.</div>
+              </div>
+
+              <div class="border-l-4 border-sky-400 pl-3">
+                <div class="font-semibold text-sky-900 mb-2">Langkah 2: Substitusi nilai</div>
+                <div>$$S_{${p.n}}=${fmt(p.a)}\\,\\frac{${fmt(p.r)}^{${p.n}}-1}{${fmt(p.r)}-1}$$</div>
+                <div class="flex items-center gap-2 mt-2">
+                  <span>Hitung $$${rpow}$$ =</span>
+                  <input id="g-easy-pow" type="number" class="border rounded px-3 py-2 w-32" placeholder="?">
+                  <button class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-2 rounded btn" onclick="checkGuidedPow('g-easy-pow', ${Math.pow(p.r,p.n)})">Cek</button>
+                  <span id="g-easy-pow-fb" class="text-sm"></span>
+                </div>
+              </div>
+
+              <div class="border-l-4 border-sky-400 pl-3">
+                <div class="font-semibold text-sky-900 mb-2">Langkah 3: Hitung hasil akhir</div>
+                <div>Masukkan hasil pangkat ke rumus, lalu hitung:</div>
+                <div class="flex items-center gap-2 mt-2">
+                  <span>$$S_{${p.n}}=$$</span>
+                  <input id="g-easy-ans" type="number" class="border rounded px-3 py-2 w-40" placeholder="Jawaban">
+                  <button class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-2 rounded btn" onclick="checkGuidedAns('g-easy-ans', ${ans})">Cek</button>
+                  <span id="g-easy-ans-fb" class="text-sm"></span>
+                </div>
+                <details class="mt-2">
+                  <summary class="cursor-pointer text-sky-700 font-semibold">Pembahasan</summary>
+                  <div class="mt-2 text-gray-800">
+                    $$S_{${p.n}}=${fmt(p.a)}\\,\\frac{${fmt(p.r)}^{${p.n}}-1}{${fmt(p.r)}-1}=${fmt(p.a)}\\,\\frac{${fmt(Math.pow(p.r,p.n))}-1}{${fmt(p.r-1)}}=${fmt(ans)}$$
+                  </div>
+                </details>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (p.type==='medium'){
+        const seqStr = p.sequence.map(x=>fmt(x)).join(', ');
+        const ans = sumGeom(p.a,p.r,p.n);
+        return `
+          <div class="bg-sky-50 border border-sky-200 rounded p-4">
+            <div class="text-gray-800 mb-2"><span class="chip">🟡 Sedang</span></div>
+            <p class="text-gray-900 text-lg mb-2">Diketahui deret geometri (barisan suku): ${seqStr}, ... Tentukan jumlah $$S_{${p.n}}$$.</p>
+
+            <div class="space-y-4">
+              <div class="border-l-4 border-sky-400 pl-3">
+                <div class="font-semibold text-sky-900 mb-2">Langkah 1: Identifikasi a dan r</div>
+                <div class="flex items-center gap-2">
+                  <span>$$a=$$</span>
+                  <input id="g-med-a" type="number" class="border rounded px-3 py-2 w-28" placeholder="?">
+                  <button class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-2 rounded btn" onclick="checkGuidedExact('g-med-a', ${p.a})">Cek</button>
+                  <span id="g-med-a-fb" class="text-sm"></span>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                  <span>$$r=\\tfrac{U_2}{U_1}=\\tfrac{${fmt(p.sequence[1])}}{${fmt(p.sequence[0])}}=$$</span>
+                  <input id="g-med-r" type="number" step="0.01" class="border rounded px-3 py-2 w-28" placeholder="?">
+                  <button class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-2 rounded btn" onclick="checkGuidedFloat('g-med-r', ${p.r})">Cek</button>
+                  <span id="g-med-r-fb" class="text-sm"></span>
+                </div>
+              </div>
+
+              <div class="border-l-4 border-sky-400 pl-3">
+                <div class="font-semibold text-sky-900 mb-2">Langkah 2: Tulis rumus jumlah dan substitusi</div>
+                <div>$$S_{${p.n}}=a\\,\\frac{r^${p.n}-1}{r-1}=${fmt(p.a)}\\,\\frac{${fmt(p.r)}^{${p.n}}-1}{${fmt(p.r)}-1}$$</div>
+              </div>
+
+              <div class="border-l-4 border-sky-400 pl-3">
+                <div class="font-semibold text-sky-900 mb-2">Langkah 3: Hitung</div>
+                <div class="flex items-center gap-2">
+                  <span>$$S_{${p.n}}=$$</span>
+                  <input id="g-med-ans" type="number" class="border rounded px-3 py-2 w-40" placeholder="Jawaban">
+                  <button class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-2 rounded btn" onclick="checkGuidedAns('g-med-ans', ${ans})">Cek</button>
+                  <span id="g-med-ans-fb" class="text-sm"></span>
+                </div>
+                <details class="mt-2">
+                  <summary class="cursor-pointer text-sky-700 font-semibold">Pembahasan</summary>
+                  <div class="mt-2 text-gray-800">
+                    $$a=${fmt(p.a)},\\ r=${fmt(p.r)}\\Rightarrow S_{${p.n}}=${fmt(ans)}$$
+                  </div>
+                </details>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // hard
+      if (p.type==='hard'){
+        const rCalc = ratioFromTwo(p.u_k,p.k,p.u_m,p.m);
+        // better exactness for 0.5,2,3:
+        const rPretty = Math.abs(rCalc-0.5)<1e-9?0.5: (Math.abs(rCalc-2)<1e-9?2: (Math.abs(rCalc-3)<1e-9?3:rCalc));
+        const aFound = p.u_k / Math.pow(rPretty, p.k-1);
+        const ans = sumGeom(aFound, rPretty, p.n);
+        return `
+          <div class="bg-sky-50 border border-sky-200 rounded p-4">
+            <div class="text-gray-800 mb-2"><span class="chip">🔴 Sulit</span></div>
+            <p class="text-gray-900 text-lg mb-2">
+              Diketahui $$U_{${p.k}}=${fmt(p.u_k)}$$ dan $$U_{${p.m}}=${fmt(p.u_m)}$$. Tentukan rasio $$r$$ terlebih dahulu, lalu hitung $$S_{${p.n}}$$.
+            </p>
+
+            <div class="space-y-4">
+              <div class="border-l-4 border-sky-400 pl-3">
+                <div class="font-semibold text-sky-900 mb-2">Langkah 1: Cari r dari dua suku</div>
+                <div>
+                  $$\\frac{U_{${p.m}}}{U_{${p.k}}}=\\frac{a\\,r^{${p.m}-1}}{a\\,r^{${p.k}-1}}=r^{${p.m}-${p.k}} \\Rightarrow r=\\sqrt[${p.m-p.k}]{\\tfrac{U_{${p.m}}}{U_{${p.k}}}}$$
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                  <span>$$r=$$</span>
+                  <input id="g-hard-r" type="number" step="0.01" class="border rounded px-3 py-2 w-28" placeholder="?">
+                  <button class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-2 rounded btn" onclick="checkGuidedFloat('g-hard-r', ${rPretty})">Cek</button>
+                  <span id="g-hard-r-fb" class="text-sm"></span>
+                </div>
+              </div>
+
+              <div class="border-l-4 border-sky-400 pl-3">
+                <div class="font-semibold text-sky-900 mb-2">Langkah 2: Tentukan a</div>
+                <div>
+                  $$U_{${p.k}}=a\\,r^{${p.k}-1}\\Rightarrow a=\\frac{U_{${p.k}}}{r^{${p.k}-1}}=\\frac{${fmt(p.u_k)}}{${fmt(rPretty)}^{${p.k}-1}}$$
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                  <span>$$a=$$</span>
+                  <input id="g-hard-a" type="number" step="0.01" class="border rounded px-3 py-2 w-28" placeholder="?">
+                  <button class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-2 rounded btn" onclick="checkGuidedFloat('g-hard-a', ${aFound})">Cek</button>
+                  <span id="g-hard-a-fb" class="text-sm"></span>
+                </div>
+              </div>
+
+              <div class="border-l-4 border-sky-400 pl-3">
+                <div class="font-semibold text-sky-900 mb-2">Langkah 3: Hitung jumlah</div>
+                <div>
+                  $$S_{${p.n}}=a\\,\\frac{r^{${p.n}}-1}{r-1}$$
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                  <span>$$S_{${p.n}}=$$</span>
+                  <input id="g-hard-s" type="number" step="0.01" class="border rounded px-3 py-2 w-40" placeholder="Jawaban">
+                  <button class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-2 rounded btn" onclick="checkGuidedFloat('g-hard-s', ${ans})">Cek</button>
+                  <span id="g-hard-s-fb" class="text-sm"></span>
+                </div>
+                <details class="mt-2">
+                  <summary class="cursor-pointer text-sky-700 font-semibold">Pembahasan</summary>
+                  <div class="mt-2 text-gray-800">
+                    $$r=${fmt(rPretty)},\\ a=${fmt(aFound)}\\Rightarrow S_{${p.n}}=${fmt(ans)}$$
+                  </div>
+                </details>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      return '';
+    }
+
+    // Guided check helpers
+    function reveal(id){
+      const el=document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    }
+    function checkGuidedPow(id, correct){
+      const el = document.getElementById(id);
+      const fb = document.getElementById(id+'-fb');
+      const v = parseFloat(el.value);
+      if (Number.isFinite(v) && Math.abs(v - correct) < 0.01){
+        fb.textContent = '✓ Benar'; fb.className='text-sm text-green-700 font-semibold';
+      } else { fb.textContent='✗ Coba lagi'; fb.className='text-sm text-red-700 font-semibold'; }
+    }
+    function checkGuidedAns(id, correct){
+      const el = document.getElementById(id);
+      const fb = document.getElementById(id+'-fb');
+      const v = parseFloat(el.value);
+      if (Number.isFinite(v) && Math.abs(v - correct) < 0.01){
+        fb.textContent = '✓ Tepat'; fb.className='text-sm text-green-700 font-semibold';
+      } else { fb.textContent='✗ Periksa lagi langkahnya'; fb.className='text-sm text-red-700 font-semibold'; }
+    }
+    function checkGuidedExact(id, correct){
+      const el = document.getElementById(id);
+      const fb = document.getElementById(id+'-fb');
+      const v = parseFloat(el.value);
+      if (Number.isFinite(v) && Math.abs(v - correct) < 1e-9){
+        fb.textContent = '✓ Benar'; fb.className='text-sm text-green-700 font-semibold';
+      } else { fb.textContent='✗ Coba lagi'; fb.className='text-sm text-red-700 font-semibold'; }
+    }
+    function checkGuidedFloat(id, correct){
+      const el = document.getElementById(id);
+      const fb = document.getElementById(id+'-fb');
+      const v = parseFloat(el.value);
+      if (Number.isFinite(v) && Math.abs(v - correct) < 0.01){
+        fb.textContent = '✓ Benar'; fb.className='text-sm text-green-700 font-semibold';
+      } else { fb.textContent='✗ Coba lagi'; fb.className='text-sm text-red-700 font-semibold'; }
+    }
+
+    // Independent Practice
+    let indLevel = 'easy';
+    document.querySelectorAll('.ind-btn').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        indLevel = b.dataset.level;
+        document.querySelectorAll('.ind-btn').forEach(x=>{
+          x.classList.remove('bg-sky-600','hover:bg-sky-700');
+          x.classList.add('bg-gray-800','hover:bg-black');
+        });
+        b.classList.add('bg-sky-600','hover:bg-sky-700');
+        b.classList.remove('bg-gray-800','hover:bg-black');
+      });
+    });
+    document.getElementById('ind-generate').addEventListener('click', ()=>{
+      const list = document.getElementById('independent-list');
+      const probs = Array.from({length:3}, ()=> makeIndProblem(indLevel));
+      list.innerHTML = probs.map((p,idx)=>buildIndItem(p, idx)).join('');
+      setTimeout(renderAllMath,50);
+    });
+
+    function makeIndProblem(level){
+      if (level==='easy'){
+        const a = randomChoice([2,3,4,5,6,10]);
+        const r = randomChoice([2,3,0.5,1.5,1]);
+        const n = randInt(4,9);
+        const ans = sumGeom(a,r,n);
+        return {type:'easy', a,r,n, ans};
+      } else if (level==='medium'){
+        const a = randomChoice([2,3,4,5]);
+        const r = randomChoice([2,3,4,0.5,1]);
+        const seqLen = 4;
+        const seq = Array.from({length:seqLen}, (_,i)=> a*Math.pow(r,i));
+        const n = randInt(6,10);
+        const ans = sumGeom(a,r,n);
+        return {type:'medium', sequence: seq, a,r,n, ans};
+      } else {
+        const a = randomChoice([2,3,5,8]);
+        const r = randomChoice([2,3,0.5,1.5]);
+        const k = randomChoice([1,2]);
+        const gap = randomChoice([2,3]);
+        const m = k + gap;
+        const u_k = a * Math.pow(r, k-1);
+        const u_m = a * Math.pow(r, m-1);
+        const rFound = ratioFromTwo(u_k,k,u_m,m);
+        const aFound = u_k / Math.pow(rFound, k-1);
+        const n = randInt(m+1, m+5);
+        const ans = sumGeom(aFound, rFound, n);
+        return {type:'hard', u_k:Math.round(u_k*1000)/1000, k, u_m:Math.round(u_m*1000)/1000, m, n, rFound, aFound, ans};
+      }
+    }
+
+    function buildIndItem(p, idx){
+      if (p.type==='easy'){
+        return `
+          <div class="border rounded p-4">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold text-sky-900">Soal ${idx+1} • 🟢 Mudah</div>
+              <button class="bg-gray-900 hover:bg-black text-white px-3 py-1 rounded btn" onclick="toggleDetail('ind-sol-${idx}')">Lihat Pembahasan</button>
+            </div>
+            <p class="mt-2 text-gray-800">Diketahui $$a=${fmt(p.a)},\\ r=${fmt(p.r)},\\ n=${p.n}$$. Tentukan $$S_{${p.n}}$$.</p>
+            <div class="flex items-center gap-2 mt-3">
+              <input id="ind-ans-${idx}" type="number" class="border rounded px-3 py-2 w-40" placeholder="Jawaban">
+              <button class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded btn" onclick="checkInd(${idx}, ${p.ans})">Periksa</button>
+              <span id="ind-fb-${idx}" class="text-sm"></span>
+            </div>
+            <div id="ind-sol-${idx}" class="hidden mt-3 bg-sky-50 border border-sky-200 rounded p-3 text-gray-800">
+              <div class="font-semibold text-sky-900 mb-1">Pembahasan</div>
+              <div>$$S_{${p.n}}=a\\,\\frac{r^{${p.n}}-1}{r-1}=${fmt(p.a)}\\,\\frac{${fmt(p.r)}^{${p.n}}-1}{${fmt(p.r)}-1}=${fmt(p.ans)}$$</div>
+            </div>
+          </div>
+        `;
+      } else if (p.type==='medium'){
+        const seqStr = p.sequence.map(x=>fmt(x)).join(', ');
+        return `
+          <div class="border rounded p-4">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold text-sky-900">Soal ${idx+1} • 🟡 Sedang</div>
+              <button class="bg-gray-900 hover:bg-black text-white px-3 py-1 rounded btn" onclick="toggleDetail('ind-sol-${idx}')">Lihat Pembahasan</button>
+            </div>
+            <p class="mt-2 text-gray-800">Diketahui barisan: ${seqStr}, ... Tentukan $$S_{${p.n}}$$.</p>
+            <div class="flex items-center gap-2 mt-3">
+              <input id="ind-ans-${idx}" type="number" class="border rounded px-3 py-2 w-40" placeholder="Jawaban">
+              <button class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded btn" onclick="checkInd(${idx}, ${p.ans})">Periksa</button>
+              <span id="ind-fb-${idx}" class="text-sm"></span>
+            </div>
+            <div id="ind-sol-${idx}" class="hidden mt-3 bg-sky-50 border border-sky-200 rounded p-3 text-gray-800">
+              <div class="font-semibold text-sky-900 mb-1">Pembahasan</div>
+              <div>
+                $$a=${fmt(p.a)},\\ r=\\tfrac{U_2}{U_1}=\\tfrac{${fmt(p.sequence[1])}}{${fmt(p.sequence[0])}}=${fmt(p.r)}$$
+                $$S_{${p.n}}=${fmt(p.a)}\\,\\frac{${fmt(p.r)}^{${p.n}}-1}{${fmt(p.r)}-1}=${fmt(p.ans)}$$
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="border rounded p-4">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold text-sky-900">Soal ${idx+1} • 🔴 Sulit</div>
+              <button class="bg-gray-900 hover:bg-black text-white px-3 py-1 rounded btn" onclick="toggleDetail('ind-sol-${idx}')">Lihat Pembahasan</button>
+            </div>
+            <p class="mt-2 text-gray-800">Diketahui $$U_{${p.k}}=${fmt(p.u_k)}$$ dan $$U_{${p.m}}=${fmt(p.u_m)}$$. Tentukan $$S_{${p.n}}$$.</p>
+            <div class="flex items-center gap-2 mt-3">
+              <input id="ind-ans-${idx}" type="number" class="border rounded px-3 py-2 w-40" placeholder="Jawaban">
+              <button class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded btn" onclick="checkInd(${idx}, ${p.ans})">Periksa</button>
+              <span id="ind-fb-${idx}" class="text-sm"></span>
+            </div>
+            <div id="ind-sol-${idx}" class="hidden mt-3 bg-sky-50 border border-sky-200 rounded p-3 text-gray-800">
+              <div class="font-semibold text-sky-900 mb-1">Pembahasan</div>
+              <div>
+                $$\\frac{U_{${p.m}}}{U_{${p.k}}}=\\frac{a\\,r^{${p.m}-1}}{a\\,r^{${p.k}-1}}=r^{${p.m}-${p.k}}\\Rightarrow r=\\sqrt[${p.m-p.k}]{\\tfrac{${fmt(p.u_m)}}{${fmt(p.u_k)}}}=${fmt(p.rFound)}$$
+                $$a=\\frac{U_{${p.k}}}{r^{${p.k}-1}}=\\frac{${fmt(p.u_k)}}{${fmt(p.rFound)}^{${p.k}-1}}=${fmt(p.aFound)}$$
+                $$S_{${p.n}}=a\\,\\frac{r^{${p.n}}-1}{r-1}=${fmt(p.aFound)}\\,\\frac{${fmt(p.rFound)}^{${p.n}}-1}{${fmt(p.rFound)}-1}=${fmt(p.ans)}$$
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function toggleDetail(id){
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('hidden');
+    }
+    function checkInd(idx, correct){
+      const v = parseFloat(document.getElementById('ind-ans-'+idx).value);
+      const fb = document.getElementById('ind-fb-'+idx);
+      if (Number.isFinite(v) && Math.abs(v - correct) < 0.01){
+        fb.textContent='✓ Benar'; fb.className='text-sm text-green-700 font-semibold';
+      } else {
+        fb.textContent='✗ Kurang tepat, cek kembali.'; fb.className='text-sm text-red-700 font-semibold';
+      }
+    }
+
+    // Initialize defaults
+    // Preload one guided block for quick start
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const container = document.getElementById('guided-container');
+      const first = makeGuidedProblem('easy');
+      container.innerHTML = buildGuidedUI(first);
+      setTimeout(renderAllMath,50);
+    });
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97f6486972dbced3',t:'MTc1NzkyMDAwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
