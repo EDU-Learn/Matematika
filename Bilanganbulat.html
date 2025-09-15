@@ -1,0 +1,2218 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Bilangan Bulat Kelas 7</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: #3b82f6;
+            color: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-card h3 {
+            color: #1e40af;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .menu-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .exercise-container {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .exercise-title {
+            font-size: 1.8rem;
+            color: #1e40af;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            background: #64748b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #475569;
+        }
+
+        .question-container {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .answer-area {
+            margin: 20px 0;
+        }
+
+        .number-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .number-box {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            background: white;
+        }
+
+        .number-box.empty {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        .number-box input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: transparent;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .math-input {
+            padding: 12px 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            width: 100px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .math-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .symbol-btn {
+            background: #e2e8f0;
+            border: 2px solid #cbd5e1;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .symbol-btn:hover {
+            background: #cbd5e1;
+        }
+
+        .symbol-btn.selected {
+            background: #3b82f6;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 10px 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #059669;
+        }
+
+        .btn-secondary {
+            background: #6366f1;
+        }
+
+        .btn-secondary:hover {
+            background: #4f46e5;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .result.correct {
+            background: #dcfce7;
+            color: #166534;
+            border: 2px solid #22c55e;
+        }
+
+        .result.incorrect {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 2px solid #ef4444;
+        }
+
+        .explanation {
+            background: #f0f9ff;
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .explanation h4 {
+            color: #0c4a6e;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .explanation ol {
+            margin-left: 20px;
+        }
+
+        .explanation li {
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .settings {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .settings h4 {
+            margin-bottom: 15px;
+            color: #1e40af;
+        }
+
+        .setting-item {
+            margin-bottom: 15px;
+        }
+
+        .setting-item label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .setting-item select, .setting-item input {
+            padding: 8px 12px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .draggable-numbers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .draggable-number {
+            background: #e0e7ff;
+            border: 2px solid #6366f1;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: move;
+            font-weight: 600;
+            user-select: none;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            min-width: 60px;
+            text-align: center;
+            margin: 5px;
+        }
+
+        .draggable-number:hover {
+            background: #c7d2fe;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .draggable-number:active {
+            transform: scale(1.05);
+            cursor: grabbing;
+        }
+
+        .drop-zone {
+            min-height: 60px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            background: #fafafa;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .story-problem {
+            background: #fef7ed;
+            border: 2px solid #fb923c;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .story-problem h4 {
+            color: #ea580c;
+            margin-bottom: 10px;
+        }
+
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .matching-column h4 {
+            margin-bottom: 15px;
+            color: #1e40af;
+            text-align: center;
+        }
+
+        .matching-item {
+            background: #e0e7ff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        .matching-item::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #3b82f6;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: all 0.3s ease;
+        }
+
+        .matching-item.operation::after {
+            right: -6px;
+        }
+
+        .matching-item.result::after {
+            left: -6px;
+        }
+
+        .matching-item:hover {
+            background: #c7d2fe;
+            transform: scale(1.02);
+        }
+
+        .matching-item.selected {
+            border-color: #3b82f6;
+            background: #dbeafe;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .matching-item.operation {
+            background: #fef3c7;
+        }
+
+        .matching-item.operation.selected {
+            background: #fde68a;
+            border-color: #f59e0b;
+        }
+
+        .matching-item.result {
+            background: #dcfce7;
+        }
+
+        .matching-item.result.selected {
+            background: #bbf7d0;
+            border-color: #10b981;
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 3px;
+            background: #3b82f6;
+            transform-origin: left center;
+            z-index: 10;
+            border-radius: 2px;
+            opacity: 0;
+            animation: drawLine 0.5s ease-out forwards;
+        }
+
+        .connection-line.correct {
+            background: #10b981;
+        }
+
+        .connection-line.incorrect {
+            background: #ef4444;
+        }
+
+        @keyframes drawLine {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 100%;
+                opacity: 1;
+            }
+        }
+
+        .matching-area {
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .exercise-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .number-line {
+                gap: 3px;
+            }
+            
+            .number-box {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔢 Latihan Bilangan Bulat</h1>
+            <p>Kelas 7 - Generator Soal Tak Terbatas</p>
+        </div>
+
+        <div id="menu" class="menu-grid">
+            <div class="menu-card" onclick="showExercise(1)">
+                <h3>1. Mengurutkan Bilangan</h3>
+                <p>Urutkan beberapa bilangan bulat dari terkecil ke terbesar atau sebaliknya</p>
+            </div>
+            <div class="menu-card" onclick="showExercise(2)">
+                <h3>2. Garis Bilangan</h3>
+                <p>Lengkapi garis bilangan dengan mengisi angka yang kosong</p>
+            </div>
+            <div class="menu-card" onclick="showExercise(3)">
+                <h3>3. Membandingkan Bilangan</h3>
+                <p>Pilih tanda yang tepat: =, <, atau > untuk membandingkan dua bilangan</p>
+            </div>
+            <div class="menu-card" onclick="showExercise(4)">
+                <h3>4. Bilangan di Antara</h3>
+                <p>Tentukan bilangan yang berada di antara dua bilangan bulat</p>
+            </div>
+            <div class="menu-card" onclick="showExercise(5)">
+                <h3>5. Penjumlahan</h3>
+                <p>Operasi penjumlahan bilangan bulat dengan berbagai kombinasi</p>
+            </div>
+            <div class="menu-card" onclick="showExercise(6)">
+                <h3>6. Pengurangan</h3>
+                <p>Operasi pengurangan bilangan bulat dengan berbagai kombinasi</p>
+            </div>
+            <div class="menu-card" onclick="showExercise(7)">
+                <h3>7. Pasangan Operasi</h3>
+                <p>Cocokkan operasi bilangan bulat dengan hasilnya</p>
+            </div>
+            <div class="menu-card" onclick="showExercise(8)">
+                <h3>8. Operasi Campuran</h3>
+                <p>Selesaikan operasi campuran bilangan bulat</p>
+            </div>
+            <div class="menu-card" onclick="showExercise(9)">
+                <h3>9. Perkalian</h3>
+                <p>Operasi perkalian bilangan bulat dengan berbagai kombinasi</p>
+            </div>
+            <div class="menu-card" onclick="showExercise(10)">
+                <h3>10. Pembagian</h3>
+                <p>Operasi pembagian bilangan bulat dengan berbagai kombinasi</p>
+            </div>
+            <div class="menu-card" onclick="showExercise(11)">
+                <h3>11. Soal Cerita</h3>
+                <p>Aplikasi bilangan bulat dalam kehidupan sehari-hari</p>
+            </div>
+        </div>
+
+        <!-- Exercise 1: Mengurutkan Bilangan -->
+        <div id="exercise1" class="exercise-container">
+            <div class="exercise-header">
+                <h2 class="exercise-title">Mengurutkan Bilangan Bulat</h2>
+                <button class="back-btn" onclick="showMenu()">← Kembali</button>
+            </div>
+            
+            <div class="settings">
+                <h4>Pengaturan Soal</h4>
+                <div class="setting-item">
+                    <label>Jumlah Bilangan:</label>
+                    <select id="countNumbers">
+                        <option value="5">5 bilangan</option>
+                        <option value="6">6 bilangan</option>
+                        <option value="7">7 bilangan</option>
+                        <option value="8">8 bilangan</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>Urutan:</label>
+                    <select id="sortOrder">
+                        <option value="asc">Terkecil ke Terbesar</option>
+                        <option value="desc">Terbesar ke Terkecil</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" onclick="generateSortingQuestion()">Generate Soal Baru</button>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text" id="sortingQuestion"></div>
+                <div class="draggable-numbers" id="numbersToSort"></div>
+                <div class="drop-zone" id="sortingDropZone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <p>Seret angka ke sini untuk mengurutkan</p>
+                </div>
+                <button class="btn" onclick="checkSortingAnswer()">Periksa Jawaban</button>
+                <button class="btn btn-warning" onclick="resetSortingAnswer()">Reset</button>
+            </div>
+            
+            <div id="sortingResult" class="result" style="display: none;"></div>
+            <div id="sortingExplanation" class="explanation" style="display: none;"></div>
+        </div>
+
+        <!-- Exercise 2: Garis Bilangan -->
+        <div id="exercise2" class="exercise-container">
+            <div class="exercise-header">
+                <h2 class="exercise-title">Melengkapi Garis Bilangan</h2>
+                <button class="back-btn" onclick="showMenu()">← Kembali</button>
+            </div>
+            
+            <div class="settings">
+                <h4>Pengaturan Soal</h4>
+                <button class="btn btn-secondary" onclick="generateNumberLineQuestion()">Generate Soal Baru</button>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text" id="numberLineQuestion"></div>
+                <div class="number-line" id="numberLine"></div>
+                <button class="btn" onclick="checkNumberLineAnswer()">Periksa Jawaban</button>
+                <button class="btn btn-warning" onclick="resetNumberLineAnswer()">Reset</button>
+            </div>
+            
+            <div id="numberLineResult" class="result" style="display: none;"></div>
+            <div id="numberLineExplanation" class="explanation" style="display: none;"></div>
+        </div>
+
+        <!-- Exercise 3: Membandingkan Bilangan -->
+        <div id="exercise3" class="exercise-container">
+            <div class="exercise-header">
+                <h2 class="exercise-title">Membandingkan Bilangan Bulat</h2>
+                <button class="back-btn" onclick="showMenu()">← Kembali</button>
+            </div>
+            
+            <div class="settings">
+                <h4>Pengaturan Soal</h4>
+                <button class="btn btn-secondary" onclick="generateComparisonQuestion()">Generate Soal Baru</button>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text" id="comparisonQuestion"></div>
+                <div class="input-group">
+                    <span id="firstNumber" style="font-size: 1.5rem; font-weight: bold;"></span>
+                    <div>
+                        <button class="symbol-btn" onclick="selectSymbol('=')">=</button>
+                        <button class="symbol-btn" onclick="selectSymbol('<')"><</button>
+                        <button class="symbol-btn" onclick="selectSymbol('>')">></button>
+                    </div>
+                    <span id="secondNumber" style="font-size: 1.5rem; font-weight: bold;"></span>
+                </div>
+                <button class="btn" onclick="checkComparisonAnswer()">Periksa Jawaban</button>
+                <button class="btn btn-warning" onclick="resetComparisonAnswer()">Reset</button>
+            </div>
+            
+            <div id="comparisonResult" class="result" style="display: none;"></div>
+            <div id="comparisonExplanation" class="explanation" style="display: none;"></div>
+        </div>
+
+        <!-- Exercise 4: Bilangan di Antara -->
+        <div id="exercise4" class="exercise-container">
+            <div class="exercise-header">
+                <h2 class="exercise-title">Bilangan di Antara</h2>
+                <button class="back-btn" onclick="showMenu()">← Kembali</button>
+            </div>
+            
+            <div class="settings">
+                <h4>Pengaturan Soal</h4>
+                <button class="btn btn-secondary" onclick="generateBetweenQuestion()">Generate Soal Baru</button>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text" id="betweenQuestion"></div>
+                <div class="input-group">
+                    <input type="number" id="betweenAnswer" class="math-input" placeholder="?">
+                </div>
+                <button class="btn" onclick="checkBetweenAnswer()">Periksa Jawaban</button>
+                <button class="btn btn-warning" onclick="resetBetweenAnswer()">Reset</button>
+            </div>
+            
+            <div id="betweenResult" class="result" style="display: none;"></div>
+            <div id="betweenExplanation" class="explanation" style="display: none;"></div>
+        </div>
+
+        <!-- Exercise 5: Penjumlahan -->
+        <div id="exercise5" class="exercise-container">
+            <div class="exercise-header">
+                <h2 class="exercise-title">Penjumlahan Bilangan Bulat</h2>
+                <button class="back-btn" onclick="showMenu()">← Kembali</button>
+            </div>
+            
+            <div class="settings">
+                <h4>Pengaturan Soal</h4>
+                <div class="setting-item">
+                    <label>Tipe Operasi:</label>
+                    <select id="additionType">
+                        <option value="pos_pos">Positif + Positif</option>
+                        <option value="neg_neg">Negatif + Negatif</option>
+                        <option value="pos_neg">Positif + Negatif</option>
+                        <option value="neg_pos">Negatif + Positif</option>
+                        <option value="mixed">Campuran</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" onclick="generateAdditionQuestion()">Generate Soal Baru</button>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text" id="additionQuestion"></div>
+                <div class="input-group">
+                    <span id="additionExpression" style="font-size: 1.5rem; font-weight: bold;"></span>
+                    <span style="font-size: 1.5rem; font-weight: bold;"> = </span>
+                    <input type="number" id="additionAnswer" class="math-input" placeholder="?">
+                </div>
+                <button class="btn" onclick="checkAdditionAnswer()">Periksa Jawaban</button>
+                <button class="btn btn-warning" onclick="resetAdditionAnswer()">Reset</button>
+            </div>
+            
+            <div id="additionResult" class="result" style="display: none;"></div>
+            <div id="additionExplanation" class="explanation" style="display: none;"></div>
+        </div>
+
+        <!-- Exercise 6: Pengurangan -->
+        <div id="exercise6" class="exercise-container">
+            <div class="exercise-header">
+                <h2 class="exercise-title">Pengurangan Bilangan Bulat</h2>
+                <button class="back-btn" onclick="showMenu()">← Kembali</button>
+            </div>
+            
+            <div class="settings">
+                <h4>Pengaturan Soal</h4>
+                <div class="setting-item">
+                    <label>Tipe Operasi:</label>
+                    <select id="subtractionType">
+                        <option value="pos_pos">Positif - Positif</option>
+                        <option value="neg_neg">Negatif - Negatif</option>
+                        <option value="pos_neg">Positif - Negatif</option>
+                        <option value="neg_pos">Negatif - Positif</option>
+                        <option value="mixed">Campuran</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" onclick="generateSubtractionQuestion()">Generate Soal Baru</button>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text" id="subtractionQuestion"></div>
+                <div class="input-group">
+                    <span id="subtractionExpression" style="font-size: 1.5rem; font-weight: bold;"></span>
+                    <span style="font-size: 1.5rem; font-weight: bold;"> = </span>
+                    <input type="number" id="subtractionAnswer" class="math-input" placeholder="?">
+                </div>
+                <button class="btn" onclick="checkSubtractionAnswer()">Periksa Jawaban</button>
+                <button class="btn btn-warning" onclick="resetSubtractionAnswer()">Reset</button>
+            </div>
+            
+            <div id="subtractionResult" class="result" style="display: none;"></div>
+            <div id="subtractionExplanation" class="explanation" style="display: none;"></div>
+        </div>
+
+        <!-- Exercise 7: Pasangan Operasi -->
+        <div id="exercise7" class="exercise-container">
+            <div class="exercise-header">
+                <h2 class="exercise-title">Pasangan Operasi dan Hasil</h2>
+                <button class="back-btn" onclick="showMenu()">← Kembali</button>
+            </div>
+            
+            <div class="settings">
+                <h4>Pengaturan Soal</h4>
+                <button class="btn btn-secondary" onclick="generateMatchingQuestion()">Generate Soal Baru</button>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text">Cocokkan operasi dengan hasilnya yang benar:</div>
+                <div id="matchingArea"></div>
+                <button class="btn" onclick="checkMatchingAnswer()">Periksa Jawaban</button>
+                <button class="btn btn-warning" onclick="resetMatchingAnswer()">Reset</button>
+            </div>
+            
+            <div id="matchingResult" class="result" style="display: none;"></div>
+            <div id="matchingExplanation" class="explanation" style="display: none;"></div>
+        </div>
+
+        <!-- Exercise 8: Operasi Campuran -->
+        <div id="exercise8" class="exercise-container">
+            <div class="exercise-header">
+                <h2 class="exercise-title">Operasi Campuran Bilangan Bulat</h2>
+                <button class="back-btn" onclick="showMenu()">← Kembali</button>
+            </div>
+            
+            <div class="settings">
+                <h4>Pengaturan Soal</h4>
+                <div class="setting-item">
+                    <label>Operasi yang Digunakan:</label>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <label><input type="checkbox" id="useAddition" checked> Penjumlahan (+)</label>
+                        <label><input type="checkbox" id="useSubtraction" checked> Pengurangan (-)</label>
+                        <label><input type="checkbox" id="useMultiplication"> Perkalian (×)</label>
+                        <label><input type="checkbox" id="useDivision"> Pembagian (÷)</label>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="generateMixedQuestion()">Generate Soal Baru</button>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text" id="mixedQuestion"></div>
+                <div class="input-group">
+                    <span id="mixedExpression" style="font-size: 1.5rem; font-weight: bold;"></span>
+                    <span style="font-size: 1.5rem; font-weight: bold;"> = </span>
+                    <input type="number" id="mixedAnswer" class="math-input" placeholder="?">
+                </div>
+                <button class="btn" onclick="checkMixedAnswer()">Periksa Jawaban</button>
+                <button class="btn btn-warning" onclick="resetMixedAnswer()">Reset</button>
+            </div>
+            
+            <div id="mixedResult" class="result" style="display: none;"></div>
+            <div id="mixedExplanation" class="explanation" style="display: none;"></div>
+        </div>
+
+        <!-- Exercise 9: Perkalian -->
+        <div id="exercise9" class="exercise-container">
+            <div class="exercise-header">
+                <h2 class="exercise-title">Perkalian Bilangan Bulat</h2>
+                <button class="back-btn" onclick="showMenu()">← Kembali</button>
+            </div>
+            
+            <div class="settings">
+                <h4>Pengaturan Soal</h4>
+                <div class="setting-item">
+                    <label>Tipe Operasi:</label>
+                    <select id="multiplicationType">
+                        <option value="pos_pos">Positif × Positif</option>
+                        <option value="neg_neg">Negatif × Negatif</option>
+                        <option value="pos_neg">Positif × Negatif</option>
+                        <option value="neg_pos">Negatif × Positif</option>
+                        <option value="mixed">Campuran</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" onclick="generateMultiplicationQuestion()">Generate Soal Baru</button>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text" id="multiplicationQuestion"></div>
+                <div class="input-group">
+                    <span id="multiplicationExpression" style="font-size: 1.5rem; font-weight: bold;"></span>
+                    <span style="font-size: 1.5rem; font-weight: bold;"> = </span>
+                    <input type="number" id="multiplicationAnswer" class="math-input" placeholder="?">
+                </div>
+                <button class="btn" onclick="checkMultiplicationAnswer()">Periksa Jawaban</button>
+                <button class="btn btn-warning" onclick="resetMultiplicationAnswer()">Reset</button>
+            </div>
+            
+            <div id="multiplicationResult" class="result" style="display: none;"></div>
+            <div id="multiplicationExplanation" class="explanation" style="display: none;"></div>
+        </div>
+
+        <!-- Exercise 10: Pembagian -->
+        <div id="exercise10" class="exercise-container">
+            <div class="exercise-header">
+                <h2 class="exercise-title">Pembagian Bilangan Bulat</h2>
+                <button class="back-btn" onclick="showMenu()">← Kembali</button>
+            </div>
+            
+            <div class="settings">
+                <h4>Pengaturan Soal</h4>
+                <div class="setting-item">
+                    <label>Tipe Operasi:</label>
+                    <select id="divisionType">
+                        <option value="pos_pos">Positif ÷ Positif</option>
+                        <option value="neg_neg">Negatif ÷ Negatif</option>
+                        <option value="pos_neg">Positif ÷ Negatif</option>
+                        <option value="neg_pos">Negatif ÷ Positif</option>
+                        <option value="mixed">Campuran</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" onclick="generateDivisionQuestion()">Generate Soal Baru</button>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text" id="divisionQuestion"></div>
+                <div class="input-group">
+                    <span id="divisionExpression" style="font-size: 1.5rem; font-weight: bold;"></span>
+                    <span style="font-size: 1.5rem; font-weight: bold;"> = </span>
+                    <input type="number" id="divisionAnswer" class="math-input" placeholder="?">
+                </div>
+                <button class="btn" onclick="checkDivisionAnswer()">Periksa Jawaban</button>
+                <button class="btn btn-warning" onclick="resetDivisionAnswer()">Reset</button>
+            </div>
+            
+            <div id="divisionResult" class="result" style="display: none;"></div>
+            <div id="divisionExplanation" class="explanation" style="display: none;"></div>
+        </div>
+
+        <!-- Exercise 11: Soal Cerita -->
+        <div id="exercise11" class="exercise-container">
+            <div class="exercise-header">
+                <h2 class="exercise-title">Soal Cerita Bilangan Bulat</h2>
+                <button class="back-btn" onclick="showMenu()">← Kembali</button>
+            </div>
+            
+            <div class="settings">
+                <h4>Pengaturan Soal</h4>
+                <div class="setting-item">
+                    <label>Tipe Cerita:</label>
+                    <select id="storyType">
+                        <option value="temperature">Suhu</option>
+                        <option value="score">Skor/Poin</option>
+                        <option value="elevation">Ketinggian/Lift</option>
+                        <option value="competition">Kompetisi Matematika</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" onclick="generateStoryQuestion()">Generate Soal Baru</button>
+            </div>
+
+            <div class="question-container">
+                <div class="story-problem" id="storyProblem"></div>
+                <div class="input-group">
+                    <input type="number" id="storyAnswer" class="math-input" placeholder="Jawaban">
+                </div>
+                <button class="btn" onclick="checkStoryAnswer()">Periksa Jawaban</button>
+                <button class="btn btn-warning" onclick="resetStoryAnswer()">Reset</button>
+            </div>
+            
+            <div id="storyResult" class="result" style="display: none;"></div>
+            <div id="storyExplanation" class="explanation" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentExercise = 0;
+        let currentQuestion = {};
+        let selectedSymbol = '';
+        let draggedElement = null;
+
+        // Utility functions
+        function randomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Navigation functions
+        function showMenu() {
+            document.getElementById('menu').style.display = 'grid';
+            for (let i = 1; i <= 9; i++) {
+                document.getElementById(`exercise${i}`).style.display = 'none';
+            }
+            currentExercise = 0;
+        }
+
+        function showExercise(exerciseNum) {
+            document.getElementById('menu').style.display = 'none';
+            for (let i = 1; i <= 11; i++) {
+                document.getElementById(`exercise${i}`).style.display = i === exerciseNum ? 'block' : 'none';
+            }
+            currentExercise = exerciseNum;
+            
+            // Generate initial question for each exercise
+            switch(exerciseNum) {
+                case 1: generateSortingQuestion(); break;
+                case 2: generateNumberLineQuestion(); break;
+                case 3: generateComparisonQuestion(); break;
+                case 4: generateBetweenQuestion(); break;
+                case 5: generateAdditionQuestion(); break;
+                case 6: generateSubtractionQuestion(); break;
+                case 7: generateMatchingQuestion(); break;
+                case 8: generateMixedQuestion(); break;
+                case 9: generateMultiplicationQuestion(); break;
+                case 10: generateDivisionQuestion(); break;
+                case 11: generateStoryQuestion(); break;
+            }
+        }
+
+        // Exercise 1: Sorting Numbers
+        function generateSortingQuestion() {
+            const count = parseInt(document.getElementById('countNumbers').value);
+            const order = document.getElementById('sortOrder').value;
+            
+            // Generate random numbers
+            const numbers = [];
+            while (numbers.length < count) {
+                const num = randomInt(-20, 20);
+                if (!numbers.includes(num)) {
+                    numbers.push(num);
+                }
+            }
+            
+            currentQuestion = {
+                numbers: [...numbers],
+                correctOrder: order === 'asc' ? [...numbers].sort((a, b) => a - b) : [...numbers].sort((a, b) => b - a),
+                order: order
+            };
+            
+            document.getElementById('sortingQuestion').textContent = 
+                `Urutkan bilangan berikut dari ${order === 'asc' ? 'terkecil ke terbesar' : 'terbesar ke terkecil'}:`;
+            
+            const numbersContainer = document.getElementById('numbersToSort');
+            numbersContainer.innerHTML = '';
+            
+            shuffle(numbers).forEach(num => {
+                const div = document.createElement('div');
+                div.className = 'draggable-number';
+                div.draggable = true;
+                div.textContent = num;
+                div.ondragstart = drag;
+                numbersContainer.appendChild(div);
+            });
+            
+            document.getElementById('sortingDropZone').innerHTML = '<p>Seret angka ke sini untuk mengurutkan</p>';
+            hideResults('sorting');
+        }
+
+        function drag(ev) {
+            draggedElement = ev.target;
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.target.classList.add('drag-over');
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            ev.target.classList.remove('drag-over');
+            
+            if (draggedElement && ev.target.classList.contains('drop-zone')) {
+                const clone = draggedElement.cloneNode(true);
+                clone.ondragstart = null;
+                clone.draggable = false;
+                clone.style.cursor = 'default';
+                
+                if (ev.target.querySelector('p')) {
+                    ev.target.innerHTML = '';
+                }
+                
+                ev.target.appendChild(clone);
+                draggedElement.style.display = 'none';
+            }
+        }
+
+        function checkSortingAnswer() {
+            const dropZone = document.getElementById('sortingDropZone');
+            const userOrder = Array.from(dropZone.children).map(el => parseInt(el.textContent));
+            
+            const isCorrect = JSON.stringify(userOrder) === JSON.stringify(currentQuestion.correctOrder);
+            
+            showResult('sorting', isCorrect, 
+                isCorrect ? 'Benar! Urutan bilangan sudah tepat.' : 'Salah! Coba perhatikan nilai setiap bilangan.',
+                generateSortingExplanation()
+            );
+        }
+
+        function showSortingHint() {
+            alert(`Petunjuk: ${currentQuestion.order === 'asc' ? 'Bilangan negatif lebih kecil dari bilangan positif. Semakin jauh dari nol ke kiri, semakin kecil nilainya.' : 'Bilangan positif lebih besar dari bilangan negatif. Semakin jauh dari nol ke kanan, semakin besar nilainya.'}`);
+        }
+
+        function generateSortingExplanation() {
+            const order = currentQuestion.order === 'asc' ? 'terkecil ke terbesar' : 'terbesar ke terkecil';
+            return `
+                <h4>Pembahasan:</h4>
+                <ol>
+                    <li>Untuk mengurutkan bilangan bulat dari ${order}, kita perlu memahami posisi bilangan pada garis bilangan</li>
+                    <li>Bilangan asli: ${currentQuestion.numbers.join(', ')}</li>
+                    <li>Urutan yang benar: ${currentQuestion.correctOrder.join(', ')}</li>
+                    <li>${currentQuestion.order === 'asc' ? 
+                        'Bilangan negatif selalu lebih kecil dari bilangan positif. Pada bilangan negatif, semakin besar angkanya, semakin kecil nilainya.' :
+                        'Bilangan positif selalu lebih besar dari bilangan negatif. Pada bilangan positif, semakin besar angkanya, semakin besar nilainya.'}</li>
+                </ol>
+            `;
+        }
+
+        // Exercise 2: Number Line
+        function generateNumberLineQuestion() {
+            const start = randomInt(-10, 5);
+            const length = 7;
+            const sequence = [];
+            
+            for (let i = 0; i < length; i++) {
+                sequence.push(start + i);
+            }
+            
+            // Hide 2-3 random numbers
+            const hiddenIndices = [];
+            while (hiddenIndices.length < 3) {
+                const index = randomInt(1, length - 2); // Don't hide first and last
+                if (!hiddenIndices.includes(index)) {
+                    hiddenIndices.push(index);
+                }
+            }
+            
+            currentQuestion = {
+                sequence: sequence,
+                hiddenIndices: hiddenIndices
+            };
+            
+            document.getElementById('numberLineQuestion').textContent = 'Lengkapi garis bilangan berikut:';
+            
+            const numberLine = document.getElementById('numberLine');
+            numberLine.innerHTML = '';
+            
+            sequence.forEach((num, index) => {
+                const box = document.createElement('div');
+                box.className = 'number-box';
+                
+                if (hiddenIndices.includes(index)) {
+                    box.classList.add('empty');
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.dataset.index = index;
+                    input.dataset.correct = num;
+                    box.appendChild(input);
+                } else {
+                    box.textContent = num;
+                }
+                
+                numberLine.appendChild(box);
+            });
+            
+            hideResults('numberLine');
+        }
+
+        function checkNumberLineAnswer() {
+            const inputs = document.querySelectorAll('#numberLine input');
+            let correct = 0;
+            let total = inputs.length;
+            
+            inputs.forEach(input => {
+                const userAnswer = parseInt(input.value);
+                const correctAnswer = parseInt(input.dataset.correct);
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                    input.style.backgroundColor = '#dcfce7';
+                } else {
+                    input.style.backgroundColor = '#fef2f2';
+                }
+            });
+            
+            const isCorrect = correct === total;
+            showResult('numberLine', isCorrect,
+                isCorrect ? 'Benar! Semua bilangan sudah tepat.' : `${correct}/${total} jawaban benar. Periksa kembali jawaban yang salah.`,
+                generateNumberLineExplanation()
+            );
+        }
+
+        function showNumberLineHint() {
+            alert('Petunjuk: Pada garis bilangan, setiap langkah ke kanan menambah 1, dan setiap langkah ke kiri mengurangi 1.');
+        }
+
+        function generateNumberLineExplanation() {
+            return `
+                <h4>Pembahasan:</h4>
+                <ol>
+                    <li>Garis bilangan menunjukkan urutan bilangan bulat secara berurutan</li>
+                    <li>Setiap kotak berisi bilangan yang berurutan dengan selisih 1</li>
+                    <li>Urutan lengkap: ${currentQuestion.sequence.join(', ')}</li>
+                    <li>Bilangan yang tersembunyi berada pada posisi: ${currentQuestion.hiddenIndices.map(i => currentQuestion.sequence[i]).join(', ')}</li>
+                </ol>
+            `;
+        }
+
+        // Exercise 3: Comparison
+        function generateComparisonQuestion() {
+            const num1 = randomInt(-15, 15);
+            let num2 = randomInt(-15, 15);
+            while (num2 === num1) {
+                num2 = randomInt(-15, 15);
+            }
+            
+            currentQuestion = {
+                num1: num1,
+                num2: num2,
+                correctSymbol: num1 > num2 ? '>' : num1 < num2 ? '<' : '='
+            };
+            
+            document.getElementById('comparisonQuestion').textContent = 'Pilih tanda yang tepat untuk membandingkan kedua bilangan:';
+            document.getElementById('firstNumber').textContent = num1;
+            document.getElementById('secondNumber').textContent = num2;
+            
+            // Reset symbol selection
+            document.querySelectorAll('.symbol-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            selectedSymbol = '';
+            
+            hideResults('comparison');
+        }
+
+        function selectSymbol(symbol) {
+            document.querySelectorAll('.symbol-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            event.target.classList.add('selected');
+            selectedSymbol = symbol;
+        }
+
+        function checkComparisonAnswer() {
+            if (!selectedSymbol) {
+                alert('Pilih salah satu tanda terlebih dahulu!');
+                return;
+            }
+            
+            const isCorrect = selectedSymbol === currentQuestion.correctSymbol;
+            showResult('comparison', isCorrect,
+                isCorrect ? 'Benar! Tanda perbandingan sudah tepat.' : 'Salah! Perhatikan nilai kedua bilangan.',
+                generateComparisonExplanation()
+            );
+        }
+
+        function showComparisonHint() {
+            alert('Petunjuk: Gunakan garis bilangan untuk membandingkan. Bilangan yang lebih ke kanan lebih besar nilainya.');
+        }
+
+        function generateComparisonExplanation() {
+            const {num1, num2, correctSymbol} = currentQuestion;
+            return `
+                <h4>Pembahasan:</h4>
+                <ol>
+                    <li>Membandingkan ${num1} dan ${num2}</li>
+                    <li>Pada garis bilangan: ${num1} berada di ${num1 > num2 ? 'kanan' : num1 < num2 ? 'kiri' : 'posisi yang sama dengan'} ${num2}</li>
+                    <li>Karena itu: ${num1} ${correctSymbol} ${num2}</li>
+                    <li>${num1 > 0 && num2 < 0 ? 'Bilangan positif selalu lebih besar dari bilangan negatif' : 
+                         num1 < 0 && num2 > 0 ? 'Bilangan negatif selalu lebih kecil dari bilangan positif' :
+                         num1 > 0 && num2 > 0 ? 'Pada bilangan positif, semakin besar angka semakin besar nilainya' :
+                         'Pada bilangan negatif, semakin besar angka semakin kecil nilainya'}</li>
+                </ol>
+            `;
+        }
+
+        // Exercise 4: Between Numbers
+        function generateBetweenQuestion() {
+            // Generate two numbers that are close to each other (difference of 2-4)
+            const num1 = randomInt(-10, 10);
+            const gap = randomInt(2, 4); // Gap between 2-4 to ensure adjacent numbers
+            const num2 = Math.random() > 0.5 ? num1 + gap : num1 - gap;
+            
+            const min = Math.min(num1, num2);
+            const max = Math.max(num1, num2);
+            
+            currentQuestion = {
+                min: min,
+                max: max,
+                allPossible: []
+            };
+            
+            // Generate all possible numbers between min and max
+            for (let i = min + 1; i < max; i++) {
+                currentQuestion.allPossible.push(i);
+            }
+            
+            document.getElementById('betweenQuestion').textContent = 
+                `Tentukan salah satu bilangan bulat yang berada di antara ${min} dan ${max}:`;
+            
+            document.getElementById('betweenAnswer').value = '';
+            hideResults('between');
+        }
+
+        function checkBetweenAnswer() {
+            const userAnswer = parseInt(document.getElementById('betweenAnswer').value);
+            
+            if (isNaN(userAnswer)) {
+                alert('Masukkan bilangan yang valid!');
+                return;
+            }
+            
+            const isCorrect = currentQuestion.allPossible.includes(userAnswer);
+            showResult('between', isCorrect,
+                isCorrect ? 'Benar! Bilangan tersebut berada di antara kedua bilangan.' : 'Salah! Bilangan tersebut tidak berada di antara kedua bilangan.',
+                generateBetweenExplanation()
+            );
+        }
+
+        function showBetweenHint() {
+            alert(`Petunjuk: Bilangan yang berada di antara ${currentQuestion.min} dan ${currentQuestion.max} adalah bilangan yang lebih besar dari ${currentQuestion.min} dan lebih kecil dari ${currentQuestion.max}.`);
+        }
+
+        function generateBetweenExplanation() {
+            return `
+                <h4>Pembahasan:</h4>
+                <ol>
+                    <li>Bilangan yang berada di antara ${currentQuestion.min} dan ${currentQuestion.max}</li>
+                    <li>Harus memenuhi: ${currentQuestion.min} < bilangan < ${currentQuestion.max}</li>
+                    <li>Semua kemungkinan jawaban: ${currentQuestion.allPossible.join(', ')}</li>
+                    <li>Bilangan yang berada "di antara" tidak termasuk batas-batasnya</li>
+                </ol>
+            `;
+        }
+
+        // Exercise 5: Addition
+        function generateAdditionQuestion() {
+            const type = document.getElementById('additionType').value;
+            let num1, num2;
+            
+            switch(type) {
+                case 'pos_pos':
+                    num1 = randomInt(1, 20);
+                    num2 = randomInt(1, 20);
+                    break;
+                case 'neg_neg':
+                    num1 = randomInt(-20, -1);
+                    num2 = randomInt(-20, -1);
+                    break;
+                case 'pos_neg':
+                    num1 = randomInt(1, 20);
+                    num2 = randomInt(-20, -1);
+                    break;
+                case 'neg_pos':
+                    num1 = randomInt(-20, -1);
+                    num2 = randomInt(1, 20);
+                    break;
+                case 'mixed':
+                    num1 = randomInt(-20, 20);
+                    num2 = randomInt(-20, 20);
+                    break;
+            }
+            
+            currentQuestion = {
+                num1: num1,
+                num2: num2,
+                correctAnswer: num1 + num2,
+                operation: 'addition'
+            };
+            
+            const expression = num2 >= 0 ? `${num1} + ${num2}` : `${num1} + (${num2})`;
+            
+            document.getElementById('additionQuestion').textContent = 'Hitunglah hasil penjumlahan berikut:';
+            document.getElementById('additionExpression').textContent = expression;
+            document.getElementById('additionAnswer').value = '';
+            
+            hideResults('addition');
+        }
+
+        function checkAdditionAnswer() {
+            const userAnswer = parseInt(document.getElementById('additionAnswer').value);
+            
+            if (isNaN(userAnswer)) {
+                alert('Masukkan bilangan yang valid!');
+                return;
+            }
+            
+            const isCorrect = userAnswer === currentQuestion.correctAnswer;
+            showResult('addition', isCorrect,
+                isCorrect ? 'Benar! Hasil penjumlahan sudah tepat.' : `Salah! Hasil yang benar adalah ${currentQuestion.correctAnswer}.`,
+                generateAdditionExplanation()
+            );
+        }
+
+        function showAdditionHint() {
+            const {num1, num2} = currentQuestion;
+            if (num1 > 0 && num2 > 0) {
+                alert('Petunjuk: Penjumlahan dua bilangan positif hasilnya selalu positif dan lebih besar.');
+            } else if (num1 < 0 && num2 < 0) {
+                alert('Petunjuk: Penjumlahan dua bilangan negatif hasilnya selalu negatif dan lebih kecil.');
+            } else {
+                alert('Petunjuk: Penjumlahan bilangan positif dan negatif, lihat mana yang lebih besar nilai mutlaknya.');
+            }
+        }
+
+        function generateAdditionExplanation() {
+            const {num1, num2, correctAnswer} = currentQuestion;
+            const expression = num2 >= 0 ? `${num1} + ${num2}` : `${num1} + (${num2})`;
+            
+            let steps = [];
+            
+            if (num1 > 0 && num2 > 0) {
+                steps = [
+                    `${expression}`,
+                    `Kedua bilangan positif, jadi kita jumlahkan langsung`,
+                    `= ${correctAnswer}`
+                ];
+            } else if (num1 < 0 && num2 < 0) {
+                steps = [
+                    `${expression}`,
+                    `Kedua bilangan negatif, jadi kita jumlahkan nilai mutlaknya dan beri tanda negatif`,
+                    `= -(${Math.abs(num1)} + ${Math.abs(num2)})`,
+                    `= -${Math.abs(correctAnswer)}`,
+                    `= ${correctAnswer}`
+                ];
+            } else {
+                const absNum1 = Math.abs(num1);
+                const absNum2 = Math.abs(num2);
+                steps = [
+                    `${expression}`,
+                    `Satu positif, satu negatif. Kurangkan nilai mutlak yang lebih kecil dari yang lebih besar`,
+                    `|${num1}| = ${absNum1}, |${num2}| = ${absNum2}`,
+                    absNum1 > absNum2 ? 
+                        `Karena |${num1}| > |${num2}|, hasilnya bertanda ${num1 > 0 ? 'positif' : 'negatif'}` :
+                        `Karena |${num2}| > |${num1}|, hasilnya bertanda ${num2 > 0 ? 'positif' : 'negatif'}`,
+                    `= ${correctAnswer}`
+                ];
+            }
+            
+            return `
+                <h4>Pembahasan:</h4>
+                <ol>
+                    ${steps.map(step => `<li>${step}</li>`).join('')}
+                </ol>
+            `;
+        }
+
+        // Exercise 6: Subtraction
+        function generateSubtractionQuestion() {
+            const type = document.getElementById('subtractionType').value;
+            let num1, num2;
+            
+            switch(type) {
+                case 'pos_pos':
+                    num1 = randomInt(1, 20);
+                    num2 = randomInt(1, 20);
+                    break;
+                case 'neg_neg':
+                    num1 = randomInt(-20, -1);
+                    num2 = randomInt(-20, -1);
+                    break;
+                case 'pos_neg':
+                    num1 = randomInt(1, 20);
+                    num2 = randomInt(-20, -1);
+                    break;
+                case 'neg_pos':
+                    num1 = randomInt(-20, -1);
+                    num2 = randomInt(1, 20);
+                    break;
+                case 'mixed':
+                    num1 = randomInt(-20, 20);
+                    num2 = randomInt(-20, 20);
+                    break;
+            }
+            
+            currentQuestion = {
+                num1: num1,
+                num2: num2,
+                correctAnswer: num1 - num2,
+                operation: 'subtraction'
+            };
+            
+            const expression = num2 >= 0 ? `${num1} - ${num2}` : `${num1} - (${num2})`;
+            
+            document.getElementById('subtractionQuestion').textContent = 'Hitunglah hasil pengurangan berikut:';
+            document.getElementById('subtractionExpression').textContent = expression;
+            document.getElementById('subtractionAnswer').value = '';
+            
+            hideResults('subtraction');
+        }
+
+        function checkSubtractionAnswer() {
+            const userAnswer = parseInt(document.getElementById('subtractionAnswer').value);
+            
+            if (isNaN(userAnswer)) {
+                alert('Masukkan bilangan yang valid!');
+                return;
+            }
+            
+            const isCorrect = userAnswer === currentQuestion.correctAnswer;
+            showResult('subtraction', isCorrect,
+                isCorrect ? 'Benar! Hasil pengurangan sudah tepat.' : `Salah! Hasil yang benar adalah ${currentQuestion.correctAnswer}.`,
+                generateSubtractionExplanation()
+            );
+        }
+
+        function showSubtractionHint() {
+            alert('Petunjuk: Pengurangan sama dengan penjumlahan dengan lawan bilangan. a - b = a + (-b)');
+        }
+
+        function generateSubtractionExplanation() {
+            const {num1, num2, correctAnswer} = currentQuestion;
+            const expression = num2 >= 0 ? `${num1} - ${num2}` : `${num1} - (${num2})`;
+            
+            return `
+                <h4>Pembahasan:</h4>
+                <ol>
+                    <li>${expression}</li>
+                    <li>Pengurangan = penjumlahan dengan lawan bilangan</li>
+                    <li>= ${num1} + (${-num2})</li>
+                    <li>= ${correctAnswer}</li>
+                    <li>Ingat: Mengurangi bilangan negatif sama dengan menambah bilangan positif</li>
+                </ol>
+            `;
+        }
+
+        // Exercise 7: Matching
+        let selectedOperations = [];
+        let selectedResults = [];
+        let connections = [];
+
+        function generateMatchingQuestion() {
+            const operations = [];
+            const results = [];
+            
+            for (let i = 0; i < 4; i++) {
+                const num1 = randomInt(-10, 10);
+                const num2 = randomInt(-10, 10);
+                const op = Math.random() > 0.5 ? '+' : '-';
+                const result = op === '+' ? num1 + num2 : num1 - num2;
+                
+                const expression = op === '+' ? 
+                    (num2 >= 0 ? `${num1} + ${num2}` : `${num1} + (${num2})`) :
+                    (num2 >= 0 ? `${num1} - ${num2}` : `${num1} - (${num2})`);
+                
+                operations.push({expression, result, id: i});
+                results.push({value: result, id: i});
+            }
+            
+            currentQuestion = {
+                operations: operations,
+                results: [...results],
+                shuffledResults: shuffle([...results])
+            };
+            
+            selectedOperations = [];
+            selectedResults = [];
+            connections = [];
+            
+            const matchingArea = document.getElementById('matchingArea');
+            matchingArea.innerHTML = `
+                <div class="matching-area" style="position: relative;">
+                    <div class="matching-container">
+                        <div>
+                            <h4>Operasi:</h4>
+                            ${operations.map((op, i) => `
+                                <div class="matching-item operation" data-id="${op.id}" data-result="${op.result}" onclick="selectOperation(${op.id}, '${op.expression}', ${op.result})">
+                                    ${op.expression}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div>
+                            <h4>Hasil:</h4>
+                            ${currentQuestion.shuffledResults.map((result, i) => `
+                                <div class="matching-item result" data-id="${result.id}" data-value="${result.value}" onclick="selectResult(${result.id}, ${result.value})">
+                                    ${result.value}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            hideResults('matching');
+        }
+
+        function selectOperation(id, expression, result) {
+            // Remove previous selection
+            document.querySelectorAll('.matching-item.operation').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Select current operation
+            event.target.classList.add('selected');
+            selectedOperations = [{id, expression, result}];
+            
+            // Check if we can make a connection
+            if (selectedResults.length > 0) {
+                const selectedResult = selectedResults[0];
+                const isCorrect = result === selectedResult.value;
+                const resultElement = document.querySelector(`[data-id="${selectedResult.id}"][data-value="${selectedResult.value}"]`);
+                
+                makeConnection(event.target, resultElement, isCorrect);
+                connections.push({operationId: id, resultId: selectedResult.id, correct: isCorrect});
+                
+                // Clear selections
+                selectedOperations = [];
+                selectedResults = [];
+                document.querySelectorAll('.matching-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+            }
+        }
+
+        function selectResult(id, value) {
+            // Remove previous selection
+            document.querySelectorAll('.matching-item.result').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Select current result
+            event.target.classList.add('selected');
+            selectedResults = [{id, value}];
+            
+            // Check if we can make a connection
+            if (selectedOperations.length > 0) {
+                const selectedOperation = selectedOperations[0];
+                const isCorrect = selectedOperation.result === value;
+                const operationElement = document.querySelector(`[data-id="${selectedOperation.id}"][data-result="${selectedOperation.result}"]`);
+                
+                makeConnection(operationElement, event.target, isCorrect);
+                connections.push({operationId: selectedOperation.id, resultId: id, correct: isCorrect});
+                
+                // Clear selections
+                selectedOperations = [];
+                selectedResults = [];
+                document.querySelectorAll('.matching-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+            }
+        }
+
+        function makeConnection(operationElement, resultElement, isCorrect = true) {
+            const matchingArea = document.querySelector('.matching-area');
+            const line = document.createElement('div');
+            line.className = `connection-line ${isCorrect ? 'correct' : 'incorrect'}`;
+            
+            const opRect = operationElement.getBoundingClientRect();
+            const resRect = resultElement.getBoundingClientRect();
+            const areaRect = matchingArea.getBoundingClientRect();
+            
+            // Connect from the dot on the right of operation to the dot on the left of result
+            const startX = opRect.right - areaRect.left;
+            const startY = opRect.top + opRect.height/2 - areaRect.top;
+            const endX = resRect.left - areaRect.left;
+            const endY = resRect.top + resRect.height/2 - areaRect.top;
+            
+            const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+            const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+            
+            line.style.left = startX + 'px';
+            line.style.top = startY + 'px';
+            line.style.width = length + 'px';
+            line.style.transform = `rotate(${angle}deg)`;
+            
+            matchingArea.appendChild(line);
+            return line;
+        }
+
+        function checkMatchingAnswer() {
+            if (connections.length !== 4) {
+                alert('Silakan cocokkan semua operasi dengan hasilnya terlebih dahulu!');
+                return;
+            }
+            
+            const correctConnections = connections.filter(conn => conn.correct).length;
+            const isCorrect = correctConnections === 4;
+            
+            showResult('matching', isCorrect,
+                isCorrect ? 'Benar! Semua pasangan sudah tepat.' : `${correctConnections}/4 pasangan benar. Periksa kembali jawaban yang salah.`,
+                generateMatchingExplanation()
+            );
+        }
+
+        function generateMatchingExplanation() {
+            return `
+                <h4>Pembahasan:</h4>
+                <ol>
+                    ${currentQuestion.operations.map(op => `
+                        <li>${op.expression} = ${op.result}</li>
+                    `).join('')}
+                </ol>
+            `;
+        }
+
+        // Exercise 8: Mixed Operations
+        function generateMixedQuestion() {
+            const useAddition = document.getElementById('useAddition').checked;
+            const useSubtraction = document.getElementById('useSubtraction').checked;
+            const useMultiplication = document.getElementById('useMultiplication').checked;
+            const useDivision = document.getElementById('useDivision').checked;
+            
+            const availableOps = [];
+            if (useAddition) availableOps.push('+');
+            if (useSubtraction) availableOps.push('-');
+            if (useMultiplication) availableOps.push('×');
+            if (useDivision) availableOps.push('÷');
+            
+            if (availableOps.length === 0) {
+                alert('Pilih minimal satu operasi!');
+                return;
+            }
+            
+            let num1, num2, num3, op1, op2, step1, finalResult;
+            let attempts = 0;
+            
+            // Keep generating until we get whole number results
+            do {
+                num1 = randomInt(-10, 10);
+                num2 = randomInt(-10, 10);
+                num3 = randomInt(-10, 10);
+                
+                op1 = availableOps[randomInt(0, availableOps.length - 1)];
+                op2 = availableOps[randomInt(0, availableOps.length - 1)];
+                
+                // Special handling for division to ensure whole numbers
+                if (op1 === '÷') {
+                    const divisors = [-5, -4, -3, -2, 2, 3, 4, 5];
+                    num2 = divisors[randomInt(0, divisors.length - 1)];
+                    const multiplier = randomInt(-8, 8);
+                    if (multiplier !== 0) {
+                        num1 = multiplier * num2;
+                    } else {
+                        num1 = num2; // This will result in 1
+                    }
+                }
+                
+                // Avoid zero for multiplication and division
+                if ((op1 === '×' || op1 === '÷') && num2 === 0) num2 = randomInt(1, 5);
+                if ((op2 === '×' || op2 === '÷') && num3 === 0) num3 = randomInt(1, 5);
+                
+                // Calculate step 1
+                switch(op1) {
+                    case '+': step1 = num1 + num2; break;
+                    case '-': step1 = num1 - num2; break;
+                    case '×': step1 = num1 * num2; break;
+                    case '÷': step1 = num1 / num2; break;
+                }
+                
+                // Special handling for second division
+                if (op2 === '÷') {
+                    const divisors = [-5, -4, -3, -2, 2, 3, 4, 5];
+                    num3 = divisors[randomInt(0, divisors.length - 1)];
+                    // Ensure step1 is divisible by num3
+                    if (step1 % num3 !== 0) {
+                        step1 = Math.round(step1 / num3) * num3;
+                    }
+                }
+                
+                // Calculate final result
+                switch(op2) {
+                    case '+': finalResult = step1 + num3; break;
+                    case '-': finalResult = step1 - num3; break;
+                    case '×': finalResult = step1 * num3; break;
+                    case '÷': finalResult = step1 / num3; break;
+                }
+                
+                attempts++;
+            } while ((finalResult !== Math.floor(finalResult) || step1 !== Math.floor(step1)) && attempts < 20);
+            
+            // If still not whole numbers after 20 attempts, force whole numbers
+            if (finalResult !== Math.floor(finalResult)) {
+                finalResult = Math.floor(finalResult);
+            }
+            if (step1 !== Math.floor(step1)) {
+                step1 = Math.floor(step1);
+            }
+            
+            let expression = `${num1} ${op1} `;
+            expression += (num2 >= 0 && op1 !== '×' && op1 !== '÷') ? `${num2}` : `(${num2})`;
+            expression += ` ${op2} `;
+            expression += (num3 >= 0 && op2 !== '×' && op2 !== '÷') ? `${num3}` : `(${num3})`;
+            
+            currentQuestion = {
+                num1, num2, num3, op1, op2,
+                expression: expression,
+                step1: step1,
+                correctAnswer: finalResult
+            };
+            
+            document.getElementById('mixedQuestion').textContent = 'Hitunglah hasil operasi campuran berikut:';
+            document.getElementById('mixedExpression').textContent = expression;
+            document.getElementById('mixedAnswer').value = '';
+            
+            hideResults('mixed');
+        }
+
+        function checkMixedAnswer() {
+            const userAnswer = parseInt(document.getElementById('mixedAnswer').value);
+            
+            if (isNaN(userAnswer)) {
+                alert('Masukkan bilangan yang valid!');
+                return;
+            }
+            
+            const isCorrect = userAnswer === currentQuestion.correctAnswer;
+            showResult('mixed', isCorrect,
+                isCorrect ? 'Benar! Hasil operasi campuran sudah tepat.' : `Salah! Hasil yang benar adalah ${currentQuestion.correctAnswer}.`,
+                generateMixedExplanation()
+            );
+        }
+
+        function showMixedHint() {
+            alert('Petunjuk: Kerjakan dari kiri ke kanan. Hitung operasi pertama dulu, baru lanjut ke operasi kedua.');
+        }
+
+        function generateMixedExplanation() {
+            const {num1, num2, num3, op1, op2, expression, step1, correctAnswer} = currentQuestion;
+            
+            return `
+                <h4>Pembahasan:</h4>
+                <ol>
+                    <li>${expression}</li>
+                    <li>Kerjakan dari kiri ke kanan:</li>
+                    <li>Langkah 1: ${num1} ${op1} ${num2 >= 0 ? num2 : `(${num2})`} = ${step1}</li>
+                    <li>Langkah 2: ${step1} ${op2} ${num3 >= 0 ? num3 : `(${num3})`} = ${correctAnswer}</li>
+                    <li>Jadi hasilnya adalah ${correctAnswer}</li>
+                </ol>
+            `;
+        }
+
+        // Exercise 9: Multiplication
+        function generateMultiplicationQuestion() {
+            const type = document.getElementById('multiplicationType').value;
+            let num1, num2;
+            
+            switch(type) {
+                case 'pos_pos':
+                    num1 = randomInt(1, 12);
+                    num2 = randomInt(1, 12);
+                    break;
+                case 'neg_neg':
+                    num1 = randomInt(-12, -1);
+                    num2 = randomInt(-12, -1);
+                    break;
+                case 'pos_neg':
+                    num1 = randomInt(1, 12);
+                    num2 = randomInt(-12, -1);
+                    break;
+                case 'neg_pos':
+                    num1 = randomInt(-12, -1);
+                    num2 = randomInt(1, 12);
+                    break;
+                case 'mixed':
+                    num1 = randomInt(-12, 12);
+                    num2 = randomInt(-12, 12);
+                    if (num1 === 0) num1 = 1;
+                    if (num2 === 0) num2 = 1;
+                    break;
+            }
+            
+            currentQuestion = {
+                num1: num1,
+                num2: num2,
+                correctAnswer: num1 * num2,
+                operation: 'multiplication'
+            };
+            
+            const expression = `${num1} × ${num2 >= 0 ? num2 : `(${num2})`}`;
+            
+            document.getElementById('multiplicationQuestion').textContent = 'Hitunglah hasil perkalian berikut:';
+            document.getElementById('multiplicationExpression').textContent = expression;
+            document.getElementById('multiplicationAnswer').value = '';
+            
+            hideResults('multiplication');
+        }
+
+        function checkMultiplicationAnswer() {
+            const userAnswer = parseInt(document.getElementById('multiplicationAnswer').value);
+            
+            if (isNaN(userAnswer)) {
+                alert('Masukkan bilangan yang valid!');
+                return;
+            }
+            
+            const isCorrect = userAnswer === currentQuestion.correctAnswer;
+            showResult('multiplication', isCorrect,
+                isCorrect ? 'Benar! Hasil perkalian sudah tepat.' : `Salah! Hasil yang benar adalah ${currentQuestion.correctAnswer}.`,
+                generateMultiplicationExplanation()
+            );
+        }
+
+        function generateMultiplicationExplanation() {
+            const {num1, num2, correctAnswer} = currentQuestion;
+            const expression = `${num1} × ${num2 >= 0 ? num2 : `(${num2})`}`;
+            
+            let rule = '';
+            if (num1 > 0 && num2 > 0) {
+                rule = 'Positif × Positif = Positif';
+            } else if (num1 < 0 && num2 < 0) {
+                rule = 'Negatif × Negatif = Positif';
+            } else {
+                rule = 'Positif × Negatif = Negatif (atau sebaliknya)';
+            }
+            
+            return `
+                <h4>Pembahasan:</h4>
+                <ol>
+                    <li>${expression}</li>
+                    <li>Aturan tanda: ${rule}</li>
+                    <li>Hitung nilai mutlak: ${Math.abs(num1)} × ${Math.abs(num2)} = ${Math.abs(correctAnswer)}</li>
+                    <li>Tentukan tanda hasil: ${correctAnswer >= 0 ? 'Positif' : 'Negatif'}</li>
+                    <li>Jadi hasilnya adalah ${correctAnswer}</li>
+                </ol>
+            `;
+        }
+
+        // Exercise 10: Division
+        function generateDivisionQuestion() {
+            const type = document.getElementById('divisionType').value;
+            let num1, num2;
+            
+            // Generate numbers that result in whole number division
+            const divisors = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12];
+            const quotient = randomInt(1, 10);
+            const divisor = divisors[randomInt(0, divisors.length - 1)];
+            
+            switch(type) {
+                case 'pos_pos':
+                    num1 = quotient * divisor;
+                    num2 = divisor;
+                    break;
+                case 'neg_neg':
+                    num1 = -(quotient * divisor);
+                    num2 = -divisor;
+                    break;
+                case 'pos_neg':
+                    num1 = quotient * divisor;
+                    num2 = -divisor;
+                    break;
+                case 'neg_pos':
+                    num1 = -(quotient * divisor);
+                    num2 = divisor;
+                    break;
+                case 'mixed':
+                    const signs = [1, -1];
+                    const sign1 = signs[randomInt(0, 1)];
+                    const sign2 = signs[randomInt(0, 1)];
+                    num1 = sign1 * quotient * divisor;
+                    num2 = sign2 * divisor;
+                    break;
+            }
+            
+            currentQuestion = {
+                num1: num1,
+                num2: num2,
+                correctAnswer: num1 / num2,
+                operation: 'division'
+            };
+            
+            const expression = `${num1} ÷ ${num2 >= 0 ? num2 : `(${num2})`}`;
+            
+            document.getElementById('divisionQuestion').textContent = 'Hitunglah hasil pembagian berikut:';
+            document.getElementById('divisionExpression').textContent = expression;
+            document.getElementById('divisionAnswer').value = '';
+            
+            hideResults('division');
+        }
+
+        function checkDivisionAnswer() {
+            const userAnswer = parseInt(document.getElementById('divisionAnswer').value);
+            
+            if (isNaN(userAnswer)) {
+                alert('Masukkan bilangan yang valid!');
+                return;
+            }
+            
+            const isCorrect = userAnswer === currentQuestion.correctAnswer;
+            showResult('division', isCorrect,
+                isCorrect ? 'Benar! Hasil pembagian sudah tepat.' : `Salah! Hasil yang benar adalah ${currentQuestion.correctAnswer}.`,
+                generateDivisionExplanation()
+            );
+        }
+
+        function generateDivisionExplanation() {
+            const {num1, num2, correctAnswer} = currentQuestion;
+            const expression = `${num1} ÷ ${num2 >= 0 ? num2 : `(${num2})`}`;
+            
+            let rule = '';
+            if (num1 > 0 && num2 > 0) {
+                rule = 'Positif ÷ Positif = Positif';
+            } else if (num1 < 0 && num2 < 0) {
+                rule = 'Negatif ÷ Negatif = Positif';
+            } else {
+                rule = 'Positif ÷ Negatif = Negatif (atau sebaliknya)';
+            }
+            
+            return `
+                <h4>Pembahasan:</h4>
+                <ol>
+                    <li>${expression}</li>
+                    <li>Aturan tanda: ${rule}</li>
+                    <li>Hitung nilai mutlak: ${Math.abs(num1)} ÷ ${Math.abs(num2)} = ${Math.abs(correctAnswer)}</li>
+                    <li>Tentukan tanda hasil: ${correctAnswer >= 0 ? 'Positif' : 'Negatif'}</li>
+                    <li>Jadi hasilnya adalah ${correctAnswer}</li>
+                </ol>
+            `;
+        }
+
+        // Exercise 11: Story Problems
+        function generateStoryQuestion() {
+            const type = document.getElementById('storyType').value;
+            let story, answer, unit;
+            
+            switch(type) {
+                case 'temperature':
+                    const temp1 = randomInt(-10, 30);
+                    const change = randomInt(-15, 15);
+                    answer = temp1 + change;
+                    story = `Suhu di kota A pada pagi hari adalah ${temp1}°C. ${change >= 0 ? `Pada siang hari, suhu naik ${change}°C` : `Pada siang hari, suhu turun ${Math.abs(change)}°C`}. Berapa suhu pada siang hari?`;
+                    unit = '°C';
+                    break;
+                    
+                case 'score':
+                    const score1 = randomInt(50, 100);
+                    const penalty = randomInt(5, 30);
+                    answer = score1 - penalty;
+                    story = `Skor awal Budi dalam permainan adalah ${score1} poin. Karena melakukan kesalahan, skornya dikurangi ${penalty} poin. Berapa skor akhir Budi?`;
+                    unit = ' poin';
+                    break;
+                    
+                case 'elevation':
+                    if (Math.random() > 0.5) {
+                        // Lift story
+                        const floors = ['B3', 'B2', 'B1', 'LG', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+                        const floorValues = [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                        const startFloorIndex = randomInt(0, floors.length - 1);
+                        const move = randomInt(-5, 5);
+                        const endFloorIndex = Math.max(0, Math.min(floors.length - 1, startFloorIndex + move));
+                        
+                        answer = floorValues[endFloorIndex];
+                        const startFloor = floors[startFloorIndex];
+                        
+                        story = `Sebuah lift berada di lantai ${startFloor}. ${move > 0 ? `Lift naik ${move} lantai` : move < 0 ? `Lift turun ${Math.abs(move)} lantai` : 'Lift tidak bergerak'}. Di lantai berapa lift berada sekarang? (Gunakan angka: B3=-3, B2=-2, B1=-1, LG=0, lantai 1=1, dst)`;
+                        unit = '';
+                    } else {
+                        // Submarine story
+                        const startDepth = randomInt(-50, 10);
+                        const change = randomInt(-20, 30);
+                        answer = startDepth + change;
+                        
+                        story = `Sebuah kapal selam berada pada kedalaman ${Math.abs(startDepth)} meter ${startDepth < 0 ? 'di bawah permukaan laut' : startDepth > 0 ? 'di atas permukaan laut' : 'di permukaan laut'}. ${change > 0 ? `Kapal selam naik ${change} meter` : change < 0 ? `Kapal selam turun ${Math.abs(change)} meter` : 'Kapal selam tidak bergerak'}. Pada kedalaman berapa kapal selam sekarang? (Gunakan bilangan negatif untuk di bawah permukaan laut, 0 untuk permukaan laut, positif untuk di atas permukaan laut)`;
+                        unit = ' meter';
+                    }
+                    break;
+                    
+                case 'competition':
+                    const initialScore = randomInt(80, 120);
+                    const correct1 = randomInt(2, 5);
+                    const wrong1 = randomInt(1, 3);
+                    const correct2 = randomInt(1, 4);
+                    const wrong2 = randomInt(0, 2);
+                    
+                    // Each correct = +5, each wrong = -2
+                    const round1Score = (correct1 * 5) - (wrong1 * 2);
+                    const round2Score = (correct2 * 5) - (wrong2 * 2);
+                    answer = initialScore + round1Score + round2Score;
+                    
+                    story = `Dalam kompetisi matematika, Sari memulai dengan skor ${initialScore} poin. Pada babak pertama, dia menjawab ${correct1} soal benar (+5 poin per soal) dan ${wrong1} soal salah (-2 poin per soal). Pada babak kedua, dia menjawab ${correct2} soal benar dan ${wrong2} soal salah. Berapa skor akhir Sari?`;
+                    unit = ' poin';
+                    break;
+            }
+            
+            currentQuestion = {
+                story: story,
+                correctAnswer: answer,
+                unit: unit,
+                type: type
+            };
+            
+            document.getElementById('storyProblem').innerHTML = `
+                <h4>Soal Cerita:</h4>
+                <p>${story}</p>
+            `;
+            
+            document.getElementById('storyAnswer').value = '';
+            hideResults('story');
+        }
+
+        function checkStoryAnswer() {
+            const userAnswer = parseInt(document.getElementById('storyAnswer').value);
+            
+            if (isNaN(userAnswer)) {
+                alert('Masukkan bilangan yang valid!');
+                return;
+            }
+            
+            const isCorrect = userAnswer === currentQuestion.correctAnswer;
+            showResult('story', isCorrect,
+                isCorrect ? 'Benar! Jawaban sudah tepat.' : `Salah! Jawaban yang benar adalah ${currentQuestion.correctAnswer}${currentQuestion.unit}.`,
+                generateStoryExplanation()
+            );
+        }
+
+        function showStoryHint() {
+            const type = currentQuestion.type;
+            const hints = {
+                temperature: 'Petunjuk: Naik suhu berarti tambah (+), turun suhu berarti kurang (-).',
+                score: 'Petunjuk: Dikurangi poin berarti operasi pengurangan (-).',
+                elevation: 'Petunjuk: Naik berarti tambah (+), turun berarti kurang (-). Permukaan laut = 0.',
+                money: 'Petunjuk: Membeli/mengeluarkan uang berarti operasi pengurangan (-).'
+            };
+            alert(hints[type]);
+        }
+
+        function generateStoryExplanation() {
+            return `
+                <h4>Pembahasan:</h4>
+                <ol>
+                    <li>Baca soal dengan teliti dan identifikasi informasi yang diberikan</li>
+                    <li>Tentukan operasi yang diperlukan (penjumlahan atau pengurangan)</li>
+                    <li>Hitung sesuai dengan operasi bilangan bulat</li>
+                    <li>Jawaban: ${currentQuestion.correctAnswer}${currentQuestion.unit}</li>
+                </ol>
+            `;
+        }
+
+        // Reset functions for all exercises
+        function resetSortingAnswer() {
+            document.getElementById('sortingDropZone').innerHTML = '<p>Seret angka ke sini untuk mengurutkan</p>';
+            document.querySelectorAll('.draggable-number').forEach(el => {
+                el.style.display = 'block';
+            });
+            hideResults('sorting');
+        }
+
+        function resetNumberLineAnswer() {
+            document.querySelectorAll('#numberLine input').forEach(input => {
+                input.value = '';
+                input.style.backgroundColor = '';
+            });
+            hideResults('numberLine');
+        }
+
+        function resetComparisonAnswer() {
+            document.querySelectorAll('.symbol-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            selectedSymbol = '';
+            hideResults('comparison');
+        }
+
+        function resetBetweenAnswer() {
+            document.getElementById('betweenAnswer').value = '';
+            hideResults('between');
+        }
+
+        function resetAdditionAnswer() {
+            document.getElementById('additionAnswer').value = '';
+            hideResults('addition');
+        }
+
+        function resetSubtractionAnswer() {
+            document.getElementById('subtractionAnswer').value = '';
+            hideResults('subtraction');
+        }
+
+        function resetMatchingAnswer() {
+            selectedOperations = [];
+            selectedResults = [];
+            connections = [];
+            document.querySelectorAll('.matching-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelectorAll('.connection-line').forEach(line => {
+                line.remove();
+            });
+            hideResults('matching');
+        }
+
+        function resetMixedAnswer() {
+            document.getElementById('mixedAnswer').value = '';
+            hideResults('mixed');
+        }
+
+        function resetMultiplicationAnswer() {
+            document.getElementById('multiplicationAnswer').value = '';
+            hideResults('multiplication');
+        }
+
+        function resetDivisionAnswer() {
+            document.getElementById('divisionAnswer').value = '';
+            hideResults('division');
+        }
+
+        function resetStoryAnswer() {
+            document.getElementById('storyAnswer').value = '';
+            hideResults('story');
+        }
+
+        // Utility functions for results
+        function hideResults(exerciseType) {
+            document.getElementById(`${exerciseType}Result`).style.display = 'none';
+            document.getElementById(`${exerciseType}Explanation`).style.display = 'none';
+        }
+
+        function showResult(exerciseType, isCorrect, message, explanation) {
+            const resultDiv = document.getElementById(`${exerciseType}Result`);
+            const explanationDiv = document.getElementById(`${exerciseType}Explanation`);
+            
+            resultDiv.className = `result ${isCorrect ? 'correct' : 'incorrect'}`;
+            resultDiv.textContent = message;
+            resultDiv.style.display = 'block';
+            
+            explanationDiv.innerHTML = explanation;
+            explanationDiv.style.display = 'block';
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            showMenu();
+        });
+    </script>
+</body>
+</html>
