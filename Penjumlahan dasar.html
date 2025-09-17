@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Penjumlahan Ceria</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: #162b4e;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 20px;
+        }
+
+        .image-selector {
+            background: #5481c8;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .selector-title {
+            font-size: 1.3rem;
+            color: white;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .image-selector-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .nav-arrow {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .nav-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .image-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 300px;
+        }
+
+        .image-option {
+            background: white;
+            border: 3px solid transparent;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .image-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .image-option.active {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+
+        .image-option .emoji {
+            font-size: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .image-option .label {
+            font-size: 0.9rem;
+            color: #4a5568;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .group {
+            background: #5481c8;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .group-title {
+            font-size: 1.4rem;
+            color: white;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .counter-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .counter-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .counter-btn:hover {
+            background: #3182ce;
+            transform: scale(1.1);
+        }
+
+        .counter-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            min-width: 60px;
+        }
+
+        .items-display {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            min-height: 80px;
+            align-items: center;
+        }
+
+        .item {
+            font-size: 2.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .item:hover {
+            transform: scale(1.2);
+        }
+
+        .item.numbered::after, .result-item.numbered::after {
+            content: attr(data-number);
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e53e3e;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: #162b4e;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-section {
+            background: #5481c8;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .equation {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .result-display {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            min-height: 120px;
+            align-items: flex-start;
+            padding-top: 20px;
+        }
+
+        .result-item {
+            font-size: 3rem;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0);
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .result-item.animate-in {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .tip {
+            background: #bee3f8;
+            padding: 15px;
+            border-radius: 10px;
+            color: #2c5282;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .count-one-by-one {
+            background: #48bb78;
+            margin-top: 15px;
+        }
+
+        .count-one-by-one:hover {
+            background: #38a169;
+        }
+
+        .answer-input-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+
+        .answer-prompt {
+            font-size: 1.3rem;
+            color: white;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .answer-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .answer-input {
+            font-size: 1.5rem;
+            padding: 10px 15px;
+            border: 3px solid #4299e1;
+            border-radius: 10px;
+            text-align: center;
+            width: 80px;
+            font-weight: bold;
+            background: white;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #2b6cb0;
+            box-shadow: 0 0 10px rgba(66, 153, 225, 0.5);
+        }
+
+        .check-answer {
+            background: #4299e1;
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+
+        .check-answer:hover {
+            background: #3182ce;
+        }
+
+        .feedback {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 10px;
+            min-height: 30px;
+        }
+
+        .feedback.correct {
+            color: #48bb78;
+            animation: correctAnswer 1s ease;
+        }
+
+        .feedback.incorrect {
+            color: #f56565;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes equationUpdate {
+            0% { transform: scale(1); color: white; }
+            50% { transform: scale(1.1); color: white; }
+            100% { transform: scale(1); color: white; }
+        }
+
+        .equation.correct {
+            animation: equationUpdate 1s ease;
+            color: white !important;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .bounce {
+            animation: bounce 0.6s ease;
+        }
+
+        @keyframes moveToResult {
+            0% { 
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+            50% { 
+                transform: scale(0.8) translateY(-50px);
+                opacity: 0.7;
+            }
+            100% { 
+                transform: scale(1) translateY(0);
+                opacity: 0;
+            }
+        }
+
+        .move-to-result {
+            animation: moveToResult 1s ease-in-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🎯 Simulasi Penjumlahan Ceria</h1>
+            <p class="subtitle">Atur jumlahnya, gabungkan, lalu hitung satu per satu!</p>
+        </div>
+
+        <div class="image-selector">
+            <h3 class="selector-title">Pilih Gambar</h3>
+            <div class="image-selector-container">
+                <button class="nav-arrow" id="prevBtn" onclick="previousPage()">‹</button>
+                <div class="image-options" id="imageOptions">
+                    <!-- Images will be populated by JavaScript -->
+                </div>
+                <button class="nav-arrow" id="nextBtn" onclick="nextPage()">›</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="group">
+                <h3 class="group-title">Kelompok A</h3>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('A', -1)">−</button>
+                    <span class="counter-display" id="countA">3</span>
+                    <button class="counter-btn" onclick="changeCount('A', 1)">+</button>
+                </div>
+                <div class="items-display" id="itemsA"></div>
+            </div>
+
+            <div class="group">
+                <h3 class="group-title">Kelompok B</h3>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('B', -1)">−</button>
+                    <span class="counter-display" id="countB">2</span>
+                    <button class="counter-btn" onclick="changeCount('B', 1)">+</button>
+                </div>
+                <div class="items-display" id="itemsB"></div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-btn" onclick="randomizeNumbers()">🎲 Acak</button>
+            <button class="action-btn" onclick="combineGroups()">🔄 Gabungkan</button>
+            <button class="action-btn" onclick="reset()">🔄 Reset</button>
+        </div>
+
+        <div class="result-section" id="resultSection" style="display: none;">
+            <div class="equation" id="equation">A + B</div>
+            <div class="answer-input-section" id="answerSection">
+                <div class="answer-prompt">Berapa hasilnya?</div>
+                <div class="answer-controls">
+                    <input type="number" id="answerInput" class="answer-input" placeholder="?" min="0" max="20">
+                    <button class="action-btn check-answer" onclick="checkAnswer()">✓ Periksa</button>
+                </div>
+                <div class="feedback" id="feedback"></div>
+            </div>
+            <div class="result-display" id="resultDisplay"></div>
+            <button class="action-btn count-one-by-one" onclick="countOneByOne()" id="countBtn">🔢 Hitung Satu per Satu</button>
+            <div class="tip">
+                💡 <strong>Tip:</strong> Setelah menekan Tampilkan Hasil, ketuk tiap gambar untuk melihat angkanya, atau pakai "Hitung Satu per Satu".
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentImage = '🍎';
+        let countA = 3;
+        let countB = 2;
+        let combined = false;
+        let resultShown = false;
+        let countingIndex = 0;
+
+        const imageData = [
+            { type: 'apple', emoji: '🍎', label: 'Apel' },
+            { type: 'star', emoji: '⭐', label: 'Bintang' },
+            { type: 'heart', emoji: '❤️', label: 'Hati' },
+            { type: 'flower', emoji: '🌸', label: 'Bunga' },
+            { type: 'ball', emoji: '⚽', label: 'Bola' },
+            { type: 'candy', emoji: '🍭', label: 'Permen' },
+            { type: 'car', emoji: '🚗', label: 'Mobil' },
+            { type: 'cat', emoji: '🐱', label: 'Kucing' },
+            { type: 'dog', emoji: '🐶', label: 'Anjing' },
+            { type: 'fish', emoji: '🐟', label: 'Ikan' },
+            { type: 'sun', emoji: '☀️', label: 'Matahari' },
+            { type: 'chicken', emoji: '🐔', label: 'Ayam' }
+        ];
+
+        const imageMap = {
+            apple: '🍎',
+            star: '⭐',
+            heart: '❤️',
+            flower: '🌸',
+            ball: '⚽',
+            candy: '🍭',
+            car: '🚗',
+            cat: '🐱',
+            dog: '🐶',
+            fish: '🐟',
+            sun: '☀️',
+            chicken: '🐔'
+        };
+
+        let currentPage = 0;
+        const itemsPerPage = 4;
+
+        // Initialize
+        updateDisplay();
+        updateImageSelector();
+
+        function updateImageSelector() {
+            const container = document.getElementById('imageOptions');
+            const startIndex = currentPage * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, imageData.length);
+            
+            container.innerHTML = '';
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const item = imageData[i];
+                const option = document.createElement('div');
+                option.className = 'image-option';
+                option.dataset.type = item.type;
+                
+                if (item.type === 'apple' && currentPage === 0) {
+                    option.classList.add('active');
+                }
+                
+                option.innerHTML = `
+                    <span class="emoji">${item.emoji}</span>
+                    <div class="label">${item.label}</div>
+                `;
+                
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.image-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    currentImage = imageMap[this.dataset.type];
+                    updateDisplay();
+                });
+                
+                container.appendChild(option);
+            }
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentPage === 0;
+            document.getElementById('nextBtn').disabled = endIndex >= imageData.length;
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                updateImageSelector();
+            }
+        }
+
+        function nextPage() {
+            if ((currentPage + 1) * itemsPerPage < imageData.length) {
+                currentPage++;
+                updateImageSelector();
+            }
+        }
+
+        function changeCount(group, delta) {
+            if (group === 'A') {
+                countA = Math.max(0, Math.min(10, countA + delta));
+                document.getElementById('countA').textContent = countA;
+            } else {
+                countB = Math.max(0, Math.min(10, countB + delta));
+                document.getElementById('countB').textContent = countB;
+            }
+            updateDisplay();
+            resetState();
+        }
+
+        function updateDisplay() {
+            updateGroupDisplay('A', countA);
+            updateGroupDisplay('B', countB);
+            updateEquation();
+        }
+
+        function updateGroupDisplay(group, count) {
+            const container = document.getElementById(`items${group}`);
+            container.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const item = document.createElement('div');
+                item.className = 'item';
+                item.textContent = currentImage;
+                item.addEventListener('click', function() {
+                    this.classList.add('bounce');
+                    setTimeout(() => this.classList.remove('bounce'), 600);
+                });
+                container.appendChild(item);
+            }
+        }
+
+        function updateEquation() {
+            const equation = document.getElementById('equation');
+            equation.textContent = `${countA} + ${countB} = ?`;
+        }
+
+        function randomizeNumbers() {
+            countA = Math.floor(Math.random() * 6) + 1;
+            countB = Math.floor(Math.random() * 6) + 1;
+            document.getElementById('countA').textContent = countA;
+            document.getElementById('countB').textContent = countB;
+            updateDisplay();
+            resetState();
+        }
+
+        function combineGroups() {
+            combined = true;
+            
+            // Hide controls and show result in the same area
+            const controlsDiv = document.querySelector('.controls');
+            controlsDiv.style.display = 'none';
+            
+            // Show result section
+            const resultSection = document.getElementById('resultSection');
+            resultSection.style.display = 'block';
+            
+            // Create result items immediately
+            const resultDisplay = document.getElementById('resultDisplay');
+            resultDisplay.innerHTML = '';
+            
+            const total = countA + countB;
+            
+            // Add all items to result display with animation
+            for (let i = 0; i < total; i++) {
+                setTimeout(() => {
+                    const item = document.createElement('div');
+                    item.className = 'result-item';
+                    item.textContent = currentImage;
+                    item.addEventListener('click', function() {
+                        if (!this.classList.contains('numbered')) {
+                            this.classList.add('numbered');
+                            this.setAttribute('data-number', Array.from(resultDisplay.children).indexOf(this) + 1);
+                        }
+                        this.classList.add('bounce');
+                        setTimeout(() => this.classList.remove('bounce'), 600);
+                    });
+                    
+                    resultDisplay.appendChild(item);
+                    
+                    // Trigger animation
+                    setTimeout(() => {
+                        item.classList.add('animate-in');
+                    }, 50);
+                }, i * 200);
+            }
+
+            // Update equation to show question mark
+            document.getElementById('equation').textContent = `${countA} + ${countB} = ?`;
+        }
+
+        function showResult() {
+            // This function is no longer needed as results are shown in combineGroups
+            return;
+        }
+
+        function countOneByOne() {
+            const items = document.querySelectorAll('.result-item');
+            
+            // Remove all existing numbers first
+            items.forEach(item => {
+                item.classList.remove('numbered');
+                item.removeAttribute('data-number');
+            });
+            
+            // Reset counting index
+            countingIndex = 0;
+            
+            // Add numbers one by one with animation
+            const addNumber = () => {
+                if (countingIndex < items.length) {
+                    const item = items[countingIndex];
+                    const numberToShow = countingIndex + 1;
+                    
+                    // Add the numbered class and set the data attribute
+                    item.classList.add('numbered');
+                    item.setAttribute('data-number', numberToShow);
+                    
+                    // Add bounce animation
+                    item.classList.add('bounce');
+                    setTimeout(() => item.classList.remove('bounce'), 600);
+                    
+                    countingIndex++;
+                    
+                    // Continue to next number after delay
+                    if (countingIndex < items.length) {
+                        setTimeout(addNumber, 1000);
+                    }
+                }
+            };
+            
+            // Start counting after a short delay
+            setTimeout(addNumber, 300);
+        }
+
+        function resetState() {
+            combined = false;
+            resultShown = false;
+            document.getElementById('resultSection').style.display = 'none';
+            document.querySelector('.controls').style.display = 'grid';
+            
+            // Reset answer section
+            document.getElementById('answerInput').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('answerSection').style.display = 'block';
+            document.getElementById('equation').classList.remove('correct');
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseInt(document.getElementById('answerInput').value);
+            const correctAnswer = countA + countB;
+            const feedback = document.getElementById('feedback');
+            const equation = document.getElementById('equation');
+            
+            if (userAnswer === correctAnswer) {
+                // Correct answer
+                feedback.textContent = '🎉 Benar! Hebat sekali!';
+                feedback.className = 'feedback correct';
+                
+                // Update equation to show the answer
+                equation.textContent = `${countA} + ${countB} = ${correctAnswer}`;
+                equation.classList.add('correct');
+                
+                // Hide the answer input section after correct answer
+                setTimeout(() => {
+                    document.getElementById('answerSection').style.display = 'none';
+                }, 2000);
+                
+            } else if (isNaN(userAnswer)) {
+                // No answer entered
+                feedback.textContent = '❓ Silakan masukkan jawaban!';
+                feedback.className = 'feedback incorrect';
+            } else {
+                // Wrong answer
+                feedback.textContent = '❌ Coba lagi! Hitung dengan teliti.';
+                feedback.className = 'feedback incorrect';
+                
+                // Clear the input for retry
+                setTimeout(() => {
+                    document.getElementById('answerInput').value = '';
+                    document.getElementById('answerInput').focus();
+                }, 1000);
+            }
+        }
+
+        // Allow Enter key to check answer
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('answerInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+        });
+
+        function reset() {
+            countA = 3;
+            countB = 2;
+            document.getElementById('countA').textContent = countA;
+            document.getElementById('countB').textContent = countB;
+            updateDisplay();
+            resetState();
+            
+            // Reset answer section
+            document.getElementById('answerInput').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('answerSection').style.display = 'block';
+            document.getElementById('equation').classList.remove('correct');
+        }
+    </script>
+</body>
+</html>
