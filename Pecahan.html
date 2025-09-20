@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilangan Rasional - Platform Pembelajaran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Poppins', sans-serif; }
+        .fraction { 
+            display: inline-block; 
+            vertical-align: middle; 
+            text-align: center; 
+            margin: 0 4px;
+            font-weight: 500;
+        }
+        .fraction .numerator { 
+            display: block; 
+            border-bottom: 2px solid #374151; 
+            padding-bottom: 3px; 
+            line-height: 1.2;
+            min-width: 20px;
+        }
+        .fraction .denominator { 
+            display: block; 
+            padding-top: 3px; 
+            line-height: 1.2;
+            min-width: 20px;
+        }
+        .answer-fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 8px;
+            font-size: 1.1em;
+        }
+        .answer-fraction input {
+            width: 60px;
+            text-align: center;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 4px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .answer-fraction .fraction-line {
+            width: 70px;
+            height: 2px;
+            background-color: #374151;
+            margin: 4px 0;
+        }
+        .answer-fraction input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .number-line { background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 100%); }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-8 py-4">
+                <button onclick="showSection('materi')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-all duration-300 bg-blue-500 text-white">
+                    <i class="fas fa-book mr-2"></i>Materi
+                </button>
+                <button onclick="showSection('latihan')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-all duration-300 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-pencil-alt mr-2"></i>Latihan Soal
+                </button>
+                <button onclick="showSection('cerita')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-all duration-300 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-story mr-2"></i>Soal Cerita
+                </button>
+                <button onclick="showSection('generator')" class="nav-btn px-6 py-2 rounded-lg font-semibold transition-all duration-300 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-magic mr-2"></i>Generator
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Materi Section -->
+        <section id="materi" class="section">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+                    <i class="fas fa-lightbulb text-yellow-500 mr-3"></i>Materi Pembelajaran
+                </h2>
+                
+                <!-- Definisi -->
+                <div class="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-l-4 border-blue-500">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Apa itu Bilangan Rasional?</h3>
+                    <p class="text-gray-700 text-lg leading-relaxed mb-4">
+                        Bilangan rasional adalah bilangan yang dapat dinyatakan dalam bentuk pecahan <span class="fraction font-bold text-blue-600"><span class="numerator">a</span><span class="denominator">b</span></span>, 
+                        dimana a dan b adalah bilangan bulat dan b ≠ 0.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-4 mt-6">
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <h4 class="font-semibold text-green-600 mb-2">Contoh Positif:</h4>
+                            <div class="text-center">
+                                <span class="fraction text-xl"><span class="numerator">3</span><span class="denominator">4</span></span>,
+                                <span class="fraction text-xl"><span class="numerator">5</span><span class="denominator">2</span></span>,
+                                <span class="fraction text-xl"><span class="numerator">7</span><span class="denominator">3</span></span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <h4 class="font-semibold text-red-600 mb-2">Contoh Negatif:</h4>
+                            <div class="text-center">
+                                <span class="fraction text-xl"><span class="numerator">-2</span><span class="denominator">5</span></span>,
+                                <span class="fraction text-xl"><span class="numerator">-1</span><span class="denominator">3</span></span>,
+                                <span class="fraction text-xl"><span class="numerator">-4</span><span class="denominator">7</span></span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <h4 class="font-semibold text-purple-600 mb-2">Bilangan Bulat:</h4>
+                            <div class="text-center">
+                                <span class="fraction text-xl"><span class="numerator">2</span><span class="denominator">1</span></span>,
+                                <span class="fraction text-xl"><span class="numerator">-3</span><span class="denominator">1</span></span>,
+                                <span class="fraction text-xl"><span class="numerator">0</span><span class="denominator">1</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualisasi Garis Bilangan -->
+                <div class="mb-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border-l-4 border-green-500">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Visualisasi pada Garis Bilangan</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <canvas id="numberLineCanvas" width="800" height="200" class="w-full max-w-4xl mx-auto"></canvas>
+                        <div class="mt-4 text-center space-x-4">
+                            <button onclick="animateNumberLine()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                <i class="fas fa-play mr-2"></i>Animasi Garis Bilangan
+                            </button>
+                            <button onclick="randomizeNumberLine()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-random mr-2"></i>Acak Pecahan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Operasi Penjumlahan -->
+                <div class="mb-8 p-6 bg-gradient-to-r from-orange-50 to-red-50 rounded-lg border-l-4 border-orange-500">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Penjumlahan Bilangan Rasional</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h4 class="text-xl font-semibold text-orange-600 mb-4">Penyebut Sama</h4>
+                            <div class="text-center mb-4">
+                                <span class="fraction text-2xl text-blue-600">
+                                    <span class="numerator">a</span>
+                                    <span class="denominator">c</span>
+                                </span>
+                                <span class="text-2xl mx-4">+</span>
+                                <span class="fraction text-2xl text-green-600">
+                                    <span class="numerator">b</span>
+                                    <span class="denominator">c</span>
+                                </span>
+                                <span class="text-2xl mx-4">=</span>
+                                <span class="fraction text-2xl text-purple-600">
+                                    <span class="numerator">a + b</span>
+                                    <span class="denominator">c</span>
+                                </span>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="font-semibold text-gray-700 mb-2">Contoh:</p>
+                                <div class="text-center">
+                                    <span class="fraction text-xl">
+                                        <span class="numerator">2</span>
+                                        <span class="denominator">7</span>
+                                    </span>
+                                    <span class="text-xl mx-3">+</span>
+                                    <span class="fraction text-xl">
+                                        <span class="numerator">3</span>
+                                        <span class="denominator">7</span>
+                                    </span>
+                                    <span class="text-xl mx-3">=</span>
+                                    <span class="fraction text-xl text-green-600">
+                                        <span class="numerator">5</span>
+                                        <span class="denominator">7</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h4 class="text-xl font-semibold text-orange-600 mb-4">Penyebut Berbeda</h4>
+                            <div class="text-center mb-4">
+                                <span class="fraction text-2xl text-blue-600">
+                                    <span class="numerator">a</span>
+                                    <span class="denominator">b</span>
+                                </span>
+                                <span class="text-2xl mx-4">+</span>
+                                <span class="fraction text-2xl text-green-600">
+                                    <span class="numerator">c</span>
+                                    <span class="denominator">d</span>
+                                </span>
+                                <span class="text-2xl mx-4">=</span>
+                                <span class="fraction text-2xl text-purple-600">
+                                    <span class="numerator">ad + bc</span>
+                                    <span class="denominator">bd</span>
+                                </span>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="font-semibold text-gray-700 mb-2">Contoh:</p>
+                                <div class="text-center">
+                                    <span class="fraction text-xl">
+                                        <span class="numerator">1</span>
+                                        <span class="denominator">3</span>
+                                    </span>
+                                    <span class="text-xl mx-3">+</span>
+                                    <span class="fraction text-xl">
+                                        <span class="numerator">1</span>
+                                        <span class="denominator">4</span>
+                                    </span>
+                                    <span class="text-xl mx-3">=</span>
+                                    <span class="fraction text-xl text-green-600">
+                                        <span class="numerator">7</span>
+                                        <span class="denominator">12</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visualisasi Interaktif Penjumlahan -->
+                    <div class="mt-6 bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-4">Visualisasi Interaktif</h4>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <canvas id="additionCanvas" width="400" height="300" class="w-full border rounded-lg"></canvas>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-3 text-center">Pecahan Pertama:</label>
+                                    <div class="flex justify-center">
+                                        <div class="answer-fraction">
+                                            <input type="number" id="num1" value="1">
+                                            <div class="fraction-line"></div>
+                                            <input type="number" id="den1" value="4" min="1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-3 text-center">Pecahan Kedua:</label>
+                                    <div class="flex justify-center">
+                                        <div class="answer-fraction">
+                                            <input type="number" id="num2" value="1">
+                                            <div class="fraction-line"></div>
+                                            <input type="number" id="den2" value="3" min="1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onclick="visualizeAddition()" class="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition-colors">
+                                    <i class="fas fa-eye mr-2"></i>Visualisasikan
+                                </button>
+                                <div id="additionResult" class="text-center text-xl font-semibold text-green-600"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Operasi Pengurangan -->
+                <div class="mb-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-l-4 border-purple-500">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Pengurangan Bilangan Rasional</h3>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h4 class="text-xl font-semibold text-purple-600 mb-4">Rumus Pengurangan</h4>
+                        <div class="text-center mb-4">
+                            <span class="fraction text-2xl text-blue-600">
+                                <span class="numerator">a</span>
+                                <span class="denominator">b</span>
+                            </span>
+                            <span class="text-2xl mx-4">-</span>
+                            <span class="fraction text-2xl text-red-600">
+                                <span class="numerator">c</span>
+                                <span class="denominator">d</span>
+                            </span>
+                            <span class="text-2xl mx-4">=</span>
+                            <span class="fraction text-2xl text-blue-600">
+                                <span class="numerator">a</span>
+                                <span class="denominator">b</span>
+                            </span>
+                            <span class="text-2xl mx-4">+</span>
+                            <span class="fraction text-2xl text-green-600">
+                                <span class="numerator">-c</span>
+                                <span class="denominator">d</span>
+                            </span>
+                            <span class="text-2xl mx-4">=</span>
+                            <span class="fraction text-2xl text-purple-600">
+                                <span class="numerator">ad - bc</span>
+                                <span class="denominator">bd</span>
+                            </span>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-semibold text-gray-700 mb-2">Contoh:</p>
+                            <div class="text-center">
+                                <span class="fraction text-xl">
+                                    <span class="numerator">3</span>
+                                    <span class="denominator">4</span>
+                                </span>
+                                <span class="text-xl mx-3">-</span>
+                                <span class="fraction text-xl">
+                                    <span class="numerator">1</span>
+                                    <span class="denominator">6</span>
+                                </span>
+                                <span class="text-xl mx-3">=</span>
+                                <span class="fraction text-xl text-green-600">
+                                    <span class="numerator">7</span>
+                                    <span class="denominator">12</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visualisasi Pengurangan -->
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-4">Visualisasi Pengurangan</h4>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <canvas id="subtractionCanvas" width="400" height="300" class="w-full border rounded-lg"></canvas>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-3 text-center">Pecahan Pertama:</label>
+                                    <div class="flex justify-center">
+                                        <div class="answer-fraction">
+                                            <input type="number" id="subNum1" value="3">
+                                            <div class="fraction-line"></div>
+                                            <input type="number" id="subDen1" value="4" min="1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-3 text-center">Pecahan Kedua:</label>
+                                    <div class="flex justify-center">
+                                        <div class="answer-fraction">
+                                            <input type="number" id="subNum2" value="1">
+                                            <div class="fraction-line"></div>
+                                            <input type="number" id="subDen2" value="6" min="1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onclick="visualizeSubtraction()" class="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors">
+                                    <i class="fas fa-eye mr-2"></i>Visualisasikan
+                                </button>
+                                <div id="subtractionResult" class="text-center text-xl font-semibold text-green-600"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latihan Soal Section -->
+        <section id="latihan" class="section hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+                    <i class="fas fa-pencil-alt text-blue-500 mr-3"></i>Latihan Soal
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Soal -->
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-lg border-l-4 border-blue-500">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Soal <span id="questionNumber">1</span></h3>
+                        <div id="questionText" class="text-lg text-gray-700 mb-6 text-center py-8 bg-white rounded-lg shadow-sm">
+                            <!-- Soal akan dimuat di sini -->
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2 text-center">Jawaban Anda:</label>
+                                <div class="flex justify-center">
+                                    <div class="answer-fraction">
+                                        <input type="number" id="answerNum" placeholder="0">
+                                        <div class="fraction-line"></div>
+                                        <input type="number" id="answerDen" placeholder="1" min="1">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button onclick="checkAnswer()" class="flex-1 bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors">
+                                    <i class="fas fa-check mr-2"></i>Periksa
+                                </button>
+                                <button onclick="generateQuestion()" class="flex-1 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                                    <i class="fas fa-refresh mr-2"></i>Soal Baru
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hasil dan Statistik -->
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg border-l-4 border-green-500">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Hasil</h3>
+                            <div id="answerResult" class="text-center py-8">
+                                <p class="text-gray-500">Jawab soal untuk melihat hasil</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-lg border-l-4 border-purple-500">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Statistik</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-green-600" id="correctCount">0</div>
+                                    <div class="text-sm text-gray-600">Benar</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-red-600" id="wrongCount">0</div>
+                                    <div class="text-sm text-gray-600">Salah</div>
+                                </div>
+                                <div class="text-center col-span-2">
+                                    <div class="text-2xl font-bold text-blue-600" id="accuracy">0%</div>
+                                    <div class="text-sm text-gray-600">Akurasi</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Soal Cerita Section -->
+        <section id="cerita" class="section hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+                    <i class="fas fa-book-open text-purple-500 mr-3"></i>Soal Cerita
+                </h2>
+                
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Soal Cerita -->
+                    <div class="lg:col-span-2 bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-lg border-l-4 border-purple-500">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Soal Cerita <span id="storyNumber">1</span></h3>
+                        <div id="storyText" class="text-base text-gray-700 mb-6 p-6 bg-white rounded-lg shadow-sm leading-relaxed">
+                            <!-- Soal cerita akan dimuat di sini -->
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2 text-center">Jawaban Anda:</label>
+                                <div class="flex justify-center">
+                                    <div class="answer-fraction">
+                                        <input type="number" id="storyAnswerNum" placeholder="0">
+                                        <div class="fraction-line"></div>
+                                        <input type="number" id="storyAnswerDen" placeholder="1" min="1">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button onclick="checkStoryAnswer()" class="flex-1 bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors">
+                                    <i class="fas fa-check mr-2"></i>Periksa
+                                </button>
+                                <button onclick="generateStoryQuestion()" class="flex-1 bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors">
+                                    <i class="fas fa-refresh mr-2"></i>Cerita Baru
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hasil dan Tips -->
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg border-l-4 border-green-500">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Hasil</h3>
+                            <div id="storyResult" class="text-center py-6">
+                                <p class="text-gray-500">Jawab soal untuk melihat hasil</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-lg border-l-4 border-yellow-500">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Tips</h3>
+                            <ul class="text-sm text-gray-700 space-y-2">
+                                <li><i class="fas fa-lightbulb text-yellow-500 mr-2"></i>Baca soal dengan teliti</li>
+                                <li><i class="fas fa-search text-blue-500 mr-2"></i>Identifikasi operasi yang diperlukan</li>
+                                <li><i class="fas fa-calculator text-green-500 mr-2"></i>Hitung langkah demi langkah</li>
+                                <li><i class="fas fa-check-double text-purple-500 mr-2"></i>Periksa kembali jawaban</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-lg border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Statistik Cerita</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-green-600" id="storyCorrect">0</div>
+                                    <div class="text-sm text-gray-600">Benar</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-red-600" id="storyWrong">0</div>
+                                    <div class="text-sm text-gray-600">Salah</div>
+                                </div>
+                                <div class="text-center col-span-2">
+                                    <div class="text-2xl font-bold text-blue-600" id="storyAccuracy">0%</div>
+                                    <div class="text-sm text-gray-600">Akurasi</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generator Section -->
+        <section id="generator" class="section hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+                    <i class="fas fa-magic text-indigo-500 mr-3"></i>Generator Soal Unlimited
+                </h2>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- Pengaturan Generator -->
+                    <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-lg border-l-4 border-indigo-500">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-6">Pengaturan Generator</h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Operasi:</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" id="genAddition" checked class="mr-2">
+                                        <span>Penjumlahan</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" id="genSubtraction" checked class="mr-2">
+                                        <span>Pengurangan</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tingkat Kesulitan:</label>
+                                <select id="difficultyLevel" class="w-full px-3 py-2 border rounded-lg">
+                                    <option value="easy">Mudah (penyebut 1-10)</option>
+                                    <option value="medium">Sedang (penyebut 1-20)</option>
+                                    <option value="hard">Sulit (penyebut 1-50)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Soal:</label>
+                                <input type="number" id="questionCount" value="10" min="1" max="100" class="w-full px-3 py-2 border rounded-lg">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Format Output:</label>
+                                <select id="outputFormat" class="w-full px-3 py-2 border rounded-lg">
+                                    <option value="interactive">Interaktif</option>
+                                    <option value="printable">Dapat Dicetak</option>
+                                </select>
+                            </div>
+                            
+                            <button onclick="generateQuestionSet()" class="w-full bg-indigo-500 text-white py-3 rounded-lg hover:bg-indigo-600 transition-colors">
+                                <i class="fas fa-magic mr-2"></i>Generate Soal
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Output Generator -->
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg border-l-4 border-green-500">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-6">Hasil Generator</h3>
+                        <div id="generatedQuestions" class="space-y-4 max-h-96 overflow-y-auto">
+                            <p class="text-gray-500 text-center py-8">Klik "Generate Soal" untuk membuat soal baru</p>
+                        </div>
+                        
+                        <div class="mt-6 space-y-4">
+                            <button onclick="showAllAnswers()" id="showAnswersBtn" class="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors hidden">
+                                <i class="fas fa-key mr-2"></i>Tampilkan Semua Jawaban
+                            </button>
+                            <button onclick="downloadQuestionsPDF()" id="downloadBtn" class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors hidden">
+                                <i class="fas fa-file-pdf mr-2"></i>Download PDF
+                            </button>
+                            <button onclick="resetGenerator()" class="w-full bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition-colors">
+                                <i class="fas fa-refresh mr-2"></i>Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+
+    <script>
+        // Global variables
+        let currentQuestion = {};
+        let currentStoryQuestion = {};
+        let stats = { correct: 0, wrong: 0 };
+        let storyStats = { correct: 0, wrong: 0 };
+        let generatedQuestionSet = [];
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-500', 'text-white');
+                btn.classList.add('text-gray-600', 'hover:bg-gray-100');
+            });
+            
+            event.target.classList.remove('text-gray-600', 'hover:bg-gray-100');
+            event.target.classList.add('bg-blue-500', 'text-white');
+        }
+
+        // Utility functions
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+
+        function simplifyFraction(num, den) {
+            const g = gcd(Math.abs(num), Math.abs(den));
+            return [num / g, den / g];
+        }
+
+        function addFractions(n1, d1, n2, d2) {
+            const num = n1 * d2 + n2 * d1;
+            const den = d1 * d2;
+            return simplifyFraction(num, den);
+        }
+
+        function subtractFractions(n1, d1, n2, d2) {
+            const num = n1 * d2 - n2 * d1;
+            const den = d1 * d2;
+            return simplifyFraction(num, den);
+        }
+
+        // Global variable for number line fractions
+        let currentNumberLineFractions = [];
+
+        // Generate random fractions for number line
+        function generateRandomFractions() {
+            const fractions = [];
+            const colors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#f97316'];
+            
+            // Generate 4-6 random fractions
+            const count = Math.floor(Math.random() * 3) + 4; // 4-6 fractions
+            
+            for (let i = 0; i < count; i++) {
+                let num, den;
+                
+                // Mix of positive and negative fractions
+                const isNegative = Math.random() < 0.4; // 40% chance negative
+                
+                // Generate fraction between -3 and 3
+                if (isNegative) {
+                    num = -(Math.floor(Math.random() * 12) + 1); // -1 to -12
+                    den = Math.floor(Math.random() * 6) + 2; // 2 to 7
+                } else {
+                    num = Math.floor(Math.random() * 15) + 1; // 1 to 15
+                    den = Math.floor(Math.random() * 6) + 2; // 2 to 7
+                }
+                
+                // Ensure fraction is within reasonable range for display
+                const value = num / den;
+                if (value >= -3 && value <= 3) {
+                    fractions.push({
+                        num: num,
+                        den: den,
+                        color: colors[i % colors.length]
+                    });
+                }
+            }
+            
+            return fractions;
+        }
+
+        function randomizeNumberLine() {
+            currentNumberLineFractions = generateRandomFractions();
+            animateNumberLine();
+        }
+
+        // Number line animation
+        function animateNumberLine() {
+            const canvas = document.getElementById('numberLineCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw number line
+            const centerY = canvas.height / 2;
+            const scale = 60;
+            const centerX = canvas.width / 2;
+            
+            // Main line
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(50, centerY);
+            ctx.lineTo(canvas.width - 50, centerY);
+            ctx.stroke();
+            
+            // Draw marks and numbers
+            ctx.fillStyle = '#374151';
+            ctx.font = '14px Poppins';
+            ctx.textAlign = 'center';
+            
+            for (let i = -5; i <= 5; i++) {
+                const x = centerX + i * scale;
+                
+                // Major marks
+                ctx.beginPath();
+                ctx.moveTo(x, centerY - 10);
+                ctx.lineTo(x, centerY + 10);
+                ctx.stroke();
+                
+                // Numbers
+                ctx.fillText(i.toString(), x, centerY + 25);
+                
+                // Minor marks (halves)
+                if (i < 5) {
+                    const halfX = x + scale / 2;
+                    ctx.beginPath();
+                    ctx.moveTo(halfX, centerY - 5);
+                    ctx.lineTo(halfX, centerY + 5);
+                    ctx.stroke();
+                }
+            }
+            
+            // Use current fractions or generate default ones
+            const fractions = currentNumberLineFractions.length > 0 ? currentNumberLineFractions : [
+                { num: 1, den: 2, color: '#ef4444' },
+                { num: -3, den: 4, color: '#3b82f6' },
+                { num: 5, den: 3, color: '#10b981' },
+                { num: -7, den: 4, color: '#f59e0b' }
+            ];
+            
+            fractions.forEach((frac, index) => {
+                setTimeout(() => {
+                    const value = frac.num / frac.den;
+                    const x = centerX + value * scale;
+                    
+                    // Draw point
+                    ctx.fillStyle = frac.color;
+                    ctx.beginPath();
+                    ctx.arc(x, centerY, 6, 0, 2 * Math.PI);
+                    ctx.fill();
+                    
+                    // Draw label
+                    ctx.fillStyle = frac.color;
+                    ctx.font = 'bold 12px Poppins';
+                    ctx.fillText(`${frac.num}/${frac.den}`, x, centerY - 20);
+                    
+                    // Animate with GSAP
+                    gsap.from(ctx.canvas, {
+                        duration: 0.5,
+                        scale: 0.8,
+                        ease: "back.out(1.7)"
+                    });
+                }, index * 500);
+            });
+        }
+
+        // Visualization functions
+        function visualizeAddition() {
+            const num1 = parseInt(document.getElementById('num1').value);
+            const den1 = parseInt(document.getElementById('den1').value);
+            const num2 = parseInt(document.getElementById('num2').value);
+            const den2 = parseInt(document.getElementById('den2').value);
+            
+            const canvas = document.getElementById('additionCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw first fraction
+            drawFractionVisualization(ctx, num1, den1, 50, 50, 150, 80, '#3b82f6');
+            
+            // Draw plus sign
+            ctx.fillStyle = '#374151';
+            ctx.font = 'bold 24px Poppins';
+            ctx.textAlign = 'center';
+            ctx.fillText('+', canvas.width / 2, 100);
+            
+            // Draw second fraction
+            drawFractionVisualization(ctx, num2, den2, 250, 50, 150, 80, '#10b981');
+            
+            // Calculate result
+            const [resultNum, resultDen] = addFractions(num1, den1, num2, den2);
+            
+            // Draw result
+            ctx.fillText('=', canvas.width / 2, 180);
+            drawFractionVisualization(ctx, resultNum, resultDen, 150, 200, 150, 80, '#ef4444');
+            
+            // Display result text
+            document.getElementById('additionResult').innerHTML = 
+                `<span class="fraction text-xl"><span class="numerator">${num1}</span><span class="denominator">${den1}</span></span> + 
+                 <span class="fraction text-xl"><span class="numerator">${num2}</span><span class="denominator">${den2}</span></span> = 
+                 <span class="fraction text-xl text-green-600"><span class="numerator">${resultNum}</span><span class="denominator">${resultDen}</span></span>`;
+        }
+
+        function visualizeSubtraction() {
+            const num1 = parseInt(document.getElementById('subNum1').value);
+            const den1 = parseInt(document.getElementById('subDen1').value);
+            const num2 = parseInt(document.getElementById('subNum2').value);
+            const den2 = parseInt(document.getElementById('subDen2').value);
+            
+            const canvas = document.getElementById('subtractionCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw first fraction
+            drawFractionVisualization(ctx, num1, den1, 50, 50, 150, 80, '#3b82f6');
+            
+            // Draw minus sign
+            ctx.fillStyle = '#374151';
+            ctx.font = 'bold 24px Poppins';
+            ctx.textAlign = 'center';
+            ctx.fillText('-', canvas.width / 2, 100);
+            
+            // Draw second fraction
+            drawFractionVisualization(ctx, num2, den2, 250, 50, 150, 80, '#ef4444');
+            
+            // Calculate result
+            const [resultNum, resultDen] = subtractFractions(num1, den1, num2, den2);
+            
+            // Draw result
+            ctx.fillText('=', canvas.width / 2, 180);
+            drawFractionVisualization(ctx, resultNum, resultDen, 150, 200, 150, 80, '#10b981');
+            
+            // Display result text
+            document.getElementById('subtractionResult').innerHTML = 
+                `<span class="fraction text-xl"><span class="numerator">${num1}</span><span class="denominator">${den1}</span></span> - 
+                 <span class="fraction text-xl"><span class="numerator">${num2}</span><span class="denominator">${den2}</span></span> = 
+                 <span class="fraction text-xl text-green-600"><span class="numerator">${resultNum}</span><span class="denominator">${resultDen}</span></span>`;
+        }
+
+        function drawFractionVisualization(ctx, num, den, x, y, width, height, color) {
+            const absNum = Math.abs(num);
+            const parts = Math.max(den, absNum);
+            const partWidth = width / parts;
+            
+            // Draw outline
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, width, height);
+            
+            // Fill parts
+            ctx.fillStyle = color;
+            for (let i = 0; i < absNum && i < parts; i++) {
+                ctx.fillRect(x + i * partWidth + 1, y + 1, partWidth - 2, height - 2);
+            }
+            
+            // Draw divisions
+            ctx.strokeStyle = '#9ca3af';
+            ctx.lineWidth = 1;
+            for (let i = 1; i < den; i++) {
+                const divX = x + (i * width / den);
+                ctx.beginPath();
+                ctx.moveTo(divX, y);
+                ctx.lineTo(divX, y + height);
+                ctx.stroke();
+            }
+            
+            // Draw fraction text
+            ctx.fillStyle = '#374151';
+            ctx.font = 'bold 16px Poppins';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${num}/${den}`, x + width / 2, y + height + 20);
+        }
+
+        // Question generation
+        function generateQuestion() {
+            const operations = ['+', '-'];
+            const operation = operations[Math.floor(Math.random() * operations.length)];
+            
+            // Generate random fractions
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const den1 = Math.floor(Math.random() * 8) + 2;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const den2 = Math.floor(Math.random() * 8) + 2;
+            
+            currentQuestion = {
+                num1, den1, num2, den2, operation
+            };
+            
+            // Calculate correct answer
+            if (operation === '+') {
+                [currentQuestion.answerNum, currentQuestion.answerDen] = addFractions(num1, den1, num2, den2);
+            } else {
+                [currentQuestion.answerNum, currentQuestion.answerDen] = subtractFractions(num1, den1, num2, den2);
+            }
+            
+            // Display question
+            document.getElementById('questionText').innerHTML = `
+                <div class="text-2xl">
+                    <span class="fraction text-blue-600">
+                        <span class="numerator">${num1}</span>
+                        <span class="denominator">${den1}</span>
+                    </span>
+                    <span class="mx-4">${operation}</span>
+                    <span class="fraction text-green-600">
+                        <span class="numerator">${num2}</span>
+                        <span class="denominator">${den2}</span>
+                    </span>
+                    <span class="mx-4">=</span>
+                    <span class="text-gray-400">?</span>
+                </div>
+            `;
+            
+            // Clear previous answer
+            document.getElementById('answerNum').value = '';
+            document.getElementById('answerDen').value = '';
+            document.getElementById('answerResult').innerHTML = '<p class="text-gray-500">Jawab soal untuk melihat hasil</p>';
+        }
+
+        function checkAnswer() {
+            const userNum = parseInt(document.getElementById('answerNum').value);
+            const userDen = parseInt(document.getElementById('answerDen').value);
+            
+            if (isNaN(userNum) || isNaN(userDen) || userDen === 0) {
+                document.getElementById('answerResult').innerHTML = 
+                    '<p class="text-red-500"><i class="fas fa-exclamation-triangle mr-2"></i>Masukkan jawaban yang valid!</p>';
+                return;
+            }
+            
+            // Simplify user answer
+            const [simplifiedUserNum, simplifiedUserDen] = simplifyFraction(userNum, userDen);
+            
+            // Check if correct
+            const isCorrect = simplifiedUserNum === currentQuestion.answerNum && 
+                             simplifiedUserDen === currentQuestion.answerDen;
+            
+            if (isCorrect) {
+                stats.correct++;
+                document.getElementById('answerResult').innerHTML = `
+                    <div class="text-green-600">
+                        <i class="fas fa-check-circle text-3xl mb-2"></i>
+                        <p class="font-semibold">Benar!</p>
+                        <p class="text-sm">Jawaban: <span class="fraction"><span class="numerator">${currentQuestion.answerNum}</span><span class="denominator">${currentQuestion.answerDen}</span></span></p>
+                    </div>
+                `;
+                
+                // Animate success
+                gsap.from('#answerResult', { duration: 0.5, scale: 0.8, ease: "back.out(1.7)" });
+            } else {
+                stats.wrong++;
+                document.getElementById('answerResult').innerHTML = `
+                    <div class="text-red-600">
+                        <i class="fas fa-times-circle text-3xl mb-2"></i>
+                        <p class="font-semibold">Salah!</p>
+                        <p class="text-sm">Jawaban yang benar: <span class="fraction"><span class="numerator">${currentQuestion.answerNum}</span><span class="denominator">${currentQuestion.answerDen}</span></span></p>
+                        <p class="text-sm">Jawaban Anda: <span class="fraction"><span class="numerator">${simplifiedUserNum}</span><span class="denominator">${simplifiedUserDen}</span></span></p>
+                    </div>
+                `;
+            }
+            
+            updateStats();
+        }
+
+        function updateStats() {
+            const total = stats.correct + stats.wrong;
+            const accuracy = total > 0 ? Math.round((stats.correct / total) * 100) : 0;
+            
+            document.getElementById('correctCount').textContent = stats.correct;
+            document.getElementById('wrongCount').textContent = stats.wrong;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        // Story questions
+        function generateStoryQuestion() {
+            const stories = [
+                {
+                    text: "Sari memiliki <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> kg gula untuk membuat kue. Kemudian ibunya memberikan <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> kg gula lagi. Berapa total gula yang dimiliki Sari sekarang?",
+                    operation: "+",
+                    category: "Penjumlahan - Menambah"
+                },
+                {
+                    text: "Pak Ahmad memiliki <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> hektar sawah. Dia menjual <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> hektar kepada tetangganya. Berapa luas sawah Pak Ahmad yang tersisa?",
+                    operation: "-",
+                    category: "Pengurangan - Mengurangi"
+                },
+                {
+                    text: "Dalam sebuah resep kue, diperlukan <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> cangkir tepung dan <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> cangkir gula. Berapa total bahan kering yang diperlukan?",
+                    operation: "+",
+                    category: "Penjumlahan - Menggabungkan"
+                },
+                {
+                    text: "Andi berlari sejauh <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> km pada hari Senin dan <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> km pada hari Selasa. Berapa total jarak yang ditempuh Andi dalam dua hari?",
+                    operation: "+",
+                    category: "Penjumlahan - Menambah"
+                },
+                {
+                    text: "Sebuah tangki berisi <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> liter air. Kemudian <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> liter air digunakan untuk menyiram tanaman. Berapa liter air yang tersisa di tangki?",
+                    operation: "-",
+                    category: "Pengurangan - Mengurangi"
+                },
+                {
+                    text: "Ibu membeli <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> kg daging dan <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> kg ayam untuk acara keluarga. Berapa total berat daging yang dibeli ibu?",
+                    operation: "+",
+                    category: "Penjumlahan - Menggabungkan"
+                },
+                {
+                    text: "Sebuah kelas memiliki <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> dari total siswa yang menyukai matematika dan <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> yang menyukai fisika. Jika tidak ada yang menyukai keduanya, berapa bagian dari siswa yang menyukai salah satu mata pelajaran tersebut?",
+                    operation: "+",
+                    category: "Penjumlahan - Menggabungkan"
+                },
+                {
+                    text: "Dalam sebuah proyek, Tim A menyelesaikan <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> bagian pekerjaan dan Tim B menyelesaikan <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> bagian. Berapa total bagian pekerjaan yang telah diselesaikan?",
+                    operation: "+",
+                    category: "Penjumlahan - Menggabungkan"
+                },
+                {
+                    text: "Maya memiliki <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> meter pita. Dia menggunakan <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> meter untuk membuat hiasan. Berapa meter pita yang tersisa?",
+                    operation: "-",
+                    category: "Pengurangan - Mengurangi"
+                },
+                {
+                    text: "Sebuah toko menjual <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> kg beras pada pagi hari dan <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> kg pada sore hari. Berapa total beras yang terjual dalam sehari?",
+                    operation: "+",
+                    category: "Penjumlahan - Menambah"
+                },
+                {
+                    text: "Dina memiliki <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> liter susu. Dia memberikan <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> liter kepada adiknya. Berapa liter susu yang masih dimiliki Dina?",
+                    operation: "-",
+                    category: "Pengurangan - Memberikan"
+                },
+                {
+                    text: "Pak Budi menanam jagung di <span class='fraction'><span class='numerator'>{num1}</span><span class='denominator'>{den1}</span></span> hektar lahan dan kedelai di <span class='fraction'><span class='numerator'>{num2}</span><span class='denominator'>{den2}</span></span> hektar lahan. Berapa total luas lahan yang ditanami Pak Budi?",
+                    operation: "+",
+                    category: "Penjumlahan - Menggabungkan"
+                }
+            ];
+            
+            const story = stories[Math.floor(Math.random() * stories.length)];
+            
+            // Generate random fractions
+            const num1 = Math.floor(Math.random() * 8) + 1;
+            const den1 = Math.floor(Math.random() * 6) + 2;
+            let num2 = Math.floor(Math.random() * 8) + 1;
+            let den2 = Math.floor(Math.random() * 6) + 2;
+            
+            // For subtraction, ensure first fraction is larger
+            if (story.operation === '-' && (num1/den1) < (num2/den2)) {
+                [num2, den2] = [num1, den1];
+                const temp = Math.floor(Math.random() * 8) + num2 + 1;
+                currentStoryQuestion = { num1: temp, den1, num2, den2, operation: story.operation };
+            } else {
+                currentStoryQuestion = { num1, den1, num2, den2, operation: story.operation };
+            }
+            
+            // Calculate correct answer
+            if (story.operation === '+') {
+                [currentStoryQuestion.answerNum, currentStoryQuestion.answerDen] = 
+                    addFractions(currentStoryQuestion.num1, currentStoryQuestion.den1, 
+                               currentStoryQuestion.num2, currentStoryQuestion.den2);
+            } else {
+                [currentStoryQuestion.answerNum, currentStoryQuestion.answerDen] = 
+                    subtractFractions(currentStoryQuestion.num1, currentStoryQuestion.den1, 
+                                    currentStoryQuestion.num2, currentStoryQuestion.den2);
+            }
+            
+            // Display story
+            const storyText = story.text
+                .replace('{num1}', currentStoryQuestion.num1)
+                .replace('{den1}', currentStoryQuestion.den1)
+                .replace('{num2}', currentStoryQuestion.num2)
+                .replace('{den2}', currentStoryQuestion.den2);
+            
+            document.getElementById('storyText').innerHTML = `
+                <div class="mb-6 text-justify">
+                    <i class="fas fa-book text-purple-500 text-2xl mb-4 block text-center"></i>
+                    <p class="text-lg leading-relaxed text-justify">${storyText}</p>
+                </div>
+                <div class="mt-6 p-4 bg-purple-50 rounded-lg">
+                    <p class="font-semibold text-purple-800 mb-4 text-center">Tulis Operasi Matematika:</p>
+                    <div class="flex justify-center items-center space-x-3 text-xl mb-4">
+                        <span class="fraction text-blue-600">
+                            <span class="numerator">${currentStoryQuestion.num1}</span>
+                            <span class="denominator">${currentStoryQuestion.den1}</span>
+                        </span>
+                        <select id="storyOperation" class="px-3 py-2 border-2 border-purple-300 rounded-lg text-lg font-semibold bg-white">
+                            <option value="">?</option>
+                            <option value="+">+</option>
+                            <option value="-">-</option>
+                        </select>
+                        <span class="fraction text-green-600">
+                            <span class="numerator">${currentStoryQuestion.num2}</span>
+                            <span class="denominator">${currentStoryQuestion.den2}</span>
+                        </span>
+                        <span>=</span>
+                        <span class="text-gray-400">?</span>
+                    </div>
+
+                </div>
+            `;
+            
+            // Clear previous answer
+            document.getElementById('storyAnswerNum').value = '';
+            document.getElementById('storyAnswerDen').value = '';
+            document.getElementById('storyResult').innerHTML = '<p class="text-gray-500">Jawab soal untuk melihat hasil</p>';
+            
+            // Reset operation dropdown after DOM update
+            setTimeout(() => {
+                const operationSelect = document.getElementById('storyOperation');
+                if (operationSelect) {
+                    operationSelect.value = '';
+                }
+            }, 100);
+        }
+
+        function checkStoryAnswer() {
+            const userNum = parseInt(document.getElementById('storyAnswerNum').value);
+            const userDen = parseInt(document.getElementById('storyAnswerDen').value);
+            const userOperation = document.getElementById('storyOperation').value;
+            
+            if (isNaN(userNum) || isNaN(userDen) || userDen === 0) {
+                document.getElementById('storyResult').innerHTML = 
+                    '<p class="text-red-500"><i class="fas fa-exclamation-triangle mr-2"></i>Masukkan jawaban yang valid!</p>';
+                return;
+            }
+            
+            if (!userOperation) {
+                document.getElementById('storyResult').innerHTML = 
+                    '<p class="text-red-500"><i class="fas fa-exclamation-triangle mr-2"></i>Pilih operasi matematika!</p>';
+                return;
+            }
+            
+            // Simplify user answer
+            const [simplifiedUserNum, simplifiedUserDen] = simplifyFraction(userNum, userDen);
+            
+            // Check operation and answer
+            const operationCorrect = userOperation === currentStoryQuestion.operation;
+            const answerCorrect = simplifiedUserNum === currentStoryQuestion.answerNum && 
+                                 simplifiedUserDen === currentStoryQuestion.answerDen;
+            
+            if (operationCorrect && answerCorrect) {
+                storyStats.correct++;
+                document.getElementById('storyResult').innerHTML = `
+                    <div class="text-green-600">
+                        <i class="fas fa-check-circle text-3xl mb-2"></i>
+                        <p class="font-semibold">Sempurna!</p>
+                        <p class="text-sm">Operasi: <strong>${userOperation}</strong> ✓</p>
+                        <p class="text-sm">Jawaban: <span class="fraction"><span class="numerator">${currentStoryQuestion.answerNum}</span><span class="denominator">${currentStoryQuestion.answerDen}</span></span> ✓</p>
+                    </div>
+                `;
+            } else {
+                storyStats.wrong++;
+                let resultHTML = `<div class="text-red-600"><i class="fas fa-times-circle text-3xl mb-2"></i>`;
+                
+                if (!operationCorrect && !answerCorrect) {
+                    resultHTML += `<p class="font-semibold">Operasi dan Jawaban Salah!</p>`;
+                } else if (!operationCorrect) {
+                    resultHTML += `<p class="font-semibold">Operasi Salah!</p>`;
+                } else {
+                    resultHTML += `<p class="font-semibold">Jawaban Salah!</p>`;
+                }
+                
+                resultHTML += `
+                    <div class="text-sm mt-2 space-y-1">
+                        <p>Operasi yang benar: <strong>${currentStoryQuestion.operation}</strong> ${operationCorrect ? '✓' : '✗'}</p>
+                        <p>Jawaban yang benar: <span class="fraction"><span class="numerator">${currentStoryQuestion.answerNum}</span><span class="denominator">${currentStoryQuestion.answerDen}</span></span></p>
+                        <p>Operasi Anda: <strong>${userOperation || 'Tidak dipilih'}</strong></p>
+                        <p>Jawaban Anda: <span class="fraction"><span class="numerator">${simplifiedUserNum}</span><span class="denominator">${simplifiedUserDen}</span></span></p>
+                    </div>
+                </div>`;
+                
+                document.getElementById('storyResult').innerHTML = resultHTML;
+            }
+            
+            updateStoryStats();
+        }
+
+        function updateStoryStats() {
+            const total = storyStats.correct + storyStats.wrong;
+            const accuracy = total > 0 ? Math.round((storyStats.correct / total) * 100) : 0;
+            
+            document.getElementById('storyCorrect').textContent = storyStats.correct;
+            document.getElementById('storyWrong').textContent = storyStats.wrong;
+            document.getElementById('storyAccuracy').textContent = accuracy + '%';
+        }
+
+        // Generator functions
+        function generateQuestionSet() {
+            const additionEnabled = document.getElementById('genAddition').checked;
+            const subtractionEnabled = document.getElementById('genSubtraction').checked;
+            const difficulty = document.getElementById('difficultyLevel').value;
+            const count = parseInt(document.getElementById('questionCount').value);
+            const format = document.getElementById('outputFormat').value;
+            
+            if (!additionEnabled && !subtractionEnabled) {
+                alert('Pilih minimal satu jenis operasi!');
+                return;
+            }
+            
+            generatedQuestionSet = [];
+            const operations = [];
+            if (additionEnabled) operations.push('+');
+            if (subtractionEnabled) operations.push('-');
+            
+            let maxDenominator;
+            switch (difficulty) {
+                case 'easy': maxDenominator = 10; break;
+                case 'medium': maxDenominator = 20; break;
+                case 'hard': maxDenominator = 50; break;
+            }
+            
+            for (let i = 0; i < count; i++) {
+                const operation = operations[Math.floor(Math.random() * operations.length)];
+                const num1 = Math.floor(Math.random() * 15) + 1;
+                const den1 = Math.floor(Math.random() * maxDenominator) + 2;
+                let num2 = Math.floor(Math.random() * 15) + 1;
+                let den2 = Math.floor(Math.random() * maxDenominator) + 2;
+                
+                // For subtraction, ensure result is positive
+                if (operation === '-' && (num1/den1) < (num2/den2)) {
+                    [num2, den2] = [num1, den1];
+                    const temp = Math.floor(Math.random() * 10) + num2 + 1;
+                    generatedQuestionSet.push({
+                        num1: temp, den1, num2, den2, operation,
+                        answer: operation === '+' ? 
+                            addFractions(temp, den1, num2, den2) : 
+                            subtractFractions(temp, den1, num2, den2)
+                    });
+                } else {
+                    generatedQuestionSet.push({
+                        num1, den1, num2, den2, operation,
+                        answer: operation === '+' ? 
+                            addFractions(num1, den1, num2, den2) : 
+                            subtractFractions(num1, den1, num2, den2)
+                    });
+                }
+            }
+            
+            displayGeneratedQuestions(format);
+        }
+
+        function displayGeneratedQuestions(format) {
+            const container = document.getElementById('generatedQuestions');
+            
+            if (format === 'interactive') {
+                container.innerHTML = generatedQuestionSet.map((q, index) => `
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500">
+                        <div class="flex justify-between items-center">
+                            <div class="text-lg">
+                                <span class="font-semibold text-gray-600">${index + 1}.</span>
+                                <span class="fraction text-blue-600 mx-2">
+                                    <span class="numerator">${q.num1}</span>
+                                    <span class="denominator">${q.den1}</span>
+                                </span>
+                                <span class="mx-2">${q.operation}</span>
+                                <span class="fraction text-green-600 mx-2">
+                                    <span class="numerator">${q.num2}</span>
+                                    <span class="denominator">${q.den2}</span>
+                                </span>
+                                <span class="mx-2">=</span>
+                                <span class="mx-2">_____</span>
+                            </div>
+                            <div class="space-x-2">
+                                <button onclick="showAnswer(${index})" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
+                                    <i class="fas fa-lightbulb mr-1"></i>Jawaban
+                                </button>
+                                <button onclick="showSolution(${index})" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">
+                                    <i class="fas fa-book mr-1"></i>Pembahasan
+                                </button>
+                            </div>
+                        </div>
+                        <div id="answer-${index}" class="mt-3 p-3 bg-green-50 rounded-lg hidden">
+                            <p class="text-green-700 font-semibold">
+                                Jawaban: <span class="fraction text-green-600">
+                                    <span class="numerator">${q.answer[0]}</span>
+                                    <span class="denominator">${q.answer[1]}</span>
+                                </span>
+                            </p>
+                        </div>
+                        <div id="solution-${index}" class="mt-3 p-3 bg-blue-50 rounded-lg hidden">
+                            <p class="text-blue-700 font-semibold mb-2">Pembahasan:</p>
+                            <div class="text-sm text-blue-600 space-y-1">
+                                ${q.operation === '+' ? 
+                                    `<p>1. Samakan penyebut: KPK dari ${q.den1} dan ${q.den2} = ${q.den1 * q.den2}</p>
+                                     <p>2. <span class="fraction"><span class="numerator">${q.num1}</span><span class="denominator">${q.den1}</span></span> = <span class="fraction"><span class="numerator">${q.num1 * q.den2}</span><span class="denominator">${q.den1 * q.den2}</span></span></p>
+                                     <p>3. <span class="fraction"><span class="numerator">${q.num2}</span><span class="denominator">${q.den2}</span></span> = <span class="fraction"><span class="numerator">${q.num2 * q.den1}</span><span class="denominator">${q.den1 * q.den2}</span></span></p>
+                                     <p>4. <span class="fraction"><span class="numerator">${q.num1 * q.den2}</span><span class="denominator">${q.den1 * q.den2}</span></span> + <span class="fraction"><span class="numerator">${q.num2 * q.den1}</span><span class="denominator">${q.den1 * q.den2}</span></span> = <span class="fraction"><span class="numerator">${q.num1 * q.den2 + q.num2 * q.den1}</span><span class="denominator">${q.den1 * q.den2}</span></span></p>
+                                     <p>5. Sederhanakan: <span class="fraction"><span class="numerator">${q.answer[0]}</span><span class="denominator">${q.answer[1]}</span></span></p>` :
+                                    `<p>1. Samakan penyebut: KPK dari ${q.den1} dan ${q.den2} = ${q.den1 * q.den2}</p>
+                                     <p>2. <span class="fraction"><span class="numerator">${q.num1}</span><span class="denominator">${q.den1}</span></span> = <span class="fraction"><span class="numerator">${q.num1 * q.den2}</span><span class="denominator">${q.den1 * q.den2}</span></span></p>
+                                     <p>3. <span class="fraction"><span class="numerator">${q.num2}</span><span class="denominator">${q.den2}</span></span> = <span class="fraction"><span class="numerator">${q.num2 * q.den1}</span><span class="denominator">${q.den1 * q.den2}</span></span></p>
+                                     <p>4. <span class="fraction"><span class="numerator">${q.num1 * q.den2}</span><span class="denominator">${q.den1 * q.den2}</span></span> - <span class="fraction"><span class="numerator">${q.num2 * q.den1}</span><span class="denominator">${q.den1 * q.den2}</span></span> = <span class="fraction"><span class="numerator">${q.num1 * q.den2 - q.num2 * q.den1}</span><span class="denominator">${q.den1 * q.den2}</span></span></p>
+                                     <p>5. Sederhanakan: <span class="fraction"><span class="numerator">${q.answer[0]}</span><span class="denominator">${q.answer[1]}</span></span></p>`
+                                }
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="text-lg font-semibold mb-4">Soal Latihan Bilangan Rasional</h4>
+                        <div class="space-y-3">
+                            ${generatedQuestionSet.map((q, index) => `
+                                <div class="flex items-center">
+                                    <span class="w-8 text-gray-600">${index + 1}.</span>
+                                    <span class="fraction mx-2">
+                                        <span class="numerator">${q.num1}</span>
+                                        <span class="denominator">${q.den1}</span>
+                                    </span>
+                                    <span class="mx-2">${q.operation}</span>
+                                    <span class="fraction mx-2">
+                                        <span class="numerator">${q.num2}</span>
+                                        <span class="denominator">${q.den2}</span>
+                                    </span>
+                                    <span class="mx-2">=</span>
+                                    <span class="mx-2">_____</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('downloadBtn').classList.remove('hidden');
+            document.getElementById('showAnswersBtn').classList.remove('hidden');
+        }
+
+        function downloadQuestionsPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Set font
+            doc.setFont('helvetica');
+            
+            // Title
+            doc.setFontSize(18);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Soal Latihan Bilangan Rasional', 105, 20, { align: 'center' });
+            
+            // Subtitle
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Nama: ________________________    Kelas: ________    Tanggal: ________', 20, 35);
+            
+            // Instructions
+            doc.setFontSize(10);
+            doc.text('Petunjuk: Kerjakan soal-soal berikut dengan teliti. Sederhanakan jawaban dalam bentuk pecahan paling sederhana.', 20, 50);
+            
+            let yPosition = 70;
+            const pageHeight = doc.internal.pageSize.height;
+            
+            generatedQuestionSet.forEach((q, index) => {
+                // Check if we need a new page
+                if (yPosition > pageHeight - 40) {
+                    doc.addPage();
+                    yPosition = 30;
+                }
+                
+                // Question number and problem
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'normal');
+                
+                // Format fraction display for PDF
+                const questionText = `${index + 1}. ${q.num1}/${q.den1} ${q.operation} ${q.num2}/${q.den2} = ________`;
+                doc.text(questionText, 20, yPosition);
+                
+                yPosition += 15;
+                
+                // Add some space between questions
+                if ((index + 1) % 5 === 0) {
+                    yPosition += 10;
+                }
+            });
+            
+            // Add answer key on new page
+            doc.addPage();
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Kunci Jawaban', 105, 20, { align: 'center' });
+            
+            yPosition = 40;
+            
+            generatedQuestionSet.forEach((q, index) => {
+                if (yPosition > pageHeight - 30) {
+                    doc.addPage();
+                    yPosition = 30;
+                }
+                
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                
+                const answerText = `${index + 1}. ${q.answer[0]}/${q.answer[1]}`;
+                doc.text(answerText, 20, yPosition);
+                
+                // Add step-by-step solution
+                doc.setFontSize(8);
+                doc.setTextColor(100);
+                
+                const lcm = q.den1 * q.den2;
+                const step1 = `   KPK: ${q.den1} × ${q.den2} = ${lcm}`;
+                const step2 = `   ${q.num1}/${q.den1} = ${q.num1 * q.den2}/${lcm}, ${q.num2}/${q.den2} = ${q.num2 * q.den1}/${lcm}`;
+                const result = q.operation === '+' ? 
+                    q.num1 * q.den2 + q.num2 * q.den1 : 
+                    q.num1 * q.den2 - q.num2 * q.den1;
+                const step3 = `   ${q.num1 * q.den2}/${lcm} ${q.operation} ${q.num2 * q.den1}/${lcm} = ${result}/${lcm} = ${q.answer[0]}/${q.answer[1]}`;
+                
+                doc.text(step1, 25, yPosition + 5);
+                doc.text(step2, 25, yPosition + 10);
+                doc.text(step3, 25, yPosition + 15);
+                
+                doc.setTextColor(0);
+                yPosition += 25;
+            });
+            
+            // Save the PDF
+            doc.save('soal-bilangan-rasional.pdf');
+        }
+
+        function showAnswer(index) {
+            const answerDiv = document.getElementById(`answer-${index}`);
+            answerDiv.classList.toggle('hidden');
+        }
+
+        function showSolution(index) {
+            const solutionDiv = document.getElementById(`solution-${index}`);
+            solutionDiv.classList.toggle('hidden');
+        }
+
+        function showAllAnswers() {
+            const format = document.getElementById('outputFormat').value;
+            if (format === 'interactive') {
+                // Toggle all answers and solutions
+                generatedQuestionSet.forEach((_, index) => {
+                    const answerDiv = document.getElementById(`answer-${index}`);
+                    const solutionDiv = document.getElementById(`solution-${index}`);
+                    answerDiv.classList.remove('hidden');
+                    solutionDiv.classList.remove('hidden');
+                });
+                
+                // Change button text
+                const btn = document.getElementById('showAnswersBtn');
+                btn.innerHTML = '<i class="fas fa-eye-slash mr-2"></i>Sembunyikan Jawaban';
+                btn.onclick = hideAllAnswers;
+            } else {
+                // For printable format, show answers in a modal or new section
+                const container = document.getElementById('generatedQuestions');
+                container.innerHTML += `
+                    <div class="bg-yellow-50 p-6 rounded-lg shadow-sm mt-4 border-l-4 border-yellow-500">
+                        <h5 class="font-semibold mb-4 text-yellow-800">Kunci Jawaban & Pembahasan:</h5>
+                        <div class="space-y-4">
+                            ${generatedQuestionSet.map((q, index) => `
+                                <div class="bg-white p-4 rounded-lg">
+                                    <p class="font-semibold text-gray-700 mb-2">${index + 1}. <span class="fraction"><span class="numerator">${q.answer[0]}</span><span class="denominator">${q.answer[1]}</span></span></p>
+                                    <div class="text-sm text-gray-600 ml-4">
+                                        <p><strong>Pembahasan:</strong></p>
+                                        ${q.operation === '+' ? 
+                                            `<p>• Samakan penyebut: ${q.den1} × ${q.den2} = ${q.den1 * q.den2}</p>
+                                             <p>• ${q.num1}/${q.den1} = ${q.num1 * q.den2}/${q.den1 * q.den2}</p>
+                                             <p>• ${q.num2}/${q.den2} = ${q.num2 * q.den1}/${q.den1 * q.den2}</p>
+                                             <p>• ${q.num1 * q.den2}/${q.den1 * q.den2} + ${q.num2 * q.den1}/${q.den1 * q.den2} = ${q.num1 * q.den2 + q.num2 * q.den1}/${q.den1 * q.den2}</p>
+                                             <p>• Sederhanakan menjadi: ${q.answer[0]}/${q.answer[1]}</p>` :
+                                            `<p>• Samakan penyebut: ${q.den1} × ${q.den2} = ${q.den1 * q.den2}</p>
+                                             <p>• ${q.num1}/${q.den1} = ${q.num1 * q.den2}/${q.den1 * q.den2}</p>
+                                             <p>• ${q.num2}/${q.den2} = ${q.num2 * q.den1}/${q.den1 * q.den2}</p>
+                                             <p>• ${q.num1 * q.den2}/${q.den1 * q.den2} - ${q.num2 * q.den1}/${q.den1 * q.den2} = ${q.num1 * q.den2 - q.num2 * q.den1}/${q.den1 * q.den2}</p>
+                                             <p>• Sederhanakan menjadi: ${q.answer[0]}/${q.answer[1]}</p>`
+                                        }
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                // Change button text
+                const btn = document.getElementById('showAnswersBtn');
+                btn.innerHTML = '<i class="fas fa-eye-slash mr-2"></i>Sembunyikan Jawaban';
+                btn.onclick = hideAllAnswers;
+            }
+        }
+
+        function hideAllAnswers() {
+            const format = document.getElementById('outputFormat').value;
+            if (format === 'interactive') {
+                generatedQuestionSet.forEach((_, index) => {
+                    const answerDiv = document.getElementById(`answer-${index}`);
+                    const solutionDiv = document.getElementById(`solution-${index}`);
+                    answerDiv.classList.add('hidden');
+                    solutionDiv.classList.add('hidden');
+                });
+            } else {
+                // Remove the answer section
+                displayGeneratedQuestions(format);
+            }
+            
+            // Reset button
+            const btn = document.getElementById('showAnswersBtn');
+            btn.innerHTML = '<i class="fas fa-key mr-2"></i>Tampilkan Semua Jawaban';
+            btn.onclick = showAllAnswers;
+        }
+
+        function resetGenerator() {
+            document.getElementById('generatedQuestions').innerHTML = 
+                '<p class="text-gray-500 text-center py-8">Klik "Generate Soal" untuk membuat soal baru</p>';
+            document.getElementById('downloadBtn').classList.add('hidden');
+            document.getElementById('showAnswersBtn').classList.add('hidden');
+            generatedQuestionSet = [];
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQuestion();
+            generateStoryQuestion();
+            currentNumberLineFractions = generateRandomFractions();
+            animateNumberLine();
+            
+            // Add input event listeners for real-time visualization
+            ['num1', 'den1', 'num2', 'den2'].forEach(id => {
+                document.getElementById(id).addEventListener('input', visualizeAddition);
+            });
+            
+            ['subNum1', 'subDen1', 'subNum2', 'subDen2'].forEach(id => {
+                document.getElementById(id).addEventListener('input', visualizeSubtraction);
+            });
+        });
+    </script>
+</body>
+</html>
