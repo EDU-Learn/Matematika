@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FracMath Academy - Pembelajaran Pecahan Interaktif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-glow {
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 8px;
+        }
+        
+        .fraction-line {
+            width: 100%;
+            height: 2px;
+            background: #374151;
+            margin: 2px 0;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.6s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg text-white">
+    <!-- Header -->
+    <header class="p-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                    <i class="fas fa-calculator text-2xl text-purple-600"></i>
+                </div>
+                <h1 class="text-2xl font-bold">Pembelajaran Pecahan</h1>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-star text-yellow-300"></i>
+                    <span id="totalScore" class="font-semibold">0</span>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 pb-12">
+        <!-- Navigation Tabs -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white/10 rounded-xl p-1 card-glow flex flex-wrap gap-1">
+                <button id="multiplicationTab" class="px-4 py-3 rounded-lg font-medium transition-all bg-white text-gray-800 text-sm">
+                    <i class="fas fa-times mr-2"></i> Perkalian × Bilangan
+                </button>
+                <button id="divisionTab" class="px-4 py-3 rounded-lg font-medium transition-all hover:bg-white/20 text-sm">
+                    <i class="fas fa-divide mr-2"></i> Pembagian ÷ Bilangan
+                </button>
+                <button id="fractionMultiplicationTab" class="px-4 py-3 rounded-lg font-medium transition-all hover:bg-white/20 text-sm">
+                    <i class="fas fa-times mr-2"></i> Perkalian × Pecahan
+                </button>
+                <button id="fractionDivisionTab" class="px-4 py-3 rounded-lg font-medium transition-all hover:bg-white/20 text-sm">
+                    <i class="fas fa-divide mr-2"></i> Pembagian ÷ Pecahan
+                </button>
+                <button id="gameTab" class="px-4 py-3 rounded-lg font-medium transition-all hover:bg-white/20 text-sm">
+                    <i class="fas fa-gamepad mr-2"></i> Game Mode
+                </button>
+            </div>
+        </div>
+
+        <!-- Multiplication Section -->
+        <div id="multiplicationSection" class="space-y-8">
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Materi -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-book text-3xl mr-3 text-blue-400"></i>
+                        Materi: Perkalian Pecahan dengan Bilangan
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-blue-300">Konsep Dasar</h3>
+                            <p class="text-gray-200 mb-4">
+                                Perkalian pecahan dengan bilangan asli adalah mengulang pecahan sebanyak bilangan asli tersebut.
+                            </p>
+                            <div class="bg-gray-800 rounded-lg p-4">
+                                <div class="text-center text-xl flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <span class="mx-4">c</span>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>a × c</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-green-300">Contoh</h3>
+                            <div class="space-y-3">
+                                <div class="text-center text-lg flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>2</span>
+                                        <div class="fraction-line"></div>
+                                        <span>5</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <span class="mx-4">3</span>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>2 × 3</span>
+                                        <div class="fraction-line"></div>
+                                        <span>5</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>6</span>
+                                        <div class="fraction-line"></div>
+                                        <span>5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latihan -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-pencil-alt text-3xl mr-3 text-green-400"></i>
+                        Latihan Soal
+                    </h2>
+                    
+                    <!-- Practice Stats -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-green-400" id="multiplicationCorrect">0</div>
+                            <div class="text-xs text-gray-300">Benar</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-red-400" id="multiplicationWrong">0</div>
+                            <div class="text-xs text-gray-300">Salah</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-yellow-400" id="multiplicationScore">0</div>
+                            <div class="text-xs text-gray-300">Poin</div>
+                        </div>
+                    </div>
+
+                    <!-- Question -->
+                    <div class="text-center mb-6">
+                        <div id="multiplicationQuestion" class="text-2xl font-bold mb-4"></div>
+                        <div class="flex justify-center items-center">
+                            <div class="flex flex-col items-center">
+                                <input type="number" id="multiplicationNumerator" placeholder="0" 
+                                       class="w-16 px-2 py-1 rounded-lg bg-white/20 border border-white/30 text-center text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2">
+                                <div class="w-12 h-0.5 bg-white mb-2"></div>
+                                <input type="number" id="multiplicationDenominator" placeholder="0" 
+                                       class="w-16 px-2 py-1 rounded-lg bg-white/20 border border-white/30 text-center text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center space-x-3">
+                        <button id="multiplicationSubmit" class="btn-primary px-6 py-2 rounded-lg font-semibold text-sm">
+                            Jawab
+                        </button>
+                        <button id="multiplicationNext" class="bg-gray-600 hover:bg-gray-500 px-6 py-2 rounded-lg font-semibold text-sm transition-all hidden">
+                            Soal Berikutnya
+                        </button>
+                    </div>
+                    
+                    <div id="multiplicationFeedback" class="mt-4 text-center hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Division Section -->
+        <div id="divisionSection" class="hidden space-y-8">
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Materi -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-book text-3xl mr-3 text-purple-400"></i>
+                        Materi: Pembagian Pecahan dengan Bilangan
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-purple-300">Konsep Dasar</h3>
+                            <p class="text-gray-200 mb-4">
+                                Pembagian pecahan dengan bilangan asli sama dengan mengalikan pecahan dengan kebalikan bilangan asli tersebut.
+                            </p>
+                            <div class="bg-gray-800 rounded-lg p-4">
+                                <div class="text-center text-xl flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                    <span class="mx-4">÷</span>
+                                    <span class="mx-4">c</span>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b × c</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-yellow-300">Contoh</h3>
+                            <div class="space-y-3">
+                                <div class="text-center text-lg flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>6</span>
+                                        <div class="fraction-line"></div>
+                                        <span>7</span>
+                                    </div>
+                                    <span class="mx-4">÷</span>
+                                    <span class="mx-4">2</span>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>6</span>
+                                        <div class="fraction-line"></div>
+                                        <span>7 × 2</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>6</span>
+                                        <div class="fraction-line"></div>
+                                        <span>14</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latihan -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-pencil-alt text-3xl mr-3 text-green-400"></i>
+                        Latihan Soal
+                    </h2>
+                    
+                    <!-- Practice Stats -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-green-400" id="divisionCorrect">0</div>
+                            <div class="text-xs text-gray-300">Benar</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-red-400" id="divisionWrong">0</div>
+                            <div class="text-xs text-gray-300">Salah</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-yellow-400" id="divisionScore">0</div>
+                            <div class="text-xs text-gray-300">Poin</div>
+                        </div>
+                    </div>
+
+                    <!-- Question -->
+                    <div class="text-center mb-6">
+                        <div id="divisionQuestion" class="text-2xl font-bold mb-4"></div>
+                        <div class="flex justify-center items-center">
+                            <div class="flex flex-col items-center">
+                                <input type="number" id="divisionNumerator" placeholder="0" 
+                                       class="w-16 px-2 py-1 rounded-lg bg-white/20 border border-white/30 text-center text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2">
+                                <div class="w-12 h-0.5 bg-white mb-2"></div>
+                                <input type="number" id="divisionDenominator" placeholder="0" 
+                                       class="w-16 px-2 py-1 rounded-lg bg-white/20 border border-white/30 text-center text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center space-x-3">
+                        <button id="divisionSubmit" class="btn-primary px-6 py-2 rounded-lg font-semibold text-sm">
+                            Jawab
+                        </button>
+                        <button id="divisionNext" class="bg-gray-600 hover:bg-gray-500 px-6 py-2 rounded-lg font-semibold text-sm transition-all hidden">
+                            Soal Berikutnya
+                        </button>
+                    </div>
+                    
+                    <div id="divisionFeedback" class="mt-4 text-center hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fraction Multiplication Section -->
+        <div id="fractionMultiplicationSection" class="hidden space-y-8">
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Materi -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-book text-3xl mr-3 text-orange-400"></i>
+                        Materi: Perkalian Antar Pecahan
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-orange-300">Konsep Dasar</h3>
+                            <p class="text-gray-200 mb-4">
+                                Perkalian antar pecahan dilakukan dengan mengalikan pembilang dengan pembilang, dan penyebut dengan penyebut.
+                            </p>
+                            <div class="bg-gray-800 rounded-lg p-4">
+                                <div class="text-center text-xl flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>c</span>
+                                        <div class="fraction-line"></div>
+                                        <span>d</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>a × c</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b × d</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-green-300">Contoh</h3>
+                            <div class="space-y-3">
+                                <div class="text-center text-lg flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>2</span>
+                                        <div class="fraction-line"></div>
+                                        <span>3</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>4</span>
+                                        <div class="fraction-line"></div>
+                                        <span>5</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>2 × 4</span>
+                                        <div class="fraction-line"></div>
+                                        <span>3 × 5</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>8</span>
+                                        <div class="fraction-line"></div>
+                                        <span>15</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latihan -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-pencil-alt text-3xl mr-3 text-green-400"></i>
+                        Latihan Soal
+                    </h2>
+                    
+                    <!-- Practice Stats -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-green-400" id="fractionMultiplicationCorrect">0</div>
+                            <div class="text-xs text-gray-300">Benar</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-red-400" id="fractionMultiplicationWrong">0</div>
+                            <div class="text-xs text-gray-300">Salah</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-yellow-400" id="fractionMultiplicationScore">0</div>
+                            <div class="text-xs text-gray-300">Poin</div>
+                        </div>
+                    </div>
+
+                    <!-- Question -->
+                    <div class="text-center mb-6">
+                        <div id="fractionMultiplicationQuestion" class="text-2xl font-bold mb-4"></div>
+                        <div class="flex justify-center items-center">
+                            <div class="flex flex-col items-center">
+                                <input type="number" id="fractionMultiplicationNumerator" placeholder="0" 
+                                       class="w-16 px-2 py-1 rounded-lg bg-white/20 border border-white/30 text-center text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2">
+                                <div class="w-12 h-0.5 bg-white mb-2"></div>
+                                <input type="number" id="fractionMultiplicationDenominator" placeholder="0" 
+                                       class="w-16 px-2 py-1 rounded-lg bg-white/20 border border-white/30 text-center text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center space-x-3">
+                        <button id="fractionMultiplicationSubmit" class="btn-primary px-6 py-2 rounded-lg font-semibold text-sm">
+                            Jawab
+                        </button>
+                        <button id="fractionMultiplicationNext" class="bg-gray-600 hover:bg-gray-500 px-6 py-2 rounded-lg font-semibold text-sm transition-all hidden">
+                            Soal Berikutnya
+                        </button>
+                    </div>
+                    
+                    <div id="fractionMultiplicationFeedback" class="mt-4 text-center hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fraction Division Section -->
+        <div id="fractionDivisionSection" class="hidden space-y-8">
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Materi -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-book text-3xl mr-3 text-pink-400"></i>
+                        Materi: Pembagian Antar Pecahan
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-pink-300">Konsep Dasar</h3>
+                            <p class="text-gray-200 mb-4">
+                                Pembagian antar pecahan sama dengan mengalikan pecahan pertama dengan kebalikan pecahan kedua.
+                            </p>
+                            <div class="bg-gray-800 rounded-lg p-4">
+                                <div class="text-center text-xl flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                    <span class="mx-4">÷</span>
+                                    <div class="fraction">
+                                        <span>c</span>
+                                        <div class="fraction-line"></div>
+                                        <span>d</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>d</span>
+                                        <div class="fraction-line"></div>
+                                        <span>c</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-yellow-300">Contoh</h3>
+                            <div class="space-y-3">
+                                <div class="text-center text-lg flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>3</span>
+                                        <div class="fraction-line"></div>
+                                        <span>4</span>
+                                    </div>
+                                    <span class="mx-4">÷</span>
+                                    <div class="fraction">
+                                        <span>2</span>
+                                        <div class="fraction-line"></div>
+                                        <span>5</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>3</span>
+                                        <div class="fraction-line"></div>
+                                        <span>4</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>5</span>
+                                        <div class="fraction-line"></div>
+                                        <span>2</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>15</span>
+                                        <div class="fraction-line"></div>
+                                        <span>8</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latihan -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-pencil-alt text-3xl mr-3 text-green-400"></i>
+                        Latihan Soal
+                    </h2>
+                    
+                    <!-- Practice Stats -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-green-400" id="fractionDivisionCorrect">0</div>
+                            <div class="text-xs text-gray-300">Benar</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-red-400" id="fractionDivisionWrong">0</div>
+                            <div class="text-xs text-gray-300">Salah</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-yellow-400" id="fractionDivisionScore">0</div>
+                            <div class="text-xs text-gray-300">Poin</div>
+                        </div>
+                    </div>
+
+                    <!-- Question -->
+                    <div class="text-center mb-6">
+                        <div id="fractionDivisionQuestion" class="text-2xl font-bold mb-4"></div>
+                        <div class="flex justify-center items-center">
+                            <div class="flex flex-col items-center">
+                                <input type="number" id="fractionDivisionNumerator" placeholder="0" 
+                                       class="w-16 px-2 py-1 rounded-lg bg-white/20 border border-white/30 text-center text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2">
+                                <div class="w-12 h-0.5 bg-white mb-2"></div>
+                                <input type="number" id="fractionDivisionDenominator" placeholder="0" 
+                                       class="w-16 px-2 py-1 rounded-lg bg-white/20 border border-white/30 text-center text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center space-x-3">
+                        <button id="fractionDivisionSubmit" class="btn-primary px-6 py-2 rounded-lg font-semibold text-sm">
+                            Jawab
+                        </button>
+                        <button id="fractionDivisionNext" class="bg-gray-600 hover:bg-gray-500 px-6 py-2 rounded-lg font-semibold text-sm transition-all hidden">
+                            Soal Berikutnya
+                        </button>
+                    </div>
+                    
+                    <div id="fractionDivisionFeedback" class="mt-4 text-center hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Section -->
+        <div id="practiceSection" class="hidden">
+            <div class="max-w-4xl mx-auto">
+                <!-- Practice Stats -->
+                <div class="bg-white/10 rounded-xl p-6 mb-8 card-glow">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold">Generator Soal Latihan</h2>
+                        <div class="flex items-center space-x-6">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-check-circle text-green-400"></i>
+                                <span id="correctAnswers" class="font-bold">0</span>
+                                <span class="text-sm text-gray-300">Benar</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-times-circle text-red-400"></i>
+                                <span id="wrongAnswers" class="font-bold">0</span>
+                                <span class="text-sm text-gray-300">Salah</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span id="practiceScore" class="font-bold">0</span>
+                                <span class="text-sm text-gray-300">Poin</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Card -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-4">Soal Latihan</h3>
+                        <div id="questionText" class="text-3xl font-bold mb-6"></div>
+                        <div class="flex justify-center items-center">
+                            <div class="flex flex-col items-center">
+                                <input type="number" id="numeratorInput" placeholder="0" 
+                                       class="w-20 px-3 py-2 rounded-lg bg-white/20 border border-white/30 text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2">
+                                <div class="w-16 h-0.5 bg-white mb-2"></div>
+                                <input type="number" id="denominatorInput" placeholder="0" 
+                                       class="w-20 px-3 py-2 rounded-lg bg-white/20 border border-white/30 text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center space-x-4">
+                        <button id="submitAnswer" class="btn-primary px-8 py-3 rounded-lg font-semibold">
+                            Jawab
+                        </button>
+                        <button id="nextQuestion" class="bg-gray-600 hover:bg-gray-500 px-8 py-3 rounded-lg font-semibold transition-all hidden">
+                            Soal Berikutnya
+                        </button>
+                    </div>
+                    
+                    <div id="feedback" class="mt-6 text-center hidden"></div>
+                    
+                    <!-- Detailed Solution -->
+                    <div id="solutionSection" class="mt-8 bg-white/5 rounded-xl p-6 hidden">
+                        <h4 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-lightbulb text-yellow-400 mr-2"></i>
+                            Pembahasan Lengkap
+                        </h4>
+                        <div id="solutionSteps" class="space-y-4"></div>
+                    </div>
+                </div>
+
+                <!-- Practice Controls -->
+                <div class="flex justify-center mt-8 space-x-4 flex-wrap gap-4">
+                    <button id="multiplicationMode" class="btn-primary px-6 py-3 rounded-lg font-semibold">
+                        Perkalian × Bilangan
+                    </button>
+                    <button id="divisionMode" class="bg-purple-600 hover:bg-purple-500 px-6 py-3 rounded-lg font-semibold transition-all">
+                        Pembagian ÷ Bilangan
+                    </button>
+                    <button id="fractionMultiplicationMode" class="bg-orange-600 hover:bg-orange-500 px-6 py-3 rounded-lg font-semibold transition-all">
+                        Perkalian × Pecahan
+                    </button>
+                    <button id="fractionDivisionMode" class="bg-pink-600 hover:bg-pink-500 px-6 py-3 rounded-lg font-semibold transition-all">
+                        Pembagian ÷ Pecahan
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Perkalian dan Pembagian Antar Pecahan -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Perkalian Antar Pecahan -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-times text-3xl mr-3 text-orange-400"></i>
+                        Perkalian Antar Pecahan
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-orange-300">Konsep Dasar</h3>
+                            <p class="text-gray-200 mb-4">
+                                Perkalian antar pecahan dilakukan dengan mengalikan pembilang dengan pembilang, dan penyebut dengan penyebut.
+                            </p>
+                            <div class="bg-gray-800 rounded-lg p-4">
+                                <div class="text-center text-xl flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>c</span>
+                                        <div class="fraction-line"></div>
+                                        <span>d</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>a × c</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b × d</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-green-300">Contoh</h3>
+                            <div class="space-y-3">
+                                <div class="text-center text-lg flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>2</span>
+                                        <div class="fraction-line"></div>
+                                        <span>3</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>4</span>
+                                        <div class="fraction-line"></div>
+                                        <span>5</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>2 × 4</span>
+                                        <div class="fraction-line"></div>
+                                        <span>3 × 5</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>8</span>
+                                        <div class="fraction-line"></div>
+                                        <span>15</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pembagian Antar Pecahan -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-divide text-3xl mr-3 text-pink-400"></i>
+                        Pembagian Antar Pecahan
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-pink-300">Konsep Dasar</h3>
+                            <p class="text-gray-200 mb-4">
+                                Pembagian antar pecahan sama dengan mengalikan pecahan pertama dengan kebalikan pecahan kedua.
+                            </p>
+                            <div class="bg-gray-800 rounded-lg p-4">
+                                <div class="text-center text-xl flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                    <span class="mx-4">÷</span>
+                                    <div class="fraction">
+                                        <span>c</span>
+                                        <div class="fraction-line"></div>
+                                        <span>d</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>d</span>
+                                        <div class="fraction-line"></div>
+                                        <span>c</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-yellow-300">Contoh</h3>
+                            <div class="space-y-3">
+                                <div class="text-center text-lg flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>3</span>
+                                        <div class="fraction-line"></div>
+                                        <span>4</span>
+                                    </div>
+                                    <span class="mx-4">÷</span>
+                                    <div class="fraction">
+                                        <span>2</span>
+                                        <div class="fraction-line"></div>
+                                        <span>5</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>3</span>
+                                        <div class="fraction-line"></div>
+                                        <span>4</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>5</span>
+                                        <div class="fraction-line"></div>
+                                        <span>2</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>15</span>
+                                        <div class="fraction-line"></div>
+                                        <span>8</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Section -->
+        <div id="gameSection" class="hidden">
+            <div class="max-w-4xl mx-auto">
+                <!-- Game Stats -->
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white/10 rounded-xl p-6 card-glow text-center">
+                        <i class="fas fa-clock text-3xl mb-2 text-blue-400"></i>
+                        <div class="text-2xl font-bold" id="gameTimer">60</div>
+                        <div class="text-sm text-gray-300">Detik</div>
+                    </div>
+                    <div class="bg-white/10 rounded-xl p-6 card-glow text-center">
+                        <i class="fas fa-bullseye text-3xl mb-2 text-green-400"></i>
+                        <div class="text-2xl font-bold" id="gameScore">0</div>
+                        <div class="text-sm text-gray-300">Poin</div>
+                    </div>
+                    <div class="bg-white/10 rounded-xl p-6 card-glow text-center">
+                        <i class="fas fa-fire text-3xl mb-2 text-red-400"></i>
+                        <div class="text-2xl font-bold" id="streak">0</div>
+                        <div class="text-sm text-gray-300">Streak</div>
+                    </div>
+                </div>
+
+                <!-- Game Question -->
+                <div id="gameQuestionCard" class="bg-white/10 rounded-2xl p-8 card-glow hidden">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold mb-6">Speed Challenge!</h3>
+                        <div id="gameQuestionText" class="text-4xl font-bold mb-8"></div>
+                        <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                            <button class="game-option bg-blue-600 hover:bg-blue-500 p-4 rounded-lg text-xl font-bold transition-all"></button>
+                            <button class="game-option bg-green-600 hover:bg-green-500 p-4 rounded-lg text-xl font-bold transition-all"></button>
+                            <button class="game-option bg-purple-600 hover:bg-purple-500 p-4 rounded-lg text-xl font-bold transition-all"></button>
+                            <button class="game-option bg-red-600 hover:bg-red-500 p-4 rounded-lg text-xl font-bold transition-all"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Start -->
+                <div id="gameStart" class="bg-white/10 rounded-2xl p-8 card-glow text-center">
+                    <i class="fas fa-rocket text-6xl mb-4 text-purple-400"></i>
+                    <h3 class="text-3xl font-bold mb-4">Speed Challenge</h3>
+                    <p class="text-lg text-gray-300 mb-8">Jawab sebanyak mungkin soal dalam 60 detik!</p>
+                    <button id="startGame" class="btn-primary px-12 py-4 rounded-lg text-xl font-bold">
+                        <i class="fas fa-play mr-2"></i> Mulai Game
+                    </button>
+                </div>
+
+                <!-- Game Over -->
+                <div id="gameOver" class="bg-white/10 rounded-2xl p-8 card-glow text-center hidden">
+                    <i class="fas fa-flag-checkered text-6xl mb-4 text-green-400"></i>
+                    <h3 class="text-3xl font-bold mb-4">Game Selesai!</h3>
+                    <div class="text-6xl font-bold mb-4" id="finalScore">0</div>
+                    <p class="text-lg text-gray-300 mb-8">Poin yang kamu dapatkan</p>
+                    <button id="playAgain" class="btn-primary px-8 py-3 rounded-lg font-semibold">
+                        <i class="fas fa-redo mr-2"></i> Main Lagi
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Perkalian dan Pembagian Antar Pecahan -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Perkalian Antar Pecahan -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-times text-3xl mr-3 text-orange-400"></i>
+                        Perkalian Antar Pecahan
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-orange-300">Konsep Dasar</h3>
+                            <p class="text-gray-200 mb-4">
+                                Perkalian antar pecahan dilakukan dengan mengalikan pembilang dengan pembilang, dan penyebut dengan penyebut.
+                            </p>
+                            <div class="bg-gray-800 rounded-lg p-4">
+                                <div class="text-center text-xl flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>c</span>
+                                        <div class="fraction-line"></div>
+                                        <span>d</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>a × c</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b × d</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-green-300">Contoh</h3>
+                            <div class="space-y-3">
+                                <div class="text-center text-lg flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>2</span>
+                                        <div class="fraction-line"></div>
+                                        <span>3</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>4</span>
+                                        <div class="fraction-line"></div>
+                                        <span>5</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>2 × 4</span>
+                                        <div class="fraction-line"></div>
+                                        <span>3 × 5</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>8</span>
+                                        <div class="fraction-line"></div>
+                                        <span>15</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pembagian Antar Pecahan -->
+                <div class="bg-white/10 rounded-2xl p-8 card-glow">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-divide text-3xl mr-3 text-pink-400"></i>
+                        Pembagian Antar Pecahan
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-pink-300">Konsep Dasar</h3>
+                            <p class="text-gray-200 mb-4">
+                                Pembagian antar pecahan sama dengan mengalikan pecahan pertama dengan kebalikan pecahan kedua.
+                            </p>
+                            <div class="bg-gray-800 rounded-lg p-4">
+                                <div class="text-center text-xl flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                    <span class="mx-4">÷</span>
+                                    <div class="fraction">
+                                        <span>c</span>
+                                        <div class="fraction-line"></div>
+                                        <span>d</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>a</span>
+                                        <div class="fraction-line"></div>
+                                        <span>b</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>d</span>
+                                        <div class="fraction-line"></div>
+                                        <span>c</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white/5 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-yellow-300">Contoh</h3>
+                            <div class="space-y-3">
+                                <div class="text-center text-lg flex items-center justify-center">
+                                    <div class="fraction">
+                                        <span>3</span>
+                                        <div class="fraction-line"></div>
+                                        <span>4</span>
+                                    </div>
+                                    <span class="mx-4">÷</span>
+                                    <div class="fraction">
+                                        <span>2</span>
+                                        <div class="fraction-line"></div>
+                                        <span>5</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>3</span>
+                                        <div class="fraction-line"></div>
+                                        <span>4</span>
+                                    </div>
+                                    <span class="mx-4">×</span>
+                                    <div class="fraction">
+                                        <span>5</span>
+                                        <div class="fraction-line"></div>
+                                        <span>2</span>
+                                    </div>
+                                    <span class="mx-4">=</span>
+                                    <div class="fraction">
+                                        <span>15</span>
+                                        <div class="fraction-line"></div>
+                                        <span>8</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Game State
+        let currentTab = 'multiplication';
+        let sectionStats = {
+            multiplication: { correct: 0, wrong: 0, score: 0, currentQuestion: {} },
+            division: { correct: 0, wrong: 0, score: 0, currentQuestion: {} },
+            fractionMultiplication: { correct: 0, wrong: 0, score: 0, currentQuestion: {} },
+            fractionDivision: { correct: 0, wrong: 0, score: 0, currentQuestion: {} }
+        };
+        let totalScore = parseInt(localStorage.getItem('totalScore')) || 0;
+        let gameTimer = 60;
+        let gameScore = 0;
+        let streak = 0;
+        let gameInterval;
+        let currentGameQuestion = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUI();
+            generateQuestion('multiplication');
+            
+            // Tab switching
+            document.getElementById('multiplicationTab').addEventListener('click', () => switchTab('multiplication'));
+            document.getElementById('divisionTab').addEventListener('click', () => switchTab('division'));
+            document.getElementById('fractionMultiplicationTab').addEventListener('click', () => switchTab('fractionMultiplication'));
+            document.getElementById('fractionDivisionTab').addEventListener('click', () => switchTab('fractionDivision'));
+            document.getElementById('gameTab').addEventListener('click', () => switchTab('game'));
+            
+            // Practice controls for each section
+            setupSectionControls('multiplication');
+            setupSectionControls('division');
+            setupSectionControls('fractionMultiplication');
+            setupSectionControls('fractionDivision');
+            
+            // Game controls
+            document.getElementById('startGame').addEventListener('click', startGame);
+            document.getElementById('playAgain').addEventListener('click', resetGame);
+            
+            // Game options
+            document.querySelectorAll('.game-option').forEach(button => {
+                button.addEventListener('click', (e) => checkGameAnswer(e.target));
+            });
+        });
+
+        function setupSectionControls(section) {
+            document.getElementById(section + 'Submit').addEventListener('click', () => checkAnswer(section));
+            document.getElementById(section + 'Next').addEventListener('click', () => nextQuestion(section));
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('[id$="Tab"]').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-gray-800');
+                btn.classList.add('hover:bg-white/20');
+            });
+            document.getElementById(tab + 'Tab').classList.add('bg-white', 'text-gray-800');
+            document.getElementById(tab + 'Tab').classList.remove('hover:bg-white/20');
+            
+            // Show/hide sections
+            document.getElementById('multiplicationSection').classList.toggle('hidden', tab !== 'multiplication');
+            document.getElementById('divisionSection').classList.toggle('hidden', tab !== 'division');
+            document.getElementById('fractionMultiplicationSection').classList.toggle('hidden', tab !== 'fractionMultiplication');
+            document.getElementById('fractionDivisionSection').classList.toggle('hidden', tab !== 'fractionDivision');
+            document.getElementById('gameSection').classList.toggle('hidden', tab !== 'game');
+            
+            // Generate question for the new tab if it's not game
+            if (tab !== 'game') {
+                generateQuestion(tab);
+            }
+        }
+
+        function generateQuestion(section) {
+            const numerator1 = Math.floor(Math.random() * 9) + 1;
+            const denominator1 = Math.floor(Math.random() * 9) + 2;
+            const numerator2 = Math.floor(Math.random() * 9) + 1;
+            const denominator2 = Math.floor(Math.random() * 9) + 2;
+            const wholeNumber = Math.floor(Math.random() * 5) + 2;
+            
+            let questionHTML = '';
+            let correctAnswer = {};
+            
+            if (section === 'multiplication') {
+                questionHTML = `
+                    <div class="flex items-center justify-center">
+                        <div class="fraction">
+                            <span>${numerator1}</span>
+                            <div class="fraction-line"></div>
+                            <span>${denominator1}</span>
+                        </div>
+                        <span class="mx-4">×</span>
+                        <span class="mx-4">${wholeNumber}</span>
+                        <span class="mx-4">=</span>
+                    </div>
+                `;
+                correctAnswer = {
+                    numerator: numerator1 * wholeNumber,
+                    denominator: denominator1
+                };
+            } else if (section === 'division') {
+                questionHTML = `
+                    <div class="flex items-center justify-center">
+                        <div class="fraction">
+                            <span>${numerator1}</span>
+                            <div class="fraction-line"></div>
+                            <span>${denominator1}</span>
+                        </div>
+                        <span class="mx-4">÷</span>
+                        <span class="mx-4">${wholeNumber}</span>
+                        <span class="mx-4">=</span>
+                    </div>
+                `;
+                correctAnswer = {
+                    numerator: numerator1,
+                    denominator: denominator1 * wholeNumber
+                };
+            } else if (section === 'fractionMultiplication') {
+                questionHTML = `
+                    <div class="flex items-center justify-center">
+                        <div class="fraction">
+                            <span>${numerator1}</span>
+                            <div class="fraction-line"></div>
+                            <span>${denominator1}</span>
+                        </div>
+                        <span class="mx-4">×</span>
+                        <div class="fraction">
+                            <span>${numerator2}</span>
+                            <div class="fraction-line"></div>
+                            <span>${denominator2}</span>
+                        </div>
+                        <span class="mx-4">=</span>
+                    </div>
+                `;
+                correctAnswer = {
+                    numerator: numerator1 * numerator2,
+                    denominator: denominator1 * denominator2
+                };
+            } else if (section === 'fractionDivision') {
+                questionHTML = `
+                    <div class="flex items-center justify-center">
+                        <div class="fraction">
+                            <span>${numerator1}</span>
+                            <div class="fraction-line"></div>
+                            <span>${denominator1}</span>
+                        </div>
+                        <span class="mx-4">÷</span>
+                        <div class="fraction">
+                            <span>${numerator2}</span>
+                            <div class="fraction-line"></div>
+                            <span>${denominator2}</span>
+                        </div>
+                        <span class="mx-4">=</span>
+                    </div>
+                `;
+                correctAnswer = {
+                    numerator: numerator1 * denominator2,
+                    denominator: denominator1 * numerator2
+                };
+            }
+            
+            // Update question display
+            document.getElementById(section + 'Question').innerHTML = questionHTML;
+            
+            // Store correct answer
+            sectionStats[section].currentQuestion = correctAnswer;
+            
+            // Clear inputs and reset UI
+            document.getElementById(section + 'Numerator').value = '';
+            document.getElementById(section + 'Denominator').value = '';
+            document.getElementById(section + 'Feedback').classList.add('hidden');
+            document.getElementById(section + 'Submit').classList.remove('hidden');
+            document.getElementById(section + 'Next').classList.add('hidden');
+        }
+
+        function checkAnswer(section) {
+            const userNum = parseInt(document.getElementById(section + 'Numerator').value);
+            const userDen = parseInt(document.getElementById(section + 'Denominator').value);
+            
+            if (isNaN(userNum) || isNaN(userDen) || userDen === 0) {
+                showSectionFeedback(section, 'Mohon isi kedua bagian jawaban dengan benar! Penyebut tidak boleh nol.', 'error');
+                return;
+            }
+            
+            const correctAnswer = sectionStats[section].currentQuestion;
+            
+            // Simplify both fractions for comparison
+            const correctGCD = gcd(correctAnswer.numerator, correctAnswer.denominator);
+            const correctSimplified = {
+                numerator: correctAnswer.numerator / correctGCD,
+                denominator: correctAnswer.denominator / correctGCD
+            };
+            
+            const userGCD = gcd(Math.abs(userNum), Math.abs(userDen));
+            const userSimplified = {
+                numerator: userNum / userGCD,
+                denominator: userDen / userGCD
+            };
+            
+            const isCorrect = correctSimplified.numerator === userSimplified.numerator && 
+                            correctSimplified.denominator === userSimplified.denominator;
+            
+            if (isCorrect) {
+                showSectionFeedback(section, '<i class="fas fa-check-circle mr-2"></i>Benar! Jawaban kamu tepat!', 'success');
+                sectionStats[section].score += 10;
+                sectionStats[section].correct++;
+                totalScore += 10;
+                updateScore();
+            } else {
+                showSectionFeedback(section, `<i class="fas fa-times-circle mr-2"></i>Kurang tepat. Jawaban yang benar: ${correctSimplified.numerator}/${correctSimplified.denominator}`, 'error');
+                sectionStats[section].wrong++;
+            }
+            
+            document.getElementById(section + 'Submit').classList.add('hidden');
+            document.getElementById(section + 'Next').classList.remove('hidden');
+            updateSectionStats(section);
+        }
+        
+        function showDetailedSolution(isCorrect) {
+            const solutionSteps = document.getElementById('solutionSteps');
+            let stepsHTML = '';
+            
+            if (currentPracticeQuestion.mode === 'multiplication') {
+                const { numerator, denominator, wholeNumber } = currentPracticeQuestion;
+                stepsHTML = `
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-blue-300">Langkah 1: Pahami Soal</h5>
+                        <p class="text-gray-300">Kita akan mengalikan pecahan <span class="font-bold">${numerator}/${denominator}</span> dengan bilangan asli <span class="font-bold">${wholeNumber}</span></p>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-green-300">Langkah 2: Terapkan Rumus</h5>
+                        <p class="text-gray-300 mb-2">Rumus: <span class="font-bold">a/b × c = (a × c)/b</span></p>
+                        <div class="text-center text-lg">
+                            <div class="fraction inline-flex flex-col items-center mx-2">
+                                <span>${numerator}</span>
+                                <div class="w-8 h-0.5 bg-gray-400 my-1"></div>
+                                <span>${denominator}</span>
+                            </div>
+                            <span class="mx-2">×</span>
+                            <span class="mx-2">${wholeNumber}</span>
+                            <span class="mx-2">=</span>
+                            <div class="fraction inline-flex flex-col items-center mx-2">
+                                <span>${numerator} × ${wholeNumber}</span>
+                                <div class="w-16 h-0.5 bg-gray-400 my-1"></div>
+                                <span>${denominator}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-purple-300">Langkah 3: Hitung Pembilang</h5>
+                        <p class="text-gray-300 mb-2">Kalikan pembilang dengan bilangan asli:</p>
+                        <p class="text-center text-lg font-bold">${numerator} × ${wholeNumber} = ${numerator * wholeNumber}</p>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-yellow-300">Langkah 4: Hasil Akhir</h5>
+                        <div class="text-center text-xl">
+                            <div class="fraction inline-flex flex-col items-center">
+                                <span class="font-bold">${numerator * wholeNumber}</span>
+                                <div class="w-12 h-0.5 bg-white my-1"></div>
+                                <span class="font-bold">${denominator}</span>
+                            </div>
+                        </div>
+                        ${gcd(numerator * wholeNumber, denominator) > 1 ? `
+                            <p class="text-gray-300 mt-3 text-center">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Bisa disederhanakan menjadi: 
+                                <span class="font-bold">${(numerator * wholeNumber) / gcd(numerator * wholeNumber, denominator)}/${denominator / gcd(numerator * wholeNumber, denominator)}</span>
+                            </p>
+                        ` : ''}
+                    </div>
+                `;
+            } else if (currentPracticeQuestion.mode === 'division') {
+                const { numerator, denominator, wholeNumber } = currentPracticeQuestion;
+                stepsHTML = `
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-blue-300">Langkah 1: Pahami Soal</h5>
+                        <p class="text-gray-300">Kita akan membagi pecahan <span class="font-bold">${numerator}/${denominator}</span> dengan bilangan asli <span class="font-bold">${wholeNumber}</span></p>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-green-300">Langkah 2: Terapkan Rumus</h5>
+                        <p class="text-gray-300 mb-2">Rumus: <span class="font-bold">a/b ÷ c = a/(b × c)</span></p>
+                        <div class="text-center text-lg">
+                            <div class="fraction inline-flex flex-col items-center mx-2">
+                                <span>${numerator}</span>
+                                <div class="w-8 h-0.5 bg-gray-400 my-1"></div>
+                                <span>${denominator}</span>
+                            </div>
+                            <span class="mx-2">÷</span>
+                            <span class="mx-2">${wholeNumber}</span>
+                            <span class="mx-2">=</span>
+                            <div class="fraction inline-flex flex-col items-center mx-2">
+                                <span>${numerator}</span>
+                                <div class="w-16 h-0.5 bg-gray-400 my-1"></div>
+                                <span>${denominator} × ${wholeNumber}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-purple-300">Langkah 3: Hitung Penyebut</h5>
+                        <p class="text-gray-300 mb-2">Kalikan penyebut dengan bilangan asli:</p>
+                        <p class="text-center text-lg font-bold">${denominator} × ${wholeNumber} = ${denominator * wholeNumber}</p>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-yellow-300">Langkah 4: Hasil Akhir</h5>
+                        <div class="text-center text-xl">
+                            <div class="fraction inline-flex flex-col items-center">
+                                <span class="font-bold">${numerator}</span>
+                                <div class="w-12 h-0.5 bg-white my-1"></div>
+                                <span class="font-bold">${denominator * wholeNumber}</span>
+                            </div>
+                        </div>
+                        ${gcd(numerator, denominator * wholeNumber) > 1 ? `
+                            <p class="text-gray-300 mt-3 text-center">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Bisa disederhanakan menjadi: 
+                                <span class="font-bold">${numerator / gcd(numerator, denominator * wholeNumber)}/${(denominator * wholeNumber) / gcd(numerator, denominator * wholeNumber)}</span>
+                            </p>
+                        ` : ''}
+                    </div>
+                `;
+            } else if (currentPracticeQuestion.mode === 'fractionMultiplication') {
+                const { numerator1, denominator1, numerator2, denominator2 } = currentPracticeQuestion;
+                stepsHTML = `
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-blue-300">Langkah 1: Pahami Soal</h5>
+                        <p class="text-gray-300">Kita akan mengalikan pecahan <span class="font-bold">${numerator1}/${denominator1}</span> dengan pecahan <span class="font-bold">${numerator2}/${denominator2}</span></p>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-green-300">Langkah 2: Terapkan Rumus</h5>
+                        <p class="text-gray-300 mb-2">Rumus: <span class="font-bold">a/b × c/d = (a × c)/(b × d)</span></p>
+                        <div class="text-center text-lg">
+                            <div class="fraction inline-flex flex-col items-center mx-2">
+                                <span>${numerator1}</span>
+                                <div class="w-8 h-0.5 bg-gray-400 my-1"></div>
+                                <span>${denominator1}</span>
+                            </div>
+                            <span class="mx-2">×</span>
+                            <div class="fraction inline-flex flex-col items-center mx-2">
+                                <span>${numerator2}</span>
+                                <div class="w-8 h-0.5 bg-gray-400 my-1"></div>
+                                <span>${denominator2}</span>
+                            </div>
+                            <span class="mx-2">=</span>
+                            <div class="fraction inline-flex flex-col items-center mx-2">
+                                <span>${numerator1} × ${numerator2}</span>
+                                <div class="w-20 h-0.5 bg-gray-400 my-1"></div>
+                                <span>${denominator1} × ${denominator2}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-purple-300">Langkah 3: Hitung Pembilang dan Penyebut</h5>
+                        <p class="text-gray-300 mb-2">Pembilang: ${numerator1} × ${numerator2} = ${numerator1 * numerator2}</p>
+                        <p class="text-gray-300">Penyebut: ${denominator1} × ${denominator2} = ${denominator1 * denominator2}</p>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-yellow-300">Langkah 4: Hasil Akhir</h5>
+                        <div class="text-center text-xl">
+                            <div class="fraction inline-flex flex-col items-center">
+                                <span class="font-bold">${numerator1 * numerator2}</span>
+                                <div class="w-12 h-0.5 bg-white my-1"></div>
+                                <span class="font-bold">${denominator1 * denominator2}</span>
+                            </div>
+                        </div>
+                        ${gcd(numerator1 * numerator2, denominator1 * denominator2) > 1 ? `
+                            <p class="text-gray-300 mt-3 text-center">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Bisa disederhanakan menjadi: 
+                                <span class="font-bold">${(numerator1 * numerator2) / gcd(numerator1 * numerator2, denominator1 * denominator2)}/${(denominator1 * denominator2) / gcd(numerator1 * numerator2, denominator1 * denominator2)}</span>
+                            </p>
+                        ` : ''}
+                    </div>
+                `;
+            } else if (currentPracticeQuestion.mode === 'fractionDivision') {
+                const { numerator1, denominator1, numerator2, denominator2 } = currentPracticeQuestion;
+                stepsHTML = `
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-blue-300">Langkah 1: Pahami Soal</h5>
+                        <p class="text-gray-300">Kita akan membagi pecahan <span class="font-bold">${numerator1}/${denominator1}</span> dengan pecahan <span class="font-bold">${numerator2}/${denominator2}</span></p>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-green-300">Langkah 2: Ubah ke Perkalian</h5>
+                        <p class="text-gray-300 mb-2">Rumus: <span class="font-bold">a/b ÷ c/d = a/b × d/c</span></p>
+                        <div class="text-center text-lg">
+                            <div class="fraction inline-flex flex-col items-center mx-2">
+                                <span>${numerator1}</span>
+                                <div class="w-8 h-0.5 bg-gray-400 my-1"></div>
+                                <span>${denominator1}</span>
+                            </div>
+                            <span class="mx-2">÷</span>
+                            <div class="fraction inline-flex flex-col items-center mx-2">
+                                <span>${numerator2}</span>
+                                <div class="w-8 h-0.5 bg-gray-400 my-1"></div>
+                                <span>${denominator2}</span>
+                            </div>
+                            <span class="mx-2">=</span>
+                            <div class="fraction inline-flex flex-col items-center mx-2">
+                                <span>${numerator1}</span>
+                                <div class="w-8 h-0.5 bg-gray-400 my-1"></div>
+                                <span>${denominator1}</span>
+                            </div>
+                            <span class="mx-2">×</span>
+                            <div class="fraction inline-flex flex-col items-center mx-2">
+                                <span>${denominator2}</span>
+                                <div class="w-8 h-0.5 bg-gray-400 my-1"></div>
+                                <span>${numerator2}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-purple-300">Langkah 3: Hitung Pembilang dan Penyebut</h5>
+                        <p class="text-gray-300 mb-2">Pembilang: ${numerator1} × ${denominator2} = ${numerator1 * denominator2}</p>
+                        <p class="text-gray-300">Penyebut: ${denominator1} × ${numerator2} = ${denominator1 * numerator2}</p>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h5 class="font-semibold mb-3 text-yellow-300">Langkah 4: Hasil Akhir</h5>
+                        <div class="text-center text-xl">
+                            <div class="fraction inline-flex flex-col items-center">
+                                <span class="font-bold">${numerator1 * denominator2}</span>
+                                <div class="w-12 h-0.5 bg-white my-1"></div>
+                                <span class="font-bold">${denominator1 * numerator2}</span>
+                            </div>
+                        </div>
+                        ${gcd(numerator1 * denominator2, denominator1 * numerator2) > 1 ? `
+                            <p class="text-gray-300 mt-3 text-center">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Bisa disederhanakan menjadi: 
+                                <span class="font-bold">${(numerator1 * denominator2) / gcd(numerator1 * denominator2, denominator1 * numerator2)}/${(denominator1 * numerator2) / gcd(numerator1 * denominator2, denominator1 * numerator2)}</span>
+                            </p>
+                        ` : ''}
+                    </div>
+                `;
+            }
+            
+            solutionSteps.innerHTML = stepsHTML;
+            document.getElementById('solutionSection').classList.remove('hidden');
+        }
+
+        function nextQuestion(section) {
+            generateQuestion(section);
+        }
+
+        function showSectionFeedback(section, message, type) {
+            const feedback = document.getElementById(section + 'Feedback');
+            feedback.innerHTML = message;
+            feedback.className = `mt-4 text-center p-3 rounded-lg text-sm ${type === 'success' ? 'bg-green-600' : 'bg-red-600'} bounce-in`;
+            feedback.classList.remove('hidden');
+        }
+
+        function updateSectionStats(section) {
+            document.getElementById(section + 'Correct').textContent = sectionStats[section].correct;
+            document.getElementById(section + 'Wrong').textContent = sectionStats[section].wrong;
+            document.getElementById(section + 'Score').textContent = sectionStats[section].score;
+        }
+
+
+
+        function updateScore() {
+            localStorage.setItem('totalScore', totalScore);
+        }
+
+        function updateUI() {
+            document.getElementById('totalScore').textContent = totalScore;
+            
+            // Update all section stats
+            Object.keys(sectionStats).forEach(section => {
+                updateSectionStats(section);
+            });
+        }
+
+        // Game Functions
+        function startGame() {
+            gameTimer = 60;
+            gameScore = 0;
+            streak = 0;
+            
+            document.getElementById('gameStart').classList.add('hidden');
+            document.getElementById('gameQuestionCard').classList.remove('hidden');
+            document.getElementById('gameOver').classList.add('hidden');
+            
+            gameInterval = setInterval(() => {
+                gameTimer--;
+                document.getElementById('gameTimer').textContent = gameTimer;
+                
+                if (gameTimer <= 0) {
+                    endGame();
+                }
+            }, 1000);
+            
+            generateGameQuestion();
+        }
+
+        function generateGameQuestion() {
+            const numerator = Math.floor(Math.random() * 9) + 1;
+            const denominator = Math.floor(Math.random() * 9) + 2;
+            const wholeNumber = Math.floor(Math.random() * 5) + 2;
+            const isMultiplication = Math.random() > 0.5;
+            
+            let correctAnswer;
+            
+            if (isMultiplication) {
+                document.getElementById('gameQuestionText').innerHTML = `
+                    <div class="fraction">
+                        <span>${numerator}</span>
+                        <div class="fraction-line"></div>
+                        <span>${denominator}</span>
+                    </div>
+                    <span class="mx-4">×</span>
+                    <span>${wholeNumber}</span>
+                `;
+                correctAnswer = {
+                    numerator: numerator * wholeNumber,
+                    denominator: denominator
+                };
+            } else {
+                document.getElementById('gameQuestionText').innerHTML = `
+                    <div class="fraction">
+                        <span>${numerator}</span>
+                        <div class="fraction-line"></div>
+                        <span>${denominator}</span>
+                    </div>
+                    <span class="mx-4">÷</span>
+                    <span>${wholeNumber}</span>
+                `;
+                correctAnswer = {
+                    numerator: numerator,
+                    denominator: denominator * wholeNumber
+                };
+            }
+            
+            // Simplify correct answer
+            const correctGCD = gcd(correctAnswer.numerator, correctAnswer.denominator);
+            correctAnswer.numerator /= correctGCD;
+            correctAnswer.denominator /= correctGCD;
+            
+            currentGameQuestion = correctAnswer;
+            
+            // Generate options
+            const options = [correctAnswer];
+            while (options.length < 4) {
+                const wrongAnswer = {
+                    numerator: Math.floor(Math.random() * 20) + 1,
+                    denominator: Math.floor(Math.random() * 20) + 1
+                };
+                
+                if (!options.some(opt => opt.numerator === wrongAnswer.numerator && opt.denominator === wrongAnswer.denominator)) {
+                    options.push(wrongAnswer);
+                }
+            }
+            
+            // Shuffle options
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+            
+            // Display options
+            const optionButtons = document.querySelectorAll('.game-option');
+            options.forEach((option, index) => {
+                optionButtons[index].innerHTML = `
+                    <div class="fraction">
+                        <span>${option.numerator}</span>
+                        <div class="fraction-line"></div>
+                        <span>${option.denominator}</span>
+                    </div>
+                `;
+                optionButtons[index].dataset.answer = JSON.stringify(option);
+            });
+        }
+
+        function checkGameAnswer(button) {
+            const selectedAnswer = JSON.parse(button.dataset.answer);
+            const isCorrect = selectedAnswer.numerator === currentGameQuestion.numerator && 
+                            selectedAnswer.denominator === currentGameQuestion.denominator;
+            
+            if (isCorrect) {
+                gameScore += 10 + streak;
+                streak++;
+                button.classList.add('pulse-animation');
+                setTimeout(() => {
+                    button.classList.remove('pulse-animation');
+                    generateGameQuestion();
+                }, 500);
+            } else {
+                streak = 0;
+                button.style.background = '#ef4444';
+                setTimeout(() => {
+                    button.style.background = '';
+                    generateGameQuestion();
+                }, 500);
+            }
+            
+            document.getElementById('gameScore').textContent = gameScore;
+            document.getElementById('streak').textContent = streak;
+        }
+
+        function endGame() {
+            clearInterval(gameInterval);
+            totalScore += gameScore;
+            updateScore();
+            
+            document.getElementById('gameQuestionCard').classList.add('hidden');
+            document.getElementById('gameOver').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = gameScore;
+            
+            updateUI();
+        }
+
+        function resetGame() {
+            document.getElementById('gameOver').classList.add('hidden');
+            document.getElementById('gameStart').classList.remove('hidden');
+        }
+
+        // Utility function
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'983fbfc39686cecb',t:'MTc1ODY5MDM1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
