@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Matematika - Fungsi Invers | SMA Kelas 11</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .exam-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .exam-header {
+            background-color: #f3f4f6;
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .exam-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #374151;
+            margin: 0 0 8px 0;
+        }
+
+        .exam-info {
+            font-size: 14px;
+            color: #6b7280;
+            margin: 4px 0;
+        }
+
+        .timer-container {
+            background-color: #374151;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin: 16px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .question-container {
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            background-color: #374151;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .options-container {
+            margin: 16px 0;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            margin: 8px 0;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            background-color: #f9fafb;
+            border-color: #9ca3af;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            margin-top: 2px;
+        }
+
+        .option-label {
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .math-input {
+            width: 100%;
+            min-height: 60px;
+            max-height: 200px;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 18px;
+            line-height: 1.5;
+            font-family: 'Times New Roman', serif;
+            overflow-y: auto;
+            resize: vertical;
+            background-color: #ffffff;
+        }
+
+        .math-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .math-input[data-placeholder]:empty::before {
+            content: attr(data-placeholder);
+            color: #9ca3af;
+        }
+
+        .virtual-keyboard {
+            display: none;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-top: 8px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .virtual-keyboard.show {
+            display: grid;
+        }
+
+        .btn-math {
+            min-width: 50px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 500;
+            border: 1px solid #d1d5db;
+            background-color: #ffffff;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-math:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #f9fafb;
+        }
+
+        .fraction {
+            display: inline-block;
+            text-align: center;
+            vertical-align: super;
+            margin: 0 2px;
+            font-size: 0.6em;
+            line-height: 1;
+            position: relative;
+            top: -0.3em;
+        }
+
+        .fraction-top {
+            border-bottom: 1px solid #000;
+            padding: 1px 3px;
+            min-width: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .fraction-bottom {
+            padding: 1px 3px;
+            min-width: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .fraction-regular {
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            margin: 0 2px;
+            font-size: 1em;
+            line-height: 1;
+            position: relative;
+            top: -0.3em;
+        }
+
+        .fraction-top-regular {
+            border-bottom: 1.5px solid #000;
+            padding: 2px 6px;
+            min-width: 16px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .fraction-bottom-regular {
+            padding: 2px 6px;
+            min-width: 16px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .exponent {
+            display: inline-block;
+            vertical-align: super;
+            font-size: 0.7em;
+            margin: 0 1px;
+            position: relative;
+            top: -0.5em;
+        }
+
+        .exponent-content {
+            padding: 1px 3px;
+            min-width: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 2px;
+        }
+
+        .exponent-content:focus {
+            background: rgba(59, 130, 246, 0.2);
+            outline: none;
+        }
+
+        .contenteditable {
+            outline: none;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 2px;
+        }
+
+        .contenteditable:focus {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .keyboard-toggle {
+            background-color: #374151;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .keyboard-toggle:hover {
+            background-color: #4b5563;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 32px;
+            padding: 24px;
+            background-color: #f3f4f6;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+        }
+
+        .submit-btn {
+            background-color: #374151;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #4b5563;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            margin: 16px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #374151;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        .math-expression {
+            font-family: 'Times New Roman', serif;
+            font-size: 18px;
+        }
+
+        .context-box {
+            background-color: #f0f9ff;
+            border-left: 4px solid #374151;
+            padding: 16px;
+            margin: 12px 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .instruction {
+            background-color: #fef3c7;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            border: 1px solid #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-container">
+        <!-- Header -->
+        <div class="exam-header">
+            <h1 class="exam-title">Ujian Matematika - Fungsi Invers</h1>
+            <div class="exam-info">SMA Kelas 11 | Durasi: 45 menit | Total: 15 soal</div>
+            <div class="timer-container">
+                <span id="timer">45:00</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- Soal 1: PG - Fungsi Linear -->
+        <div class="question-container">
+            <div class="question-number">Soal 1</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Sebuah toko online mengenakan biaya pengiriman berdasarkan jarak. Biaya pengiriman dinyatakan dengan fungsi <em>f</em>(<em>x</em>) = 2<em>x</em> + 5000, dimana <em>x</em> adalah jarak dalam km dan <em>f</em>(<em>x</em>) adalah biaya dalam rupiah.
+            </div>
+            <div class="question-text">
+                Jika seorang pelanggan membayar biaya pengiriman sebesar Rp 15.000, berapa jarak pengiriman barangnya? (Tentukan fungsi invers dari $f(x) = 2x + 5000$)
+            </div>
+            <div class="options-container">
+                <label class="option">
+                    <input type="radio" name="q1" value="A">
+                    <span class="option-label">A. $f^{-1}(x) = \frac{x - 5000}{2}$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="B">
+                    <span class="option-label">B. $f^{-1}(x) = \frac{x + 5000}{2}$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="C">
+                    <span class="option-label">C. $f^{-1}(x) = 2x - 5000$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="D">
+                    <span class="option-label">D. $f^{-1}(x) = \frac{2x}{5000}$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="E">
+                    <span class="option-label">E. $f^{-1}(x) = \frac{5000 - x}{2}$</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Soal 2: PG - Fungsi Linear -->
+        <div class="question-container">
+            <div class="question-number">Soal 2</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Suhu dalam derajat Fahrenheit dapat dikonversi ke Celsius menggunakan fungsi $C(F) = \frac{5}{9}(F - 32)$.
+            </div>
+            <div class="question-text">
+                Tentukan fungsi invers untuk mengkonversi dari Celsius ke Fahrenheit!
+            </div>
+            <div class="options-container">
+                <label class="option">
+                    <input type="radio" name="q2" value="A">
+                    <span class="option-label">A. $F(C) = \frac{9}{5}C + 32$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="B">
+                    <span class="option-label">B. $F(C) = \frac{5}{9}C + 32$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="C">
+                    <span class="option-label">C. $F(C) = \frac{9}{5}C - 32$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="D">
+                    <span class="option-label">D. $F(C) = 9C + 160$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="E">
+                    <span class="option-label">E. $F(C) = 5C + 32$</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Soal 3: Isian Singkat - Fungsi Linear -->
+        <div class="question-container">
+            <div class="question-number">Soal 3</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Gaji seorang sales adalah $g(x) = 500.000 + 50.000x$, dimana $x$ adalah jumlah barang yang terjual.
+            </div>
+            <div class="question-text">
+                Jika seorang sales ingin mendapat gaji Rp 2.000.000, berapa barang yang harus dijual? Tuliskan fungsi inversnya!
+            </div>
+            <div class="instruction">Gunakan keyboard virtual untuk menulis fungsi invers. Format: $g^{-1}(x) = ...$</div>
+            <div contenteditable="true" class="math-input" id="mathInput3" data-placeholder="Ketik jawaban di sini..."></div>
+            <button class="keyboard-toggle" onclick="toggleKeyboard('keyboard3')">📱 Keyboard</button>
+            <div class="virtual-keyboard" id="keyboard3">
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '0')">0</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '1')">1</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '2')">2</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '3')">3</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '4')">4</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '5')">5</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '6')">6</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '7')">7</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '8')">8</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '9')">9</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '+')">+</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '-')">-</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '×')">×</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '÷')">÷</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '=')">=</button>
+                <button class="btn-math" onclick="insertHTMLAtCursor(document.getElementById('mathInput3'), '<span class=&quot;fraction-regular&quot;><div class=&quot;fraction-top-regular contenteditable&quot;>a</div><div class=&quot;fraction-bottom-regular contenteditable&quot;>b</div></span>&nbsp;')">a/b</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), 'x')">x</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), 'g')">g</button>
+                <button class="btn-math" onclick="insertHTMLAtCursor(document.getElementById('mathInput3'), '<span class=&quot;exponent&quot;><span class=&quot;exponent-content contenteditable&quot;>-1</span></span>&nbsp;')">^n</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput3'), '()')">()</button>
+                <button class="btn-math" onclick="clearInput(document.getElementById('mathInput3'))">C</button>
+                <button class="btn-math" onclick="backspaceInput(document.getElementById('mathInput3'))">⌫</button>
+            </div>
+        </div>
+
+        <!-- Soal 4: PG - Fungsi Kuadrat -->
+        <div class="question-container">
+            <div class="question-number">Soal 4</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Luas sebuah persegi dengan sisi $s$ cm dinyatakan dengan $L(s) = s^2$.
+            </div>
+            <div class="question-text">
+                Jika diketahui luas persegi adalah 64 cm², tentukan fungsi invers untuk mencari panjang sisi persegi tersebut!
+            </div>
+            <div class="options-container">
+                <label class="option">
+                    <input type="radio" name="q4" value="A">
+                    <span class="option-label">A. $L^{-1}(x) = \sqrt{x}$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="B">
+                    <span class="option-label">B. $L^{-1}(x) = x^2$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="C">
+                    <span class="option-label">C. $L^{-1}(x) = \frac{1}{x^2}$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="D">
+                    <span class="option-label">D. $L^{-1}(x) = 2x$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="E">
+                    <span class="option-label">E. $L^{-1}(x) = \frac{x}{2}$</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Soal 5: PG - Fungsi Kuadrat -->
+        <div class="question-container">
+            <div class="question-number">Soal 5</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Energi kinetik suatu benda dinyatakan dengan $E(v) = \frac{1}{2}mv^2$, dimana $m = 2$ kg.
+            </div>
+            <div class="question-text">
+                Tentukan fungsi invers untuk mencari kecepatan jika energi kinetik diketahui! ($E(v) = v^2$)
+            </div>
+            <div class="options-container">
+                <label class="option">
+                    <input type="radio" name="q5" value="A">
+                    <span class="option-label">A. $E^{-1}(x) = \pm\sqrt{x}$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="B">
+                    <span class="option-label">B. $E^{-1}(x) = \sqrt{x}$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="C">
+                    <span class="option-label">C. $E^{-1}(x) = x^2$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="D">
+                    <span class="option-label">D. $E^{-1}(x) = -\sqrt{x}$</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="E">
+                    <span class="option-label">E. $E^{-1}(x) = 2x$</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Soal 6: Isian Singkat - Fungsi Kuadrat -->
+        <div class="question-container">
+            <div class="question-number">Soal 6</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Volume bola dengan jari-jari $r$ adalah $V(r) = \frac{4}{3}\pi r^3$. Untuk menyederhanakan, anggap $V(r) = r^3$.
+            </div>
+            <div class="question-text">
+                Tentukan fungsi invers untuk mencari jari-jari jika volume diketahui!
+            </div>
+            <div class="instruction">Gunakan keyboard virtual. Format: $V^{-1}(x) = ...$</div>
+            <div contenteditable="true" class="math-input" id="mathInput6" data-placeholder="Ketik jawaban di sini..."></div>
+            <button class="keyboard-toggle" onclick="toggleKeyboard('keyboard6')">📱 Keyboard</button>
+            <div class="virtual-keyboard" id="keyboard6">
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '0')">0</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '1')">1</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '2')">2</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '3')">3</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '4')">4</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '5')">5</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '6')">6</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '7')">7</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '8')">8</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '9')">9</button>
+                <button class="btn-math" onclick="insertHTMLAtCursor(document.getElementById('mathInput6'), '∛<span contenteditable=&quot;true&quot; style=&quot;text-decoration: overline;&quot;>x</span>')">∛x</button>
+                <button class="btn-math" onclick="insertHTMLAtCursor(document.getElementById('mathInput6'), '√<span contenteditable=&quot;true&quot; style=&quot;text-decoration: overline;&quot;>x</span>')">√x</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), 'x')">x</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), 'V')">V</button>
+                <button class="btn-math" onclick="insertHTMLAtCursor(document.getElementById('mathInput6'), '<span class=&quot;exponent&quot;><span class=&quot;exponent-content contenteditable&quot;>-1</span></span>&nbsp;')">^n</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '=')">=</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput6'), '()')">()</button>
+                <button class="btn-math" onclick="clearInput(document.getElementById('mathInput6'))">C</button>
+                <button class="btn-math" onclick="backspaceInput(document.getElementById('mathInput6'))">⌫</button>
+            </div>
+        </div>
+
+        <!-- Soal 7: PG - Fungsi Pecahan -->
+        <div class="question-container">
+            <div class="question-number">Soal 7</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Kecepatan rata-rata perjalanan dinyatakan dengan <em>v</em>(<em>t</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">120</div><div class="fraction-bottom-regular"><em>t</em></div></span></span>, dimana <em>t</em> adalah waktu dalam jam.
+            </div>
+            <div class="question-text">
+                Tentukan fungsi invers untuk mencari waktu tempuh jika kecepatan diketahui!
+            </div>
+            <div class="options-container">
+                <label class="option">
+                    <input type="radio" name="q7" value="A">
+                    <span class="option-label">A. <em>v</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">120</div><div class="fraction-bottom-regular"><em>x</em></div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="B">
+                    <span class="option-label">B. <em>v</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em></div><div class="fraction-bottom-regular">120</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="C">
+                    <span class="option-label">C. <em>v</em><sup>-1</sup>(<em>x</em>) = 120<em>x</em></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="D">
+                    <span class="option-label">D. <em>v</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">120</div><div class="fraction-bottom-regular"><em>x</em> + 1</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="E">
+                    <span class="option-label">E. <em>v</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular">120<em>x</em></div></span></span></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Soal 8: PG - Fungsi Pecahan -->
+        <div class="question-container">
+            <div class="question-number">Soal 8</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Konsentrasi obat dalam darah setelah <em>t</em> jam dinyatakan dengan <em>C</em>(<em>t</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">50</div><div class="fraction-bottom-regular"><em>t</em> + 2</div></span></span>.
+            </div>
+            <div class="question-text">
+                Tentukan fungsi invers untuk mencari waktu jika konsentrasi obat diketahui!
+            </div>
+            <div class="options-container">
+                <label class="option">
+                    <input type="radio" name="q8" value="A">
+                    <span class="option-label">A. <em>C</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">50</div><div class="fraction-bottom-regular"><em>x</em></div></span></span> - 2</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="B">
+                    <span class="option-label">B. <em>C</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">50</div><div class="fraction-bottom-regular"><em>x</em></div></span></span> + 2</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="C">
+                    <span class="option-label">C. <em>C</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em></div><div class="fraction-bottom-regular">50</div></span></span> - 2</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="D">
+                    <span class="option-label">D. <em>C</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">50 - 2<em>x</em></div><div class="fraction-bottom-regular"><em>x</em></div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="E">
+                    <span class="option-label">E. <em>C</em><sup>-1</sup>(<em>x</em>) = 50 - 2<em>x</em></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Soal 9: Isian Singkat - Fungsi Pecahan -->
+        <div class="question-container">
+            <div class="question-number">Soal 9</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Resistansi total dua resistor paralel dinyatakan dengan <em>R</em>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">6<em>x</em></div><div class="fraction-bottom-regular"><em>x</em> + 6</div></span></span>, dimana <em>x</em> adalah resistansi salah satu resistor.
+            </div>
+            <div class="question-text">
+                Tentukan fungsi invers untuk mencari nilai resistor jika resistansi total diketahui!
+            </div>
+            <div class="instruction">Gunakan keyboard virtual. Format: R^(-1)(x) = ...</div>
+            <div contenteditable="true" class="math-input" id="mathInput9" placeholder="Ketik jawaban di sini..."></div>
+            <button class="keyboard-toggle" onclick="toggleKeyboard('keyboard9')">📱 Keyboard</button>
+            <div class="virtual-keyboard" id="keyboard9">
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '0')">0</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '1')">1</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '2')">2</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '3')">3</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '4')">4</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '5')">5</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '6')">6</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '7')">7</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '8')">8</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '9')">9</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '+')">+</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '-')">-</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '×')">×</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '÷')">÷</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '=')">=</button>
+                <button class="btn-math" onclick="insertHTMLAtCursor(document.getElementById('mathInput9'), '<span class=&quot;fraction-regular&quot;><div class=&quot;fraction-top-regular contenteditable&quot;>a</div><div class=&quot;fraction-bottom-regular contenteditable&quot;>b</div></span>&nbsp;')">a/b</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), 'x')">x</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), 'R')">R</button>
+                <button class="btn-math" onclick="insertHTMLAtCursor(document.getElementById('mathInput9'), '<span class=&quot;exponent&quot;><span class=&quot;exponent-content contenteditable&quot;>-1</span></span>&nbsp;')">^n</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput9'), '()')">()</button>
+                <button class="btn-math" onclick="clearInput(document.getElementById('mathInput9'))">C</button>
+                <button class="btn-math" onclick="backspaceInput(document.getElementById('mathInput9'))">⌫</button>
+            </div>
+        </div>
+
+        <!-- Soal 10: PG - Saling Invers -->
+        <div class="question-container">
+            <div class="question-number">Soal 10</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Dua fungsi dikatakan saling invers jika komposisi keduanya menghasilkan fungsi identitas.
+            </div>
+            <div class="question-text">
+                Manakah pasangan fungsi berikut yang saling invers?
+            </div>
+            <div class="options-container">
+                <label class="option">
+                    <input type="radio" name="q10" value="A">
+                    <span class="option-label">A. <em>f</em>(<em>x</em>) = 2<em>x</em> + 3 dan <em>g</em>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em> - 3</div><div class="fraction-bottom-regular">2</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q10" value="B">
+                    <span class="option-label">B. <em>f</em>(<em>x</em>) = <em>x</em><sup>2</sup> dan <em>g</em>(<em>x</em>) = √<span style="text-decoration: overline;"><em>x</em></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q10" value="C">
+                    <span class="option-label">C. <em>f</em>(<em>x</em>) = 3<em>x</em> - 1 dan <em>g</em>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em> + 1</div><div class="fraction-bottom-regular">2</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q10" value="D">
+                    <span class="option-label">D. <em>f</em>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular"><em>x</em></div></span></span> dan <em>g</em>(<em>x</em>) = <em>x</em></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q10" value="E">
+                    <span class="option-label">E. <em>f</em>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular"><em>x</em></div></span></span> dan <em>g</em>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular"><em>x</em></div></span></span></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Soal 11: PG - Saling Invers -->
+        <div class="question-container">
+            <div class="question-number">Soal 11</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Untuk memverifikasi bahwa dua fungsi saling invers, kita perlu menunjukkan bahwa <em>f</em>(<em>g</em>(<em>x</em>)) = <em>x</em> dan <em>g</em>(<em>f</em>(<em>x</em>)) = <em>x</em>.
+            </div>
+            <div class="question-text">
+                Jika <em>f</em>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">2<em>x</em> + 1</div><div class="fraction-bottom-regular">3</div></span></span>, maka fungsi inversnya adalah:
+            </div>
+            <div class="options-container">
+                <label class="option">
+                    <input type="radio" name="q11" value="A">
+                    <span class="option-label">A. <em>f</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">3<em>x</em> - 1</div><div class="fraction-bottom-regular">2</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q11" value="B">
+                    <span class="option-label">B. <em>f</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">3<em>x</em> + 1</div><div class="fraction-bottom-regular">2</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q11" value="C">
+                    <span class="option-label">C. <em>f</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">2<em>x</em> - 1</div><div class="fraction-bottom-regular">3</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q11" value="D">
+                    <span class="option-label">D. <em>f</em><sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">2<em>x</em> + 1</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q11" value="E">
+                    <span class="option-label">E. <em>f</em><sup>-1</sup>(<em>x</em>) = 3<em>x</em> - 1</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Soal 12: Isian Singkat - Saling Invers -->
+        <div class="question-container">
+            <div class="question-number">Soal 12</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Untuk membuktikan dua fungsi saling invers, kita harus menunjukkan bahwa komposisi keduanya menghasilkan <em>x</em>.
+            </div>
+            <div class="question-text">
+                Jika <em>f</em>(<em>x</em>) = 5<em>x</em> - 2, tentukan <em>f</em><sup>-1</sup>(<em>x</em>) dan buktikan bahwa <em>f</em>(<em>f</em><sup>-1</sup>(<em>x</em>)) = <em>x</em>!
+            </div>
+            <div class="instruction">Tuliskan fungsi invers dan pembuktiannya. Format: f^(-1)(x) = ... kemudian buktikan.</div>
+            <div contenteditable="true" class="math-input" id="mathInput12" placeholder="Ketik jawaban di sini..."></div>
+            <button class="keyboard-toggle" onclick="toggleKeyboard('keyboard12')">📱 Keyboard</button>
+            <div class="virtual-keyboard" id="keyboard12">
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '0')">0</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '1')">1</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '2')">2</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '3')">3</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '4')">4</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '5')">5</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '6')">6</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '7')">7</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '8')">8</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '9')">9</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '+')">+</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '-')">-</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '×')">×</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '÷')">÷</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '=')">=</button>
+                <button class="btn-math" onclick="insertHTMLAtCursor(document.getElementById('mathInput12'), '<span class=&quot;fraction-regular&quot;><div class=&quot;fraction-top-regular contenteditable&quot;>a</div><div class=&quot;fraction-bottom-regular contenteditable&quot;>b</div></span>&nbsp;')">a/b</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), 'x')">x</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), 'f')">f</button>
+                <button class="btn-math" onclick="insertHTMLAtCursor(document.getElementById('mathInput12'), '<span class=&quot;exponent&quot;><span class=&quot;exponent-content contenteditable&quot;>-1</span></span>&nbsp;')">^n</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput12'), '()')">()</button>
+                <button class="btn-math" onclick="clearInput(document.getElementById('mathInput12'))">C</button>
+                <button class="btn-math" onclick="backspaceInput(document.getElementById('mathInput12'))">⌫</button>
+            </div>
+        </div>
+
+        <!-- Soal 13: PG - Fungsi Komposisi -->
+        <div class="question-container">
+            <div class="question-number">Soal 13</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Dalam proses produksi, bahan baku melalui dua tahap: <em>f</em>(<em>x</em>) = 2<em>x</em> + 1 (tahap pertama) dan <em>g</em>(<em>x</em>) = 3<em>x</em> - 2 (tahap kedua).
+            </div>
+            <div class="question-text">
+                Tentukan invers dari fungsi komposisi (<em>g</em> ∘ <em>f</em>)(<em>x</em>)!
+            </div>
+            <div class="options-container">
+                <label class="option">
+                    <input type="radio" name="q13" value="A">
+                    <span class="option-label">A. (<em>g</em> ∘ <em>f</em>)<sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em> + 1</div><div class="fraction-bottom-regular">6</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q13" value="B">
+                    <span class="option-label">B. (<em>g</em> ∘ <em>f</em>)<sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em> - 1</div><div class="fraction-bottom-regular">6</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q13" value="C">
+                    <span class="option-label">C. (<em>g</em> ∘ <em>f</em>)<sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em> + 5</div><div class="fraction-bottom-regular">6</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q13" value="D">
+                    <span class="option-label">D. (<em>g</em> ∘ <em>f</em>)<sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em> - 5</div><div class="fraction-bottom-regular">6</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q13" value="E">
+                    <span class="option-label">E. (<em>g</em> ∘ <em>f</em>)<sup>-1</sup>(<em>x</em>) = 6<em>x</em> + 1</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Soal 14: PG - Fungsi Komposisi -->
+        <div class="question-container">
+            <div class="question-number">Soal 14</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Sebuah mesin mengubah input melalui dua fungsi berturut-turut: <em>p</em>(<em>x</em>) = <em>x</em> + 3 dan <em>q</em>(<em>x</em>) = 2<em>x</em>.
+            </div>
+            <div class="question-text">
+                Jika hasil akhir adalah 20, berapa input awalnya? (Tentukan invers dari (<em>q</em> ∘ <em>p</em>)(<em>x</em>))
+            </div>
+            <div class="options-container">
+                <label class="option">
+                    <input type="radio" name="q14" value="A">
+                    <span class="option-label">A. (<em>q</em> ∘ <em>p</em>)<sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em></div><div class="fraction-bottom-regular">2</div></span></span> - 3</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q14" value="B">
+                    <span class="option-label">B. (<em>q</em> ∘ <em>p</em>)<sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em></div><div class="fraction-bottom-regular">2</div></span></span> + 3</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q14" value="C">
+                    <span class="option-label">C. (<em>q</em> ∘ <em>p</em>)<sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em> - 6</div><div class="fraction-bottom-regular">2</div></span></span></span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q14" value="D">
+                    <span class="option-label">D. (<em>q</em> ∘ <em>p</em>)<sup>-1</sup>(<em>x</em>) = 2<em>x</em> - 3</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q14" value="E">
+                    <span class="option-label">E. (<em>q</em> ∘ <em>p</em>)<sup>-1</sup>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em> + 6</div><div class="fraction-bottom-regular">2</div></span></span></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Soal 15: Isian Singkat - Fungsi Komposisi -->
+        <div class="question-container">
+            <div class="question-number">Soal 15</div>
+            <div class="context-box">
+                <strong>Konteks:</strong> Dalam sistem konversi mata uang, USD ke IDR: <em>f</em>(<em>x</em>) = 15000<em>x</em>, kemudian IDR ke EUR: <em>g</em>(<em>x</em>) = <span class="math-expression"><span class="fraction-regular"><div class="fraction-top-regular"><em>x</em></div><div class="fraction-bottom-regular">17000</div></span></span>.
+            </div>
+            <div class="question-text">
+                Tentukan fungsi invers dari komposisi (<em>g</em> ∘ <em>f</em>)(<em>x</em>) untuk mengkonversi dari EUR langsung ke USD!
+            </div>
+            <div class="instruction">Gunakan keyboard virtual. Format: (g∘f)<sup>-1</sup>(x) = ...</div>
+            <div contenteditable="true" class="math-input" id="mathInput15" placeholder="Ketik jawaban di sini..."></div>
+            <button class="keyboard-toggle" onclick="toggleKeyboard('keyboard15')">📱 Keyboard</button>
+            <div class="virtual-keyboard" id="keyboard15">
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '0')">0</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '1')">1</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '2')">2</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '3')">3</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '4')">4</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '5')">5</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '6')">6</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '7')">7</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '8')">8</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '9')">9</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '+')">+</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '-')">-</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '×')">×</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '÷')">÷</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '=')">=</button>
+                <button class="btn-math" onclick="insertHTMLAtCursor(document.getElementById('mathInput15'), '<span class=&quot;fraction-regular&quot;><div class=&quot;fraction-top-regular contenteditable&quot;>a</div><div class=&quot;fraction-bottom-regular contenteditable&quot;>b</div></span>&nbsp;')">a/b</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), 'x')">x</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), 'g')">g</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), 'f')">f</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '∘')">∘</button>
+                <button class="btn-math" onclick="insertHTMLAtCursor(document.getElementById('mathInput15'), '<span class=&quot;exponent&quot;><span class=&quot;exponent-content contenteditable&quot;>-1</span></span>&nbsp;')">^n</button>
+                <button class="btn-math" onclick="insertTextAtCursor(document.getElementById('mathInput15'), '()')">()</button>
+                <button class="btn-math" onclick="clearInput(document.getElementById('mathInput15'))">C</button>
+                <button class="btn-math" onclick="backspaceInput(document.getElementById('mathInput15'))">⌫</button>
+            </div>
+        </div>
+
+        <!-- Submit Section -->
+        <div class="submit-container">
+            <h3>Selesai Mengerjakan?</h3>
+            <p>Pastikan semua jawaban sudah terisi sebelum mengirim ujian.</p>
+            <button class="submit-btn" onclick="submitExam()">Kirim Jawaban</button>
+        </div>
+    </div>
+
+    <script>
+        // Timer functionality
+        let timeLeft = 45 * 60; // 45 minutes in seconds
+        
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                alert('Waktu habis! Ujian akan otomatis dikumpulkan.');
+                submitExam();
+                return;
+            }
+            
+            timeLeft--;
+        }
+        
+        // Update timer every second
+        setInterval(updateTimer, 1000);
+        
+        // Progress tracking
+        function updateProgress() {
+            const totalQuestions = 15;
+            const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length + 
+                                   document.querySelectorAll('.math-input').length;
+            const progress = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+        
+        // Add event listeners to track progress
+        document.addEventListener('change', updateProgress);
+        document.addEventListener('input', updateProgress);
+        
+        // Virtual keyboard functions
+        function toggleKeyboard(keyboardId) {
+            const keyboard = document.getElementById(keyboardId);
+            keyboard.classList.toggle('show');
+        }
+        
+        function insertTextAtCursor(element, text) {
+            element.focus();
+            
+            if (window.getSelection) {
+                const selection = window.getSelection();
+                if (selection.getRangeAt && selection.rangeCount) {
+                    const range = selection.getRangeAt(0);
+                    range.deleteContents();
+                    range.insertNode(document.createTextNode(text));
+                    range.collapse(false);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+            }
+        }
+        
+        function insertHTMLAtCursor(element, html) {
+            element.focus();
+            
+            if (window.getSelection) {
+                const selection = window.getSelection();
+                if (selection.getRangeAt && selection.rangeCount) {
+                    const range = selection.getRangeAt(0);
+                    range.deleteContents();
+                    
+                    const div = document.createElement('div');
+                    div.innerHTML = html;
+                    const fragment = document.createDocumentFragment();
+                    let node;
+                    while ((node = div.firstChild)) {
+                        fragment.appendChild(node);
+                    }
+                    range.insertNode(fragment);
+                    
+                    // If it's a fraction, focus on the numerator
+                    if (html.includes('fraction-regular')) {
+                        setTimeout(() => {
+                            const numerator = fragment.querySelector('.fraction-top-regular');
+                            if (numerator) {
+                                numerator.focus();
+                                // Select all text in numerator for easy replacement
+                                const range = document.createRange();
+                                range.selectNodeContents(numerator);
+                                const sel = window.getSelection();
+                                sel.removeAllRanges();
+                                sel.addRange(range);
+                            }
+                        }, 10);
+                    } else if (html.includes('exponent-content')) {
+                        // If it's an exponent, focus on the exponent content
+                        setTimeout(() => {
+                            const exponentContent = fragment.querySelector('.exponent-content');
+                            if (exponentContent) {
+                                exponentContent.focus();
+                                // Select all text in exponent for easy replacement
+                                const range = document.createRange();
+                                range.selectNodeContents(exponentContent);
+                                const sel = window.getSelection();
+                                sel.removeAllRanges();
+                                sel.addRange(range);
+                            }
+                        }, 10);
+                    } else {
+                        // For other elements, position cursor after the inserted content
+                        range.setStartAfter(fragment.lastChild || fragment);
+                        range.collapse(true);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
+                }
+            }
+            
+            // Re-render MathJax for the updated content
+            if (window.MathJax) {
+                MathJax.typesetPromise([element]).catch(function (err) {
+                    console.log('MathJax typeset failed: ' + err.message);
+                });
+            }
+        }
+        
+        function clearInput(element) {
+            element.innerHTML = '';
+            element.focus();
+        }
+        
+        function backspaceInput(element) {
+            element.focus();
+            
+            if (window.getSelection) {
+                const selection = window.getSelection();
+                if (selection.getRangeAt && selection.rangeCount) {
+                    const range = selection.getRangeAt(0);
+                    if (range.collapsed) {
+                        range.setStart(range.startContainer, Math.max(0, range.startOffset - 1));
+                    }
+                    range.deleteContents();
+                }
+            }
+        }
+        
+        // Submit exam function
+        function submitExam() {
+            const answers = {};
+            
+            // Collect multiple choice answers
+            for (let i = 1; i <= 15; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected) {
+                    answers[`question_${i}`] = selected.value;
+                }
+            }
+            
+            // Collect short answer responses
+            const shortAnswers = [3, 6, 9, 12, 15];
+            shortAnswers.forEach(num => {
+                const input = document.getElementById(`mathInput${num}`);
+                if (input) {
+                    answers[`question_${num}_text`] = input.innerHTML || input.textContent;
+                }
+            });
+            
+            // Show results (in real implementation, this would be sent to server)
+            let resultText = "Jawaban Anda:\n\n";
+            Object.keys(answers).forEach(key => {
+                resultText += `${key}: ${answers[key]}\n`;
+            });
+            
+            alert("Ujian berhasil dikumpulkan!\n\nTerima kasih telah mengerjakan ujian Matematika tentang Fungsi Invers.");
+            
+            // In real implementation, you would send answers to server here
+            console.log('Exam answers:', answers);
+        }
+        
+        // Enhanced keyboard navigation for fractions and exponents
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.classList.contains('math-input')) {
+                e.preventDefault();
+            }
+            
+            // Navigation within fractions
+            if (e.target.classList.contains('fraction-top-regular') || e.target.classList.contains('fraction-bottom-regular')) {
+                if (e.key === 'ArrowDown' && e.target.classList.contains('fraction-top-regular')) {
+                    e.preventDefault();
+                    const denominator = e.target.parentElement.querySelector('.fraction-bottom-regular');
+                    if (denominator) {
+                        denominator.focus();
+                        // Select all text in denominator
+                        const range = document.createRange();
+                        range.selectNodeContents(denominator);
+                        const sel = window.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }
+                } else if (e.key === 'ArrowUp' && e.target.classList.contains('fraction-bottom-regular')) {
+                    e.preventDefault();
+                    const numerator = e.target.parentElement.querySelector('.fraction-top-regular');
+                    if (numerator) {
+                        numerator.focus();
+                        // Select all text in numerator
+                        const range = document.createRange();
+                        range.selectNodeContents(numerator);
+                        const sel = window.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }
+                } else if (e.key === 'ArrowRight' || e.key === 'Tab') {
+                    // Move cursor outside the fraction
+                    const selection = window.getSelection();
+                    const range = selection.getRangeAt(0);
+                    const fractionElement = e.target.closest('.fraction-regular');
+                    if (fractionElement) {
+                        e.preventDefault();
+                        range.setStartAfter(fractionElement);
+                        range.collapse(true);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                        
+                        // Focus back on the main input
+                        const mathInput = fractionElement.closest('.math-input');
+                        if (mathInput) {
+                            mathInput.focus();
+                        }
+                    }
+                }
+            }
+            
+            // Navigation for exponents
+            if (e.target.classList.contains('exponent-content')) {
+                if (e.key === 'ArrowRight' || e.key === 'Tab') {
+                    // Move cursor outside the exponent
+                    const selection = window.getSelection();
+                    const range = selection.getRangeAt(0);
+                    const exponentElement = e.target.closest('.exponent');
+                    if (exponentElement) {
+                        e.preventDefault();
+                        range.setStartAfter(exponentElement);
+                        range.collapse(true);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                        
+                        // Focus back on the main input
+                        const mathInput = exponentElement.closest('.math-input');
+                        if (mathInput) {
+                            mathInput.focus();
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Auto-save functionality (optional)
+        function autoSave() {
+            const answers = {};
+            
+            // Save to localStorage
+            for (let i = 1; i <= 15; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected) {
+                    answers[`q${i}`] = selected.value;
+                }
+            }
+            
+            const shortAnswers = [3, 6, 9, 12, 15];
+            shortAnswers.forEach(num => {
+                const input = document.getElementById(`mathInput${num}`);
+                if (input) {
+                    answers[`mathInput${num}`] = input.innerHTML;
+                }
+            });
+            
+            localStorage.setItem('examAnswers', JSON.stringify(answers));
+        }
+        
+        // Auto-save every 30 seconds
+        setInterval(autoSave, 30000);
+        
+        // Load saved answers on page load
+        window.addEventListener('load', function() {
+            const saved = localStorage.getItem('examAnswers');
+            if (saved) {
+                const answers = JSON.parse(saved);
+                
+                // Restore multiple choice answers
+                Object.keys(answers).forEach(key => {
+                    if (key.startsWith('q') && !key.includes('mathInput')) {
+                        const radio = document.querySelector(`input[name="${key}"][value="${answers[key]}"]`);
+                        if (radio) radio.checked = true;
+                    }
+                });
+                
+                // Restore text answers
+                Object.keys(answers).forEach(key => {
+                    if (key.startsWith('mathInput')) {
+                        const input = document.getElementById(key);
+                        if (input) input.innerHTML = answers[key];
+                    }
+                });
+                
+                updateProgress();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98a3073131d2b5e7',t:'MTc1OTczMTM2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
