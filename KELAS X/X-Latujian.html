@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Matematika SMA Kelas 10 - Barisan dan Deret</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        /* Fraction Styling */
+        .fraction {
+            display: inline-block;
+            text-align: center;
+            vertical-align: super;
+            margin: 0 2px;
+            font-size: 0.6em;
+            line-height: 1;
+            position: relative;
+            top: -0.3em;
+        }
+        
+        .fraction-top {
+            border-bottom: 1px solid #000;
+            padding: 1px 3px;
+            min-width: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .fraction-bottom {
+            padding: 1px 3px;
+            min-width: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .fraction-regular {
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            margin: 0 2px;
+            font-size: 1em;
+            line-height: 1;
+            position: relative;
+            top: -0.3em;
+        }
+        
+        .fraction-top-regular {
+            border-bottom: 1.5px solid #000;
+            padding: 2px 6px;
+            min-width: 16px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .fraction-bottom-regular {
+            padding: 2px 6px;
+            min-width: 16px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .contenteditable {
+            outline: none;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 2px;
+        }
+        
+        .contenteditable:focus {
+            background: rgba(59, 130, 246, 0.2);
+        }
+        
+        .math-input {
+            min-height: 60px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 18px;
+            line-height: 1.5;
+            font-family: 'Times New Roman', serif;
+            background: white;
+            resize: vertical;
+            overflow-y: auto;
+        }
+        
+        .math-input:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .math-input[data-placeholder]:empty::before {
+            content: attr(data-placeholder);
+            color: #9ca3af;
+        }
+        
+        .virtual-keyboard {
+            display: none;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-top: 8px;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        .virtual-keyboard.show {
+            display: block;
+        }
+        
+        .keyboard-toggle {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+        
+        .keyboard-toggle:hover {
+            background: #2563eb;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .btn-math {
+            min-width: 50px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 500;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            border-radius: 6px;
+            margin: 2px;
+        }
+        
+        .btn-math:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: #f9fafb;
+        }
+        
+        .btn-math:active {
+            transform: translateY(0);
+            background: #f3f4f6;
+        }
+        
+        /* Keyboard Grid Layout */
+        .keyboard-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+        
+        .keyboard-row {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        
+        /* Matching and Graph Containers */
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .matching-item {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .matching-item:hover {
+            border-color: #3b82f6;
+        }
+        
+        .matching-item.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        .matching-item.matched-green {
+            border-color: #10b981;
+            background-color: #dcfce7;
+            border-width: 3px;
+        }
+        
+        .matching-item.matched-blue {
+            border-color: #3b82f6;
+            background-color: #dbeafe;
+            border-width: 3px;
+        }
+        
+        .matching-item.matched-orange {
+            border-color: #f97316;
+            background-color: #fed7aa;
+            border-width: 3px;
+        }
+        
+        .matching-item.matched-purple {
+            border-color: #8b5cf6;
+            background-color: #ede9fe;
+            border-width: 3px;
+        }
+        
+        .matching-item.matched-pink {
+            border-color: #ec4899;
+            background-color: #fce7f3;
+            border-width: 3px;
+        }
+        
+        .graph-container {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            min-height: 500px;
+        }
+        
+        .option-button {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .option-button:hover {
+            background: #f3f4f6;
+            transform: translateX(4px);
+        }
+        
+        .option-button.selected {
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+        
+        .option-button.correct {
+            background: #dcfce7;
+            border-color: #16a34a;
+        }
+        
+        .option-button.incorrect {
+            background: #fef2f2;
+            border-color: #dc2626;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #0f172a;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.4);
+            border: 1px solid #334155;
+        }
+        
+        .question-nav {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-height: 70vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        
+        .question-nav.hidden {
+            transform: translateY(-50%) translateX(-100%);
+        }
+        
+        .nav-toggle {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            background: #475569;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 8px 24px rgba(71, 85, 105, 0.3);
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #64748b;
+        }
+        
+        .nav-toggle:hover {
+            background: #334155;
+            transform: scale(1.1);
+        }
+        
+        .nav-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 4px;
+            transition: all 0.2s;
+        }
+        
+        .nav-button:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+        
+        .nav-button.current {
+            background: #475569;
+            color: white;
+            border-color: #475569;
+        }
+        
+        .nav-button.answered {
+            background: #059669;
+            color: white;
+            border-color: #059669;
+        }
+        
+        .nav-button.answered.current {
+            background: #047857;
+            border-color: #047857;
+        }
+        
+        .exam-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(30, 41, 59, 0.3);
+        }
+        
+        .navigation-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px solid #e5e7eb;
+        }
+        
+        .feedback-section {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback-correct {
+            background: #dcfce7;
+            border: 1px solid #16a34a;
+            color: #166534;
+        }
+        
+        .feedback-incorrect {
+            background: #fef2f2;
+            border: 1px solid #dc2626;
+            color: #991b1b;
+        }
+        
+        .results-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        
+        .results-content {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .score-excellent { background: linear-gradient(135deg, #059669, #047857); }
+        .score-good { background: linear-gradient(135deg, #475569, #334155); }
+        .score-fair { background: linear-gradient(135deg, #d97706, #b45309); }
+        .score-poor { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+        
+        .question-review {
+            text-align: left;
+            margin: 16px 0;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .question-review.correct {
+            background: #f0fdf4;
+            border-color: #16a34a;
+        }
+        
+        .question-review.incorrect {
+            background: #fef2f2;
+            border-color: #dc2626;
+        }
+        
+        @media (max-width: 768px) {
+            .question-nav {
+                position: fixed;
+                left: 10px;
+                right: 10px;
+                top: auto;
+                bottom: 20px;
+                transform: translateY(0);
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                max-height: none;
+                padding: 12px;
+            }
+            
+            .question-nav.hidden {
+                transform: translateY(100%);
+            }
+            
+            .nav-button {
+                margin: 2px;
+            }
+            
+            .nav-toggle {
+                left: 10px;
+                top: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Timer -->
+    <div class="timer" id="timer">
+        <i class="fas fa-clock mr-2"></i>45:00
+    </div>
+
+    <!-- Navigation Toggle Button -->
+    <button class="nav-toggle" id="navToggle" onclick="toggleNavigation()" title="Tampilkan/Sembunyikan Navigasi Soal">
+        <i class="fas fa-list"></i>
+    </button>
+
+    <!-- Question Navigation -->
+    <div class="question-nav hidden" id="questionNav">
+        <h4 class="text-sm font-semibold mb-3 text-center">Navigasi Soal</h4>
+        <div class="grid grid-cols-5 gap-1" id="navButtons"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="exam-header">
+            <div class="flex items-center justify-center mb-2">
+                <i class="fas fa-calculator text-3xl mr-3"></i>
+                <h1 class="text-2xl font-bold">Ujian Matematika</h1>
+            </div>
+            <p class="text-lg opacity-90">SMA Kelas 10 - Barisan dan Deret</p>
+            <div class="mt-4 flex justify-center space-x-6 text-sm opacity-80">
+                <span><i class="fas fa-clock mr-1"></i>Durasi: 45 menit</span>
+                <span><i class="fas fa-file-alt mr-1"></i>Total: 20 soal</span>
+            </div>
+        </div>
+
+        <!-- Current Question Display -->
+        <div class="question-card" id="currentQuestion">
+            <!-- Question content will be loaded here -->
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation-controls">
+            <button id="prevBtn" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                <i class="fas fa-chevron-left mr-2"></i>Sebelumnya
+            </button>
+            
+            <div class="flex space-x-4">
+                <button id="skipBtn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                    <i class="fas fa-forward mr-2"></i>Lewati
+                </button>
+                <button id="finishBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors" style="display: none;">
+                    <i class="fas fa-flag-checkered mr-2"></i>Selesai
+                </button>
+            </div>
+            
+            <button id="nextBtn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                Selanjutnya<i class="fas fa-chevron-right ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="resultsModal" class="results-modal" style="display: none;">
+        <div class="results-content">
+            <div id="scoreCircle" class="score-circle">
+                <span id="scoreText">0%</span>
+            </div>
+            <h2 class="text-2xl font-bold mb-4" id="resultTitle">Hasil Ujian</h2>
+            <div class="space-y-2 mb-6">
+                <p><span class="font-semibold">Jawaban Benar:</span> <span id="correctCount">0</span> dari 20</p>
+                <p><span class="font-semibold">Nilai:</span> <span id="finalScore">0</span></p>
+                <p><span class="font-semibold">Waktu Pengerjaan:</span> <span id="timeSpent">0 menit</span></p>
+            </div>
+            
+            <!-- Question Review -->
+            <div class="text-left mb-6">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <i class="fas fa-clipboard-list mr-2"></i>Review Jawaban:
+                </h3>
+                <div id="questionReview" class="max-h-60 overflow-y-auto"></div>
+            </div>
+            
+            <div class="flex justify-center space-x-4">
+                <button onclick="exportToPDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                    <i class="fas fa-file-pdf mr-2"></i>Unduh PDF
+                </button>
+                <button onclick="closeResults()" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                    <i class="fas fa-times mr-2"></i>Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Exam state
+        let timeLeft = 45 * 60; // 45 minutes in seconds
+        let startTime = Date.now();
+        let answers = {};
+        let currentQuestionIndex = 0;
+        let examResults = null;
+        let examFinished = false;
+
+        // Questions data
+        const questions = [
+            {
+                id: 1,
+                type: 'multiple',
+                category: 'Barisan Aritmatika - Suku ke-n (a dan b diketahui)',
+                question: 'Diketahui barisan aritmatika dengan suku pertama a = 5 dan beda b = 3. Tentukan suku ke-8 dari barisan tersebut!',
+                options: [
+                    { value: 'A', text: '23' },
+                    { value: 'B', text: '26' },
+                    { value: 'C', text: '29' },
+                    { value: 'D', text: '32' },
+                    { value: 'E', text: '35' }
+                ],
+                correct: 'B',
+                explanation: 'Un = a + (n-1)b = 5 + (8-1)×3 = 5 + 21 = 26'
+            },
+            {
+                id: 2,
+                type: 'input',
+                category: 'Barisan Aritmatika - Suku ke-n (a dan b diketahui)',
+                question: 'Sebuah barisan aritmatika memiliki suku pertama a = 12 dan beda b = -4. Tentukan suku ke-6 dari barisan tersebut!',
+                correct: '-8',
+                explanation: 'Un = a + (n-1)b = 12 + (6-1)×(-4) = 12 - 20 = -8'
+            },
+            {
+                id: 3,
+                type: 'multiple',
+                category: 'Barisan Aritmatika - Suku ke-n (pola diketahui)',
+                question: 'Perhatikan barisan berikut: 7, 11, 15, 19, 23, ... Tentukan suku ke-10 dari barisan tersebut!',
+                options: [
+                    { value: 'A', text: '39' },
+                    { value: 'B', text: '41' },
+                    { value: 'C', text: '43' },
+                    { value: 'D', text: '45' },
+                    { value: 'E', text: '47' }
+                ],
+                correct: 'C',
+                explanation: 'a = 7, b = 4, U10 = 7 + (10-1)×4 = 7 + 36 = 43'
+            },
+            {
+                id: 4,
+                type: 'input',
+                category: 'Barisan Aritmatika - Suku ke-n (pola diketahui)',
+                question: 'Diketahui barisan: 20, 17, 14, 11, 8, ... Tentukan suku ke-7 dari barisan tersebut!',
+                correct: '2',
+                explanation: 'a = 20, b = -3, U7 = 20 + (7-1)×(-3) = 20 - 18 = 2'
+            },
+            {
+                id: 5,
+                type: 'multiple',
+                category: 'Barisan Aritmatika - Suku ke-n (dua suku diketahui)',
+                question: 'Dalam suatu barisan aritmatika, diketahui suku ke-3 adalah 14 dan suku ke-7 adalah 26. Tentukan suku ke-12 dari barisan tersebut!',
+                options: [
+                    { value: 'A', text: '38' },
+                    { value: 'B', text: '41' },
+                    { value: 'C', text: '44' },
+                    { value: 'D', text: '47' },
+                    { value: 'E', text: '50' }
+                ],
+                correct: 'B',
+                explanation: 'b = (26-14)/(7-3) = 3, a = 14-2×3 = 8, U12 = 8+11×3 = 41'
+            },
+            {
+                id: 6,
+                type: 'input',
+                category: 'Barisan Aritmatika - Suku ke-n (dua suku diketahui)',
+                question: 'Diketahui suku ke-4 dari barisan aritmatika adalah 18 dan suku ke-9 adalah 33. Tentukan suku ke-15 dari barisan tersebut!',
+                correct: '51',
+                explanation: 'b = (33-18)/(9-4) = 3, a = 18-3×3 = 9, U15 = 9+14×3 = 51'
+            },
+            {
+                id: 7,
+                type: 'multiple',
+                category: 'Deret Aritmatika - Jumlah n suku pertama (a dan b diketahui)',
+                question: 'Diketahui deret aritmatika dengan suku pertama a = 8 dan beda b = 5. Tentukan jumlah 10 suku pertama dari deret tersebut!',
+                options: [
+                    { value: 'A', text: '305' },
+                    { value: 'B', text: '315' },
+                    { value: 'C', text: '325' },
+                    { value: 'D', text: '335' },
+                    { value: 'E', text: '345' }
+                ],
+                correct: 'C',
+                explanation: 'Sn = n/2(2a+(n-1)b) = 10/2(2×8+9×5) = 5(16+45) = 325'
+            },
+            {
+                id: 8,
+                type: 'input',
+                category: 'Deret Aritmatika - Jumlah n suku pertama (a dan b diketahui)',
+                question: 'Sebuah deret aritmatika memiliki suku pertama a = 15 dan beda b = -3. Tentukan jumlah 8 suku pertama dari deret tersebut!',
+                correct: '36',
+                explanation: 'Sn = 8/2(2×15+7×(-3)) = 4(30-21) = 4×9 = 36'
+            },
+            {
+                id: 9,
+                type: 'multiple',
+                category: 'Deret Aritmatika - Jumlah n suku pertama (pola diketahui)',
+                question: 'Perhatikan deret berikut: 4 + 9 + 14 + 19 + 24 + ... Tentukan jumlah 12 suku pertama dari deret tersebut!',
+                options: [
+                    { value: 'A', text: '378' },
+                    { value: 'B', text: '388' },
+                    { value: 'C', text: '398' },
+                    { value: 'D', text: '408' },
+                    { value: 'E', text: '418' }
+                ],
+                correct: 'D',
+                explanation: 'a = 4, b = 5, S12 = 12/2(2×4+11×5) = 6(8+55) = 408'
+            },
+            {
+                id: 10,
+                type: 'input',
+                category: 'Deret Aritmatika - Jumlah n suku pertama (pola diketahui)',
+                question: 'Diketahui deret: 25 + 22 + 19 + 16 + 13 + ... Tentukan jumlah 15 suku pertama dari deret tersebut!',
+                correct: '60',
+                explanation: 'a = 25, b = -3, S15 = 15/2(2×25+14×(-3)) = 15/2(50-42) = 60'
+            },
+            {
+                id: 11,
+                type: 'multiple',
+                category: 'Deret Aritmatika - Jumlah n suku pertama (dua suku diketahui)',
+                question: 'Dalam suatu deret aritmatika, diketahui suku ke-2 adalah 12 dan suku ke-6 adalah 28. Tentukan jumlah 10 suku pertama dari deret tersebut!',
+                options: [
+                    { value: 'A', text: '260' },
+                    { value: 'B', text: '270' },
+                    { value: 'C', text: '280' },
+                    { value: 'D', text: '290' },
+                    { value: 'E', text: '300' }
+                ],
+                correct: 'C',
+                explanation: 'b = (28-12)/(6-2) = 4, a = 12-4 = 8, S10 = 10/2(2×8+9×4) = 280'
+            },
+            {
+                id: 12,
+                type: 'input',
+                category: 'Deret Aritmatika - Jumlah n suku pertama (dua suku diketahui)',
+                question: 'Diketahui suku ke-3 dari deret aritmatika adalah 17 dan suku ke-8 adalah 37. Tentukan jumlah 12 suku pertama dari deret tersebut!',
+                correct: '372',
+                explanation: 'b = (37-17)/(8-3) = 4, a = 17-2×4 = 9, S12 = 12/2(2×9+11×4) = 372'
+            },
+            {
+                id: 13,
+                type: 'multiple',
+                category: 'Barisan Geometri - Suku ke-n (a dan r diketahui)',
+                question: 'Diketahui barisan geometri dengan suku pertama a = 3 dan rasio r = 2. Tentukan suku ke-6 dari barisan tersebut!',
+                options: [
+                    { value: 'A', text: '48' },
+                    { value: 'B', text: '64' },
+                    { value: 'C', text: '96' },
+                    { value: 'D', text: '128' },
+                    { value: 'E', text: '192' }
+                ],
+                correct: 'C',
+                explanation: 'Un = a × r^(n-1) = 3 × 2^(6-1) = 3 × 32 = 96'
+            },
+            {
+                id: 14,
+                type: 'input',
+                category: 'Barisan Geometri - Suku ke-n (a dan r diketahui)',
+                question: 'Sebuah barisan geometri memiliki suku pertama a = 5 dan rasio r = 1/2. Tentukan suku ke-5 dari barisan tersebut!',
+                correct: '5/16',
+                explanation: 'Un = 5 × (1/2)^(5-1) = 5 × (1/16) = 5/16'
+            },
+            {
+                id: 15,
+                type: 'multiple',
+                category: 'Barisan Geometri - Suku ke-n (pola diketahui)',
+                question: 'Perhatikan barisan berikut: 2, 6, 18, 54, 162, ... Tentukan suku ke-7 dari barisan tersebut!',
+                options: [
+                    { value: 'A', text: '1458' },
+                    { value: 'B', text: '1944' },
+                    { value: 'C', text: '2430' },
+                    { value: 'D', text: '2916' },
+                    { value: 'E', text: '3402' }
+                ],
+                correct: 'A',
+                explanation: 'a = 2, r = 3, U7 = 2 × 3^(7-1) = 2 × 729 = 1458'
+            },
+            {
+                id: 16,
+                type: 'input',
+                category: 'Barisan Geometri - Suku ke-n (pola diketahui)',
+                question: 'Diketahui barisan: 81, 27, 9, 3, 1, ... Tentukan suku ke-8 dari barisan tersebut!',
+                correct: '1/27',
+                explanation: 'a = 81, r = 1/3, U8 = 81 × (1/3)^(8-1) = 81 × (1/2187) = 1/27'
+            },
+            {
+                id: 17,
+                type: 'multiple',
+                category: 'Barisan Geometri - Suku ke-n (dua suku diketahui)',
+                question: 'Dalam suatu barisan geometri, diketahui suku ke-2 adalah 12 dan suku ke-5 adalah 96. Tentukan suku ke-7 dari barisan tersebut!',
+                options: [
+                    { value: 'A', text: '384' },
+                    { value: 'B', text: '512' },
+                    { value: 'C', text: '768' },
+                    { value: 'D', text: '1024' },
+                    { value: 'E', text: '1536' }
+                ],
+                correct: 'A',
+                explanation: 'r^3 = 96/12 = 8, r = 2, a = 12/2 = 6, U7 = 6×2^6 = 384'
+            },
+            {
+                id: 18,
+                type: 'input',
+                category: 'Barisan Geometri - Suku ke-n (dua suku diketahui)',
+                question: 'Diketahui suku ke-3 dari barisan geometri adalah 20 dan suku ke-6 adalah 160. Tentukan suku ke-9 dari barisan tersebut!',
+                correct: '1280',
+                explanation: 'r^3 = 160/20 = 8, r = 2, a = 20/4 = 5, U9 = 5×2^8 = 1280'
+            },
+            {
+                id: 19,
+                type: 'multiple',
+                category: 'Deret Geometri - Jumlah n suku pertama (dua suku diketahui)',
+                question: 'Dalam suatu deret geometri, diketahui suku ke-1 adalah 4 dan suku ke-4 adalah 32. Tentukan jumlah 6 suku pertama dari deret tersebut!',
+                options: [
+                    { value: 'A', text: '252' },
+                    { value: 'B', text: '264' },
+                    { value: 'C', text: '276' },
+                    { value: 'D', text: '288' },
+                    { value: 'E', text: '300' }
+                ],
+                correct: 'A',
+                explanation: 'a = 4, r^3 = 32/4 = 8, r = 2, S6 = 4(2^6-1)/(2-1) = 252'
+            },
+            {
+                id: 20,
+                type: 'input',
+                category: 'Deret Geometri - Jumlah n suku pertama (dua suku diketahui)',
+                question: 'Diketahui suku ke-2 dari deret geometri adalah 6 dan suku ke-5 adalah 48. Tentukan jumlah 7 suku pertama dari deret tersebut!',
+                correct: '381',
+                explanation: 'r^3 = 48/6 = 8, r = 2, a = 6/2 = 3, S7 = 3(2^7-1)/(2-1) = 381'
+            }
+        ];
+
+        // Initialize navigation
+        function initializeNavigation() {
+            const navButtons = document.getElementById('navButtons');
+            navButtons.innerHTML = '';
+            
+            for (let i = 0; i < questions.length; i++) {
+                const button = document.createElement('button');
+                button.className = 'nav-button';
+                button.textContent = i + 1;
+                button.onclick = () => goToQuestion(i);
+                navButtons.appendChild(button);
+            }
+            
+            updateNavigation();
+        }
+
+        // Update navigation buttons
+        function updateNavigation() {
+            const buttons = document.querySelectorAll('.nav-button');
+            buttons.forEach((button, index) => {
+                button.classList.remove('current', 'answered');
+                
+                if (index === currentQuestionIndex) {
+                    button.classList.add('current');
+                }
+                
+                if (answers[questions[index].id]) {
+                    button.classList.add('answered');
+                }
+            });
+        }
+
+        // Load current question
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            const container = document.getElementById('currentQuestion');
+            
+            let html = `
+                <div class="flex items-center mb-4">
+                    <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold mr-3">${question.id}</span>
+                    <span class="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">${question.type === 'multiple' ? 'Pilihan Ganda' : 'Isian Singkat'}</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-4">${question.category}</h3>
+                <p class="mb-6 text-gray-800">${question.question}</p>
+            `;
+            
+            if (question.type === 'multiple') {
+                html += '<div class="space-y-3">';
+                question.options.forEach(option => {
+                    const isSelected = answers[question.id] === option.value;
+                    
+                    let buttonClass = 'option-button border-2 border-gray-200 rounded-lg p-4';
+                    if (isSelected) buttonClass += ' selected';
+                    
+                    html += `
+                        <div class="${buttonClass}" data-value="${option.value}" onclick="selectOption('${option.value}')">
+                            <span class="font-semibold text-blue-600 mr-3">${option.value}.</span> ${option.text}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            } else {
+                const userAnswer = answers[question.id] || '';
+                html += `
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <label class="block text-sm font-medium mb-2">Jawaban:</label>
+                        <div class="math-input w-full" contenteditable="true" data-placeholder="Masukkan jawaban Anda..." 
+                             oninput="saveInputAnswer(this.innerHTML)" data-answer="${question.id}">${userAnswer}</div>
+                        <button type="button" class="keyboard-toggle" onclick="toggleKeyboard(this)">
+                            <i class="fas fa-keyboard mr-2"></i>Tampilkan Keyboard
+                        </button>
+                        
+                        <div class="virtual-keyboard">
+                            <div class="keyboard-row">
+                                <button class="btn-math" onclick="insertMath(this, '7')">7</button>
+                                <button class="btn-math" onclick="insertMath(this, '8')">8</button>
+                                <button class="btn-math" onclick="insertMath(this, '9')">9</button>
+                                <button class="btn-math" onclick="insertMath(this, '÷')">÷</button>
+                                <button class="btn-math" onclick="insertMath(this, '(')">(</button>
+                                <button class="btn-math" onclick="insertMath(this, ')')">)</button>
+                            </div>
+                            <div class="keyboard-row">
+                                <button class="btn-math" onclick="insertMath(this, '4')">4</button>
+                                <button class="btn-math" onclick="insertMath(this, '5')">5</button>
+                                <button class="btn-math" onclick="insertMath(this, '6')">6</button>
+                                <button class="btn-math" onclick="insertMath(this, '×')">×</button>
+                                <button class="btn-math" onclick="insertMath(this, 'x')">x</button>
+                                <button class="btn-math" onclick="insertMath(this, 'y')">y</button>
+                            </div>
+                            <div class="keyboard-row">
+                                <button class="btn-math" onclick="insertMath(this, '1')">1</button>
+                                <button class="btn-math" onclick="insertMath(this, '2')">2</button>
+                                <button class="btn-math" onclick="insertMath(this, '3')">3</button>
+                                <button class="btn-math" onclick="insertMath(this, '-')">-</button>
+                                <button class="btn-math" onclick="insertMath(this, '+')">+</button>
+                                <button class="btn-math" onclick="insertMath(this, '=')">=</button>
+                            </div>
+                            <div class="keyboard-row">
+                                <button class="btn-math" onclick="insertMath(this, '0')">0</button>
+                                <button class="btn-math" onclick="insertMath(this, '.')">.</button>
+                                <button class="btn-math" onclick="insertMath(this, ',')">,</button>
+                                <button class="btn-math" onclick="insertFraction(this)">a/b</button>
+                                <button class="btn-math" onclick="insertSuperscript(this)">x²</button>
+                                <button class="btn-math" onclick="clearMath(this)">Clear</button>
+                            </div>
+                            <div class="keyboard-row">
+                                <button class="btn-math" onclick="insertMath(this, '√')">√</button>
+                                <button class="btn-math" onclick="insertMath(this, '∞')">∞</button>
+                                <button class="btn-math" onclick="insertMath(this, '±')">±</button>
+                                <button class="btn-math" onclick="insertMath(this, '≤')">≤</button>
+                                <button class="btn-math" onclick="insertMath(this, '≥')">≥</button>
+                                <button class="btn-math" onclick="insertMath(this, '≠')">≠</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+            updateNavigationButtons();
+        }
+
+        // Select multiple choice option
+        function selectOption(value) {
+            if (examFinished) return; // Prevent interaction after exam is finished
+            
+            const question = questions[currentQuestionIndex];
+            answers[question.id] = value;
+            updateNavigation();
+            
+            // Update visual selection without showing feedback
+            const options = document.querySelectorAll('.option-button');
+            options.forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.value === value) {
+                    option.classList.add('selected');
+                }
+            });
+        }
+
+        // Save input answer
+        function saveInputAnswer(value) {
+            if (examFinished) return; // Prevent input after exam is finished
+            
+            const question = questions[currentQuestionIndex];
+            // Convert HTML to plain text for storage and handle fractions
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = value;
+            
+            // Convert visual fractions to a/b format
+            const fractions = tempDiv.querySelectorAll('.fraction-regular');
+            fractions.forEach(fraction => {
+                const top = fraction.querySelector('.fraction-top-regular');
+                const bottom = fraction.querySelector('.fraction-bottom-regular');
+                if (top && bottom) {
+                    const topText = top.textContent || top.innerText || 'a';
+                    const bottomText = bottom.textContent || bottom.innerText || 'b';
+                    fraction.outerHTML = `${topText}/${bottomText}`;
+                }
+            });
+            
+            const plainText = tempDiv.textContent || tempDiv.innerText || '';
+            answers[question.id] = plainText;
+            updateNavigation();
+        }
+
+        // Navigation functions
+        function goToQuestion(index) {
+            if (examFinished) return; // Prevent navigation after exam is finished
+            currentQuestionIndex = index;
+            loadQuestion();
+        }
+
+        function nextQuestion() {
+            if (examFinished) return; // Prevent navigation after exam is finished
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (examFinished) return; // Prevent navigation after exam is finished
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function skipQuestion() {
+            if (examFinished) return; // Prevent skipping after exam is finished
+            nextQuestion();
+        }
+
+        // Toggle navigation visibility
+        function toggleNavigation() {
+            const nav = document.getElementById('questionNav');
+            const toggle = document.getElementById('navToggle');
+            
+            if (nav.classList.contains('hidden')) {
+                nav.classList.remove('hidden');
+                toggle.innerHTML = '<i class="fas fa-times"></i>';
+                toggle.title = 'Sembunyikan Navigasi Soal';
+            } else {
+                nav.classList.add('hidden');
+                toggle.innerHTML = '<i class="fas fa-list"></i>';
+                toggle.title = 'Tampilkan Navigasi Soal';
+            }
+        }
+
+        // Update navigation buttons
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const finishBtn = document.getElementById('finishBtn');
+            
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.style.display = 'none';
+                finishBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                finishBtn.style.display = 'none';
+            }
+        }
+
+        // Virtual keyboard functions
+        function toggleKeyboard(button) {
+            if (examFinished) return; // Prevent keyboard toggle after exam is finished
+            
+            const keyboard = button.nextElementSibling;
+            const isVisible = keyboard.classList.contains('show');
+            
+            if (isVisible) {
+                keyboard.classList.remove('show');
+                button.innerHTML = '<i class="fas fa-keyboard mr-2"></i>Tampilkan Keyboard';
+            } else {
+                keyboard.classList.add('show');
+                button.innerHTML = '<i class="fas fa-keyboard mr-2"></i>Sembunyikan Keyboard';
+            }
+        }
+
+        function insertMath(button, value) {
+            if (examFinished) return; // Prevent math input after exam is finished
+            
+            const keyboard = button.closest('.virtual-keyboard');
+            const input = keyboard.previousElementSibling.previousElementSibling;
+            
+            // Insert at cursor position for contenteditable div
+            if (input.contentEditable === 'true') {
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+                range.deleteContents();
+                range.insertNode(document.createTextNode(value));
+                range.collapse(false);
+                selection.removeAllRanges();
+                selection.addRange(range);
+                
+                input.focus();
+                saveInputAnswer(input.innerHTML);
+            }
+        }
+
+        function insertFraction(button) {
+            if (examFinished) return; // Prevent fraction input after exam is finished
+            
+            const keyboard = button.closest('.virtual-keyboard');
+            const input = keyboard.previousElementSibling.previousElementSibling;
+            
+            if (input.contentEditable === 'true') {
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+                range.deleteContents();
+                
+                // Add space before fraction if there's content before cursor
+                const beforeText = range.startContainer.textContent;
+                if (beforeText && beforeText.length > 0 && !beforeText.endsWith(' ')) {
+                    const spaceBefore = document.createTextNode(' ');
+                    range.insertNode(spaceBefore);
+                    range.setStartAfter(spaceBefore);
+                }
+                
+                // Create fraction HTML structure
+                const fractionDiv = document.createElement('div');
+                fractionDiv.className = 'fraction-regular';
+                fractionDiv.innerHTML = `
+                    <div class="fraction-top-regular contenteditable" contenteditable="true">a</div>
+                    <div class="fraction-bottom-regular contenteditable="true">b</div>
+                `;
+                
+                range.insertNode(fractionDiv);
+                
+                // Add space after fraction for continued editing
+                const spaceAfter = document.createTextNode(' ');
+                range.setStartAfter(fractionDiv);
+                range.insertNode(spaceAfter);
+                range.setStartAfter(spaceAfter);
+                range.collapse(true);
+                
+                selection.removeAllRanges();
+                selection.addRange(range);
+                
+                input.focus();
+                saveInputAnswer(input.innerHTML);
+            }
+        }
+
+        function insertSuperscript(button) {
+            if (examFinished) return; // Prevent superscript input after exam is finished
+            
+            const keyboard = button.closest('.virtual-keyboard');
+            const input = keyboard.previousElementSibling.previousElementSibling;
+            
+            if (input.contentEditable === 'true') {
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+                range.deleteContents();
+                
+                // Create superscript element
+                const supElement = document.createElement('sup');
+                supElement.className = 'contenteditable';
+                supElement.contentEditable = 'true';
+                supElement.textContent = '2';
+                
+                range.insertNode(supElement);
+                
+                // Add space after superscript
+                const spaceNode = document.createTextNode(' ');
+                range.setStartAfter(supElement);
+                range.insertNode(spaceNode);
+                range.setStartAfter(spaceNode);
+                range.collapse(true);
+                
+                selection.removeAllRanges();
+                selection.addRange(range);
+                
+                input.focus();
+                saveInputAnswer(input.innerHTML);
+            }
+        }
+
+        function clearMath(button) {
+            if (examFinished) return; // Prevent clearing after exam is finished
+            
+            const keyboard = button.closest('.virtual-keyboard');
+            const input = keyboard.previousElementSibling.previousElementSibling;
+            
+            if (input.contentEditable === 'true') {
+                input.innerHTML = '';
+                input.focus();
+                saveInputAnswer('');
+            }
+        }
+
+        // Disable exam interface after completion
+        function disableExamInterface() {
+            // Disable all navigation buttons
+            document.getElementById('prevBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('skipBtn').disabled = true;
+            document.getElementById('finishBtn').disabled = true;
+            
+            // Disable all navigation question buttons
+            const navButtons = document.querySelectorAll('.nav-button');
+            navButtons.forEach(button => {
+                button.disabled = true;
+                button.style.cursor = 'not-allowed';
+                button.style.opacity = '0.5';
+            });
+            
+            // Disable all option buttons
+            const optionButtons = document.querySelectorAll('.option-button');
+            optionButtons.forEach(button => {
+                button.style.pointerEvents = 'none';
+                button.style.opacity = '0.7';
+            });
+            
+            // Disable all input fields
+            const inputs = document.querySelectorAll('.math-input');
+            inputs.forEach(input => {
+                if (input.contentEditable === 'true') {
+                    input.contentEditable = 'false';
+                } else {
+                    input.disabled = true;
+                }
+                input.style.backgroundColor = '#f3f4f6';
+                input.style.cursor = 'not-allowed';
+                input.style.opacity = '0.7';
+            });
+            
+            // Disable all contenteditable elements
+            const editables = document.querySelectorAll('.contenteditable');
+            editables.forEach(editable => {
+                editable.contentEditable = 'false';
+                editable.style.backgroundColor = '#f3f4f6';
+                editable.style.cursor = 'not-allowed';
+                editable.style.opacity = '0.7';
+            });
+            
+            // Disable all keyboard buttons
+            const keyboardButtons = document.querySelectorAll('.btn-math, .keyboard-toggle');
+            keyboardButtons.forEach(button => {
+                button.disabled = true;
+                button.style.opacity = '0.5';
+                button.style.cursor = 'not-allowed';
+            });
+            
+            // Show completion message
+            const timer = document.getElementById('timer');
+            timer.innerHTML = '<i class="fas fa-check-circle mr-2"></i>SELESAI';
+            timer.style.backgroundColor = '#059669';
+        }
+
+        // Timer function
+        function updateTimer() {
+            if (examFinished) return; // Stop timer if exam is finished
+            
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').innerHTML = `<i class="fas fa-clock mr-2"></i>${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                finishExam();
+                return;
+            }
+            
+            timeLeft--;
+            setTimeout(updateTimer, 1000);
+        }
+
+        // Finish exam
+        function finishExam() {
+            if (examFinished) return; // Prevent multiple submissions
+            
+            examFinished = true; // Lock the exam
+            
+            const timeSpent = Math.round((Date.now() - startTime) / 1000 / 60);
+            let correctCount = 0;
+            const results = [];
+            
+            // Check answers
+            questions.forEach(question => {
+                const userAnswer = answers[question.id];
+                const isCorrect = userAnswer && userAnswer.toString().toLowerCase().trim() === question.correct.toLowerCase().trim();
+                
+                if (isCorrect) correctCount++;
+                
+                results.push({
+                    id: question.id,
+                    question: question.question,
+                    userAnswer: userAnswer || 'Tidak dijawab',
+                    correctAnswer: question.correct,
+                    isCorrect: isCorrect,
+                    explanation: question.explanation
+                });
+            });
+            
+            const percentage = Math.round((correctCount / questions.length) * 100);
+            
+            examResults = {
+                correctCount,
+                totalQuestions: questions.length,
+                percentage,
+                timeSpent,
+                results
+            };
+            
+            // Disable all interactive elements
+            disableExamInterface();
+            
+            showResults();
+        }
+
+        // Show results
+        function showResults() {
+            const modal = document.getElementById('resultsModal');
+            const scoreCircle = document.getElementById('scoreCircle');
+            const scoreText = document.getElementById('scoreText');
+            const resultTitle = document.getElementById('resultTitle');
+            
+            document.getElementById('correctCount').textContent = examResults.correctCount;
+            document.getElementById('finalScore').textContent = examResults.percentage;
+            document.getElementById('timeSpent').textContent = examResults.timeSpent + ' menit';
+            
+            scoreText.textContent = examResults.percentage + '%';
+            
+            // Set score circle color and feedback
+            if (examResults.percentage >= 85) {
+                scoreCircle.className = 'score-circle score-excellent';
+                resultTitle.textContent = '🎉 Luar Biasa!';
+            } else if (examResults.percentage >= 70) {
+                scoreCircle.className = 'score-circle score-good';
+                resultTitle.textContent = '👍 Bagus!';
+            } else if (examResults.percentage >= 60) {
+                scoreCircle.className = 'score-circle score-fair';
+                resultTitle.textContent = '📚 Cukup';
+            } else {
+                scoreCircle.className = 'score-circle score-poor';
+                resultTitle.textContent = '💪 Semangat!';
+            }
+            
+            // Show question review
+            const reviewContainer = document.getElementById('questionReview');
+            reviewContainer.innerHTML = '';
+            
+            examResults.results.forEach(result => {
+                const div = document.createElement('div');
+                div.className = `question-review ${result.isCorrect ? 'correct' : 'incorrect'}`;
+                div.innerHTML = `
+                    <div class="flex items-center mb-2">
+                        <span class="font-bold mr-2">Soal ${result.id}:</span>
+                        <span class="${result.isCorrect ? 'text-green-600' : 'text-red-600'}">${result.isCorrect ? '✅ Benar' : '❌ Salah'}</span>
+                    </div>
+                    <p class="text-sm mb-1"><strong>Jawaban Anda:</strong> ${result.userAnswer}</p>
+                    <p class="text-sm mb-1"><strong>Jawaban Benar:</strong> ${result.correctAnswer}</p>
+                    <p class="text-sm text-gray-600">${result.explanation}</p>
+                `;
+                reviewContainer.appendChild(div);
+            });
+            
+            modal.style.display = 'flex';
+        }
+
+        // Export to PDF
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Header
+            doc.setFontSize(16);
+            doc.text('Hasil Ujian Matematika - Barisan dan Deret', 20, 20);
+            doc.setFontSize(12);
+            doc.text('SMA Kelas 10', 20, 30);
+            
+            // Summary
+            doc.text(`Nilai: ${examResults.percentage}%`, 20, 45);
+            doc.text(`Jawaban Benar: ${examResults.correctCount} dari ${examResults.totalQuestions}`, 20, 55);
+            doc.text(`Waktu Pengerjaan: ${examResults.timeSpent} menit`, 20, 65);
+            
+            // Results
+            let yPos = 80;
+            doc.text('Detail Jawaban:', 20, yPos);
+            yPos += 10;
+            
+            examResults.results.forEach((result, index) => {
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                
+                doc.setFontSize(10);
+                doc.text(`${result.id}. ${result.isCorrect ? '✓' : '✗'} Jawaban: ${result.userAnswer} | Benar: ${result.correctAnswer}`, 20, yPos);
+                yPos += 7;
+            });
+            
+            doc.save('hasil-ujian-matematika.pdf');
+        }
+
+        function closeResults() {
+            document.getElementById('resultsModal').style.display = 'none';
+        }
+
+        // Event listeners
+        document.getElementById('prevBtn').addEventListener('click', prevQuestion);
+        document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+        document.getElementById('skipBtn').addEventListener('click', skipQuestion);
+        document.getElementById('finishBtn').addEventListener('click', finishExam);
+
+        // Handle input changes
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('math-input') && !examFinished) {
+                if (e.target.contentEditable === 'true') {
+                    saveInputAnswer(e.target.innerHTML);
+                } else {
+                    saveInputAnswer(e.target.value);
+                }
+            }
+        });
+
+        // Handle contenteditable changes
+        document.addEventListener('blur', function(e) {
+            if (e.target.classList.contains('contenteditable') && !examFinished) {
+                const mathInput = e.target.closest('.bg-gray-50').querySelector('.math-input');
+                if (mathInput) {
+                    saveInputAnswer(mathInput.innerHTML);
+                }
+            }
+        }, true);
+
+        // Handle keyboard navigation in fractions
+        document.addEventListener('keydown', function(e) {
+            if (examFinished) return;
+            
+            // Handle space key to exit fraction editing
+            if (e.key === ' ' && e.target.classList.contains('contenteditable')) {
+                const fraction = e.target.closest('.fraction-regular');
+                if (fraction) {
+                    e.preventDefault();
+                    
+                    // Move cursor after the fraction
+                    const mathInput = fraction.closest('.math-input');
+                    if (mathInput) {
+                        const selection = window.getSelection();
+                        const range = document.createRange();
+                        
+                        // Find the space after the fraction
+                        let nextNode = fraction.nextSibling;
+                        if (nextNode && nextNode.nodeType === Node.TEXT_NODE) {
+                            range.setStart(nextNode, nextNode.textContent.length);
+                            range.collapse(true);
+                        } else {
+                            // Create a new space if it doesn't exist
+                            const spaceNode = document.createTextNode(' ');
+                            fraction.parentNode.insertBefore(spaceNode, fraction.nextSibling);
+                            range.setStart(spaceNode, 1);
+                            range.collapse(true);
+                        }
+                        
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                        mathInput.focus();
+                    }
+                }
+            }
+            
+            // Handle arrow keys to navigate between fraction parts
+            if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && e.target.classList.contains('contenteditable')) {
+                const fraction = e.target.closest('.fraction-regular');
+                if (fraction) {
+                    e.preventDefault();
+                    const isTop = e.target.classList.contains('fraction-top-regular');
+                    
+                    if (e.key === 'ArrowDown' && isTop) {
+                        // Move to bottom part
+                        const bottom = fraction.querySelector('.fraction-bottom-regular');
+                        if (bottom) {
+                            bottom.focus();
+                            // Select all text in bottom part
+                            const selection = window.getSelection();
+                            const range = document.createRange();
+                            range.selectNodeContents(bottom);
+                            selection.removeAllRanges();
+                            selection.addRange(range);
+                        }
+                    } else if (e.key === 'ArrowUp' && !isTop) {
+                        // Move to top part
+                        const top = fraction.querySelector('.fraction-top-regular');
+                        if (top) {
+                            top.focus();
+                            // Select all text in top part
+                            const selection = window.getSelection();
+                            const range = document.createRange();
+                            range.selectNodeContents(top);
+                            selection.removeAllRanges();
+                            selection.addRange(range);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Initialize
+        initializeNavigation();
+        loadQuestion();
+        updateTimer();
+
+        // Prevent form submission navigation
+        document.addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98a3380991f00fad',t:'MTc1OTczMzM2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
