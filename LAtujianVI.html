@@ -1,0 +1,989 @@
+	<!DOCTYPE html>
+	<html lang="id">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Ujian Matematika SD Kelas 6</title>
+		<style>
+			body {
+				box-sizing: border-box;
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+				margin: 0;
+				padding: 0;
+				background-color: #ffffff;
+				color: #374151;
+				line-height: 1.6;
+			}
+
+			.exam-container {
+				max-width: 900px;
+				margin: 0 auto;
+				padding: 20px;
+				min-height: 100%;
+			}
+
+			.exam-header {
+				text-align: center;
+				border-bottom: 2px solid #d1d5db;
+				padding-bottom: 20px;
+				margin-bottom: 30px;
+			}
+
+			.exam-title {
+				font-size: 28px;
+				font-weight: 700;
+				color: #374151;
+				margin-bottom: 10px;
+			}
+
+			.exam-info {
+				background-color: #f3f4f6;
+				padding: 16px;
+				border-radius: 8px;
+				margin-bottom: 20px;
+				border: 1px solid #d1d5db;
+			}
+
+			.timer {
+				position: fixed;
+				top: 20px;
+				right: 20px;
+				background-color: #374151;
+				color: white;
+				padding: 12px 20px;
+				border-radius: 8px;
+				font-weight: 600;
+				z-index: 1000;
+			}
+
+			.question-container {
+				background-color: #ffffff;
+				border: 1px solid #d1d5db;
+				border-radius: 8px;
+				padding: 20px;
+				margin-bottom: 25px;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+			}
+
+			.question-number {
+				background-color: #374151;
+				color: white;
+				width: 30px;
+				height: 30px;
+				border-radius: 50%;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: 600;
+				margin-right: 12px;
+			}
+
+			.question-text {
+				font-size: 16px;
+				margin-bottom: 16px;
+				font-weight: 500;
+			}
+
+			.options {
+				margin-left: 42px;
+			}
+
+			.option {
+				margin-bottom: 12px;
+				display: flex;
+				align-items: center;
+			}
+
+			.option input[type="radio"] {
+				margin-right: 10px;
+				transform: scale(1.2);
+			}
+
+			.option label {
+				cursor: pointer;
+				font-size: 15px;
+			}
+
+			.math-input {
+				min-height: 40px;
+				max-height: 200px;
+				overflow-y: auto;
+				border: 2px solid #d1d5db;
+				border-radius: 6px;
+				padding: 12px;
+				font-size: 16px;
+				background-color: #ffffff;
+				margin-bottom: 10px;
+				outline: none;
+				cursor: text;
+			}
+
+			.math-input:focus {
+				border-color: #374151;
+			}
+
+			.virtual-keyboard {
+				display: none;
+				background-color: #f3f4f6;
+				border: 1px solid #d1d5db;
+				border-radius: 8px;
+				padding: 16px;
+				margin-top: 10px;
+				grid-template-columns: repeat(5, 1fr);
+				gap: 8px;
+			}
+
+			.virtual-keyboard.active {
+				display: grid;
+			}
+
+			.btn-math {
+				background-color: #ffffff;
+				border: 1px solid #d1d5db;
+				border-radius: 6px;
+				padding: 12px;
+				font-size: 16px;
+				cursor: pointer;
+				transition: all 0.2s;
+				text-align: center;
+				font-weight: 500;
+			}
+
+			.btn-math:hover {
+				background-color: #f3f4f6;
+				border-color: #374151;
+			}
+
+			.btn-math:active {
+				transform: scale(0.95);
+			}
+
+			.fraction-regular {
+				display: inline-block;
+				text-align: center;
+				vertical-align: middle;
+				margin: 0 2px;
+			}
+
+			.fraction-top-regular, .fraction-bottom-regular {
+				display: block;
+				padding: 2px 4px;
+				min-width: 20px;
+				border: 1px dashed transparent;
+			}
+
+			.fraction-top-regular {
+				border-bottom: 1px solid #374151;
+			}
+
+			.contenteditable:focus {
+				border-color: #374151;
+				outline: none;
+				background-color: #f3f4f6;
+			}
+
+			.submit-section {
+				text-align: center;
+				margin-top: 40px;
+				padding: 30px;
+				background-color: #f3f4f6;
+				border-radius: 8px;
+				border: 1px solid #d1d5db;
+			}
+
+			.submit-btn {
+				background-color: #374151;
+				color: white;
+				border: none;
+				padding: 16px 32px;
+				font-size: 18px;
+				font-weight: 600;
+				border-radius: 8px;
+				cursor: pointer;
+				transition: all 0.2s;
+			}
+
+			.submit-btn:hover {
+				background-color: #1f2937;
+				transform: translateY(-1px);
+			}
+
+			.keyboard-toggle {
+				background-color: #374151;
+				color: white;
+				border: none;
+				padding: 8px 16px;
+				border-radius: 6px;
+				cursor: pointer;
+				font-size: 14px;
+				margin-left: 10px;
+			}
+
+			.keyboard-toggle:hover {
+				background-color: #1f2937;
+			}
+
+			.progress-bar {
+				width: 100%;
+				height: 8px;
+				background-color: #f3f4f6;
+				border-radius: 4px;
+				margin-bottom: 20px;
+				overflow: hidden;
+			}
+
+			.progress-fill {
+				height: 100%;
+				background-color: #374151;
+				width: 0%;
+				transition: width 0.3s ease;
+			}
+
+			@media (max-width: 768px) {
+				.exam-container {
+					padding: 15px;
+				}
+				
+				.timer {
+					position: static;
+					margin-bottom: 20px;
+					text-align: center;
+				}
+				
+				.virtual-keyboard {
+					grid-template-columns: repeat(4, 1fr);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="timer" id="timer">Waktu: 90:00</div>
+		
+		<div class="exam-container">
+			<div class="exam-header">
+				<h1 class="exam-title">Ujian Matematika</h1>
+				<p style="font-size: 18px; color: #6b7280;">SD Kelas 6 • Durasi: 90 Menit</p>
+			</div>
+
+			<div class="exam-info">
+				<h3 style="margin-top: 0;">Petunjuk Ujian:</h3>
+				<ul style="margin-bottom: 0;">
+					<li>Bacalah setiap soal dengan teliti sebelum menjawab</li>
+					<li>Pilih jawaban yang paling tepat untuk soal pilihan ganda</li>
+					<li>Gunakan virtual keyboard matematika untuk menulis rumus dan perhitungan</li>
+					<li>Periksa kembali jawaban sebelum mengumpulkan</li>
+					<li>Total soal: 20 soal</li>
+				</ul>
+			</div>
+
+			<div class="progress-bar">
+				<div class="progress-fill" id="progressFill"></div>
+			</div>
+
+			<!-- Soal 1: Perkalian bilangan asli dengan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">1</span>
+					Hasil dari 4 × <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">5</div></span> adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q1a" name="q1" value="a">
+						<label for="q1a">A. <span class="fraction-regular"><div class="fraction-top-regular">7</div><div class="fraction-bottom-regular">5</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q1b" name="q1" value="b">
+						<label for="q1b">B. <span class="fraction-regular"><div class="fraction-top-regular">12</div><div class="fraction-bottom-regular">5</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q1c" name="q1" value="c">
+						<label for="q1c">C. <span class="fraction-regular"><div class="fraction-top-regular">12</div><div class="fraction-bottom-regular">20</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q1d" name="q1" value="d">
+						<label for="q1d">D. <span class="fraction-regular"><div class="fraction-top-regular">4</div><div class="fraction-bottom-regular">15</div></span></label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 2: Perkalian bilangan asli dengan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">2</span>
+					Ani membeli 6 kg apel. Dia memberikan <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span> bagian kepada temannya. Berapa kg apel yang diberikan Ani?
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q2a" name="q2" value="a">
+						<label for="q2a">A. 2 kg</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q2b" name="q2" value="b">
+						<label for="q2b">B. 3 kg</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q2c" name="q2" value="c">
+						<label for="q2c">C. 4 kg</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q2d" name="q2" value="d">
+						<label for="q2d">D. 8 kg</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 3: Pembagian bilangan asli dengan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">3</span>
+					Hasil dari 8 ÷ <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span> adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q3a" name="q3" value="a">
+						<label for="q3a">A. 12</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q3b" name="q3" value="b">
+						<label for="q3b">B. 10</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q3c" name="q3" value="c">
+						<label for="q3c">C. <span class="fraction-regular"><div class="fraction-top-regular">16</div><div class="fraction-bottom-regular">3</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q3d" name="q3" value="d">
+						<label for="q3d">D. <span class="fraction-regular"><div class="fraction-top-regular">16</div><div class="fraction-bottom-regular">24</div></span></label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 4: Pembagian bilangan asli dengan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">4</span>
+					Sebuah tali sepanjang 12 meter akan dipotong menjadi beberapa bagian. Setiap potongan panjangnya <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">4</div></span> meter. Berapa banyak potongan yang dihasilkan?
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q4a" name="q4" value="a">
+						<label for="q4a">A. 9 potongan</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q4b" name="q4" value="b">
+						<label for="q4b">B. 16 potongan</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q4c" name="q4" value="c">
+						<label for="q4c">C. 15 potongan</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q4d" name="q4" value="d">
+						<label for="q4d">D. 18 potongan</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 5: Perkalian pecahan dengan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">5</span>
+					Hasil dari <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">5</div></span> × <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">4</div></span> adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q5a" name="q5" value="a">
+						<label for="q5a">A. <span class="fraction-regular"><div class="fraction-top-regular">6</div><div class="fraction-bottom-regular">20</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q5b" name="q5" value="b">
+						<label for="q5b">B. <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">9</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q5c" name="q5" value="c">
+						<label for="q5c">C. <span class="fraction-regular"><div class="fraction-top-regular">6</div><div class="fraction-bottom-regular">9</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q5d" name="q5" value="d">
+						<label for="q5d">D. <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">20</div></span></label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 6: Perkalian pecahan dengan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">6</span>
+					Budi menghabiskan <span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular">3</div></span> dari uang sakunya untuk membeli buku, dan <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">5</div></span> dari sisanya untuk membeli pensil. Berapa bagian dari uang saku Budi yang digunakan untuk membeli pensil?
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q6a" name="q6" value="a">
+						<label for="q6a">A. <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">15</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q6b" name="q6" value="b">
+						<label for="q6b">B. <span class="fraction-regular"><div class="fraction-top-regular">4</div><div class="fraction-bottom-regular">15</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q6c" name="q6" value="c">
+						<label for="q6c">C. <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">8</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q6d" name="q6" value="d">
+						<label for="q6d">D. <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">8</div></span></label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 7: Pembagian pecahan dengan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">7</span>
+					Hasil dari <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">4</div></span> ÷ <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">5</div></span> adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q7a" name="q7" value="a">
+						<label for="q7a">A. <span class="fraction-regular"><div class="fraction-top-regular">15</div><div class="fraction-bottom-regular">8</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q7b" name="q7" value="b">
+						<label for="q7b">B. <span class="fraction-regular"><div class="fraction-top-regular">6</div><div class="fraction-bottom-regular">20</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q7c" name="q7" value="c">
+						<label for="q7c">C. <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">8</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q7d" name="q7" value="d">
+						<label for="q7d">D. <span class="fraction-regular"><div class="fraction-top-regular">8</div><div class="fraction-bottom-regular">15</div></span></label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 8: Pembagian pecahan dengan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">8</span>
+					Sari memiliki <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">6</div></span> liter susu. Dia akan menuangkannya ke dalam gelas-gelas kecil. Setiap gelas berisi <span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular">4</div></span> liter. Berapa banyak gelas yang dapat diisi penuh?
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q8a" name="q8" value="a">
+						<label for="q8a">A. 2 gelas</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q8b" name="q8" value="b">
+						<label for="q8b">B. 3 gelas</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q8c" name="q8" value="c">
+						<label for="q8c">C. <span class="fraction-regular"><div class="fraction-top-regular">10</div><div class="fraction-bottom-regular">3</div></span> gelas</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q8d" name="q8" value="d">
+						<label for="q8d">D. 4 gelas</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 9: Mengubah pecahan menjadi desimal -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">9</span>
+					Bentuk desimal dari <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">4</div></span> adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q9a" name="q9" value="a">
+						<label for="q9a">A. 0,34</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q9b" name="q9" value="b">
+						<label for="q9b">B. 0,75</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q9c" name="q9" value="c">
+						<label for="q9c">C. 0,43</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q9d" name="q9" value="d">
+						<label for="q9d">D. 0,25</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 10: Mengubah pecahan menjadi desimal -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">10</span>
+					Bentuk desimal dari <span class="fraction-regular"><div class="fraction-top-regular">7</div><div class="fraction-bottom-regular">8</div></span> adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q10a" name="q10" value="a">
+						<label for="q10a">A. 0,78</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q10b" name="q10" value="b">
+						<label for="q10b">B. 0,875</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q10c" name="q10" value="c">
+						<label for="q10c">C. 0,87</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q10d" name="q10" value="d">
+						<label for="q10d">D. 0,785</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 11: Mengubah desimal menjadi pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">11</span>
+					Bentuk pecahan paling sederhana dari 0,6 adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q11a" name="q11" value="a">
+						<label for="q11a">A. <span class="fraction-regular"><div class="fraction-top-regular">6</div><div class="fraction-bottom-regular">10</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q11b" name="q11" value="b">
+						<label for="q11b">B. <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">5</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q11c" name="q11" value="c">
+						<label for="q11c">C. <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q11d" name="q11" value="d">
+						<label for="q11d">D. <span class="fraction-regular"><div class="fraction-top-regular">60</div><div class="fraction-bottom-regular">100</div></span></label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 12: Mengubah desimal menjadi pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">12</span>
+					Bentuk pecahan paling sederhana dari 0,25 adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q12a" name="q12" value="a">
+						<label for="q12a">A. <span class="fraction-regular"><div class="fraction-top-regular">25</div><div class="fraction-bottom-regular">100</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q12b" name="q12" value="b">
+						<label for="q12b">B. <span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular">4</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q12c" name="q12" value="c">
+						<label for="q12c">C. <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">20</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q12d" name="q12" value="d">
+						<label for="q12d">D. <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">8</div></span></label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 13: Membandingkan bilangan desimal -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">13</span>
+					Tanda yang tepat untuk mengisi titik-titik pada 0,45 ... 0,54 adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q13a" name="q13" value="a">
+						<label for="q13a">A. ></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q13b" name="q13" value="b">
+						<label for="q13b">B. <</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q13c" name="q13" value="c">
+						<label for="q13c">C. =</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q13d" name="q13" value="d">
+						<label for="q13d">D. ≥</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 14: Membandingkan bilangan desimal -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">14</span>
+					Bilangan desimal yang paling besar di antara pilihan berikut adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q14a" name="q14" value="a">
+						<label for="q14a">A. 0,789</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q14b" name="q14" value="b">
+						<label for="q14b">B. 0,8</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q14c" name="q14" value="c">
+						<label for="q14c">C. 0,79</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q14d" name="q14" value="d">
+						<label for="q14d">D. 0,798</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 15: Membandingkan bilangan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">15</span>
+					Tanda yang tepat untuk mengisi titik-titik pada <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span> ... <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">4</div></span> adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q15a" name="q15" value="a">
+						<label for="q15a">A. ></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q15b" name="q15" value="b">
+						<label for="q15b">B. <</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q15c" name="q15" value="c">
+						<label for="q15c">C. =</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q15d" name="q15" value="d">
+						<label for="q15d">D. ≤</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 16: Membandingkan bilangan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">16</span>
+					Pecahan yang paling kecil di antara pilihan berikut adalah...
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q16a" name="q16" value="a">
+						<label for="q16a">A. <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">8</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q16b" name="q16" value="b">
+						<label for="q16b">B. <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">5</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q16c" name="q16" value="c">
+						<label for="q16c">C. <span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular">3</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q16d" name="q16" value="d">
+						<label for="q16d">D. <span class="fraction-regular"><div class="fraction-top-regular">4</div><div class="fraction-bottom-regular">9</div></span></label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 17: Mengurutkan bilangan desimal -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">17</span>
+					Urutan bilangan desimal dari yang terkecil ke terbesar adalah...
+					<br>0,6 ; 0,56 ; 0,65 ; 0,5
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q17a" name="q17" value="a">
+						<label for="q17a">A. 0,5 ; 0,56 ; 0,6 ; 0,65</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q17b" name="q17" value="b">
+						<label for="q17b">B. 0,56 ; 0,5 ; 0,6 ; 0,65</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q17c" name="q17" value="c">
+						<label for="q17c">C. 0,65 ; 0,6 ; 0,56 ; 0,5</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q17d" name="q17" value="d">
+						<label for="q17d">D. 0,5 ; 0,6 ; 0,56 ; 0,65</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 18: Mengurutkan bilangan desimal -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">18</span>
+					Urutan bilangan desimal dari yang terbesar ke terkecil adalah...
+					<br>1,25 ; 1,2 ; 1,52 ; 1,205
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q18a" name="q18" value="a">
+						<label for="q18a">A. 1,52 ; 1,25 ; 1,205 ; 1,2</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q18b" name="q18" value="b">
+						<label for="q18b">B. 1,25 ; 1,2 ; 1,52 ; 1,205</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q18c" name="q18" value="c">
+						<label for="q18c">C. 1,52 ; 1,25 ; 1,2 ; 1,205</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q18d" name="q18" value="d">
+						<label for="q18d">D. 1,2 ; 1,205 ; 1,25 ; 1,52</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 19: Mengurutkan bilangan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">19</span>
+					Urutan pecahan dari yang terkecil ke terbesar adalah...
+					<br><span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular">2</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">4</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">8</div></span>
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q19a" name="q19" value="a">
+						<label for="q19a">A. <span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular">2</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">8</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">4</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q19b" name="q19" value="b">
+						<label for="q19b">B. <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">8</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular">2</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">4</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q19c" name="q19" value="c">
+						<label for="q19c">C. <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">4</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">8</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular">2</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q19d" name="q19" value="d">
+						<label for="q19d">D. <span class="fraction-regular"><div class="fraction-top-regular">1</div><div class="fraction-bottom-regular">2</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">8</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">4</div></span></label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Soal 20: Mengurutkan bilangan pecahan -->
+			<div class="question-container">
+				<div class="question-text">
+					<span class="question-number">20</span>
+					Urutan pecahan dari yang terbesar ke terkecil adalah...
+					<br><span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">5</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">4</div><div class="fraction-bottom-regular">7</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">9</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span>
+				</div>
+				<div class="options">
+					<div class="option">
+						<input type="radio" id="q20a" name="q20" value="a">
+						<label for="q20a">A. <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">5</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">4</div><div class="fraction-bottom-regular">7</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">9</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q20b" name="q20" value="b">
+						<label for="q20b">B. <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">5</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">4</div><div class="fraction-bottom-regular">7</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">9</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q20c" name="q20" value="c">
+						<label for="q20c">C. <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">9</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">4</div><div class="fraction-bottom-regular">7</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">5</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span></label>
+					</div>
+					<div class="option">
+						<input type="radio" id="q20d" name="q20" value="d">
+						<label for="q20d">D. <span class="fraction-regular"><div class="fraction-top-regular">2</div><div class="fraction-bottom-regular">3</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">5</div><div class="fraction-bottom-regular">9</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">4</div><div class="fraction-bottom-regular">7</div></span> ; <span class="fraction-regular"><div class="fraction-top-regular">3</div><div class="fraction-bottom-regular">5</div></span></label>
+					</div>
+				</div>
+			</div>
+
+			<div class="submit-section">
+				<h3>Selesai Mengerjakan?</h3>
+				<p>Pastikan semua jawaban sudah terisi dengan benar sebelum mengumpulkan ujian.</p>
+				<button class="submit-btn" onclick="submitExam()">Kumpulkan Ujian</button>
+			</div>
+		</div>
+
+		<script>
+			// Timer functionality
+			let timeLeft = 90 * 60; // 90 minutes in seconds
+			
+			function updateTimer() {
+				const minutes = Math.floor(timeLeft / 60);
+				const seconds = timeLeft % 60;
+				document.getElementById('timer').textContent = 
+					`Waktu: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+				
+				if (timeLeft <= 0) {
+					alert('Waktu ujian telah habis! Ujian akan dikumpulkan otomatis.');
+					submitExam();
+					return;
+				}
+				
+				timeLeft--;
+			}
+			
+			// Update timer every second
+			setInterval(updateTimer, 1000);
+			
+			// Progress tracking
+			function updateProgress() {
+				const totalQuestions = 20;
+				let answeredQuestions = 0;
+				
+				for (let i = 1; i <= totalQuestions; i++) {
+					const question = document.querySelector(`input[name="q${i}"]:checked`);
+					if (question) {
+						answeredQuestions++;
+					}
+				}
+				
+				const progress = (answeredQuestions / totalQuestions) * 100;
+				document.getElementById('progressFill').style.width = progress + '%';
+			}
+			
+			// Add event listeners to all radio buttons
+			document.addEventListener('DOMContentLoaded', function() {
+				const radioButtons = document.querySelectorAll('input[type="radio"]');
+				radioButtons.forEach(button => {
+					button.addEventListener('change', updateProgress);
+				});
+			});
+			
+			// Virtual keyboard functions
+			function toggleKeyboard(keyboardId) {
+				const keyboard = document.getElementById(keyboardId);
+				keyboard.classList.toggle('active');
+			}
+			
+			function insertTextAtCursor(mathInput, text) {
+				mathInput.focus();
+				const selection = window.getSelection();
+				const range = selection.getRangeAt(0);
+				range.deleteContents();
+				range.insertNode(document.createTextNode(text));
+				range.collapse(false);
+				selection.removeAllRanges();
+				selection.addRange(range);
+			}
+			
+			function insertHTMLAtCursor(mathInput, html) {
+				mathInput.focus();
+				const selection = window.getSelection();
+				const range = selection.getRangeAt(0);
+				range.deleteContents();
+				const div = document.createElement('div');
+				div.innerHTML = html;
+				const fragment = document.createDocumentFragment();
+				while (div.firstChild) {
+					fragment.appendChild(div.firstChild);
+				}
+				range.insertNode(fragment);
+				range.collapse(false);
+				selection.removeAllRanges();
+				selection.addRange(range);
+			}
+			
+			// Submit exam function
+			function submitExam() {
+				const totalQuestions = 20;
+				let answeredQuestions = 0;
+				let answers = {};
+				
+				// Collect all answers
+				for (let i = 1; i <= totalQuestions; i++) {
+					const question = document.querySelector(`input[name="q${i}"]:checked`);
+					if (question) {
+						answeredQuestions++;
+						answers[`q${i}`] = question.value;
+					}
+				}
+				
+				if (answeredQuestions < totalQuestions) {
+					const unanswered = totalQuestions - answeredQuestions;
+					const confirmSubmit = confirm(
+						`Anda belum menjawab ${unanswered} soal. Apakah yakin ingin mengumpulkan ujian sekarang?`
+					);
+					if (!confirmSubmit) {
+						return;
+					}
+				}
+				
+				// Calculate score (correct answers)
+				const correctAnswers = {
+					q1: 'b', q2: 'c', q3: 'a', q4: 'b', q5: 'a',
+					q6: 'b', q7: 'a', q8: 'c', q9: 'b', q10: 'b',
+					q11: 'b', q12: 'b', q13: 'b', q14: 'b', q15: 'b',
+					q16: 'c', q17: 'a', q18: 'a', q19: 'a', q20: 'a'
+				};
+				
+				let correctCount = 0;
+				for (let i = 1; i <= totalQuestions; i++) {
+					if (answers[`q${i}`] === correctAnswers[`q${i}`]) {
+						correctCount++;
+					}
+				}
+				
+				const score = (correctCount / totalQuestions) * 100;
+				
+				// Show results
+				alert(`Ujian selesai!\n\nJawaban benar: ${correctCount}/${totalQuestions}\nNilai: ${score.toFixed(1)}\n\nTerima kasih telah mengerjakan ujian.`);
+				
+				// Disable all inputs
+				const allInputs = document.querySelectorAll('input[type="radio"]');
+				allInputs.forEach(input => {
+					input.disabled = true;
+				});
+				
+				// Hide submit button
+				document.querySelector('.submit-btn').style.display = 'none';
+			}
+			
+			// Prevent accidental page refresh
+			window.addEventListener('beforeunload', function(e) {
+				e.preventDefault();
+				e.returnValue = 'Apakah Anda yakin ingin meninggalkan halaman? Jawaban ujian akan hilang.';
+			});
+			
+			// Auto-save functionality (optional)
+			function autoSave() {
+				const answers = {};
+				for (let i = 1; i <= 20; i++) {
+					const question = document.querySelector(`input[name="q${i}"]:checked`);
+					if (question) {
+						answers[`q${i}`] = question.value;
+					}
+				}
+				localStorage.setItem('examAnswers', JSON.stringify(answers));
+			}
+			
+			// Load saved answers on page load
+			function loadSavedAnswers() {
+				const savedAnswers = localStorage.getItem('examAnswers');
+				if (savedAnswers) {
+					const answers = JSON.parse(savedAnswers);
+					for (const [question, answer] of Object.entries(answers)) {
+						const input = document.querySelector(`input[name="${question}"][value="${answer}"]`);
+						if (input) {
+							input.checked = true;
+						}
+					}
+					updateProgress();
+				}
+			}
+			
+			// Auto-save every 30 seconds
+			setInterval(autoSave, 30000);
+			
+			// Load saved answers when page loads
+			document.addEventListener('DOMContentLoaded', loadSavedAnswers);
+		</script>
+	<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98b3178234a73e3b',t:'MTc1OTg5OTgwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+	</html>
