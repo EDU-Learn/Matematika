@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Rasio - Kelas 6 SD</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+            color: #333;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #10ac84, #00d2d3);
+        }
+
+        .section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .object-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .object-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .objects {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .object {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid #333;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .object:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #3742fa, #2f3542);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .ratio-display {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3436;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(45deg, #ffecd2, #fcb69f);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-area {
+            background: linear-gradient(45deg, #a8edea, #fed6e3);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 15px;
+        }
+
+        .question {
+            font-size: 1.3rem;
+            margin: 20px 0;
+            color: #2d3436;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .option {
+            background: white;
+            border: 3px solid #ddd;
+            padding: 15px 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .option:hover {
+            border-color: #3742fa;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .option.correct {
+            background: #00b894;
+            color: white;
+            border-color: #00b894;
+        }
+
+        .option.wrong {
+            background: #e17055;
+            color: white;
+            border-color: #e17055;
+        }
+
+        .visual-comparison {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .ratio-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .visual-objects {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .visual-object {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #333;
+        }
+
+        .measurement-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            margin: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .measurement-bar {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            min-height: 30px;
+        }
+
+        .measurement-bar.blue {
+            background: linear-gradient(45deg, #4ecdc4, #00d2d3);
+        }
+
+        .feedback {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .feedback.correct {
+            background: #d1f2eb;
+            color: #00b894;
+            border: 2px solid #00b894;
+        }
+
+        .feedback.wrong {
+            background: #fadbd8;
+            color: #e17055;
+            border: 2px solid #e17055;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .input-field {
+            width: 80px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3742fa;
+            box-shadow: 0 0 10px rgba(55, 66, 250, 0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .object-container {
+                gap: 10px;
+            }
+            
+            .object {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .ratio-display {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header class="header">
+            <h1>🎮 Petualangan Rasio 🎮</h1>
+            <p>Mari belajar rasio dengan cara yang menyenangkan!</p>
+            
+            <nav class="nav-buttons">
+                <button class="nav-btn active" onclick="showSection('pengenalan')">Pengenalan Rasio</button>
+                <button class="nav-btn" onclick="showSection('ukuran')">Rasio Ukuran</button>
+                <button class="nav-btn" onclick="showSection('permainan')">Permainan Tebak Rasio</button>
+                <button class="nav-btn" onclick="showSection('kesamaan')">Kesamaan Rasio</button>
+                <button class="nav-btn" onclick="showSection('latihan')">Latihan Soal</button>
+            </nav>
+        </header>
+
+        <!-- Bagian Pengenalan Rasio -->
+        <section id="pengenalan" class="section active">
+            <h2>🔍 Pengenalan Rasio</h2>
+            <p>Rasio adalah perbandingan antara dua atau lebih objek. Mari kita pelajari dengan mengamati objek-objek berikut!</p>
+            
+            <div class="controls">
+                <label for="objectType">Pilih Bentuk:</label>
+                <select id="objectType" onchange="changeObjectType()" class="btn">
+                    <option value="circle">Lingkaran</option>
+                    <option value="square">Kotak</option>
+                    <option value="star">Bintang</option>
+                </select>
+                
+                <button class="btn" onclick="generateRandomObjects()">Acak Objek</button>
+            </div>
+
+            <div class="object-container">
+                <div class="object-group">
+                    <div class="objects" id="redObjects"></div>
+                    <label id="redLabel">Merah</label>
+                </div>
+                <div style="font-size: 2rem; font-weight: bold;">:</div>
+                <div class="object-group">
+                    <div class="objects" id="blueObjects"></div>
+                    <label id="blueLabel">Biru</label>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn" onclick="addObject('red')">+ Merah</button>
+                <button class="btn" onclick="removeObject('red')">- Merah</button>
+                <button class="btn" onclick="addObject('blue')">+ Biru</button>
+                <button class="btn" onclick="removeObject('blue')">- Biru</button>
+            </div>
+
+            <div class="ratio-display" id="ratioDisplay">
+                Rasio: 3 : 2
+            </div>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <h3>Cara Membaca Rasio:</h3>
+                <p>Rasio 3 : 2 dibaca "tiga banding dua"</p>
+                <p>Artinya: untuk setiap 3 objek merah, ada 2 objek biru</p>
+            </div>
+        </section>
+
+        <!-- Bagian Rasio Ukuran -->
+        <section id="ukuran" class="section">
+            <h2>📏 Rasio Ukuran</h2>
+            <p>Rasio juga bisa digunakan untuk membandingkan ukuran seperti panjang, berat, tinggi, dan waktu. Mari kita pelajari!</p>
+            
+            <div class="controls">
+                <label for="measurementType">Pilih Jenis Ukuran:</label>
+                <select id="measurementType" onchange="changeMeasurementType()" class="btn">
+                    <option value="length">Panjang (cm)</option>
+                    <option value="weight">Berat (kg)</option>
+                    <option value="height">Tinggi (cm)</option>
+                    <option value="time">Waktu (menit)</option>
+                </select>
+                
+                <button class="btn" onclick="generateRandomMeasurements()">Acak Ukuran</button>
+            </div>
+
+            <div class="object-container">
+                <div class="object-group">
+                    <div class="objects" id="measurement1Container"></div>
+                    <label id="measurement1Label">Objek A</label>
+                </div>
+                <div style="font-size: 2rem; font-weight: bold;">:</div>
+                <div class="object-group">
+                    <div class="objects" id="measurement2Container"></div>
+                    <label id="measurement2Label">Objek B</label>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn" onclick="adjustMeasurement(1, 'increase')">+ Objek A</button>
+                <button class="btn" onclick="adjustMeasurement(1, 'decrease')">- Objek A</button>
+                <button class="btn" onclick="adjustMeasurement(2, 'increase')">+ Objek B</button>
+                <button class="btn" onclick="adjustMeasurement(2, 'decrease')">- Objek B</button>
+            </div>
+
+            <div class="ratio-display" id="measurementRatioDisplay">
+                Rasio: 15 cm : 10 cm = 3 : 2
+            </div>
+
+            <div style="text-align: center; margin: 20px 0; background: linear-gradient(45deg, #ffecd2, #fcb69f); padding: 20px; border-radius: 15px;">
+                <h3>💡 Cara Menentukan Rasio Ukuran:</h3>
+                <div style="display: flex; justify-content: space-around; margin: 15px 0; flex-wrap: wrap; gap: 15px;">
+                    <div style="background: white; padding: 15px; border-radius: 10px; min-width: 200px;">
+                        <h4>1️⃣ Tulis Ukuran</h4>
+                        <p>15 cm : 10 cm</p>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 10px; min-width: 200px;">
+                        <h4>2️⃣ Cari Pembagi Sama</h4>
+                        <p>15 ÷ 5 = 3<br>10 ÷ 5 = 2</p>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 10px; min-width: 200px;">
+                        <h4>3️⃣ Rasio Sederhana</h4>
+                        <p>3 : 2</p>
+                    </div>
+                </div>
+                <p style="color: #2d3436; font-weight: bold;">Ingat: Satuan harus sama untuk dibandingkan!</p>
+            </div>
+        </section>
+
+        <!-- Bagian Permainan Tebak Rasio -->
+        <section id="permainan" class="section">
+            <h2>🎯 Permainan Tebak Rasio</h2>
+            <div class="game-area">
+                <div class="score">Skor: <span id="gameScore">0</span> | Level: <span id="gameLevel">1</span></div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+
+                <div class="question" id="gameQuestion">
+                    Perhatikan objek-objek di bawah ini dan tentukan rasionya!
+                </div>
+
+                <div class="object-container" id="gameObjects"></div>
+
+                <div class="options" id="gameOptions"></div>
+
+                <div id="gameFeedback" class="feedback" style="display: none;"></div>
+
+                <button class="btn" id="nextGameBtn" onclick="nextGameQuestion()" style="display: none;">Soal Berikutnya</button>
+                <button class="btn" onclick="startGame()">Mulai Permainan</button>
+            </div>
+        </section>
+
+        <!-- Bagian Kesamaan Rasio -->
+        <section id="kesamaan" class="section">
+            <h2>⚖️ Kesamaan Rasio</h2>
+            <div style="text-align: center; margin: 20px 0;">
+                <h3>🤔 Pertanyaan Pematik:</h3>
+                <p style="font-size: 1.3rem; color: #e17055; font-weight: bold;">Apakah rasio 2:3 sama dengan 4:6?</p>
+                <p>Mari kita cari tahu dengan melihat visualnya!</p>
+            </div>
+
+            <div class="visual-comparison">
+                <div class="ratio-visual">
+                    <h4>Rasio 2:3</h4>
+                    <div class="visual-objects">
+                        <div class="visual-object" style="background: #ff6b6b;"></div>
+                        <div class="visual-object" style="background: #ff6b6b;"></div>
+                        <div class="visual-object" style="background: #4ecdc4;"></div>
+                        <div class="visual-object" style="background: #4ecdc4;"></div>
+                        <div class="visual-object" style="background: #4ecdc4;"></div>
+                    </div>
+                    <p><strong>2 merah : 3 biru</strong></p>
+                    <p style="font-size: 0.9rem; color: #666;">Setiap 2 objek merah, ada 3 objek biru</p>
+                </div>
+
+                <div style="font-size: 2rem; font-weight: bold; color: #2d3436;">🆚</div>
+
+                <div class="ratio-visual">
+                    <h4>Rasio 4:6</h4>
+                    <div class="visual-objects">
+                        <div class="visual-object" style="background: #ff6b6b;"></div>
+                        <div class="visual-object" style="background: #ff6b6b;"></div>
+                        <div class="visual-object" style="background: #ff6b6b;"></div>
+                        <div class="visual-object" style="background: #ff6b6b;"></div>
+                        <div class="visual-object" style="background: #4ecdc4;"></div>
+                        <div class="visual-object" style="background: #4ecdc4;"></div>
+                        <div class="visual-object" style="background: #4ecdc4;"></div>
+                        <div class="visual-object" style="background: #4ecdc4;"></div>
+                        <div class="visual-object" style="background: #4ecdc4;"></div>
+                        <div class="visual-object" style="background: #4ecdc4;"></div>
+                    </div>
+                    <p><strong>4 merah : 6 biru</strong></p>
+                    <p style="font-size: 0.9rem; color: #666;">Setiap 4 objek merah, ada 6 objek biru</p>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(45deg, #ffecd2, #fcb69f); padding: 25px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="text-align: center; color: #2d3436;">🔍 3 Cara Menentukan Kesamaan Rasio</h3>
+                
+                <!-- Cara 1: Sederhanakan -->
+                <div style="background: white; padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px solid #ff6b6b;">
+                    <h4 style="color: #ff6b6b; text-align: center;">📝 Cara 1: Sederhanakan Kedua Rasio</h4>
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px; margin: 15px 0;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: center; min-width: 200px;">
+                            <h5>Rasio 2:3</h5>
+                            <p>Cari pembagi bersama terbesar (PBB)</p>
+                            <p>PBB dari 2 dan 3 = 1</p>
+                            <p>2÷1 : 3÷1 = <strong>2:3</strong></p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: center; min-width: 200px;">
+                            <h5>Rasio 4:6</h5>
+                            <p>Cari pembagi bersama terbesar (PBB)</p>
+                            <p>PBB dari 4 dan 6 = 2</p>
+                            <p>4÷2 : 6÷2 = <strong>2:3</strong></p>
+                        </div>
+                    </div>
+                    <div style="text-align: center; background: #d1f2eb; padding: 10px; border-radius: 10px; color: #00b894; font-weight: bold;">
+                        ✅ Hasil sama: 2:3 = 2:3, jadi rasio sama!
+                    </div>
+                </div>
+
+                <!-- Cara 2: Perkalian -->
+                <div style="background: white; padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px solid #4ecdc4;">
+                    <h4 style="color: #4ecdc4; text-align: center;">✖️ Cara 2: Cari Angka Pengali</h4>
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px; margin: 15px 0;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: center; min-width: 250px;">
+                            <h5>Dari 2:3 ke 4:6</h5>
+                            <p>2 × ? = 4 → ? = 2</p>
+                            <p>3 × ? = 6 → ? = 2</p>
+                            <p style="color: #00b894; font-weight: bold;">Pengali sama: 2</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: center; min-width: 250px;">
+                            <h5>Contoh Lain: 3:5 dan 6:10</h5>
+                            <p>3 × ? = 6 → ? = 2</p>
+                            <p>5 × ? = 10 → ? = 2</p>
+                            <p style="color: #00b894; font-weight: bold;">Pengali sama: 2</p>
+                        </div>
+                    </div>
+                    <div style="text-align: center; background: #d1f2eb; padding: 10px; border-radius: 10px; color: #00b894; font-weight: bold;">
+                        ✅ Jika pengali sama untuk kedua angka, maka rasio sama!
+                    </div>
+                </div>
+
+                <!-- Cara 3: Perkalian Silang -->
+                <div style="background: white; padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px solid #a55eea;">
+                    <h4 style="color: #a55eea; text-align: center;">❌ Cara 3: Perkalian Silang</h4>
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px; margin: 15px 0;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: center; min-width: 250px;">
+                            <h5>Rasio 2:3 dan 4:6</h5>
+                            <p>Kalikan silang:</p>
+                            <p>2 × 6 = 12</p>
+                            <p>3 × 4 = 12</p>
+                            <p style="color: #00b894; font-weight: bold;">Hasil sama: 12 = 12</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: center; min-width: 250px;">
+                            <h5>Contoh Lain: 3:4 dan 9:12</h5>
+                            <p>Kalikan silang:</p>
+                            <p>3 × 12 = 36</p>
+                            <p>4 × 9 = 36</p>
+                            <p style="color: #00b894; font-weight: bold;">Hasil sama: 36 = 36</p>
+                        </div>
+                    </div>
+                    <div style="text-align: center; background: #d1f2eb; padding: 10px; border-radius: 10px; color: #00b894; font-weight: bold;">
+                        ✅ Jika hasil perkalian silang sama, maka rasio sama!
+                    </div>
+                </div>
+
+                <!-- Tombol Coba Sendiri -->
+                <div style="text-align: center; margin: 20px 0;">
+                    <button class="btn" onclick="generateNewExample()" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); font-size: 1.1rem; padding: 15px 30px;">
+                        🎲 Coba Contoh Baru
+                    </button>
+                </div>
+
+                <!-- Area Contoh Dinamis -->
+                <div id="dynamicExample" style="background: white; padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px solid #feca57; display: none;">
+                    <h4 style="color: #ff9ff3; text-align: center;">🧮 Latihan dengan Contoh Baru</h4>
+                    <div id="exampleContent"></div>
+                </div>
+                
+                <div style="text-align: center; background: #00b894; color: white; padding: 15px; border-radius: 10px; margin-top: 20px;">
+                    <h3>✅ Kesimpulan:</h3>
+                    <p style="font-size: 1.2rem; margin: 0;">Gunakan salah satu dari 3 cara di atas untuk menentukan kesamaan rasio!</p>
+                </div>
+            </div>
+
+            <div class="game-area">
+                <h3>🎯 Latihan Kesamaan Rasio</h3>
+                <p>Sekarang giliran kamu untuk menentukan apakah dua rasio sama atau tidak!</p>
+                <div id="equalityQuestion" class="question"></div>
+                <div class="visual-comparison" id="equalityVisual"></div>
+                <div class="input-group">
+                    <span style="font-weight: bold;">Apakah kedua rasio ini sama?</span>
+                    <button class="btn" onclick="checkEquality(true)">✅ Ya, Sama</button>
+                    <button class="btn" onclick="checkEquality(false)">❌ Tidak Sama</button>
+                </div>
+                <div id="equalityFeedback" class="feedback" style="display: none;"></div>
+                <button class="btn" onclick="generateEqualityQuestion()">🔄 Soal Baru</button>
+            </div>
+        </section>
+
+        <!-- Bagian Latihan Soal -->
+        <section id="latihan" class="section">
+            <h2>📝 Latihan Soal</h2>
+            <div class="controls" style="margin-bottom: 20px;">
+                <label for="exerciseType">Pilih Jenis Latihan:</label>
+                <select id="exerciseType" class="btn">
+                    <option value="ratio">Menentukan Rasio</option>
+                    <option value="equality">Kesamaan Rasio</option>
+                    <option value="measurement">Rasio Ukuran</option>
+                </select>
+            </div>
+            
+            <div class="game-area">
+                <div class="score">Soal ke-<span id="exerciseNumber">1</span> dari 10 | Jenis: <span id="exerciseTypeDisplay">Menentukan Rasio</span></div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="exerciseProgress" style="width: 10%"></div>
+                </div>
+
+                <div class="question" id="exerciseQuestion"></div>
+                <div class="object-container" id="exerciseObjects"></div>
+                
+                <div class="input-group" id="exerciseInput">
+                    <input type="number" class="input-field" id="answer1" placeholder="?">
+                    <span style="font-size: 1.5rem;">:</span>
+                    <input type="number" class="input-field" id="answer2" placeholder="?">
+                    <button class="btn" onclick="checkExerciseAnswer()">Periksa</button>
+                </div>
+
+                <div class="input-group" id="exerciseEqualityInput" style="display: none;">
+                    <span style="font-weight: bold;">Apakah kedua rasio ini sama?</span>
+                    <button class="btn" onclick="checkExerciseEquality(true)">✅ Ya, Sama</button>
+                    <button class="btn" onclick="checkExerciseEquality(false)">❌ Tidak Sama</button>
+                </div>
+
+                <div id="exerciseFeedback" class="feedback" style="display: none;"></div>
+                <button class="btn" id="nextExerciseBtn" onclick="nextExercise()" style="display: none;">Soal Berikutnya</button>
+                <button class="btn" onclick="startExercise()">Mulai Latihan</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // State variables
+        let currentSection = 'pengenalan';
+        let redCount = 3;
+        let blueCount = 2;
+        let currentObjectType = 'circle';
+        let gameScore = 0;
+        let gameLevel = 1;
+        let currentGameQuestion = {};
+        let exerciseNumber = 1;
+        let exerciseScore = 0;
+        let currentEqualityQuestion = {};
+
+        // Initialize the app
+        function init() {
+            updateRatioDisplay();
+            generateObjects();
+            generateMeasurements();
+            generateEqualityQuestion();
+        }
+
+        // Navigation functions
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            currentSection = sectionName;
+        }
+
+        // Object generation functions
+        function generateObjects() {
+            const redContainer = document.getElementById('redObjects');
+            const blueContainer = document.getElementById('blueObjects');
+            const redLabel = document.getElementById('redLabel');
+            const blueLabel = document.getElementById('blueLabel');
+            
+            redContainer.innerHTML = '';
+            blueContainer.innerHTML = '';
+            
+            // Generate visual objects for shapes only
+            for (let i = 0; i < redCount; i++) {
+                redContainer.appendChild(createObject('#ff6b6b'));
+            }
+            
+            for (let i = 0; i < blueCount; i++) {
+                blueContainer.appendChild(createObject('#4ecdc4'));
+            }
+            
+            redLabel.textContent = 'Merah';
+            blueLabel.textContent = 'Biru';
+        }
+
+        function createObject(color) {
+            const obj = document.createElement('div');
+            obj.className = 'object';
+            obj.style.background = color;
+            
+            if (currentObjectType === 'square') {
+                obj.style.borderRadius = '10%';
+            } else if (currentObjectType === 'star') {
+                obj.style.borderRadius = '0';
+                obj.style.clipPath = 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)';
+            }
+            
+            return obj;
+        }
+
+        function generateMeasurements() {
+            const units = {
+                'length': 'cm',
+                'weight': 'kg', 
+                'height': 'cm',
+                'time': 'menit'
+            };
+            
+            const redValue = redCount * (Math.floor(Math.random() * 5) + 1);
+            const blueValue = blueCount * (Math.floor(Math.random() * 5) + 1);
+            
+            return {
+                red: { value: redValue, unit: units[currentObjectType] },
+                blue: { value: blueValue, unit: units[currentObjectType] }
+            };
+        }
+
+        function createMeasurementDisplay(measurement, type) {
+            const container = document.createElement('div');
+            container.className = 'measurement-display';
+            
+            const bar = document.createElement('div');
+            bar.className = `measurement-bar ${type}`;
+            bar.style.width = Math.max(measurement.value * 3, 60) + 'px';
+            bar.textContent = `${measurement.value} ${measurement.unit}`;
+            
+            container.appendChild(bar);
+            return container;
+        }
+
+        function addObject(color) {
+            if (color === 'red' && redCount < 10) {
+                redCount++;
+            } else if (color === 'blue' && blueCount < 10) {
+                blueCount++;
+            }
+            generateObjects();
+            updateRatioDisplay();
+        }
+
+        function removeObject(color) {
+            if (color === 'red' && redCount > 1) {
+                redCount--;
+            } else if (color === 'blue' && blueCount > 1) {
+                blueCount--;
+            }
+            generateObjects();
+            updateRatioDisplay();
+        }
+
+        function changeObjectType() {
+            currentObjectType = document.getElementById('objectType').value;
+            generateObjects();
+        }
+
+        function generateRandomObjects() {
+            redCount = Math.floor(Math.random() * 8) + 1;
+            blueCount = Math.floor(Math.random() * 8) + 1;
+            generateObjects();
+            updateRatioDisplay();
+        }
+
+        function updateRatioDisplay() {
+            document.getElementById('ratioDisplay').innerHTML = `
+                Rasio: ${redCount} : ${blueCount}
+            `;
+        }
+
+        // Measurement functions
+        let currentMeasurementType = 'length';
+        let measurement1Value = 15;
+        let measurement2Value = 10;
+
+        function generateMeasurements() {
+            const container1 = document.getElementById('measurement1Container');
+            const container2 = document.getElementById('measurement2Container');
+            const label1 = document.getElementById('measurement1Label');
+            const label2 = document.getElementById('measurement2Label');
+            
+            container1.innerHTML = '';
+            container2.innerHTML = '';
+            
+            const units = {
+                'length': 'cm',
+                'weight': 'kg', 
+                'height': 'cm',
+                'time': 'menit'
+            };
+            
+            const labels = {
+                'length': ['Panjang A', 'Panjang B'],
+                'weight': ['Berat A', 'Berat B'],
+                'height': ['Tinggi A', 'Tinggi B'],
+                'time': ['Waktu A', 'Waktu B']
+            };
+            
+            container1.appendChild(createMeasurementDisplay({
+                value: measurement1Value, 
+                unit: units[currentMeasurementType]
+            }, 'red'));
+            
+            container2.appendChild(createMeasurementDisplay({
+                value: measurement2Value, 
+                unit: units[currentMeasurementType]
+            }, 'blue'));
+            
+            label1.textContent = labels[currentMeasurementType][0];
+            label2.textContent = labels[currentMeasurementType][1];
+            
+            updateMeasurementRatioDisplay();
+        }
+
+        function changeMeasurementType() {
+            currentMeasurementType = document.getElementById('measurementType').value;
+            generateMeasurements();
+        }
+
+        function generateRandomMeasurements() {
+            measurement1Value = (Math.floor(Math.random() * 10) + 1) * 5;
+            measurement2Value = (Math.floor(Math.random() * 10) + 1) * 5;
+            generateMeasurements();
+        }
+
+        function adjustMeasurement(objectNum, action) {
+            const step = currentMeasurementType === 'time' ? 1 : 5;
+            
+            if (objectNum === 1) {
+                if (action === 'increase' && measurement1Value < 100) {
+                    measurement1Value += step;
+                } else if (action === 'decrease' && measurement1Value > step) {
+                    measurement1Value -= step;
+                }
+            } else {
+                if (action === 'increase' && measurement2Value < 100) {
+                    measurement2Value += step;
+                } else if (action === 'decrease' && measurement2Value > step) {
+                    measurement2Value -= step;
+                }
+            }
+            
+            generateMeasurements();
+        }
+
+        function updateMeasurementRatioDisplay() {
+            const units = {
+                'length': 'cm',
+                'weight': 'kg', 
+                'height': 'cm',
+                'time': 'menit'
+            };
+            
+            const gcd = findGCD(measurement1Value, measurement2Value);
+            const simplified1 = measurement1Value / gcd;
+            const simplified2 = measurement2Value / gcd;
+            
+            document.getElementById('measurementRatioDisplay').innerHTML = `
+                Rasio: ${measurement1Value} ${units[currentMeasurementType]} : ${measurement2Value} ${units[currentMeasurementType]} = ${simplified1} : ${simplified2}
+            `;
+        }
+
+        function findGCD(a, b) {
+            return b === 0 ? a : findGCD(b, a % b);
+        }
+
+        // Game functions
+        function startGame() {
+            gameScore = 0;
+            gameLevel = 1;
+            document.getElementById('gameScore').textContent = gameScore;
+            document.getElementById('gameLevel').textContent = gameLevel;
+            nextGameQuestion();
+        }
+
+        function nextGameQuestion() {
+            const red = Math.floor(Math.random() * 6) + 1;
+            const blue = Math.floor(Math.random() * 6) + 1;
+            
+            currentGameQuestion = {
+                red: red,
+                blue: blue,
+                correctAnswer: `${red}:${blue}`
+            };
+            
+            // Generate objects for the question
+            const gameObjectsContainer = document.getElementById('gameObjects');
+            gameObjectsContainer.innerHTML = '';
+            
+            const redGroup = document.createElement('div');
+            redGroup.className = 'object-group';
+            const redObjects = document.createElement('div');
+            redObjects.className = 'objects';
+            
+            for (let i = 0; i < red; i++) {
+                redObjects.appendChild(createObject('#ff6b6b'));
+            }
+            
+            redGroup.appendChild(redObjects);
+            redGroup.appendChild(document.createElement('label')).textContent = 'Merah';
+            
+            const separator = document.createElement('div');
+            separator.style.fontSize = '2rem';
+            separator.style.fontWeight = 'bold';
+            separator.textContent = ':';
+            
+            const blueGroup = document.createElement('div');
+            blueGroup.className = 'object-group';
+            const blueObjects = document.createElement('div');
+            blueObjects.className = 'objects';
+            
+            for (let i = 0; i < blue; i++) {
+                blueObjects.appendChild(createObject('#4ecdc4'));
+            }
+            
+            blueGroup.appendChild(blueObjects);
+            blueGroup.appendChild(document.createElement('label')).textContent = 'Biru';
+            
+            gameObjectsContainer.appendChild(redGroup);
+            gameObjectsContainer.appendChild(separator);
+            gameObjectsContainer.appendChild(blueGroup);
+            
+            // Generate options
+            generateGameOptions();
+            
+            // Hide feedback and next button
+            document.getElementById('gameFeedback').style.display = 'none';
+            document.getElementById('nextGameBtn').style.display = 'none';
+            
+            // Update progress
+            updateGameProgress();
+        }
+
+        function generateGameOptions() {
+            const options = [`${currentGameQuestion.red}:${currentGameQuestion.blue}`];
+            
+            // Generate wrong options
+            while (options.length < 4) {
+                const wrongRed = Math.floor(Math.random() * 6) + 1;
+                const wrongBlue = Math.floor(Math.random() * 6) + 1;
+                const wrongOption = `${wrongRed}:${wrongBlue}`;
+                
+                if (!options.includes(wrongOption)) {
+                    options.push(wrongOption);
+                }
+            }
+            
+            // Shuffle options
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+            
+            const optionsContainer = document.getElementById('gameOptions');
+            optionsContainer.innerHTML = '';
+            
+            options.forEach(option => {
+                const optionBtn = document.createElement('div');
+                optionBtn.className = 'option';
+                optionBtn.textContent = option;
+                optionBtn.onclick = () => checkGameAnswer(option);
+                optionsContainer.appendChild(optionBtn);
+            });
+        }
+
+        function checkGameAnswer(selectedAnswer) {
+            const feedback = document.getElementById('gameFeedback');
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+                if (option.textContent === currentGameQuestion.correctAnswer) {
+                    option.classList.add('correct');
+                } else if (option.textContent === selectedAnswer) {
+                    option.classList.add('wrong');
+                }
+            });
+            
+            if (selectedAnswer === currentGameQuestion.correctAnswer) {
+                gameScore += 10;
+                feedback.className = 'feedback correct';
+                feedback.textContent = 'Benar! Hebat sekali!';
+                
+                if (gameScore % 50 === 0) {
+                    gameLevel++;
+                    document.getElementById('gameLevel').textContent = gameLevel;
+                }
+            } else {
+                feedback.className = 'feedback wrong';
+                feedback.textContent = `Salah! Jawaban yang benar adalah ${currentGameQuestion.correctAnswer}`;
+            }
+            
+            document.getElementById('gameScore').textContent = gameScore;
+            feedback.style.display = 'block';
+            document.getElementById('nextGameBtn').style.display = 'inline-block';
+        }
+
+        function updateGameProgress() {
+            const progress = (gameScore % 50) * 2; // 50 points per level
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Equality functions
+        function generateEqualityQuestion() {
+            const baseRed = Math.floor(Math.random() * 4) + 1;
+            const baseBlue = Math.floor(Math.random() * 4) + 1;
+            const multiplier = Math.floor(Math.random() * 3) + 2;
+            
+            const isEqual = Math.random() > 0.5;
+            
+            let red2, blue2;
+            if (isEqual) {
+                red2 = baseRed * multiplier;
+                blue2 = baseBlue * multiplier;
+            } else {
+                red2 = baseRed * multiplier + Math.floor(Math.random() * 2) + 1;
+                blue2 = baseBlue * multiplier + Math.floor(Math.random() * 2) + 1;
+            }
+            
+            currentEqualityQuestion = {
+                ratio1: { red: baseRed, blue: baseBlue },
+                ratio2: { red: red2, blue: blue2 },
+                isEqual: isEqual
+            };
+            
+            document.getElementById('equalityQuestion').textContent = 
+                `Apakah rasio ${baseRed}:${baseBlue} sama dengan ${red2}:${blue2}?`;
+            
+            // Generate visual comparison
+            generateEqualityVisual();
+            
+            document.getElementById('equalityFeedback').style.display = 'none';
+        }
+
+        function generateEqualityVisual() {
+            const visualContainer = document.getElementById('equalityVisual');
+            visualContainer.innerHTML = '';
+            
+            // First ratio
+            const ratio1Visual = document.createElement('div');
+            ratio1Visual.className = 'ratio-visual';
+            ratio1Visual.innerHTML = `<h4>Rasio ${currentEqualityQuestion.ratio1.red}:${currentEqualityQuestion.ratio1.blue}</h4>`;
+            
+            const objects1 = document.createElement('div');
+            objects1.className = 'visual-objects';
+            
+            for (let i = 0; i < currentEqualityQuestion.ratio1.red; i++) {
+                const obj = document.createElement('div');
+                obj.className = 'visual-object';
+                obj.style.background = '#ff6b6b';
+                objects1.appendChild(obj);
+            }
+            
+            for (let i = 0; i < currentEqualityQuestion.ratio1.blue; i++) {
+                const obj = document.createElement('div');
+                obj.className = 'visual-object';
+                obj.style.background = '#4ecdc4';
+                objects1.appendChild(obj);
+            }
+            
+            ratio1Visual.appendChild(objects1);
+            
+            // VS separator
+            const separator = document.createElement('div');
+            separator.style.fontSize = '2rem';
+            separator.style.fontWeight = 'bold';
+            separator.style.color = '#2d3436';
+            separator.textContent = 'VS';
+            
+            // Second ratio
+            const ratio2Visual = document.createElement('div');
+            ratio2Visual.className = 'ratio-visual';
+            ratio2Visual.innerHTML = `<h4>Rasio ${currentEqualityQuestion.ratio2.red}:${currentEqualityQuestion.ratio2.blue}</h4>`;
+            
+            const objects2 = document.createElement('div');
+            objects2.className = 'visual-objects';
+            
+            for (let i = 0; i < currentEqualityQuestion.ratio2.red; i++) {
+                const obj = document.createElement('div');
+                obj.className = 'visual-object';
+                obj.style.background = '#ff6b6b';
+                objects2.appendChild(obj);
+            }
+            
+            for (let i = 0; i < currentEqualityQuestion.ratio2.blue; i++) {
+                const obj = document.createElement('div');
+                obj.className = 'visual-object';
+                obj.style.background = '#4ecdc4';
+                objects2.appendChild(obj);
+            }
+            
+            ratio2Visual.appendChild(objects2);
+            
+            visualContainer.appendChild(ratio1Visual);
+            visualContainer.appendChild(separator);
+            visualContainer.appendChild(ratio2Visual);
+        }
+
+        function checkEquality(userAnswer) {
+            const feedback = document.getElementById('equalityFeedback');
+            
+            if (userAnswer === currentEqualityQuestion.isEqual) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = 'Benar! Kamu memahami kesamaan rasio dengan baik!';
+            } else {
+                feedback.className = 'feedback wrong';
+                const explanation = currentEqualityQuestion.isEqual ? 
+                    'Rasio ini sama karena memiliki perbandingan yang sama setelah disederhanakan.' :
+                    'Rasio ini tidak sama karena memiliki perbandingan yang berbeda.';
+                feedback.textContent = `Salah! ${explanation}`;
+            }
+            
+            feedback.style.display = 'block';
+        }
+
+        // Exercise functions
+        function startExercise() {
+            exerciseNumber = 1;
+            exerciseScore = 0;
+            nextExercise();
+        }
+
+        function nextExercise() {
+            if (exerciseNumber > 10) {
+                showExerciseResults();
+                return;
+            }
+            
+            const exerciseType = document.getElementById('exerciseType').value;
+            const typeDisplay = {
+                'ratio': 'Menentukan Rasio',
+                'equality': 'Kesamaan Rasio', 
+                'measurement': 'Rasio Ukuran'
+            };
+            
+            document.getElementById('exerciseTypeDisplay').textContent = typeDisplay[exerciseType];
+            
+            if (exerciseType === 'ratio') {
+                generateRatioExercise();
+            } else if (exerciseType === 'equality') {
+                generateEqualityExercise();
+            } else if (exerciseType === 'measurement') {
+                generateMeasurementExercise();
+            }
+            
+            // Update progress
+            document.getElementById('exerciseNumber').textContent = exerciseNumber;
+            document.getElementById('exerciseProgress').style.width = (exerciseNumber * 10) + '%';
+            
+            // Hide feedback and next button
+            document.getElementById('exerciseFeedback').style.display = 'none';
+            document.getElementById('nextExerciseBtn').style.display = 'none';
+        }
+
+        function generateRatioExercise() {
+            const red = Math.floor(Math.random() * 8) + 1;
+            const blue = Math.floor(Math.random() * 8) + 1;
+            
+            // Generate objects
+            const exerciseObjectsContainer = document.getElementById('exerciseObjects');
+            exerciseObjectsContainer.innerHTML = '';
+            
+            const redGroup = document.createElement('div');
+            redGroup.className = 'object-group';
+            const redObjects = document.createElement('div');
+            redObjects.className = 'objects';
+            
+            for (let i = 0; i < red; i++) {
+                redObjects.appendChild(createObject('#ff6b6b'));
+            }
+            
+            redGroup.appendChild(redObjects);
+            redGroup.appendChild(document.createElement('label')).textContent = 'Merah';
+            
+            const separator = document.createElement('div');
+            separator.style.fontSize = '2rem';
+            separator.style.fontWeight = 'bold';
+            separator.textContent = ':';
+            
+            const blueGroup = document.createElement('div');
+            blueGroup.className = 'object-group';
+            const blueObjects = document.createElement('div');
+            blueObjects.className = 'objects';
+            
+            for (let i = 0; i < blue; i++) {
+                blueObjects.appendChild(createObject('#4ecdc4'));
+            }
+            
+            blueGroup.appendChild(blueObjects);
+            blueGroup.appendChild(document.createElement('label')).textContent = 'Biru';
+            
+            exerciseObjectsContainer.appendChild(redGroup);
+            exerciseObjectsContainer.appendChild(separator);
+            exerciseObjectsContainer.appendChild(blueGroup);
+            
+            // Update question
+            document.getElementById('exerciseQuestion').textContent = 
+                `Tentukan rasio objek merah terhadap objek biru!`;
+            
+            // Store correct answer
+            window.currentExerciseAnswer = { red: red, blue: blue, type: 'ratio' };
+            
+            // Show/hide appropriate inputs
+            document.getElementById('exerciseInput').style.display = 'flex';
+            document.getElementById('exerciseEqualityInput').style.display = 'none';
+            
+            // Clear inputs
+            document.getElementById('answer1').value = '';
+            document.getElementById('answer2').value = '';
+        }
+
+        function generateEqualityExercise() {
+            const baseRed = Math.floor(Math.random() * 4) + 1;
+            const baseBlue = Math.floor(Math.random() * 4) + 1;
+            const multiplier = Math.floor(Math.random() * 3) + 2;
+            
+            const isEqual = Math.random() > 0.5;
+            
+            let red2, blue2;
+            if (isEqual) {
+                red2 = baseRed * multiplier;
+                blue2 = baseBlue * multiplier;
+            } else {
+                red2 = baseRed * multiplier + Math.floor(Math.random() * 2) + 1;
+                blue2 = baseBlue * multiplier + Math.floor(Math.random() * 2) + 1;
+            }
+            
+            // Generate visual comparison
+            const exerciseObjectsContainer = document.getElementById('exerciseObjects');
+            exerciseObjectsContainer.innerHTML = '';
+            exerciseObjectsContainer.className = 'visual-comparison';
+            
+            // First ratio
+            const ratio1Visual = document.createElement('div');
+            ratio1Visual.className = 'ratio-visual';
+            ratio1Visual.innerHTML = `<h4>Rasio ${baseRed}:${baseBlue}</h4>`;
+            
+            const objects1 = document.createElement('div');
+            objects1.className = 'visual-objects';
+            
+            for (let i = 0; i < baseRed; i++) {
+                const obj = document.createElement('div');
+                obj.className = 'visual-object';
+                obj.style.background = '#ff6b6b';
+                objects1.appendChild(obj);
+            }
+            
+            for (let i = 0; i < baseBlue; i++) {
+                const obj = document.createElement('div');
+                obj.className = 'visual-object';
+                obj.style.background = '#4ecdc4';
+                objects1.appendChild(obj);
+            }
+            
+            ratio1Visual.appendChild(objects1);
+            
+            // VS separator
+            const separator = document.createElement('div');
+            separator.style.fontSize = '2rem';
+            separator.style.fontWeight = 'bold';
+            separator.style.color = '#2d3436';
+            separator.textContent = '🆚';
+            
+            // Second ratio
+            const ratio2Visual = document.createElement('div');
+            ratio2Visual.className = 'ratio-visual';
+            ratio2Visual.innerHTML = `<h4>Rasio ${red2}:${blue2}</h4>`;
+            
+            const objects2 = document.createElement('div');
+            objects2.className = 'visual-objects';
+            
+            for (let i = 0; i < red2; i++) {
+                const obj = document.createElement('div');
+                obj.className = 'visual-object';
+                obj.style.background = '#ff6b6b';
+                objects2.appendChild(obj);
+            }
+            
+            for (let i = 0; i < blue2; i++) {
+                const obj = document.createElement('div');
+                obj.className = 'visual-object';
+                obj.style.background = '#4ecdc4';
+                objects2.appendChild(obj);
+            }
+            
+            ratio2Visual.appendChild(objects2);
+            
+            exerciseObjectsContainer.appendChild(ratio1Visual);
+            exerciseObjectsContainer.appendChild(separator);
+            exerciseObjectsContainer.appendChild(ratio2Visual);
+            
+            document.getElementById('exerciseQuestion').textContent = 
+                `Apakah rasio ${baseRed}:${baseBlue} sama dengan ${red2}:${blue2}?`;
+            
+            // Store correct answer
+            window.currentExerciseAnswer = { 
+                ratio1: { red: baseRed, blue: baseBlue },
+                ratio2: { red: red2, blue: blue2 },
+                isEqual: isEqual,
+                type: 'equality'
+            };
+            
+            // Show/hide appropriate inputs
+            document.getElementById('exerciseInput').style.display = 'none';
+            document.getElementById('exerciseEqualityInput').style.display = 'flex';
+        }
+
+        function generateMeasurementExercise() {
+            const measurements = ['length', 'weight', 'height', 'time'];
+            const selectedMeasurement = measurements[Math.floor(Math.random() * measurements.length)];
+            
+            const value1 = (Math.floor(Math.random() * 8) + 1) * 5;
+            const value2 = (Math.floor(Math.random() * 8) + 1) * 5;
+            
+            const units = {
+                'length': 'cm',
+                'weight': 'kg', 
+                'height': 'cm',
+                'time': 'menit'
+            };
+            
+            const labels = {
+                'length': ['Panjang A', 'Panjang B'],
+                'weight': ['Berat A', 'Berat B'],
+                'height': ['Tinggi A', 'Tinggi B'],
+                'time': ['Waktu A', 'Waktu B']
+            };
+            
+            // Generate measurement displays
+            const exerciseObjectsContainer = document.getElementById('exerciseObjects');
+            exerciseObjectsContainer.innerHTML = '';
+            exerciseObjectsContainer.className = 'object-container';
+            
+            const group1 = document.createElement('div');
+            group1.className = 'object-group';
+            group1.appendChild(createMeasurementDisplay({value: value1, unit: units[selectedMeasurement]}, 'red'));
+            group1.appendChild(document.createElement('label')).textContent = labels[selectedMeasurement][0];
+            
+            const separator = document.createElement('div');
+            separator.style.fontSize = '2rem';
+            separator.style.fontWeight = 'bold';
+            separator.textContent = ':';
+            
+            const group2 = document.createElement('div');
+            group2.className = 'object-group';
+            group2.appendChild(createMeasurementDisplay({value: value2, unit: units[selectedMeasurement]}, 'blue'));
+            group2.appendChild(document.createElement('label')).textContent = labels[selectedMeasurement][1];
+            
+            exerciseObjectsContainer.appendChild(group1);
+            exerciseObjectsContainer.appendChild(separator);
+            exerciseObjectsContainer.appendChild(group2);
+            
+            document.getElementById('exerciseQuestion').textContent = 
+                `Tentukan rasio ${labels[selectedMeasurement][0]} terhadap ${labels[selectedMeasurement][1]}!`;
+            
+            // Store correct answer
+            window.currentExerciseAnswer = { red: value1, blue: value2, type: 'measurement' };
+            
+            // Show/hide appropriate inputs
+            document.getElementById('exerciseInput').style.display = 'flex';
+            document.getElementById('exerciseEqualityInput').style.display = 'none';
+            
+            // Clear inputs
+            document.getElementById('answer1').value = '';
+            document.getElementById('answer2').value = '';
+        }
+
+        function checkExerciseAnswer() {
+            const answer1 = parseInt(document.getElementById('answer1').value);
+            const answer2 = parseInt(document.getElementById('answer2').value);
+            const feedback = document.getElementById('exerciseFeedback');
+            
+            if (isNaN(answer1) || isNaN(answer2)) {
+                feedback.className = 'feedback wrong';
+                feedback.textContent = 'Mohon isi kedua kolom dengan angka!';
+                feedback.style.display = 'block';
+                return;
+            }
+            
+            const correctRed = window.currentExerciseAnswer.red;
+            const correctBlue = window.currentExerciseAnswer.blue;
+            
+            // Check if the ratio is correct (including simplified forms)
+            const gcd1 = findGCD(answer1, answer2);
+            const gcd2 = findGCD(correctRed, correctBlue);
+            
+            const userSimplified = { red: answer1 / gcd1, blue: answer2 / gcd1 };
+            const correctSimplified = { red: correctRed / gcd2, blue: correctBlue / gcd2 };
+            
+            if (userSimplified.red === correctSimplified.red && userSimplified.blue === correctSimplified.blue) {
+                exerciseScore++;
+                feedback.className = 'feedback correct';
+                feedback.textContent = 'Benar! Jawaban kamu tepat!';
+            } else {
+                feedback.className = 'feedback wrong';
+                feedback.textContent = `Salah! Jawaban yang benar adalah ${correctRed}:${correctBlue}`;
+            }
+            
+            feedback.style.display = 'block';
+            document.getElementById('nextExerciseBtn').style.display = 'inline-block';
+            exerciseNumber++;
+        }
+
+        function checkExerciseEquality(userAnswer) {
+            const feedback = document.getElementById('exerciseFeedback');
+            
+            if (userAnswer === window.currentExerciseAnswer.isEqual) {
+                exerciseScore++;
+                feedback.className = 'feedback correct';
+                feedback.textContent = 'Benar! Kamu memahami kesamaan rasio dengan baik!';
+            } else {
+                feedback.className = 'feedback wrong';
+                const explanation = window.currentExerciseAnswer.isEqual ? 
+                    'Rasio ini sama karena memiliki perbandingan yang sama setelah disederhanakan.' :
+                    'Rasio ini tidak sama karena memiliki perbandingan yang berbeda.';
+                feedback.textContent = `Salah! ${explanation}`;
+            }
+            
+            feedback.style.display = 'block';
+            document.getElementById('nextExerciseBtn').style.display = 'inline-block';
+            exerciseNumber++;
+        }
+
+        function showExerciseResults() {
+            const feedback = document.getElementById('exerciseFeedback');
+            feedback.className = 'feedback correct';
+            feedback.innerHTML = `
+                <h3>Latihan Selesai!</h3>
+                <p>Skor kamu: ${exerciseScore}/10</p>
+                <p>${exerciseScore >= 7 ? 'Hebat! Kamu sudah menguasai rasio!' : 'Terus berlatih ya!'}</p>
+            `;
+            feedback.style.display = 'block';
+            
+            document.getElementById('exerciseInput').style.display = 'none';
+            document.getElementById('nextExerciseBtn').style.display = 'none';
+        }
+
+        // Dynamic example functions
+        function generateNewExample() {
+            // Generate two ratios that are equal
+            const baseRed = Math.floor(Math.random() * 5) + 2;
+            const baseBlue = Math.floor(Math.random() * 5) + 2;
+            const multiplier = Math.floor(Math.random() * 4) + 2;
+            
+            const ratio1 = { red: baseRed, blue: baseBlue };
+            const ratio2 = { red: baseRed * multiplier, blue: baseBlue * multiplier };
+            
+            // Show the dynamic example area
+            document.getElementById('dynamicExample').style.display = 'block';
+            
+            // Generate content for all three methods
+            const exampleContent = document.getElementById('exampleContent');
+            exampleContent.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h5 style="color: #2d3436;">Apakah rasio ${ratio1.red}:${ratio1.blue} sama dengan ${ratio2.red}:${ratio2.blue}?</h5>
+                </div>
+                
+                <!-- Method 1: Simplification -->
+                <div style="background: #fff5f5; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 5px solid #ff6b6b;">
+                    <h6 style="color: #ff6b6b;">📝 Cara 1: Sederhanakan</h6>
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <p><strong>Rasio ${ratio1.red}:${ratio1.blue}</strong></p>
+                            <p>PBB dari ${ratio1.red} dan ${ratio1.blue} = ${findGCD(ratio1.red, ratio1.blue)}</p>
+                            <p>${ratio1.red}÷${findGCD(ratio1.red, ratio1.blue)} : ${ratio1.blue}÷${findGCD(ratio1.red, ratio1.blue)} = <strong>${ratio1.red/findGCD(ratio1.red, ratio1.blue)}:${ratio1.blue/findGCD(ratio1.red, ratio1.blue)}</strong></p>
+                        </div>
+                        <div>
+                            <p><strong>Rasio ${ratio2.red}:${ratio2.blue}</strong></p>
+                            <p>PBB dari ${ratio2.red} dan ${ratio2.blue} = ${findGCD(ratio2.red, ratio2.blue)}</p>
+                            <p>${ratio2.red}÷${findGCD(ratio2.red, ratio2.blue)} : ${ratio2.blue}÷${findGCD(ratio2.red, ratio2.blue)} = <strong>${ratio2.red/findGCD(ratio2.red, ratio2.blue)}:${ratio2.blue/findGCD(ratio2.red, ratio2.blue)}</strong></p>
+                        </div>
+                    </div>
+                    <p style="text-align: center; color: #00b894; font-weight: bold;">✅ Hasil sama, jadi rasio sama!</p>
+                </div>
+                
+                <!-- Method 2: Multiplication -->
+                <div style="background: #f0ffff; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 5px solid #4ecdc4;">
+                    <h6 style="color: #4ecdc4;">✖️ Cara 2: Cari Pengali</h6>
+                    <div style="text-align: center;">
+                        <p>Dari ${ratio1.red}:${ratio1.blue} ke ${ratio2.red}:${ratio2.blue}</p>
+                        <p>${ratio1.red} × ? = ${ratio2.red} → ? = ${ratio2.red/ratio1.red}</p>
+                        <p>${ratio1.blue} × ? = ${ratio2.blue} → ? = ${ratio2.blue/ratio1.blue}</p>
+                        <p style="color: #00b894; font-weight: bold;">✅ Pengali sama: ${multiplier}, jadi rasio sama!</p>
+                    </div>
+                </div>
+                
+                <!-- Method 3: Cross multiplication -->
+                <div style="background: #faf5ff; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 5px solid #a55eea;">
+                    <h6 style="color: #a55eea;">❌ Cara 3: Perkalian Silang</h6>
+                    <div style="text-align: center;">
+                        <p>Kalikan silang:</p>
+                        <p>${ratio1.red} × ${ratio2.blue} = ${ratio1.red * ratio2.blue}</p>
+                        <p>${ratio1.blue} × ${ratio2.red} = ${ratio1.blue * ratio2.red}</p>
+                        <p style="color: #00b894; font-weight: bold;">✅ Hasil sama: ${ratio1.red * ratio2.blue} = ${ratio1.blue * ratio2.red}, jadi rasio sama!</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; background: #d1f2eb; padding: 10px; border-radius: 10px; margin-top: 15px;">
+                    <p style="color: #00b894; font-weight: bold; margin: 0;">🎉 Ketiga cara membuktikan bahwa ${ratio1.red}:${ratio1.blue} = ${ratio2.red}:${ratio2.blue}</p>
+                </div>
+            `;
+            
+            // Scroll to the example
+            document.getElementById('dynamicExample').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize the app when page loads
+        window.onload = init;
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9926773263012035',t:'MTc2MTEwOTU4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
