@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bangun Ruang Sisi Lengkung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .shape-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .shape-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .quiz-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .quiz-option:hover {
+            background-color: #f3f4f6;
+            transform: translateX(8px);
+        }
+        
+        .quiz-option.correct {
+            background-color: #d1fae5;
+            border-color: #10b981;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 min-h-full">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-8 shadow-lg">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl font-bold text-center mb-2">🎓 Bangun Ruang Sisi Lengkung</h1>
+            <p class="text-center text-purple-100 text-lg">Belajar Matematika dengan Menyenangkan!</p>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="container mx-auto px-6 mt-8">
+        <div class="flex flex-wrap gap-4 justify-center mb-8">
+            <button class="tab-button active px-8 py-3 rounded-full font-semibold shadow-md" onclick="showTab('konsep')">
+                📐 Konsep Dasar
+            </button>
+            <button class="tab-button px-8 py-3 rounded-full font-semibold bg-white shadow-md" onclick="showTab('jenis')">
+                🔍 Jenis-Jenis
+            </button>
+            <button class="tab-button px-8 py-3 rounded-full font-semibold bg-white shadow-md" onclick="showTab('latihan')">
+                ✅ Latihan Soal
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 pb-12">
+        
+        <!-- Tab 1: Konsep Dasar -->
+        <div id="konsep-tab" class="tab-content">
+            <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
+                <h2 class="text-3xl font-bold text-purple-700 mb-6">🌟 Apa itu Bangun Ruang Sisi Lengkung?</h2>
+                <p class="text-gray-700 text-lg leading-relaxed mb-6">
+                    Bangun ruang sisi lengkung adalah bangun ruang yang memiliki <span class="font-bold text-purple-600">permukaan lengkung</span>. 
+                    Berbeda dengan kubus atau balok yang memiliki sisi datar, bangun ruang ini memiliki sisi yang melengkung seperti lingkaran.
+                </p>
+                
+                <div class="bg-gradient-to-r from-purple-100 to-blue-100 rounded-2xl p-6 mb-8">
+                    <h3 class="text-xl font-bold text-purple-800 mb-4">💡 Hubungan dengan Lingkaran</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Lingkaran adalah <span class="font-bold">dasar utama</span> dari bangun ruang sisi lengkung. 
+                        Ketika lingkaran diputar atau dikembangkan dalam ruang tiga dimensi, terbentuklah bangun ruang sisi lengkung!
+                    </p>
+                </div>
+
+                <!-- Interactive Circle Demo -->
+                <div class="bg-blue-50 rounded-2xl p-8 text-center mb-8">
+                    <h3 class="text-xl font-bold text-purple-800 mb-6">🎯 Elemen Lingkaran</h3>
+                    <div class="flex justify-center mb-6">
+                        <svg width="300" height="300" viewBox="0 0 300 300">
+                            <!-- Circle -->
+                            <circle cx="150" cy="150" r="100" fill="none" stroke="#8b5cf6" stroke-width="3"/>
+                            <!-- Center point -->
+                            <circle cx="150" cy="150" r="5" fill="#8b5cf6"/>
+                            <!-- Radius -->
+                            <line x1="150" y1="150" x2="250" y2="150" stroke="#ef4444" stroke-width="2"/>
+                            <!-- Diameter -->
+                            <line x1="50" y1="150" x2="250" y2="150" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5,5"/>
+                            <!-- Labels -->
+                            <text x="200" y="145" fill="#ef4444" font-size="16" font-weight="bold">r (jari-jari)</text>
+                            <text x="120" y="130" fill="#3b82f6" font-size="16" font-weight="bold">d (diameter)</text>
+                            <text x="140" y="170" fill="#8b5cf6" font-size="14" font-weight="bold">Pusat</text>
+                        </svg>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                        <div class="bg-white rounded-xl p-4 shadow-md">
+                            <p class="font-bold text-purple-700">📍 Pusat Lingkaran</p>
+                            <p class="text-gray-600 text-sm">Titik tengah lingkaran</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-4 shadow-md">
+                            <p class="font-bold text-red-600">📏 Jari-jari (r)</p>
+                            <p class="text-gray-600 text-sm">Jarak dari pusat ke tepi</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-4 shadow-md">
+                            <p class="font-bold text-blue-600">↔️ Diameter (d)</p>
+                            <p class="text-gray-600 text-sm">2 × jari-jari (d = 2r)</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-4 shadow-md">
+                            <p class="font-bold text-green-600">⭕ Keliling</p>
+                            <p class="text-gray-600 text-sm">2πr atau πd</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rumus Lingkaran -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 class="text-2xl font-bold text-purple-700 mb-6 text-center">📐 Rumus-Rumus Lingkaran</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-blue-50 rounded-xl p-6">
+                            <h4 class="text-xl font-bold text-blue-700 mb-4">🔵 Keliling Lingkaran</h4>
+                            <div class="space-y-3">
+                                <div class="bg-white rounded-lg p-4">
+                                    <p class="font-bold text-blue-600">K = 2πr</p>
+                                    <p class="text-sm text-gray-600">atau</p>
+                                    <p class="font-bold text-blue-600">K = πd</p>
+                                </div>
+                                <div class="text-sm text-gray-700">
+                                    <p><strong>Keterangan:</strong></p>
+                                    <p>K = Keliling</p>
+                                    <p>r = jari-jari</p>
+                                    <p>d = diameter</p>
+                                    <p>π = 22/7 atau 3,14</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 rounded-xl p-6">
+                            <h4 class="text-xl font-bold text-green-700 mb-4">🟢 Luas Lingkaran</h4>
+                            <div class="space-y-3">
+                                <div class="bg-white rounded-lg p-4">
+                                    <p class="font-bold text-green-600">L = πr²</p>
+                                    <p class="text-sm text-gray-600">atau</p>
+                                    <p class="font-bold text-green-600">L = ¼πd²</p>
+                                </div>
+                                <div class="text-sm text-gray-700">
+                                    <p><strong>Keterangan:</strong></p>
+                                    <p>L = Luas</p>
+                                    <p>r = jari-jari</p>
+                                    <p>d = diameter</p>
+                                    <p>π = 22/7 atau 3,14</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contoh Soal -->
+                    <div class="mt-8 bg-yellow-50 rounded-xl p-6">
+                        <h4 class="text-xl font-bold text-yellow-700 mb-4">💡 Contoh Soal</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-lg p-4">
+                                <p class="font-bold text-blue-600 mb-2">Contoh 1: Menghitung Keliling</p>
+                                <p class="text-sm text-gray-700 mb-2">Diketahui: r = 7 cm, π = 22/7</p>
+                                <p class="text-sm text-gray-700 mb-2">Ditanya: Keliling lingkaran?</p>
+                                <p class="text-sm text-gray-700 mb-2">Jawab:</p>
+                                <p class="text-sm text-gray-700">K = 2πr = 2 × 22/7 × 7 = 44 cm</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-4">
+                                <p class="font-bold text-green-600 mb-2">Contoh 2: Menghitung Luas</p>
+                                <p class="text-sm text-gray-700 mb-2">Diketahui: r = 10 cm, π = 3,14</p>
+                                <p class="text-sm text-gray-700 mb-2">Ditanya: Luas lingkaran?</p>
+                                <p class="text-sm text-gray-700 mb-2">Jawab:</p>
+                                <p class="text-sm text-gray-700">L = πr² = 3,14 × 10² = 314 cm²</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Jenis-Jenis -->
+        <div id="jenis-tab" class="tab-content hidden">
+            <h2 class="text-3xl font-bold text-purple-700 mb-8 text-center">🔍 Tiga Jenis Bangun Ruang Sisi Lengkung</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <!-- Tabung -->
+                <div class="shape-card bg-white rounded-3xl shadow-xl p-6 text-center">
+                    <div class="text-6xl mb-4 floating">🥫</div>
+                    <h3 class="text-2xl font-bold text-blue-600 mb-4">Tabung (Silinder)</h3>
+                    <div class="mb-6">
+                        <svg width="200" height="200" viewBox="0 0 200 200" class="mx-auto">
+                            <!-- Top ellipse -->
+                            <ellipse cx="100" cy="40" rx="60" ry="15" fill="#93c5fd" stroke="#3b82f6" stroke-width="2"/>
+                            <!-- Side lines -->
+                            <line x1="40" y1="40" x2="40" y2="160" stroke="#3b82f6" stroke-width="2"/>
+                            <line x1="160" y1="40" x2="160" y2="160" stroke="#3b82f6" stroke-width="2"/>
+                            <!-- Bottom ellipse -->
+                            <ellipse cx="100" cy="160" rx="60" ry="15" fill="#bfdbfe" stroke="#3b82f6" stroke-width="2"/>
+                            <!-- Height line -->
+                            <line x1="170" y1="40" x2="170" y2="160" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,5"/>
+                            <text x="175" y="105" fill="#ef4444" font-size="14" font-weight="bold">t</text>
+                        </svg>
+                    </div>
+                    <div class="text-left space-y-3">
+                        <div class="bg-blue-50 rounded-lg p-3">
+                            <p class="font-bold text-blue-700">✨ Ciri-ciri:</p>
+                            <ul class="text-sm text-gray-700 ml-4 mt-2 space-y-1">
+                                <li>• Memiliki 2 sisi alas berbentuk lingkaran</li>
+                                <li>• Sisi tegak berbentuk lengkung</li>
+                                <li>• Tinggi tegak lurus dengan alas</li>
+                            </ul>
+                        </div>
+                        <div class="bg-green-50 rounded-lg p-3">
+                            <p class="font-bold text-green-700">📐 Rumus:</p>
+                            <p class="text-sm text-gray-700 mt-2">Volume = πr²t</p>
+                            <p class="text-sm text-gray-700">Luas = 2πr(r+t)</p>
+                        </div>
+                        <div class="bg-purple-50 rounded-lg p-3">
+                            <p class="font-bold text-purple-700">🌍 Contoh:</p>
+                            <p class="text-sm text-gray-700 mt-2">Kaleng, drum, gelas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kerucut -->
+                <div class="shape-card bg-white rounded-3xl shadow-xl p-6 text-center">
+                    <div class="text-6xl mb-4 floating" style="animation-delay: 0.5s">🍦</div>
+                    <h3 class="text-2xl font-bold text-orange-600 mb-4">Kerucut</h3>
+                    <div class="mb-6">
+                        <svg width="200" height="200" viewBox="0 0 200 200" class="mx-auto">
+                            <!-- Base ellipse -->
+                            <ellipse cx="100" cy="170" rx="70" ry="18" fill="#fed7aa" stroke="#f97316" stroke-width="2"/>
+                            <!-- Left side -->
+                            <line x1="100" y1="30" x2="30" y2="170" stroke="#f97316" stroke-width="2"/>
+                            <!-- Right side -->
+                            <line x1="100" y1="30" x2="170" y2="170" stroke="#f97316" stroke-width="2"/>
+                            <!-- Apex point -->
+                            <circle cx="100" cy="30" r="4" fill="#f97316"/>
+                            <!-- Height line -->
+                            <line x1="100" y1="30" x2="100" y2="170" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,5"/>
+                            <text x="105" y="105" fill="#ef4444" font-size="14" font-weight="bold">t</text>
+                            <!-- Slant height -->
+                            <line x1="100" y1="30" x2="170" y2="170" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="3,3"/>
+                            <text x="140" y="110" fill="#8b5cf6" font-size="14" font-weight="bold">s</text>
+                        </svg>
+                    </div>
+                    <div class="text-left space-y-3">
+                        <div class="bg-orange-50 rounded-lg p-3">
+                            <p class="font-bold text-orange-700">✨ Ciri-ciri:</p>
+                            <ul class="text-sm text-gray-700 ml-4 mt-2 space-y-1">
+                                <li>• Memiliki 1 sisi alas lingkaran</li>
+                                <li>• Memiliki 1 titik puncak</li>
+                                <li>• Sisi tegak berbentuk lengkung</li>
+                            </ul>
+                        </div>
+                        <div class="bg-green-50 rounded-lg p-3">
+                            <p class="font-bold text-green-700">📐 Rumus:</p>
+                            <p class="text-sm text-gray-700 mt-2">Volume = ⅓πr²t</p>
+                            <p class="text-sm text-gray-700">Luas = πr(r+s)</p>
+                        </div>
+                        <div class="bg-purple-50 rounded-lg p-3">
+                            <p class="font-bold text-purple-700">🌍 Contoh:</p>
+                            <p class="text-sm text-gray-700 mt-2">Es krim cone, topi ulang tahun</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bola -->
+                <div class="shape-card bg-white rounded-3xl shadow-xl p-6 text-center">
+                    <div class="text-6xl mb-4 floating" style="animation-delay: 1s">⚽</div>
+                    <h3 class="text-2xl font-bold text-green-600 mb-4">Bola (Sphere)</h3>
+                    <div class="mb-6">
+                        <svg width="200" height="200" viewBox="0 0 200 200" class="mx-auto">
+                            <!-- Main circle -->
+                            <circle cx="100" cy="100" r="70" fill="#bbf7d0" stroke="#22c55e" stroke-width="2"/>
+                            <!-- Center point -->
+                            <circle cx="100" cy="100" r="4" fill="#22c55e"/>
+                            <!-- Radius line -->
+                            <line x1="100" y1="100" x2="170" y2="100" stroke="#ef4444" stroke-width="2"/>
+                            <text x="125" y="95" fill="#ef4444" font-size="14" font-weight="bold">r</text>
+                            <!-- Horizontal ellipse (equator) -->
+                            <ellipse cx="100" cy="100" rx="70" ry="20" fill="none" stroke="#22c55e" stroke-width="1" stroke-dasharray="5,5"/>
+                            <!-- Vertical ellipse -->
+                            <ellipse cx="100" cy="100" rx="20" ry="70" fill="none" stroke="#22c55e" stroke-width="1" stroke-dasharray="5,5"/>
+                        </svg>
+                    </div>
+                    <div class="text-left space-y-3">
+                        <div class="bg-green-50 rounded-lg p-3">
+                            <p class="font-bold text-green-700">✨ Ciri-ciri:</p>
+                            <ul class="text-sm text-gray-700 ml-4 mt-2 space-y-1">
+                                <li>• Semua permukaan lengkung</li>
+                                <li>• Tidak memiliki rusuk atau titik sudut</li>
+                                <li>• Jarak dari pusat ke permukaan sama</li>
+                            </ul>
+                        </div>
+                        <div class="bg-green-50 rounded-lg p-3">
+                            <p class="font-bold text-green-700">📐 Rumus:</p>
+                            <p class="text-sm text-gray-700 mt-2">Volume = 4/3πr³</p>
+                            <p class="text-sm text-gray-700">Luas = 4πr²</p>
+                        </div>
+                        <div class="bg-purple-50 rounded-lg p-3">
+                            <p class="font-bold text-purple-700">🌍 Contoh:</p>
+                            <p class="text-sm text-gray-700 mt-2">Bola sepak, kelereng, planet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <h3 class="text-2xl font-bold text-purple-700 mb-6 text-center">📊 Tabel Perbandingan</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+                                <th class="px-6 py-4 rounded-tl-xl">Karakteristik</th>
+                                <th class="px-6 py-4">Tabung</th>
+                                <th class="px-6 py-4">Kerucut</th>
+                                <th class="px-6 py-4 rounded-tr-xl">Bola</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <tr class="border-b border-gray-200">
+                                <td class="px-6 py-4 font-semibold bg-purple-50">Jumlah Sisi Alas</td>
+                                <td class="px-6 py-4">2 (atas & bawah)</td>
+                                <td class="px-6 py-4">1 (bawah)</td>
+                                <td class="px-6 py-4">0</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="px-6 py-4 font-semibold bg-purple-50">Bentuk Alas</td>
+                                <td class="px-6 py-4">Lingkaran</td>
+                                <td class="px-6 py-4">Lingkaran</td>
+                                <td class="px-6 py-4">-</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="px-6 py-4 font-semibold bg-purple-50">Titik Puncak</td>
+                                <td class="px-6 py-4">Tidak ada</td>
+                                <td class="px-6 py-4">Ada (1)</td>
+                                <td class="px-6 py-4">Tidak ada</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="px-6 py-4 font-semibold bg-purple-50">Sisi Lengkung</td>
+                                <td class="px-6 py-4">1 (selimut)</td>
+                                <td class="px-6 py-4">1 (selimut)</td>
+                                <td class="px-6 py-4">Seluruh permukaan</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-semibold bg-purple-50 rounded-bl-xl">Rusuk</td>
+                                <td class="px-6 py-4">2</td>
+                                <td class="px-6 py-4">1</td>
+                                <td class="px-6 py-4 rounded-br-xl">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Latihan Soal -->
+        <div id="latihan-tab" class="tab-content hidden">
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-purple-700 mb-6 text-center">📝 Latihan Soal</h2>
+                <p class="text-center text-gray-600 mb-8">Kerjakan soal-soal berikut untuk menguji pemahamanmu!</p>
+                
+                <div id="quiz-container" class="space-y-8">
+                    <!-- Questions will be generated here -->
+                </div>
+
+                <div id="quiz-result" class="hidden mt-8 p-6 rounded-2xl text-center">
+                    <p class="text-2xl font-bold mb-4" id="result-text"></p>
+                    <p class="text-lg mb-6" id="result-score"></p>
+                    <button onclick="resetQuiz()" class="bg-purple-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all">
+                        🔄 Coba Lagi
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.add('hidden'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('bg-white');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            event.target.classList.remove('bg-white');
+            
+            // Initialize quiz if latihan tab is selected
+            if (tabName === 'latihan') {
+                initQuiz();
+            }
+        }
+
+        // Quiz data - Sesuai Kurikulum SIBI
+        const quizQuestions = [
+            // Soal Luas dan Keliling Lingkaran - Level Dasar
+            {
+                question: "Sebuah lingkaran memiliki jari-jari 7 cm. Hitunglah keliling lingkaran tersebut! (π = 22/7)",
+                options: ["22 cm", "44 cm", "88 cm", "154 cm"],
+                correct: 1
+            },
+            {
+                question: "Diketahui diameter lingkaran 14 cm. Berapakah luas lingkaran tersebut? (π = 22/7)",
+                options: ["154 cm²", "308 cm²", "616 cm²", "88 cm²"],
+                correct: 0
+            },
+            {
+                question: "Keliling sebuah lingkaran adalah 88 cm. Tentukan jari-jari lingkaran tersebut! (π = 22/7)",
+                options: ["7 cm", "14 cm", "21 cm", "28 cm"],
+                correct: 1
+            },
+            {
+                question: "Luas lingkaran dengan jari-jari 21 cm adalah... (π = 22/7)",
+                options: ["1386 cm²", "693 cm²", "132 cm²", "264 cm²"],
+                correct: 0
+            },
+            {
+                question: "Sebuah roda memiliki diameter 70 cm. Berapa keliling roda tersebut? (π = 22/7)",
+                options: ["110 cm", "220 cm", "330 cm", "440 cm"],
+                correct: 1
+            },
+            {
+                question: "Jika keliling lingkaran 44 cm, maka luas lingkaran tersebut adalah... (π = 22/7)",
+                options: ["154 cm²", "308 cm²", "77 cm²", "88 cm²"],
+                correct: 0
+            },
+            {
+                question: "Sebuah taman berbentuk lingkaran dengan jari-jari 10 m. Luas taman tersebut adalah... (π = 3,14)",
+                options: ["314 m²", "628 m²", "31,4 m²", "62,8 m²"],
+                correct: 0
+            },
+            {
+                question: "Diameter sebuah lingkaran adalah 28 cm. Keliling lingkaran tersebut adalah... (π = 22/7)",
+                options: ["44 cm", "88 cm", "176 cm", "132 cm"],
+                correct: 1
+            },
+            
+            // Soal Aplikasi Lingkaran
+            {
+                question: "Sebuah kolam renang berbentuk lingkaran dengan diameter 20 m. Berapa luas permukaan kolam? (π = 3,14)",
+                options: ["314 m²", "628 m²", "1256 m²", "62,8 m²"],
+                correct: 0
+            },
+            {
+                question: "Pak Ahmad akan membuat pagar mengelilingi taman berbentuk lingkaran dengan jari-jari 14 m. Berapa panjang pagar yang dibutuhkan? (π = 22/7)",
+                options: ["44 m", "88 m", "176 m", "132 m"],
+                correct: 1
+            },
+            
+            // Soal Klasifikasi Bangun Ruang Sisi Lengkung
+            {
+                question: "Manakah yang termasuk bangun ruang sisi lengkung?",
+                options: ["Kubus, balok, prisma", "Tabung, kerucut, bola", "Limas, prisma, kubus", "Balok, tabung, kubus"],
+                correct: 1
+            },
+            {
+                question: "Bangun ruang yang memiliki 2 sisi berbentuk lingkaran adalah...",
+                options: ["Kerucut", "Tabung", "Bola", "Limas"],
+                correct: 1
+            },
+            {
+                question: "Ciri-ciri kerucut adalah...",
+                options: ["Memiliki 2 sisi alas", "Memiliki 1 sisi alas dan 1 titik puncak", "Tidak memiliki sisi alas", "Memiliki 3 sisi alas"],
+                correct: 1
+            },
+            {
+                question: "Bangun ruang yang tidak memiliki rusuk adalah...",
+                options: ["Tabung", "Kerucut", "Bola", "Prisma"],
+                correct: 2
+            },
+            {
+                question: "Sisi lengkung pada tabung disebut...",
+                options: ["Alas", "Tutup", "Selimut tabung", "Diameter"],
+                correct: 2
+            },
+            {
+                question: "Berapa jumlah titik sudut yang dimiliki bola?",
+                options: ["1", "2", "4", "0"],
+                correct: 3
+            },
+            {
+                question: "Contoh benda berbentuk tabung dalam kehidupan sehari-hari adalah...",
+                options: ["Bola sepak", "Kaleng susu", "Topi ulang tahun", "Kelereng"],
+                correct: 1
+            },
+            {
+                question: "Garis dari titik puncak kerucut ke tepi lingkaran alas disebut...",
+                options: ["Tinggi kerucut", "Jari-jari", "Garis pelukis", "Diameter"],
+                correct: 2
+            },
+            {
+                question: "Bangun ruang yang terbentuk jika lingkaran diputar pada diameternya adalah...",
+                options: ["Tabung", "Kerucut", "Bola", "Prisma"],
+                correct: 2
+            },
+            {
+                question: "Berapa jumlah rusuk yang dimiliki kerucut?",
+                options: ["0", "1", "2", "3"],
+                correct: 1
+            },
+            
+            // Soal Perbandingan Bangun Ruang
+            {
+                question: "Perbedaan utama antara tabung dan kerucut adalah...",
+                options: ["Tabung memiliki 2 alas, kerucut memiliki 1 alas", "Tabung lebih besar dari kerucut", "Tabung tidak memiliki alas", "Kerucut memiliki 2 alas"],
+                correct: 0
+            },
+            {
+                question: "Persamaan antara tabung, kerucut, dan bola adalah...",
+                options: ["Memiliki rusuk", "Memiliki titik sudut", "Memiliki sisi lengkung", "Memiliki alas persegi"],
+                correct: 2
+            },
+            {
+                question: "Bangun ruang yang memiliki volume terbesar jika jari-jarinya sama adalah...",
+                options: ["Tabung", "Kerucut", "Bola", "Sama besar"],
+                correct: 0
+            },
+            {
+                question: "Jika sebuah kerucut dipotong sejajar dengan alasnya, maka potongannya berbentuk...",
+                options: ["Persegi", "Segitiga", "Lingkaran", "Persegi panjang"],
+                correct: 2
+            },
+            {
+                question: "Bangun ruang yang jika dilihat dari atas berbentuk lingkaran adalah...",
+                options: ["Kubus", "Balok", "Tabung dan kerucut", "Prisma"],
+                correct: 2
+            },
+            
+            // Soal Aplikasi Bangun Ruang
+            {
+                question: "Sebuah topi ulang tahun berbentuk kerucut. Bagian manakah yang merupakan alas kerucut?",
+                options: ["Bagian puncak topi", "Bagian bawah topi yang terbuka", "Bagian tengah topi", "Seluruh permukaan topi"],
+                correct: 1
+            },
+            {
+                question: "Drum minyak berbentuk tabung. Berapa banyak sisi datar yang dimiliki drum tersebut?",
+                options: ["1", "2", "3", "4"],
+                correct: 1
+            },
+            {
+                question: "Bola basket memiliki ciri-ciri...",
+                options: ["Memiliki rusuk dan titik sudut", "Seluruh permukaan lengkung", "Memiliki alas berbentuk lingkaran", "Memiliki titik puncak"],
+                correct: 1
+            },
+            {
+                question: "Jika sebuah kaleng susu (tabung) dibuka tutupnya, maka yang tersisa adalah...",
+                options: ["Kerucut", "Bola", "Tabung tanpa tutup atas", "Prisma"],
+                correct: 2
+            },
+            {
+                question: "Es krim cone terdiri dari dua bangun ruang, yaitu...",
+                options: ["Tabung dan bola", "Kerucut dan setengah bola", "Bola dan kubus", "Kerucut dan tabung"],
+                correct: 1
+            }
+        ];
+
+        let currentAnswers = [];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            if (container.children.length > 0) return; // Already initialized
+            
+            currentAnswers = new Array(quizQuestions.length).fill(null);
+            
+            quizQuestions.forEach((q, qIndex) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-6';
+                
+                let optionsHTML = '';
+                q.options.forEach((option, oIndex) => {
+                    optionsHTML += `
+                        <div class="quiz-option bg-white rounded-xl p-4 mb-3 border-2 border-gray-200" 
+                             onclick="selectAnswer(${qIndex}, ${oIndex})">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="q${qIndex}" value="${oIndex}" class="mr-3 w-5 h-5">
+                                <span class="text-gray-700">${option}</span>
+                            </label>
+                        </div>
+                    `;
+                });
+                
+                questionDiv.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-purple-700">
+                            Pertanyaan ${qIndex + 1}
+                        </h3>
+                        <button onclick="toggleAnswer(${qIndex})" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all">
+                            🔑 Kunci Jawaban
+                        </button>
+                    </div>
+                    <p class="text-gray-800 mb-4 text-lg">${q.question}</p>
+                    <div class="options-container">
+                        ${optionsHTML}
+                    </div>
+                    <div id="answer-key-${qIndex}" class="hidden mt-4 bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg">
+                        <div class="flex items-start space-x-3">
+                            <div class="text-yellow-600 text-xl">💡</div>
+                            <div>
+                                <p class="font-bold text-yellow-800 mb-2">Kunci Jawaban:</p>
+                                <p class="text-yellow-700 font-semibold">${q.options[q.correct]}</p>
+                                ${q.explanation ? `<p class="text-yellow-600 text-sm mt-2 italic">${q.explanation}</p>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(questionDiv);
+            });
+            
+            // Add submit button
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all mt-6';
+            submitBtn.textContent = '✨ Submit Jawaban';
+            submitBtn.onclick = submitQuiz;
+            container.appendChild(submitBtn);
+        }
+
+        function selectAnswer(questionIndex, optionIndex) {
+            currentAnswers[questionIndex] = optionIndex;
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            const totalQuestions = quizQuestions.length;
+            
+            quizQuestions.forEach((q, index) => {
+                const options = document.querySelectorAll(`input[name="q${index}"]`);
+                const selectedOption = currentAnswers[index];
+                
+                options.forEach((option, oIndex) => {
+                    const parent = option.closest('.quiz-option');
+                    parent.style.pointerEvents = 'none';
+                    
+                    if (oIndex === q.correct) {
+                        parent.classList.add('correct');
+                    } else if (oIndex === selectedOption && selectedOption !== q.correct) {
+                        parent.classList.add('incorrect');
+                    }
+                });
+                
+                if (selectedOption === q.correct) {
+                    score++;
+                }
+            });
+            
+            // Show result
+            const resultDiv = document.getElementById('quiz-result');
+            const resultText = document.getElementById('result-text');
+            const resultScore = document.getElementById('result-score');
+            
+            const percentage = (score / totalQuestions) * 100;
+            
+            if (percentage >= 80) {
+                resultDiv.className = 'mt-8 p-6 rounded-2xl text-center bg-gradient-to-r from-green-100 to-emerald-100 border-4 border-green-500';
+                resultText.textContent = '🎉 Luar Biasa!';
+            } else if (percentage >= 60) {
+                resultDiv.className = 'mt-8 p-6 rounded-2xl text-center bg-gradient-to-r from-blue-100 to-cyan-100 border-4 border-blue-500';
+                resultText.textContent = '👍 Bagus!';
+            } else {
+                resultDiv.className = 'mt-8 p-6 rounded-2xl text-center bg-gradient-to-r from-yellow-100 to-orange-100 border-4 border-yellow-500';
+                resultText.textContent = '💪 Terus Belajar!';
+            }
+            
+            resultScore.textContent = `Skor kamu: ${score} dari ${totalQuestions} (${percentage.toFixed(0)}%)`;
+            resultDiv.classList.remove('hidden');
+            
+            // Hide submit button
+            event.target.style.display = 'none';
+        }
+
+        function toggleAnswer(questionIndex) {
+            const answerKey = document.getElementById(`answer-key-${questionIndex}`);
+            const button = event.target;
+            
+            if (answerKey.classList.contains('hidden')) {
+                answerKey.classList.remove('hidden');
+                button.textContent = '🙈 Sembunyikan';
+                button.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
+                button.classList.add('bg-gray-500', 'hover:bg-gray-600');
+            } else {
+                answerKey.classList.add('hidden');
+                button.textContent = '🔑 Kunci Jawaban';
+                button.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+                button.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
+            }
+        }
+
+        function resetQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+            document.getElementById('quiz-result').classList.add('hidden');
+            initQuiz();
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'992f6962369f6cfe',t:'MTc2MTIwMzM5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
