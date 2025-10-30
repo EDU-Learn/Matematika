@@ -347,11 +347,61 @@
             ctx.lineTo(centerX + scaleR, centerY + scaleH/2);
             ctx.stroke();
             
+            // Draw radius line on bottom base
+            ctx.strokeStyle = '#dc2626';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY + scaleH/2);
+            ctx.lineTo(centerX + scaleR, centerY + scaleH/2);
+            ctx.stroke();
+            
+            // Draw small circle at center of bottom base
+            ctx.fillStyle = '#dc2626';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY + scaleH/2, 3, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw height line on the side
+            ctx.strokeStyle = '#059669';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(centerX - scaleR - 20, centerY - scaleH/2);
+            ctx.lineTo(centerX - scaleR - 20, centerY + scaleH/2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Draw arrows for height
+            ctx.strokeStyle = '#059669';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            // Top arrow
+            ctx.moveTo(centerX - scaleR - 20, centerY - scaleH/2);
+            ctx.lineTo(centerX - scaleR - 25, centerY - scaleH/2 + 5);
+            ctx.moveTo(centerX - scaleR - 20, centerY - scaleH/2);
+            ctx.lineTo(centerX - scaleR - 15, centerY - scaleH/2 + 5);
+            // Bottom arrow
+            ctx.moveTo(centerX - scaleR - 20, centerY + scaleH/2);
+            ctx.lineTo(centerX - scaleR - 25, centerY + scaleH/2 - 5);
+            ctx.moveTo(centerX - scaleR - 20, centerY + scaleH/2);
+            ctx.lineTo(centerX - scaleR - 15, centerY + scaleH/2 - 5);
+            ctx.stroke();
+            
             // Labels
             ctx.fillStyle = '#1f2937';
             ctx.font = '14px Arial';
-            ctx.fillText(`r = ${radius} cm`, centerX + scaleR + 10, centerY);
-            ctx.fillText(`t = ${height} cm`, centerX - 30, centerY + scaleH/2 + 20);
+            
+            // Radius label (on the bottom base)
+            ctx.fillStyle = '#dc2626';
+            ctx.fillText(`r = ${radius} cm`, centerX + scaleR/2 - 25, centerY + scaleH/2 - 8);
+            
+            // Height label (on the side)
+            ctx.fillStyle = '#059669';
+            ctx.save();
+            ctx.translate(centerX - scaleR - 35, centerY);
+            ctx.rotate(-Math.PI/2);
+            ctx.fillText(`t = ${height} cm`, -25, 5);
+            ctx.restore();
             
             // Update display values
             document.getElementById('radiusValue').textContent = radius;
@@ -858,5 +908,5 @@
             }
         });
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99686409935a9a70',t:'MTc2MTgwMDg2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9968765824809a70',t:'MTc2MTgwMTYxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
