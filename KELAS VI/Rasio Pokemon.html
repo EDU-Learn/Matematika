@@ -520,9 +520,13 @@
     }
 
     async function generateConcreteQuestions() {
-      // Template soal dengan berbagai kombinasi angka mudah
+      // Template soal dengan tingkat mudah dan sedang
       const easyRatios = [
-        [4, 6], [6, 9], [8, 12], [10, 15], [6, 18], [4, 8], [9, 12], [10, 20], [6, 12], [8, 16]
+        [2, 4], [3, 6], [4, 8], [5, 10], [6, 12], [2, 6], [3, 9], [4, 12], [6, 9], [8, 12]
+      ];
+      
+      const mediumRatios = [
+        [6, 15], [8, 20], [9, 15], [12, 18], [10, 25], [14, 21], [16, 24], [15, 25], [18, 27], [20, 30]
       ];
       
       const attributes = [
@@ -532,21 +536,26 @@
       
       const questions = [];
       
-      for (let i = 0; i < 5; i++) {
-        // Pilih 2 Pokemon random
-        const id1 = Math.floor(Math.random() * 150) + 1;
-        let id2 = Math.floor(Math.random() * 150) + 1;
+      for (let i = 0; i < 10; i++) { // Tambah jadi 10 soal (5 pilgan + 5 isian)
+        // Pilih 2 Pokemon random dari 1000 Pokemon
+        const id1 = Math.floor(Math.random() * 1000) + 1;
+        let id2 = Math.floor(Math.random() * 1000) + 1;
         while (id2 === id1) {
-          id2 = Math.floor(Math.random() * 150) + 1;
+          id2 = Math.floor(Math.random() * 1000) + 1;
         }
         
         const pokemon1 = await fetchPokemon(id1);
         const pokemon2 = await fetchPokemon(id2);
         
         if (pokemon1 && pokemon2) {
-          // Pilih rasio mudah random
-          const ratioIndex = Math.floor(Math.random() * easyRatios.length);
-          const [value1, value2] = easyRatios[ratioIndex];
+          // Tentukan tingkat kesulitan (5 pertama mudah, 5 terakhir sedang)
+          const isEasy = i < 5;
+          const ratioPool = isEasy ? easyRatios : mediumRatios;
+          const difficulty = isEasy ? "Mudah" : "Sedang";
+          
+          // Pilih rasio random
+          const ratioIndex = Math.floor(Math.random() * ratioPool.length);
+          const [value1, value2] = ratioPool[ratioIndex];
           
           // Pilih atribut random
           const attrIndex = Math.floor(Math.random() * attributes.length);
@@ -554,36 +563,96 @@
           
           const [correct1, correct2] = simplifyRatio(value1, value2);
           
-          // Buat pilihan jawaban yang mudah dipahami
-          const wrongOptions = [
-            [value1, value2], // Jawaban belum disederhanakan
-            [correct1 + 1, correct2], // Salah satu angka ditambah 1
-            [correct1, correct2 + 1], // Salah satu angka ditambah 1
-          ];
+          // Tentukan tipe soal (5 pertama pilgan, 5 terakhir isian)
+          const isMultipleChoice = i < 5;
           
-          const options = [
-            [correct1, correct2],
-            ...wrongOptions
-          ].sort(() => Math.random() - 0.5);
-          
-          questions.push({
-            pokemon1: {
-              ...pokemon1,
-              [attribute.key]: value1
-            },
-            pokemon2: {
-              ...pokemon2, 
-              [attribute.key]: value2
-            },
-            attribute: attribute.key,
-            label: attribute.label,
-            unit: attribute.unit,
-            value1: value1,
-            value2: value2,
-            correct: `${correct1}:${correct2}`,
-            options: options.map(opt => `${opt[0]}:${opt[1]}`),
-            explanation: `${value1} : ${value2} = ${correct1} : ${correct2} (dibagi ${value1/correct1})`
-          });
+          if (isMultipleChoice) {
+            // Buat pilihan jawaban yang sangat menipu dan tidak mengikuti pola
+            const wrongOptions = [];
+            
+            // Strategi 1: Buat jawaban yang lebih kecil dari jawaban benar
+            if (correct1 > 1 && correct2 > 1) {
+              wrongOptions.push([correct1 - 1, correct2 - 1]); // Kedua angka dikurangi 1
+              wrongOptions.push([1, correct2 - 1]); // Angka pertama jadi 1, kedua dikurangi
+            }
+            
+            // Strategi 2: Buat jawaban dengan angka yang tampak "lebih sederhana"
+            wrongOptions.push([1, correct2]); // 1:sesuatu (tampak sederhana)
+            wrongOptions.push([correct1, 1]); // sesuatu:1 (tampak sederhana)
+            
+            // Strategi 3: Jawaban belum disederhanakan
+            wrongOptions.push([value1, value2]);
+            
+            // Strategi 4: Pola matematika yang salah tapi masuk akal
+            wrongOptions.push([correct1 + 1, correct2]); // Salah satu angka +1
+            wrongOptions.push([correct1, correct2 + 1]); // Salah satu angka +1
+            wrongOptions.push([correct1 * 2, correct2]); // Salah satu angka dikali 2
+            
+            // Strategi 5: Urutan terbalik
+            wrongOptions.push([correct2, correct1]);
+            
+            // Strategi 6: Hasil pembagian yang salah
+            if (value1 % 2 === 0 && value2 % 2 === 0) {
+              wrongOptions.push([value1/2, value2/3]); // Bagi dengan angka berbeda
+            }
+            
+            // Filter jawaban yang valid dan pilih 3 secara random
+            const validWrongOptions = wrongOptions.filter(opt => 
+              opt[0] > 0 && opt[1] > 0 && opt[0] <= 50 && opt[1] <= 50 &&
+              `${opt[0]}:${opt[1]}` !== `${correct1}:${correct2}`
+            );
+            
+            const selectedWrong = validWrongOptions
+              .sort(() => Math.random() - 0.5)
+              .slice(0, 3);
+            
+            const options = [
+              [correct1, correct2],
+              ...selectedWrong
+            ].sort(() => Math.random() - 0.5);
+            
+            questions.push({
+              type: 'multiple_choice',
+              difficulty: difficulty,
+              pokemon1: {
+                ...pokemon1,
+                [attribute.key]: value1
+              },
+              pokemon2: {
+                ...pokemon2, 
+                [attribute.key]: value2
+              },
+              attribute: attribute.key,
+              label: attribute.label,
+              unit: attribute.unit,
+              value1: value1,
+              value2: value2,
+              correct: `${correct1}:${correct2}`,
+              options: options.map(opt => `${opt[0]}:${opt[1]}`),
+              explanation: `${value1} : ${value2} = ${correct1} : ${correct2} (dibagi ${value1/correct1})`
+            });
+          } else {
+            // Soal isian singkat
+            questions.push({
+              type: 'fill_in',
+              difficulty: difficulty,
+              pokemon1: {
+                ...pokemon1,
+                [attribute.key]: value1
+              },
+              pokemon2: {
+                ...pokemon2, 
+                [attribute.key]: value2
+              },
+              attribute: attribute.key,
+              label: attribute.label,
+              unit: attribute.unit,
+              value1: value1,
+              value2: value2,
+              correct: `${correct1}:${correct2}`,
+              explanation: `${value1} : ${value2} = ${correct1} : ${correct2} (dibagi ${value1/correct1})`
+            });
+          }
         }
       }
       
@@ -603,15 +672,25 @@
       ];
       
       const easyRatios = [
-        [4, 6], [6, 9], [8, 12], [10, 15], [6, 18], [4, 8], [9, 12], [8, 4], [12, 6], [15, 5]
+        [2, 4], [3, 6], [4, 8], [5, 10], [6, 12], [2, 6], [3, 9], [4, 12], [6, 9], [8, 12]
+      ];
+      
+      const mediumRatios = [
+        [6, 15], [8, 20], [9, 15], [12, 18], [10, 25], [14, 21], [16, 24], [15, 25], [18, 27], [20, 30]
       ];
       
       const questions = [];
       
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 10; i++) { // Tambah jadi 10 soal (5 pilgan + 5 isian)
         const character = characters[Math.floor(Math.random() * characters.length)];
-        const ratioIndex = Math.floor(Math.random() * easyRatios.length);
-        const [value1, value2] = easyRatios[ratioIndex];
+        
+        // Tentukan tingkat kesulitan (5 pertama mudah, 5 terakhir sedang)
+        const isEasy = i < 5;
+        const ratioPool = isEasy ? easyRatios : mediumRatios;
+        const difficulty = isEasy ? "Mudah" : "Sedang";
+        
+        const ratioIndex = Math.floor(Math.random() * ratioPool.length);
+        const [value1, value2] = ratioPool[ratioIndex];
         const [correct1, correct2] = simplifyRatio(value1, value2);
         
         let question, explanation;
@@ -628,24 +707,67 @@
           explanation = `${value1} : ${value2} = (${value1}÷${value1/correct1}) : (${value2}÷${value1/correct1}) = ${correct1} : ${correct2}`;
         }
         
-        // Buat pilihan jawaban
-        const wrongOptions = [
-          `${value1}:${value2}`, // Belum disederhanakan
-          `${correct1 + 1}:${correct2}`, // Salah satu angka +1
-          `${correct1}:${correct2 + 1}`, // Salah satu angka +1
-        ];
+        // Tentukan tipe soal (5 pertama pilgan, 5 terakhir isian)
+        const isMultipleChoice = i < 5;
         
-        const options = [
-          `${correct1}:${correct2}`,
-          ...wrongOptions
-        ].sort(() => Math.random() - 0.5);
-        
-        questions.push({
-          question,
-          options,
-          correct: `${correct1}:${correct2}`,
-          explanation
-        });
+        if (isMultipleChoice) {
+          // Buat pilihan jawaban yang sangat menipu dan tidak mengikuti pola
+          const wrongOptions = [];
+          
+          // Strategi 1: Buat jawaban yang lebih kecil dari jawaban benar
+          if (correct1 > 1 && correct2 > 1) {
+            wrongOptions.push(`${correct1 - 1}:${correct2 - 1}`); // Kedua angka dikurangi 1
+            wrongOptions.push(`1:${correct2 - 1}`); // Angka pertama jadi 1, kedua dikurangi
+          }
+          
+          // Strategi 2: Buat jawaban dengan angka yang tampak "lebih sederhana"
+          wrongOptions.push(`1:${correct2}`); // 1:sesuatu (tampak sederhana)
+          wrongOptions.push(`${correct1}:1`); // sesuatu:1 (tampak sederhana)
+          
+          // Strategi 3: Jawaban belum disederhanakan
+          wrongOptions.push(`${value1}:${value2}`);
+          
+          // Strategi 4: Pola matematika yang salah tapi masuk akal
+          wrongOptions.push(`${correct1 + 1}:${correct2}`); // Salah satu angka +1
+          wrongOptions.push(`${correct1}:${correct2 + 1}`); // Salah satu angka +1
+          wrongOptions.push(`${correct1 * 2}:${correct2}`); // Salah satu angka dikali 2
+          
+          // Strategi 5: Urutan terbalik
+          wrongOptions.push(`${correct2}:${correct1}`);
+          
+          // Filter jawaban yang valid dan pilih 3 secara random
+          const validWrongOptions = wrongOptions.filter(opt => 
+            opt !== `${correct1}:${correct2}` && 
+            !opt.includes('0') && !opt.includes('-')
+          );
+          
+          const selectedWrong = validWrongOptions
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 3);
+          
+          const options = [
+            `${correct1}:${correct2}`,
+            ...selectedWrong
+          ].sort(() => Math.random() - 0.5);
+          
+          questions.push({
+            type: 'multiple_choice',
+            difficulty: difficulty,
+            question,
+            options,
+            correct: `${correct1}:${correct2}`,
+            explanation
+          });
+        } else {
+          // Soal isian singkat
+          questions.push({
+            type: 'fill_in',
+            difficulty: difficulty,
+            question,
+            correct: `${correct1}:${correct2}`,
+            explanation
+          });
+        }
       }
       
       return questions;
@@ -655,55 +777,93 @@
       const container = document.getElementById('concrete-questions');
       document.getElementById('concrete-total').textContent = questions.length;
       
-      container.innerHTML = questions.map((q, index) => `
-        <div class="question-card">
-          <h4>Soal ${index + 1}</h4>
-          <div class="pokemon-display">
-            <div class="pokemon-card">
-              <img src="${q.pokemon1.image}" alt="${q.pokemon1.name}" onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
-              <h4>${q.pokemon1.name}</h4>
-              <p>${q.label.charAt(0).toUpperCase() + q.label.slice(1)}: ${q.value1} ${q.unit}</p>
+      container.innerHTML = questions.map((q, index) => {
+        const questionType = q.type === 'multiple_choice' ? '(Pilihan Ganda)' : '(Isian Singkat)';
+        const difficultyColor = q.difficulty === 'Mudah' ? '#28a745' : '#fd7e14';
+        
+        return `
+          <div class="question-card">
+            <h4>Soal ${index + 1} ${questionType} - <span style="color: ${difficultyColor}; font-weight: bold;">${q.difficulty}</span></h4>
+            <div class="pokemon-display">
+              <div class="pokemon-card">
+                <img src="${q.pokemon1.image}" alt="${q.pokemon1.name}" onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+                <h4>${q.pokemon1.name}</h4>
+                <p>${q.label.charAt(0).toUpperCase() + q.label.slice(1)}: ${q.value1} ${q.unit}</p>
+              </div>
+              <div class="ratio-symbol">:</div>
+              <div class="pokemon-card">
+                <img src="${q.pokemon2.image}" alt="${q.pokemon2.name}" onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+                <h4>${q.pokemon2.name}</h4>
+                <p>${q.label.charAt(0).toUpperCase() + q.label.slice(1)}: ${q.value2} ${q.unit}</p>
+              </div>
             </div>
-            <div class="ratio-symbol">:</div>
-            <div class="pokemon-card">
-              <img src="${q.pokemon2.image}" alt="${q.pokemon2.name}" onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
-              <h4>${q.pokemon2.name}</h4>
-              <p>${q.label.charAt(0).toUpperCase() + q.label.slice(1)}: ${q.value2} ${q.unit}</p>
-            </div>
+            <p><strong>Berapa rasio paling sederhana dari ${q.label} ${q.pokemon1.name} terhadap ${q.pokemon2.name}?</strong></p>
+            
+            ${q.type === 'multiple_choice' ? `
+              <div class="options">
+                ${q.options.map(opt => `
+                  <button class="option-btn" onclick="checkConcreteAnswer(${index}, '${opt}', '${q.correct}', '${q.type}')">${opt}</button>
+                `).join('')}
+              </div>
+            ` : `
+              <div style="margin: 1rem 0;">
+                <p style="margin-bottom: 0.5rem; font-weight: bold; color: #495057;">Tulis jawabanmu (format: angka:angka)</p>
+                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                  <input type="text" id="fill-input-${index}" style="padding: 0.8rem; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1.1rem; min-width: 150px;">
+                  <button onclick="checkConcreteAnswer(${index}, document.getElementById('fill-input-${index}').value.trim(), '${q.correct}', '${q.type}')" style="background: #667eea; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: bold;">
+                    ✓ Periksa Jawaban
+                  </button>
+                </div>
+              </div>
+            `}
+            
+            <div class="feedback" id="concrete-feedback-${index}"></div>
+            <button class="next-btn" id="concrete-next-${index}" onclick="scrollToNext(${index + 1}, 'concrete')">Soal Berikutnya →</button>
           </div>
-          <p><strong>Berapa rasio paling sederhana dari ${q.label} ${q.pokemon1.name} terhadap ${q.pokemon2.name}?</strong></p>
-          <div class="options">
-            ${q.options.map(opt => `
-              <button class="option-btn" onclick="checkConcreteAnswer(${index}, '${opt}', '${q.correct}')">${opt}</button>
-            `).join('')}
-          </div>
-          <div class="feedback" id="concrete-feedback-${index}"></div>
-          <button class="next-btn" id="concrete-next-${index}" onclick="scrollToNext(${index + 1}, 'concrete')">Soal Berikutnya →</button>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function renderStoryQuestions(questions) {
       const container = document.getElementById('story-questions');
       document.getElementById('story-total').textContent = questions.length;
       
-      container.innerHTML = questions.map((q, index) => `
-        <div class="question-card">
-          <h4>Soal ${index + 1}</h4>
-          <p><strong>${q.question}</strong></p>
-          <div class="options">
-            ${q.options.map(opt => `
-              <button class="option-btn" onclick="checkStoryAnswer(${index}, '${opt}', '${q.correct}', '${q.explanation}')">${opt}</button>
-            `).join('')}
+      container.innerHTML = questions.map((q, index) => {
+        const questionType = q.type === 'multiple_choice' ? '(Pilihan Ganda)' : '(Isian Singkat)';
+        const difficultyColor = q.difficulty === 'Mudah' ? '#28a745' : '#fd7e14';
+        
+        return `
+          <div class="question-card">
+            <h4>Soal ${index + 1} ${questionType} - <span style="color: ${difficultyColor}; font-weight: bold;">${q.difficulty}</span></h4>
+            <p><strong>${q.question}</strong></p>
+            
+            ${q.type === 'multiple_choice' ? `
+              <div class="options">
+                ${q.options.map(opt => `
+                  <button class="option-btn" onclick="checkStoryAnswer(${index}, '${opt}', '${q.correct}', '${q.explanation}', '${q.type}')">${opt}</button>
+                `).join('')}
+              </div>
+            ` : `
+              <div style="margin: 1rem 0;">
+                <p style="margin-bottom: 0.5rem; font-weight: bold; color: #495057;">Tulis jawabanmu (format: angka:angka)</p>
+                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                  <input type="text" id="story-fill-input-${index}" style="padding: 0.8rem; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1.1rem; min-width: 150px;">
+                  <button onclick="checkStoryAnswer(${index}, document.getElementById('story-fill-input-${index}').value.trim(), '${q.correct}', '${q.explanation}', '${q.type}')" style="background: #667eea; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: bold;">
+                    ✓ Periksa Jawaban
+                  </button>
+                </div>
+              </div>
+            `}
+            
+            <div class="feedback" id="story-feedback-${index}"></div>
+            <button class="next-btn" id="story-next-${index}" onclick="scrollToNext(${index + 1}, 'story')">Soal Berikutnya →</button>
           </div>
-          <div class="feedback" id="story-feedback-${index}"></div>
-          <button class="next-btn" id="story-next-${index}" onclick="scrollToNext(${index + 1}, 'story')">Soal Berikutnya →</button>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     async function catchPokemon() {
-      const randomId = Math.floor(Math.random() * 150) + 1;
+      const randomId = Math.floor(Math.random() * 1000) + 1;
       
       // Cek apakah Pokemon sudah ditangkap
       if (collectedPokemon.has(randomId)) {
@@ -842,7 +1002,7 @@
           for (const idStr of idStrings) {
             if (idStr) {
               const id = parseInt(idStr);
-              if (id >= 1 && id <= 150) {
+              if (id >= 1 && id <= 1000) {
                 pokemonIds.push(id);
               }
             }
@@ -857,8 +1017,8 @@
                 const idStr = pokemonIdsStr.substring(i, i + len);
                 const id = parseInt(idStr);
                 
-                // Validasi ID Pokemon (1-150)
-                if (id >= 1 && id <= 150) {
+                // Validasi ID Pokemon (1-1000)
+                if (id >= 1 && id <= 1000) {
                   pokemonIds.push(id);
                   i += len;
                   break;
@@ -933,8 +1093,7 @@
       }, 5000);
     }
 
-    function checkConcreteAnswer(index, selected, correct) {
-      const buttons = document.querySelectorAll(`#concrete-questions .question-card:nth-child(${index + 1}) .option-btn`);
+    function checkConcreteAnswer(index, selected, correct, questionType) {
       const feedback = document.getElementById(`concrete-feedback-${index}`);
       const nextBtn = document.getElementById(`concrete-next-${index}`);
       
@@ -948,16 +1107,32 @@
         value2 = pokemonCards[1].textContent.match(/\d+/)[0];
       }
       
-      buttons.forEach(btn => {
-        btn.disabled = true;
-        if (btn.textContent === correct) {
-          btn.classList.add('correct');
-        } else if (btn.textContent === selected) {
-          btn.classList.add('incorrect');
-        }
-      });
+      // Normalisasi jawaban (hapus spasi, ubah ke lowercase)
+      const normalizedSelected = selected.replace(/\s+/g, '').toLowerCase();
+      const normalizedCorrect = correct.replace(/\s+/g, '').toLowerCase();
       
-      if (selected === correct) {
+      if (questionType === 'multiple_choice') {
+        // Untuk pilihan ganda, disable semua tombol
+        const buttons = document.querySelectorAll(`#concrete-questions .question-card:nth-child(${index + 1}) .option-btn`);
+        buttons.forEach(btn => {
+          btn.disabled = true;
+          if (btn.textContent === correct) {
+            btn.classList.add('correct');
+          } else if (btn.textContent === selected) {
+            btn.classList.add('incorrect');
+          }
+        });
+      } else {
+        // Untuk isian, disable input dan tombol
+        const input = document.getElementById(`fill-input-${index}`);
+        const button = input.nextElementSibling;
+        input.disabled = true;
+        button.disabled = true;
+        button.style.opacity = '0.6';
+        button.style.cursor = 'not-allowed';
+      }
+      
+      if (normalizedSelected === normalizedCorrect) {
         concreteScore++;
         feedback.innerHTML = `🎉 Benar! Jawaban kamu tepat!<br><small>Penjelasan: ${value1} : ${value2} = ${correct} (dibagi ${Math.floor(value1/correct.split(':')[0])})</small>`;
         feedback.className = 'feedback correct show';
@@ -965,7 +1140,16 @@
         // Tangkap Pokemon jika jawaban benar!
         catchPokemon();
       } else {
-        feedback.innerHTML = `❌ Kurang tepat. Jawaban yang benar adalah ${correct}<br><small>Penjelasan: ${value1} : ${value2} = ${correct} (dibagi ${Math.floor(value1/correct.split(':')[0])})</small>`;
+        let errorMsg = '';
+        if (questionType === 'fill_in') {
+          if (!selected || selected.trim() === '') {
+            errorMsg = 'Jawaban tidak boleh kosong! ';
+          } else if (!selected.includes(':')) {
+            errorMsg = 'Format jawaban salah! Gunakan format angka:angka (contoh: 2:3). ';
+          }
+        }
+        
+        feedback.innerHTML = `❌ ${errorMsg}Jawaban yang benar adalah ${correct}<br><small>Penjelasan: ${value1} : ${value2} = ${correct} (dibagi ${Math.floor(value1/correct.split(':')[0])})</small>`;
         feedback.className = 'feedback incorrect show';
       }
       
@@ -978,21 +1162,36 @@
       }
     }
 
-    function checkStoryAnswer(index, selected, correct, explanation) {
-      const buttons = document.querySelectorAll(`#story-questions .question-card:nth-child(${index + 1}) .option-btn`);
+    function checkStoryAnswer(index, selected, correct, explanation, questionType) {
       const feedback = document.getElementById(`story-feedback-${index}`);
       const nextBtn = document.getElementById(`story-next-${index}`);
       
-      buttons.forEach(btn => {
-        btn.disabled = true;
-        if (btn.textContent === correct) {
-          btn.classList.add('correct');
-        } else if (btn.textContent === selected) {
-          btn.classList.add('incorrect');
-        }
-      });
+      // Normalisasi jawaban (hapus spasi, ubah ke lowercase)
+      const normalizedSelected = selected.replace(/\s+/g, '').toLowerCase();
+      const normalizedCorrect = correct.replace(/\s+/g, '').toLowerCase();
       
-      if (selected === correct) {
+      if (questionType === 'multiple_choice') {
+        // Untuk pilihan ganda, disable semua tombol
+        const buttons = document.querySelectorAll(`#story-questions .question-card:nth-child(${index + 1}) .option-btn`);
+        buttons.forEach(btn => {
+          btn.disabled = true;
+          if (btn.textContent === correct) {
+            btn.classList.add('correct');
+          } else if (btn.textContent === selected) {
+            btn.classList.add('incorrect');
+          }
+        });
+      } else {
+        // Untuk isian, disable input dan tombol
+        const input = document.getElementById(`story-fill-input-${index}`);
+        const button = input.nextElementSibling;
+        input.disabled = true;
+        button.disabled = true;
+        button.style.opacity = '0.6';
+        button.style.cursor = 'not-allowed';
+      }
+      
+      if (normalizedSelected === normalizedCorrect) {
         storyScore++;
         feedback.innerHTML = `🎉 Benar! ${explanation}`;
         feedback.className = 'feedback correct show';
@@ -1000,7 +1199,16 @@
         // Tangkap Pokemon jika jawaban benar!
         catchPokemon();
       } else {
-        feedback.innerHTML = `❌ Kurang tepat. Jawaban yang benar adalah ${correct}<br>${explanation}`;
+        let errorMsg = '';
+        if (questionType === 'fill_in') {
+          if (!selected || selected.trim() === '') {
+            errorMsg = 'Jawaban tidak boleh kosong! ';
+          } else if (!selected.includes(':')) {
+            errorMsg = 'Format jawaban salah! Gunakan format angka:angka (contoh: 2:3). ';
+          }
+        }
+        
+        feedback.innerHTML = `❌ ${errorMsg}Jawaban yang benar adalah ${correct}<br>${explanation}`;
         feedback.className = 'feedback incorrect show';
       }
       
@@ -1113,5 +1321,5 @@
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9999d8beb7fdb5ab',t:'MTc2MjMxOTQ0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'999a1b42f6173aa1',t:'MTc2MjMyMjE3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
