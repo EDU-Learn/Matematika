@@ -1,0 +1,1117 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Rasio Learning</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin: 0 0 0.5rem 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    .section {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .section h2 {
+      color: #667eea;
+      font-size: 1.8rem;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .theory-box {
+      background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin-bottom: 1.5rem;
+      border: 3px solid #f39c12;
+    }
+
+    .theory-box h3 {
+      color: #d35400;
+      margin-top: 0;
+      font-size: 1.3rem;
+    }
+
+    .theory-box p {
+      color: #2c3e50;
+      line-height: 1.8;
+      margin: 0.5rem 0;
+      font-size: 1.1rem;
+    }
+
+    .example-box {
+      background: #e8f4f8;
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin: 1rem 0;
+      border-left: 5px solid #3498db;
+    }
+
+    .pokemon-display {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      justify-content: center;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+
+    .pokemon-card {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+      min-width: 150px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .pokemon-card img {
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 50%;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .pokemon-card h4 {
+      margin: 0.5rem 0;
+      font-size: 1.2rem;
+      text-transform: capitalize;
+    }
+
+    .pokemon-card p {
+      margin: 0.3rem 0;
+      font-size: 1rem;
+    }
+
+    .ratio-symbol {
+      font-size: 2rem;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .question-card {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin: 1rem 0;
+      border: 2px solid #e9ecef;
+    }
+
+    .question-card h4 {
+      color: #495057;
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .option-btn {
+      background: white;
+      border: 3px solid #dee2e6;
+      padding: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #495057;
+    }
+
+    .option-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border-color: #667eea;
+    }
+
+    .option-btn.correct {
+      background: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .option-btn.incorrect {
+      background: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    .option-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.correct {
+      background: #d4edda;
+      color: #155724;
+      border: 2px solid #28a745;
+    }
+
+    .feedback.incorrect {
+      background: #f8d7da;
+      color: #721c24;
+      border: 2px solid #dc3545;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #667eea;
+      font-size: 1.2rem;
+    }
+
+    .next-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: all 0.3s;
+      display: none;
+    }
+
+    .next-btn.show {
+      display: inline-block;
+    }
+
+    .next-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .score-display {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .collected-pokemon {
+      background: white;
+      border-radius: 15px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border: 3px solid #f39c12;
+      transition: all 0.3s;
+    }
+
+    .collected-pokemon:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .collected-pokemon img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #f8f9fa;
+      padding: 0.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .collected-pokemon h5 {
+      margin: 0.5rem 0;
+      color: #2c3e50;
+      font-size: 0.9rem;
+      text-transform: capitalize;
+    }
+
+    .pokemon-catch-animation {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      z-index: 1000;
+      text-align: center;
+      border: 5px solid #f39c12;
+      animation: pokemonCatch 2s ease-in-out;
+    }
+
+    @keyframes pokemonCatch {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .pokemon-catch-animation img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #f8f9fa;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <h1 id="main-title">🎮 Belajar Rasio dengan Pokémon! 🎮</h1>
+    <p id="subtitle">Matematika Kelas 6 SD - Materi Rasio</p>
+   </div><!-- Materi Teori -->
+   <div class="section">
+    <h2 id="theory-title">📚 Apa itu Rasio?</h2>
+    <div class="theory-box">
+     <h3>Pengertian Rasio</h3>
+     <p><strong>Rasio</strong> adalah perbandingan antara dua bilangan atau lebih. Rasio ditulis dengan tanda titik dua (:)</p>
+     <p>Contoh: Rasio 3 : 5 dibaca "tiga berbanding lima"</p>
+    </div>
+    <div class="theory-box" style="background: linear-gradient(135deg, #a8e6cf 0%, #88d8a3 100%); border-color: #27ae60;">
+     <h3>🔢 Cara Menyederhanakan Rasio (Tips Pembagian)</h3>
+     <p><strong>Langkah 1:</strong> Cari bilangan yang bisa membagi kedua angka</p>
+     <p><strong>Langkah 2:</strong> Bagi kedua angka dengan bilangan yang sama</p>
+     <p><strong>Contoh:</strong> 12 : 18</p>
+     <div style="background: white; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+      <p style="margin: 0.5rem 0;">• Kedua angka bisa dibagi 2 → 12÷2 = 6, 18÷2 = 9 → jadi 6:9</p>
+      <p style="margin: 0.5rem 0;">• Masih bisa dibagi 3 → 6÷3 = 2, 9÷3 = 3 → jadi <strong>2:3</strong></p>
+      <p style="margin: 0.5rem 0; color: #27ae60;"><strong>✓ Selesai! 2 dan 3 tidak bisa dibagi lagi dengan bilangan yang sama</strong></p>
+     </div>
+    </div>
+    <div class="example-box">
+     <h3>🔍 Contoh dengan Pokémon:</h3>
+     <div id="theory-pokemon-display" class="pokemon-display">
+      <div class="loading">
+       Memuat Pokémon...
+      </div>
+     </div>
+     <p style="text-align: center; font-size: 1.1rem; margin-top: 1rem;"><strong>Rasio tinggi Pokémon di atas akan ditampilkan setelah data dimuat!</strong></p>
+    </div>
+   </div><!-- Kalkulator Bantuan -->
+   <div class="section">
+    <h2>🧮 Kalkulator Bantuan Rasio</h2>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 15px; border: 2px solid #dee2e6;">
+     <h3 style="color: #495057; margin-top: 0;">Masukkan dua angka untuk melihat cara menyederhanakan rasio:</h3>
+     <div style="display: flex; gap: 1rem; align-items: center; margin: 1rem 0; flex-wrap: wrap;"><input type="number" id="num1" placeholder="Angka 1" style="padding: 0.8rem; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1.1rem; width: 120px;"> <span style="font-size: 1.5rem; font-weight: bold;">:</span> <input type="number" id="num2" placeholder="Angka 2" style="padding: 0.8rem; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1.1rem; width: 120px;"> <button onclick="calculateRatio()" style="background: #667eea; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">Hitung!</button>
+     </div>
+     <div id="ratio-result" style="margin-top: 1rem;"></div>
+     <div style="background: #e3f2fd; padding: 1rem; border-radius: 10px; margin-top: 1rem; border-left: 4px solid #2196f3;">
+      <h4 style="margin-top: 0; color: #1976d2;">💡 Tips Cepat Mencari Pembagi:</h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
+       <p style="margin: 0.3rem 0;">• <strong>Bagi 2:</strong> Jika kedua angka genap</p>
+       <p style="margin: 0.3rem 0;">• <strong>Bagi 3:</strong> Jika jumlah digit habis dibagi 3</p>
+       <p style="margin: 0.3rem 0;">• <strong>Bagi 5:</strong> Jika berakhir 0 atau 5</p>
+       <p style="margin: 0.3rem 0;">• <strong>Bagi 10:</strong> Jika berakhir 0</p>
+      </div>
+     </div>
+    </div>
+   </div><!-- Pokemon Collection -->
+   <div class="section">
+    <h2>📖 Koleksi Pokémon Kamu</h2>
+    <div style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); padding: 1.5rem; border-radius: 15px; margin-bottom: 1rem;">
+     <h3 style="margin-top: 0; color: #8e44ad;">🏆 Total Pokémon: <span id="pokemon-count">0</span></h3>
+     <p style="margin: 0; color: #2c3e50;">Jawab soal dengan benar untuk menangkap Pokémon baru!</p>
+    </div><!-- Save/Load System -->
+    <div style="background: #e8f4f8; padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem; border-left: 5px solid #3498db;">
+     <h3 style="margin-top: 0; color: #2980b9;">💾 Simpan &amp; Muat Koleksi</h3>
+     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+      <div>
+       <h4 style="margin: 0 0 0.5rem 0; color: #34495e;">📤 Simpan Koleksi</h4><button onclick="saveCollection()" style="background: #27ae60; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-size: 1rem; cursor: pointer; width: 100%; font-weight: bold;"> 💾 Buat Kode Simpan </button>
+       <div id="save-code-display" style="margin-top: 1rem;"></div>
+      </div>
+      <div>
+       <h4 style="margin: 0 0 0.5rem 0; color: #34495e;">📥 Muat Koleksi</h4><input type="text" id="load-code-input" placeholder="Masukkan kode koleksi..." style="width: 100%; padding: 0.8rem; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 1rem; margin-bottom: 0.5rem;"> <button onclick="loadCollection()" style="background: #3498db; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-size: 1rem; cursor: pointer; width: 100%; font-weight: bold;"> 📥 Muat Koleksi </button>
+      </div>
+     </div>
+     <div id="save-load-message" style="margin-top: 1rem;"></div>
+     <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; border-left: 4px solid #ffc107; margin-top: 1rem;">
+      <h5 style="margin-top: 0; color: #856404;">💡 Cara Menggunakan:</h5>
+      <ul style="margin: 0.5rem 0; color: #856404; padding-left: 1.5rem;">
+       <li><strong>Simpan:</strong> Klik "Buat Kode Simpan" untuk mendapatkan kode koleksi kamu</li>
+       <li><strong>Salin:</strong> Copy kode tersebut dan simpan di tempat aman</li>
+       <li><strong>Muat:</strong> Paste kode di kotak "Muat Koleksi" untuk melanjutkan</li>
+      </ul>
+     </div>
+    </div>
+    <div id="pokemon-collection" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+     <div style="text-align: center; color: #7f8c8d; padding: 2rem;">
+      <p>🎯 Mulai menjawab soal untuk mengumpulkan Pokémon!</p>
+     </div>
+    </div>
+   </div><!-- Latihan Soal Konkret -->
+   <div class="section">
+    <h2 id="concrete-title">🎯 Latihan Soal Konkret</h2>
+    <div class="score-display">
+     Skor: <span id="concrete-score">0</span> / <span id="concrete-total">0</span>
+    </div>
+    <div id="concrete-questions"></div>
+    <div style="text-align: center; margin-top: 2rem;"><button id="new-concrete-btn" onclick="generateNewConcreteQuestions()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: none;"> 🔄 Soal Baru </button>
+    </div>
+   </div><!-- Latihan Soal Cerita -->
+   <div class="section">
+    <h2 id="story-title">📖 Latihan Soal Cerita</h2>
+    <div class="score-display">
+     Skor: <span id="story-score">0</span> / <span id="story-total">0</span>
+    </div>
+    <div id="story-questions"></div>
+    <div style="text-align: center; margin-top: 2rem;"><button id="new-story-btn" onclick="generateNewStoryQuestions()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: none;"> 🔄 Soal Baru </button>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: "🎮 Belajar Rasio dengan Pokémon! 🎮",
+      subtitle: "Matematika Kelas 6 SD - Materi Rasio",
+      theory_title: "📚 Apa itu Rasio?",
+      concrete_practice_title: "🎯 Latihan Soal Konkret",
+      story_practice_title: "📖 Latihan Soal Cerita"
+    };
+
+    let concreteScore = 0;
+    let storyScore = 0;
+    let pokemonData = [];
+    let collectedPokemon = new Set();
+    let currentConcreteQuestions = [];
+    let currentStoryQuestions = [];
+
+    async function onConfigChange(config) {
+      document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+      document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+      document.getElementById('theory-title').textContent = config.theory_title || defaultConfig.theory_title;
+      document.getElementById('concrete-title').textContent = config.concrete_practice_title || defaultConfig.concrete_practice_title;
+      document.getElementById('story-title').textContent = config.story_practice_title || defaultConfig.story_practice_title;
+    }
+
+    async function fetchPokemon(id) {
+      try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        const data = await response.json();
+        return {
+          name: data.name,
+          height: data.height,
+          weight: data.weight,
+          image: data.sprites.front_default
+        };
+      } catch (error) {
+        console.error('Error fetching Pokemon:', error);
+        return null;
+      }
+    }
+
+    function gcd(a, b) {
+      return b === 0 ? a : gcd(b, a % b);
+    }
+
+    function simplifyRatio(a, b) {
+      const divisor = gcd(a, b);
+      return [a / divisor, b / divisor];
+    }
+
+    async function loadTheoryPokemon() {
+      const pokemon1 = await fetchPokemon(25); // Pikachu
+      const pokemon2 = await fetchPokemon(1);  // Bulbasaur
+      
+      if (pokemon1 && pokemon2) {
+        const [ratio1, ratio2] = simplifyRatio(pokemon1.height, pokemon2.height);
+        
+        const display = document.getElementById('theory-pokemon-display');
+        display.innerHTML = `
+          <div class="pokemon-card">
+            <img src="${pokemon1.image}" alt="${pokemon1.name}" onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+            <h4>${pokemon1.name}</h4>
+            <p>Tinggi: ${pokemon1.height} dm</p>
+          </div>
+          <div class="ratio-symbol">:</div>
+          <div class="pokemon-card">
+            <img src="${pokemon2.image}" alt="${pokemon2.name}" onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+            <h4>${pokemon2.name}</h4>
+            <p>Tinggi: ${pokemon2.height} dm</p>
+          </div>
+        `;
+        
+        const explanation = display.nextElementSibling;
+        explanation.innerHTML = `
+          <strong>Rasio tinggi ${pokemon1.name} : ${pokemon2.name} = ${pokemon1.height} : ${pokemon2.height}</strong><br>
+          Jika disederhanakan = <strong>${ratio1} : ${ratio2}</strong>
+        `;
+      }
+    }
+
+    async function generateConcreteQuestions() {
+      // Template soal dengan berbagai kombinasi angka mudah
+      const easyRatios = [
+        [4, 6], [6, 9], [8, 12], [10, 15], [6, 18], [4, 8], [9, 12], [10, 20], [6, 12], [8, 16]
+      ];
+      
+      const attributes = [
+        { key: 'height', label: 'tinggi', unit: 'dm' },
+        { key: 'weight', label: 'berat', unit: 'kg' }
+      ];
+      
+      const questions = [];
+      
+      for (let i = 0; i < 5; i++) {
+        // Pilih 2 Pokemon random
+        const id1 = Math.floor(Math.random() * 150) + 1;
+        let id2 = Math.floor(Math.random() * 150) + 1;
+        while (id2 === id1) {
+          id2 = Math.floor(Math.random() * 150) + 1;
+        }
+        
+        const pokemon1 = await fetchPokemon(id1);
+        const pokemon2 = await fetchPokemon(id2);
+        
+        if (pokemon1 && pokemon2) {
+          // Pilih rasio mudah random
+          const ratioIndex = Math.floor(Math.random() * easyRatios.length);
+          const [value1, value2] = easyRatios[ratioIndex];
+          
+          // Pilih atribut random
+          const attrIndex = Math.floor(Math.random() * attributes.length);
+          const attribute = attributes[attrIndex];
+          
+          const [correct1, correct2] = simplifyRatio(value1, value2);
+          
+          // Buat pilihan jawaban yang mudah dipahami
+          const wrongOptions = [
+            [value1, value2], // Jawaban belum disederhanakan
+            [correct1 + 1, correct2], // Salah satu angka ditambah 1
+            [correct1, correct2 + 1], // Salah satu angka ditambah 1
+          ];
+          
+          const options = [
+            [correct1, correct2],
+            ...wrongOptions
+          ].sort(() => Math.random() - 0.5);
+          
+          questions.push({
+            pokemon1: {
+              ...pokemon1,
+              [attribute.key]: value1
+            },
+            pokemon2: {
+              ...pokemon2, 
+              [attribute.key]: value2
+            },
+            attribute: attribute.key,
+            label: attribute.label,
+            unit: attribute.unit,
+            value1: value1,
+            value2: value2,
+            correct: `${correct1}:${correct2}`,
+            options: options.map(opt => `${opt[0]}:${opt[1]}`),
+            explanation: `${value1} : ${value2} = ${correct1} : ${correct2} (dibagi ${value1/correct1})`
+          });
+        }
+      }
+      
+      return questions;
+    }
+
+    function generateStoryQuestions() {
+      const characters = ["Ash", "Misty", "Brock", "Gary", "Jessie", "James"];
+      const pokemonTypes = [
+        ["Air", "Api"], ["Listrik", "Rumput"], ["Batu", "Tanah"], 
+        ["Psikis", "Gelap"], ["Es", "Naga"], ["Racun", "Terbang"]
+      ];
+      const items = [
+        ["Poké Ball merah", "Poké Ball biru"], ["Great Ball", "Ultra Ball"],
+        ["Potion", "Super Potion"], ["Revive", "Max Revive"],
+        ["Rare Candy", "TM"], ["Berry Oran", "Berry Sitrus"]
+      ];
+      
+      const easyRatios = [
+        [4, 6], [6, 9], [8, 12], [10, 15], [6, 18], [4, 8], [9, 12], [8, 4], [12, 6], [15, 5]
+      ];
+      
+      const questions = [];
+      
+      for (let i = 0; i < 5; i++) {
+        const character = characters[Math.floor(Math.random() * characters.length)];
+        const ratioIndex = Math.floor(Math.random() * easyRatios.length);
+        const [value1, value2] = easyRatios[ratioIndex];
+        const [correct1, correct2] = simplifyRatio(value1, value2);
+        
+        let question, explanation;
+        
+        if (Math.random() > 0.5) {
+          // Soal tentang Pokemon
+          const types = pokemonTypes[Math.floor(Math.random() * pokemonTypes.length)];
+          question = `${character} memiliki ${value1} Pokémon tipe ${types[0]} dan ${value2} Pokémon tipe ${types[1]}. Berapa rasio paling sederhana dari Pokémon tipe ${types[0]} terhadap tipe ${types[1]}?`;
+          explanation = `${value1} : ${value2} = (${value1}÷${value1/correct1}) : (${value2}÷${value1/correct1}) = ${correct1} : ${correct2}`;
+        } else {
+          // Soal tentang item
+          const itemPair = items[Math.floor(Math.random() * items.length)];
+          question = `Di Pokémon Center, terdapat ${value1} ${itemPair[0]} dan ${value2} ${itemPair[1]}. Berapa rasio ${itemPair[0]} terhadap ${itemPair[1]}?`;
+          explanation = `${value1} : ${value2} = (${value1}÷${value1/correct1}) : (${value2}÷${value1/correct1}) = ${correct1} : ${correct2}`;
+        }
+        
+        // Buat pilihan jawaban
+        const wrongOptions = [
+          `${value1}:${value2}`, // Belum disederhanakan
+          `${correct1 + 1}:${correct2}`, // Salah satu angka +1
+          `${correct1}:${correct2 + 1}`, // Salah satu angka +1
+        ];
+        
+        const options = [
+          `${correct1}:${correct2}`,
+          ...wrongOptions
+        ].sort(() => Math.random() - 0.5);
+        
+        questions.push({
+          question,
+          options,
+          correct: `${correct1}:${correct2}`,
+          explanation
+        });
+      }
+      
+      return questions;
+    }
+
+    function renderConcreteQuestions(questions) {
+      const container = document.getElementById('concrete-questions');
+      document.getElementById('concrete-total').textContent = questions.length;
+      
+      container.innerHTML = questions.map((q, index) => `
+        <div class="question-card">
+          <h4>Soal ${index + 1}</h4>
+          <div class="pokemon-display">
+            <div class="pokemon-card">
+              <img src="${q.pokemon1.image}" alt="${q.pokemon1.name}" onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+              <h4>${q.pokemon1.name}</h4>
+              <p>${q.label.charAt(0).toUpperCase() + q.label.slice(1)}: ${q.value1} ${q.unit}</p>
+            </div>
+            <div class="ratio-symbol">:</div>
+            <div class="pokemon-card">
+              <img src="${q.pokemon2.image}" alt="${q.pokemon2.name}" onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+              <h4>${q.pokemon2.name}</h4>
+              <p>${q.label.charAt(0).toUpperCase() + q.label.slice(1)}: ${q.value2} ${q.unit}</p>
+            </div>
+          </div>
+          <p><strong>Berapa rasio paling sederhana dari ${q.label} ${q.pokemon1.name} terhadap ${q.pokemon2.name}?</strong></p>
+          <div class="options">
+            ${q.options.map(opt => `
+              <button class="option-btn" onclick="checkConcreteAnswer(${index}, '${opt}', '${q.correct}')">${opt}</button>
+            `).join('')}
+          </div>
+          <div class="feedback" id="concrete-feedback-${index}"></div>
+          <button class="next-btn" id="concrete-next-${index}" onclick="scrollToNext(${index + 1}, 'concrete')">Soal Berikutnya →</button>
+        </div>
+      `).join('');
+    }
+
+    function renderStoryQuestions(questions) {
+      const container = document.getElementById('story-questions');
+      document.getElementById('story-total').textContent = questions.length;
+      
+      container.innerHTML = questions.map((q, index) => `
+        <div class="question-card">
+          <h4>Soal ${index + 1}</h4>
+          <p><strong>${q.question}</strong></p>
+          <div class="options">
+            ${q.options.map(opt => `
+              <button class="option-btn" onclick="checkStoryAnswer(${index}, '${opt}', '${q.correct}', '${q.explanation}')">${opt}</button>
+            `).join('')}
+          </div>
+          <div class="feedback" id="story-feedback-${index}"></div>
+          <button class="next-btn" id="story-next-${index}" onclick="scrollToNext(${index + 1}, 'story')">Soal Berikutnya →</button>
+        </div>
+      `).join('');
+    }
+
+    async function catchPokemon() {
+      const randomId = Math.floor(Math.random() * 150) + 1;
+      
+      // Cek apakah Pokemon sudah ditangkap
+      if (collectedPokemon.has(randomId)) {
+        return await catchPokemon(); // Coba lagi dengan Pokemon lain
+      }
+      
+      const pokemon = await fetchPokemon(randomId);
+      if (pokemon) {
+        collectedPokemon.add(randomId);
+        showPokemonCatchAnimation(pokemon);
+        updatePokemonCollection();
+        return pokemon;
+      }
+    }
+
+    function showPokemonCatchAnimation(pokemon) {
+      const backdrop = document.createElement('div');
+      backdrop.className = 'backdrop';
+      
+      const animation = document.createElement('div');
+      animation.className = 'pokemon-catch-animation';
+      animation.innerHTML = `
+        <h2 style="color: #f39c12; margin-top: 0;">🎉 Pokémon Tertangkap! 🎉</h2>
+        <img src="${pokemon.image}" alt="${pokemon.name}" onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+        <h3 style="color: #2c3e50; text-transform: capitalize; margin: 0.5rem 0;">${pokemon.name}</h3>
+        <p style="color: #7f8c8d; margin: 0;">Ditambahkan ke koleksi kamu!</p>
+      `;
+      
+      document.body.appendChild(backdrop);
+      document.body.appendChild(animation);
+      
+      setTimeout(() => {
+        document.body.removeChild(backdrop);
+        document.body.removeChild(animation);
+      }, 2000);
+    }
+
+    function updatePokemonCollection() {
+      const container = document.getElementById('pokemon-collection');
+      const count = document.getElementById('pokemon-count');
+      
+      count.textContent = collectedPokemon.size;
+      
+      if (collectedPokemon.size === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; color: #7f8c8d; padding: 2rem;">
+            <p>🎯 Mulai menjawab soal untuk mengumpulkan Pokémon!</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // Tampilkan Pokemon yang sudah ditangkap
+      Promise.all([...collectedPokemon].map(id => fetchPokemon(id)))
+        .then(pokemonList => {
+          container.innerHTML = pokemonList.map(pokemon => `
+            <div class="collected-pokemon">
+              <img src="${pokemon.image}" alt="${pokemon.name}" onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+              <h5>${pokemon.name}</h5>
+            </div>
+          `).join('');
+        });
+    }
+
+    function saveCollection() {
+      if (collectedPokemon.size === 0) {
+        showSaveLoadMessage("❌ Belum ada Pokémon untuk disimpan! Jawab soal dulu untuk menangkap Pokémon.", "error");
+        return;
+      }
+
+      // Buat kode unik berdasarkan koleksi Pokemon
+      const pokemonArray = [...collectedPokemon].sort((a, b) => a - b);
+      const timestamp = Date.now();
+      const checksum = pokemonArray.reduce((sum, id) => sum + id, 0);
+      
+      // Format baru: POKEMON-[jumlah]-[checksum]-[timestamp_akhir6digit]-[pokemonids_dengan_separator]
+      // Gunakan 'x' sebagai separator untuk memisahkan ID Pokemon
+      const pokemonIdsString = pokemonArray.join('x');
+      const saveCode = `POKEMON-${pokemonArray.length}-${checksum}-${timestamp.toString().slice(-6)}-${pokemonIdsString}`;
+      
+      const displayDiv = document.getElementById('save-code-display');
+      displayDiv.innerHTML = `
+        <div style="background: #d4edda; padding: 1rem; border-radius: 8px; border: 2px solid #27ae60;">
+          <h5 style="margin-top: 0; color: #155724;">✅ Kode Koleksi Berhasil Dibuat!</h5>
+          <div style="background: white; padding: 0.8rem; border-radius: 5px; font-family: monospace; font-size: 0.9rem; word-break: break-all; border: 1px solid #c3e6cb; margin: 0.5rem 0;">
+            ${saveCode}
+          </div>
+          <button onclick="copyToClipboard('${saveCode}')" style="background: #28a745; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; font-size: 0.9rem; cursor: pointer;">
+            📋 Salin Kode
+          </button>
+          <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: #155724;">
+            <strong>Simpan kode ini!</strong> Kamu bisa menggunakannya untuk memuat koleksi ${pokemonArray.length} Pokémon kapan saja.
+          </p>
+          <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; color: #6c757d;">
+            Pokémon ID: ${pokemonArray.join(', ')}
+          </p>
+        </div>
+      `;
+      
+      showSaveLoadMessage(`🎉 Kode koleksi berhasil dibuat! Kamu memiliki ${pokemonArray.length} Pokémon.`, "success");
+    }
+
+    function loadCollection() {
+      const codeInput = document.getElementById('load-code-input');
+      const code = codeInput.value.trim();
+      
+      if (!code) {
+        showSaveLoadMessage("❌ Masukkan kode koleksi terlebih dahulu!", "error");
+        return;
+      }
+      
+      // Validasi format kode
+      if (!code.startsWith('POKEMON-')) {
+        showSaveLoadMessage("❌ Format kode tidak valid! Pastikan kode dimulai dengan 'POKEMON-'", "error");
+        return;
+      }
+      
+      try {
+        // Parse kode: POKEMON-[jumlah]-[checksum]-[timestamp]-[pokemonids]
+        const parts = code.split('-');
+        if (parts.length !== 5) {
+          throw new Error("Format kode salah");
+        }
+        
+        const [prefix, countStr, checksumStr, timestampStr, pokemonIdsStr] = parts;
+        const expectedCount = parseInt(countStr);
+        const expectedChecksum = parseInt(checksumStr);
+        
+        // Extract Pokemon IDs dengan pemisah yang lebih baik
+        const pokemonIds = [];
+        
+        // Pisahkan berdasarkan pola: setiap ID dipisah dengan 'x'
+        if (pokemonIdsStr.includes('x')) {
+          // Format baru dengan separator 'x'
+          const idStrings = pokemonIdsStr.split('x');
+          for (const idStr of idStrings) {
+            if (idStr) {
+              const id = parseInt(idStr);
+              if (id >= 1 && id <= 150) {
+                pokemonIds.push(id);
+              }
+            }
+          }
+        } else {
+          // Format lama - coba parsing dengan asumsi setiap ID 1-3 digit
+          let i = 0;
+          while (i < pokemonIdsStr.length && pokemonIds.length < expectedCount) {
+            // Coba ambil 1-3 digit
+            for (let len = 3; len >= 1; len--) {
+              if (i + len <= pokemonIdsStr.length) {
+                const idStr = pokemonIdsStr.substring(i, i + len);
+                const id = parseInt(idStr);
+                
+                // Validasi ID Pokemon (1-150)
+                if (id >= 1 && id <= 150) {
+                  pokemonIds.push(id);
+                  i += len;
+                  break;
+                }
+              }
+              
+              // Jika sampai len = 1 dan masih tidak valid, skip karakter ini
+              if (len === 1) {
+                i++;
+              }
+            }
+          }
+        }
+        
+        // Validasi jumlah dan checksum
+        if (pokemonIds.length !== expectedCount) {
+          throw new Error(`Jumlah Pokémon tidak sesuai. Diharapkan: ${expectedCount}, Ditemukan: ${pokemonIds.length}`);
+        }
+        
+        const actualChecksum = pokemonIds.reduce((sum, id) => sum + id, 0);
+        if (actualChecksum !== expectedChecksum) {
+          throw new Error("Checksum tidak valid, kode mungkin rusak");
+        }
+        
+        // Muat koleksi
+        collectedPokemon.clear();
+        pokemonIds.forEach(id => collectedPokemon.add(id));
+        
+        updatePokemonCollection();
+        codeInput.value = '';
+        
+        showSaveLoadMessage(`🎉 Koleksi berhasil dimuat! ${pokemonIds.length} Pokémon telah ditambahkan.`, "success");
+        
+        // Hapus kode yang ditampilkan sebelumnya
+        document.getElementById('save-code-display').innerHTML = '';
+        
+      } catch (error) {
+        showSaveLoadMessage(`❌ Gagal memuat koleksi: ${error.message}`, "error");
+      }
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showSaveLoadMessage("📋 Kode berhasil disalin ke clipboard!", "success");
+      }).catch(() => {
+        // Fallback untuk browser yang tidak mendukung clipboard API
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showSaveLoadMessage("📋 Kode berhasil disalin!", "success");
+      });
+    }
+
+    function showSaveLoadMessage(message, type) {
+      const messageDiv = document.getElementById('save-load-message');
+      const bgColor = type === 'success' ? '#d4edda' : '#f8d7da';
+      const borderColor = type === 'success' ? '#28a745' : '#dc3545';
+      const textColor = type === 'success' ? '#155724' : '#721c24';
+      
+      messageDiv.innerHTML = `
+        <div style="background: ${bgColor}; color: ${textColor}; padding: 1rem; border-radius: 8px; border: 2px solid ${borderColor}; text-align: center; font-weight: bold;">
+          ${message}
+        </div>
+      `;
+      
+      // Hapus pesan setelah 5 detik
+      setTimeout(() => {
+        messageDiv.innerHTML = '';
+      }, 5000);
+    }
+
+    function checkConcreteAnswer(index, selected, correct) {
+      const buttons = document.querySelectorAll(`#concrete-questions .question-card:nth-child(${index + 1}) .option-btn`);
+      const feedback = document.getElementById(`concrete-feedback-${index}`);
+      const nextBtn = document.getElementById(`concrete-next-${index}`);
+      
+      // Ambil data soal untuk penjelasan
+      const questionData = document.querySelector(`#concrete-questions .question-card:nth-child(${index + 1})`);
+      const pokemonCards = questionData.querySelectorAll('.pokemon-card p');
+      let value1, value2;
+      
+      if (pokemonCards.length >= 2) {
+        value1 = pokemonCards[0].textContent.match(/\d+/)[0];
+        value2 = pokemonCards[1].textContent.match(/\d+/)[0];
+      }
+      
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.textContent === correct) {
+          btn.classList.add('correct');
+        } else if (btn.textContent === selected) {
+          btn.classList.add('incorrect');
+        }
+      });
+      
+      if (selected === correct) {
+        concreteScore++;
+        feedback.innerHTML = `🎉 Benar! Jawaban kamu tepat!<br><small>Penjelasan: ${value1} : ${value2} = ${correct} (dibagi ${Math.floor(value1/correct.split(':')[0])})</small>`;
+        feedback.className = 'feedback correct show';
+        
+        // Tangkap Pokemon jika jawaban benar!
+        catchPokemon();
+      } else {
+        feedback.innerHTML = `❌ Kurang tepat. Jawaban yang benar adalah ${correct}<br><small>Penjelasan: ${value1} : ${value2} = ${correct} (dibagi ${Math.floor(value1/correct.split(':')[0])})</small>`;
+        feedback.className = 'feedback incorrect show';
+      }
+      
+      document.getElementById('concrete-score').textContent = concreteScore;
+      nextBtn.classList.add('show');
+      
+      // Tampilkan tombol soal baru jika semua soal selesai
+      if (index === currentConcreteQuestions.length - 1) {
+        document.getElementById('new-concrete-btn').style.display = 'inline-block';
+      }
+    }
+
+    function checkStoryAnswer(index, selected, correct, explanation) {
+      const buttons = document.querySelectorAll(`#story-questions .question-card:nth-child(${index + 1}) .option-btn`);
+      const feedback = document.getElementById(`story-feedback-${index}`);
+      const nextBtn = document.getElementById(`story-next-${index}`);
+      
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.textContent === correct) {
+          btn.classList.add('correct');
+        } else if (btn.textContent === selected) {
+          btn.classList.add('incorrect');
+        }
+      });
+      
+      if (selected === correct) {
+        storyScore++;
+        feedback.innerHTML = `🎉 Benar! ${explanation}`;
+        feedback.className = 'feedback correct show';
+        
+        // Tangkap Pokemon jika jawaban benar!
+        catchPokemon();
+      } else {
+        feedback.innerHTML = `❌ Kurang tepat. Jawaban yang benar adalah ${correct}<br>${explanation}`;
+        feedback.className = 'feedback incorrect show';
+      }
+      
+      document.getElementById('story-score').textContent = storyScore;
+      nextBtn.classList.add('show');
+      
+      // Tampilkan tombol soal baru jika semua soal selesai
+      if (index === currentStoryQuestions.length - 1) {
+        document.getElementById('new-story-btn').style.display = 'inline-block';
+      }
+    }
+
+    function scrollToNext(nextIndex, type) {
+      const container = type === 'concrete' ? 
+        document.getElementById('concrete-questions') : 
+        document.getElementById('story-questions');
+      
+      const nextCard = container.querySelector(`.question-card:nth-child(${nextIndex + 1})`);
+      if (nextCard) {
+        nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function calculateRatio() {
+      const num1 = parseInt(document.getElementById('num1').value);
+      const num2 = parseInt(document.getElementById('num2').value);
+      const resultDiv = document.getElementById('ratio-result');
+      
+      if (!num1 || !num2 || num1 <= 0 || num2 <= 0) {
+        resultDiv.innerHTML = '<p style="color: #dc3545; font-weight: bold;">⚠️ Masukkan dua angka positif!</p>';
+        return;
+      }
+      
+      let steps = [];
+      let current1 = num1;
+      let current2 = num2;
+      
+      steps.push(`<strong>Rasio awal:</strong> ${current1} : ${current2}`);
+      
+      // Cari pembagi bersama
+      for (let i = 2; i <= Math.min(current1, current2); i++) {
+        while (current1 % i === 0 && current2 % i === 0) {
+          current1 = current1 / i;
+          current2 = current2 / i;
+          steps.push(`Bagi dengan ${i} → ${current1} : ${current2}`);
+        }
+      }
+      
+      if (current1 === num1 && current2 === num2) {
+        steps.push(`<span style="color: #28a745;">✓ Sudah dalam bentuk paling sederhana!</span>`);
+      } else {
+        steps.push(`<span style="color: #28a745;">✓ Hasil akhir: <strong>${current1} : ${current2}</strong></span>`);
+      }
+      
+      resultDiv.innerHTML = `
+        <div style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #667eea;">
+          <h4 style="margin-top: 0; color: #667eea;">Langkah-langkah:</h4>
+          ${steps.map(step => `<p style="margin: 0.5rem 0;">${step}</p>`).join('')}
+        </div>
+      `;
+    }
+
+    async function generateNewConcreteQuestions() {
+      document.getElementById('new-concrete-btn').style.display = 'none';
+      document.getElementById('concrete-questions').innerHTML = '<div class="loading">Membuat soal baru...</div>';
+      
+      currentConcreteQuestions = await generateConcreteQuestions();
+      renderConcreteQuestions(currentConcreteQuestions);
+    }
+
+    async function generateNewStoryQuestions() {
+      document.getElementById('new-story-btn').style.display = 'none';
+      document.getElementById('story-questions').innerHTML = '<div class="loading">Membuat soal baru...</div>';
+      
+      currentStoryQuestions = generateStoryQuestions();
+      renderStoryQuestions(currentStoryQuestions);
+    }
+
+    async function init() {
+      await loadTheoryPokemon();
+      currentConcreteQuestions = await generateConcreteQuestions();
+      currentStoryQuestions = generateStoryQuestions();
+      
+      renderConcreteQuestions(currentConcreteQuestions);
+      renderStoryQuestions(currentStoryQuestions);
+      updatePokemonCollection();
+      
+      await onConfigChange(defaultConfig);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["subtitle", config.subtitle || defaultConfig.subtitle],
+          ["theory_title", config.theory_title || defaultConfig.theory_title],
+          ["concrete_practice_title", config.concrete_practice_title || defaultConfig.concrete_practice_title],
+          ["story_practice_title", config.story_practice_title || defaultConfig.story_practice_title]
+        ])
+      });
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9999d8beb7fdb5ab',t:'MTc2MjMxOTQ0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
