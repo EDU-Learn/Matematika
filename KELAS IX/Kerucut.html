@@ -1,0 +1,1042 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi Bangun Ruang Kerucut</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        .canvas-container {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: #f9fafb;
+        }
+        .formula-box {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            color: #212529;
+            margin: 16px 0;
+        }
+        .example-box {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            color: #212529;
+            margin: 16px 0;
+        }
+        .practice-box {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            color: #212529;
+            margin: 16px 0;
+        }
+        .guided-box {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            color: #212529;
+            margin: 16px 0;
+        }
+        .step-box {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+        }
+        .answer-box {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        .input-field {
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 16px;
+            width: 100px;
+            text-align: center;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .tab-button {
+            padding: 12px 24px;
+            border: 1px solid #dee2e6;
+            background: #ffffff;
+            color: #495057;
+            cursor: pointer;
+            border-radius: 6px 6px 0 0;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .tab-button.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="bg-gray-50 min-h-full">
+  <header class="bg-white shadow-sm border-b-2 border-blue-200">
+   <div class="max-w-6xl mx-auto px-6 py-4">
+    <h1 id="main-title" class="text-3xl font-bold text-gray-800">Bangun Ruang: Kerucut</h1>
+    <p id="subtitle" class="text-lg text-gray-600 mt-2">Luas Permukaan dan Volume Kerucut</p>
+   </div>
+  </header>
+  <main class="max-w-6xl mx-auto px-6 py-8"><!-- Tab Navigation -->
+   <div class="flex space-x-2 mb-6"><button class="tab-button active" onclick="showTab('materi')">📚 Materi</button> <button class="tab-button" onclick="showTab('contoh')">💡 Contoh Soal</button> <button class="tab-button" onclick="showTab('terbimbing')">🎯 Latihan Terbimbing</button> <button class="tab-button" onclick="showTab('latihan')">✏️ Latihan Soal</button>
+   </div><!-- Materi Tab -->
+   <div id="materi" class="tab-content active">
+    <div class="grid md:grid-cols-2 gap-8">
+     <div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Visualisasi Kerucut</h2>
+      <div class="canvas-container">
+       <canvas id="coneCanvas" width="400" height="300"></canvas>
+      </div>
+      <div class="mt-4 text-center"><label for="radiusSlider" class="block text-sm font-medium text-gray-700 mb-2">Jari-jari (r): <span id="radiusValue">7</span> cm</label> <input type="range" id="radiusSlider" min="3" max="25" value="7" class="w-full"> <label for="heightSlider" class="block text-sm font-medium text-gray-700 mb-2 mt-4">Tinggi (t): <span id="heightValue">12</span> cm</label> <input type="range" id="heightSlider" min="3" max="25" value="12" class="w-full"> <label for="slantSlider" class="block text-sm font-medium text-gray-700 mb-2 mt-4">Garis Pelukis (s): <span id="slantValue">9.4</span> cm</label> <input type="range" id="slantSlider" min="7" max="15" value="9.4" step="0.1" class="w-full" disabled>
+      </div>
+     </div>
+     <div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Rumus-rumus Kerucut</h2>
+      <div class="formula-box">
+       <h3 class="text-xl font-bold mb-3">🔵 Luas Permukaan Kerucut</h3>
+       <div class="text-lg mb-2 font-mono bg-blue-50 p-3 rounded border">
+        L = πr² + πrs
+       </div>
+       <div class="text-lg font-mono bg-blue-50 p-3 rounded border">
+        L = πr(r + s)
+       </div>
+       <p class="text-sm mt-3 opacity-90">Dimana: r = jari-jari, s = garis pelukis</p>
+      </div>
+      <div class="formula-box">
+       <h3 class="text-xl font-bold mb-3">📦 Volume Kerucut</h3>
+       <div class="text-lg font-mono bg-green-50 p-3 rounded border">
+        V = (1/3)πr²t
+       </div>
+       <p class="text-sm mt-3 opacity-90">Dimana: r = jari-jari, t = tinggi</p>
+      </div>
+      <div class="formula-box">
+       <h3 class="text-xl font-bold mb-3">📏 Garis Pelukis Kerucut</h3>
+       <div class="text-lg font-mono bg-yellow-50 p-3 rounded border">
+        s = √(r² + t²)
+       </div>
+       <p class="text-sm mt-3 opacity-90">Dimana: r = jari-jari, t = tinggi, s = garis pelukis</p>
+      </div>
+      <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 mt-4 rounded">
+       <h4 class="font-bold text-yellow-800">💡 Tips Penting:</h4>
+       <ul class="text-yellow-700 mt-2 space-y-1">
+        <li>• Jika jari-jari kelipatan 7, gunakan π = 22/7</li>
+        <li>• Jika tidak, gunakan π = 3,14</li>
+        <li>• Pastikan satuan sama untuk semua ukuran</li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </div><!-- Contoh Soal Tab -->
+   <div id="contoh" class="tab-content">
+    <div class="example-box">
+     <h2 class="text-2xl font-bold mb-4">💡 Contoh Soal</h2>
+     <div class="mb-4">
+      <h3 class="text-lg font-semibold mb-3">Pilih topik contoh soal:</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4"><button class="btn-secondary text-sm" onclick="generateExample('surface')">🔵 Luas Permukaan</button> <button class="btn-secondary text-sm" onclick="generateExample('volume')">📦 Volume</button> <button class="btn-secondary text-sm" onclick="generateExample('slant_height')">📏 Garis Pelukis</button> <button class="btn-secondary text-sm" onclick="generateExample('height_from_surface')">📐 t dari L</button> <button class="btn-secondary text-sm" onclick="generateExample('radius_from_surface')">📏 r dari L</button> <button class="btn-secondary text-sm" onclick="generateExample('slant_from_surface')">📐 s dari L</button> <button class="btn-secondary text-sm" onclick="generateExample('height_from_volume')">📐 t dari V</button> <button class="btn-secondary text-sm" onclick="generateExample('radius_from_volume')">📏 r dari V</button>
+      </div>
+     </div>
+     <div class="grid md:grid-cols-2 gap-6">
+      <div>
+       <div id="exampleProblem" class="step-box">
+        <p class="font-semibold">Pilih topik di atas untuk melihat contoh soal...</p>
+       </div>
+      </div>
+      <div><button class="btn-secondary mb-4" onclick="showExampleSolution()" id="showSolutionBtn">👁️ Tampilkan Penyelesaian</button>
+       <div id="exampleSolution" class="answer-box" style="display: none;">
+        <p>Penyelesaian akan muncul di sini...</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Latihan Terbimbing Tab -->
+   <div id="terbimbing" class="tab-content">
+    <div class="guided-box">
+     <h2 class="text-2xl font-bold mb-4">🎯 Latihan Terbimbing</h2>
+     <div class="mb-4">
+      <h3 class="text-lg font-semibold mb-3">Pilih topik yang ingin dipelajari:</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4"><button class="btn-secondary text-sm" onclick="generateGuidedProblem('surface')">🔵 Luas Permukaan</button> <button class="btn-secondary text-sm" onclick="generateGuidedProblem('volume')">📦 Volume</button> <button class="btn-secondary text-sm" onclick="generateGuidedProblem('slant_height')">📏 Garis Pelukis</button> <button class="btn-secondary text-sm" onclick="generateGuidedProblem('height_from_surface')">📐 t dari L</button> <button class="btn-secondary text-sm" onclick="generateGuidedProblem('radius_from_surface')">📏 r dari L</button> <button class="btn-secondary text-sm" onclick="generateGuidedProblem('slant_from_surface')">📐 s dari L</button> <button class="btn-secondary text-sm" onclick="generateGuidedProblem('height_from_volume')">📐 t dari V</button> <button class="btn-secondary text-sm" onclick="generateGuidedProblem('radius_from_volume')">📏 r dari V</button>
+      </div>
+     </div>
+     <div id="guidedProblem" class="step-box">
+      <p class="font-semibold">Pilih topik di atas untuk memulai latihan terbimbing...</p>
+     </div>
+     <div id="guidedSteps" style="display: none;">
+      <div class="step-box">
+       <h4 class="font-bold mb-2">Langkah 1: Identifikasi yang diketahui</h4>
+       <div id="step1Content"></div><button class="btn-secondary mt-2" onclick="showStep(1)" id="step1Btn">Tampilkan</button>
+      </div>
+      <div class="step-box">
+       <h4 class="font-bold mb-2">Langkah 2: Tentukan rumus yang digunakan</h4>
+       <div id="step2Content" style="display: none;"></div><button class="btn-secondary mt-2" onclick="showStep(2)" id="step2Btn" style="display: none;">Tampilkan</button>
+      </div>
+      <div class="step-box">
+       <h4 class="font-bold mb-2">Langkah 3: Substitusi nilai ke rumus</h4>
+       <div id="step3Content" style="display: none;"></div><button class="btn-secondary mt-2" onclick="showStep(3)" id="step3Btn" style="display: none;">Tampilkan</button>
+      </div>
+      <div class="step-box">
+       <h4 class="font-bold mb-2">Langkah 4: Hitung hasil akhir</h4>
+       <div id="step4Content" style="display: none;"></div><button class="btn-secondary mt-2" onclick="showStep(4)" id="step4Btn" style="display: none;">Tampilkan</button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Latihan Soal Tab -->
+   <div id="latihan" class="tab-content">
+    <div class="practice-box">
+     <h2 class="text-2xl font-bold mb-4">✏️ Latihan Soal</h2>
+     <div class="mb-4"><button class="btn-secondary" onclick="generateAllPractice()">🎲 Generate 16 Soal Baru</button>
+      <p class="text-sm text-gray-600 mt-2">16 soal: 2 soal untuk setiap topik (luas permukaan, volume, garis pelukis, t dari L, r dari L, s dari L, t dari V, r dari V)</p>
+     </div>
+     <div id="practiceContainer">
+      <p class="text-center text-gray-600 py-8">Klik "Generate 16 Soal Baru" untuk memulai latihan...</p>
+     </div>
+    </div>
+   </div>
+  </main>
+  <script>
+        // Configuration object for Element SDK
+        const defaultConfig = {
+            main_title: "Bangun Ruang: Kerucut",
+            subtitle: "Luas Permukaan dan Volume Kerucut"
+        };
+
+        let currentExampleData = null;
+        let currentGuidedData = null;
+        let currentPracticeData = null;
+        let currentStep = 0;
+
+
+
+        // Element SDK implementation
+        const element = {
+            defaultConfig: defaultConfig,
+            onConfigChange: async (config) => {
+                document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+                document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+            },
+            mapToCapabilities: (config) => ({
+                recolorables: [],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            }),
+            mapToEditPanelValues: (config) => new Map([
+                ["main_title", config.main_title || defaultConfig.main_title],
+                ["subtitle", config.subtitle || defaultConfig.subtitle]
+            ])
+        };
+
+        // Initialize Element SDK
+        if (window.elementSdk) {
+            window.elementSdk.init(element);
+        }
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Canvas drawing functions
+        function drawCone() {
+            const canvas = document.getElementById('coneCanvas');
+            const ctx = canvas.getContext('2d');
+            const radius = parseInt(document.getElementById('radiusSlider').value);
+            const height = parseInt(document.getElementById('heightSlider').value);
+            
+            // Calculate slant height
+            const slantHeight = Math.sqrt(radius * radius + height * height);
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Set up drawing parameters
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const scaleR = radius * 15;
+            const scaleH = height * 12;
+            
+            // Draw cone
+            ctx.strokeStyle = '#4f46e5';
+            ctx.fillStyle = 'rgba(79, 70, 229, 0.1)';
+            ctx.lineWidth = 2;
+            
+            // Bottom ellipse (base)
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY + scaleH/2, scaleR, scaleR/3, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Cone sides
+            ctx.beginPath();
+            ctx.moveTo(centerX - scaleR, centerY + scaleH/2);
+            ctx.lineTo(centerX, centerY - scaleH/2); // apex
+            ctx.lineTo(centerX + scaleR, centerY + scaleH/2);
+            ctx.stroke();
+            
+            // Fill cone body
+            ctx.fillStyle = 'rgba(79, 70, 229, 0.05)';
+            ctx.beginPath();
+            ctx.moveTo(centerX - scaleR, centerY + scaleH/2);
+            ctx.lineTo(centerX, centerY - scaleH/2);
+            ctx.lineTo(centerX + scaleR, centerY + scaleH/2);
+            ctx.fill();
+            
+            // Draw radius line on bottom base
+            ctx.strokeStyle = '#dc2626';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY + scaleH/2);
+            ctx.lineTo(centerX + scaleR, centerY + scaleH/2);
+            ctx.stroke();
+            
+            // Draw small circle at center of bottom base
+            ctx.fillStyle = '#dc2626';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY + scaleH/2, 3, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw height line
+            ctx.strokeStyle = '#059669';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - scaleH/2);
+            ctx.lineTo(centerX, centerY + scaleH/2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Draw slant height line
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - scaleH/2);
+            ctx.lineTo(centerX + scaleR, centerY + scaleH/2);
+            ctx.stroke();
+            
+            // No arrows for height - just the line
+            
+            // Labels
+            ctx.fillStyle = '#1f2937';
+            ctx.font = '14px Arial';
+            
+            // Radius label (on the bottom base)
+            ctx.fillStyle = '#dc2626';
+            ctx.fillText(`r = ${radius} cm`, centerX + scaleR/2 - 25, centerY + scaleH/2 - 8);
+            
+            // Height label (on the side)
+            ctx.fillStyle = '#059669';
+            ctx.fillText(`t = ${height} cm`, centerX - 35, centerY);
+            
+            // Slant height label
+            ctx.fillStyle = '#f59e0b';
+            ctx.save();
+            ctx.translate(centerX + scaleR/2 + 10, centerY);
+            ctx.rotate(Math.atan(height/radius));
+            ctx.fillText(`s = ${slantHeight.toFixed(1)} cm`, -30, -5);
+            ctx.restore();
+            
+            // Update display values
+            document.getElementById('radiusValue').textContent = radius;
+            document.getElementById('heightValue').textContent = height;
+            document.getElementById('slantValue').textContent = slantHeight.toFixed(1);
+            document.getElementById('slantSlider').value = slantHeight.toFixed(1);
+        }
+
+        // Slider event listeners
+        document.getElementById('radiusSlider').addEventListener('input', drawCone);
+        document.getElementById('heightSlider').addEventListener('input', drawCone);
+
+        // Generate random values for problems using Pythagorean triples
+        function generateRandomValues() {
+            // Pythagorean triples for nice integer values
+            const pythagoreanTriples = [
+                {r: 3, t: 4, s: 5},
+                {r: 5, t: 12, s: 13},
+                {r: 8, t: 15, s: 17},
+                {r: 7, t: 24, s: 25},
+                {r: 9, t: 12, s: 15},
+                {r: 12, t: 16, s: 20},
+                {r: 6, t: 8, s: 10},
+                {r: 15, t: 20, s: 25},
+                {r: 21, t: 28, s: 35}, // All multiples of 7
+                {r: 14, t: 48, s: 50}, // 7 multiples
+                {r: 7, t: 14, s: Math.sqrt(245)}, // 7 multiple for π = 22/7
+                {r: 10, t: 24, s: 26} // Nice values
+            ];
+            
+            const triple = pythagoreanTriples[Math.floor(Math.random() * pythagoreanTriples.length)];
+            const radius = triple.r;
+            const height = triple.t;
+            const slantHeight = triple.s;
+            
+            // Use π = 22/7 if radius or height is multiple of 7
+            const useSpecialPi = (radius % 7 === 0) || (height % 7 === 0);
+            const pi = useSpecialPi ? "22/7" : "3.14";
+            const piValue = useSpecialPi ? 22/7 : 3.14;
+            
+            return { radius, height, slantHeight, pi, piValue };
+        }
+
+        // Generate example problem
+        function generateExample(topicChoice = 'random') {
+            const data = generateRandomValues();
+            let problemType;
+            
+            const problemTypes = ['surface', 'volume', 'slant_height', 'height_from_surface', 'radius_from_surface', 'slant_from_surface', 'height_from_volume', 'radius_from_volume'];
+            
+            if (problemTypes.includes(topicChoice)) {
+                problemType = topicChoice;
+            } else {
+                problemType = problemTypes[Math.floor(Math.random() * problemTypes.length)];
+            }
+            
+            let problemText = '';
+            let givenData = { ...data };
+            
+            if (problemType === 'surface') {
+                problemText = `Sebuah kerucut memiliki jari-jari ${data.radius} cm, tinggi ${data.height} cm, dan garis pelukis ${data.slantHeight} cm. Hitunglah luas permukaan kerucut tersebut! (π = ${data.pi})`;
+            } else if (problemType === 'volume') {
+                problemText = `Sebuah kerucut memiliki jari-jari ${data.radius} cm dan tinggi ${data.height} cm. Hitunglah volume kerucut tersebut! (π = ${data.pi})`;
+            } else if (problemType === 'slant_height') {
+                problemText = `Sebuah kerucut memiliki jari-jari ${data.radius} cm dan tinggi ${data.height} cm. Hitunglah garis pelukis kerucut tersebut!`;
+            } else if (problemType === 'height_from_surface') {
+                const surfaceArea = data.piValue * data.radius * (data.radius + data.slantHeight);
+                givenData.surfaceArea = surfaceArea;
+                problemText = `Sebuah kerucut memiliki luas permukaan ${surfaceArea.toFixed(0)} cm², jari-jari ${data.radius} cm, dan garis pelukis ${data.slantHeight} cm. Hitunglah tinggi kerucut tersebut! (π = ${data.pi})`;
+            } else if (problemType === 'radius_from_surface') {
+                const surfaceArea = data.piValue * data.radius * (data.radius + data.slantHeight);
+                givenData.surfaceArea = surfaceArea;
+                problemText = `Sebuah kerucut memiliki luas permukaan ${surfaceArea.toFixed(0)} cm², tinggi ${data.height} cm, dan garis pelukis ${data.slantHeight} cm. Hitunglah jari-jari kerucut tersebut! (π = ${data.pi})`;
+            } else if (problemType === 'slant_from_surface') {
+                const surfaceArea = data.piValue * data.radius * (data.radius + data.slantHeight);
+                givenData.surfaceArea = surfaceArea;
+                problemText = `Sebuah kerucut memiliki luas permukaan ${surfaceArea.toFixed(0)} cm², tinggi ${data.height} cm, dan jari-jari ${data.radius} cm. Hitunglah garis pelukis kerucut tersebut! (π = ${data.pi})`;
+            } else if (problemType === 'height_from_volume') {
+                const volume = (1/3) * data.piValue * data.radius * data.radius * data.height;
+                givenData.volume = volume;
+                problemText = `Sebuah kerucut memiliki volume ${volume.toFixed(0)} cm³ dan jari-jari ${data.radius} cm. Hitunglah tinggi kerucut tersebut! (π = ${data.pi})`;
+            } else if (problemType === 'radius_from_volume') {
+                const volume = (1/3) * data.piValue * data.radius * data.radius * data.height;
+                givenData.volume = volume;
+                problemText = `Sebuah kerucut memiliki volume ${volume.toFixed(0)} cm³ dan tinggi ${data.height} cm. Hitunglah jari-jari kerucut tersebut! (π = ${data.pi})`;
+            }
+            
+            currentExampleData = { ...givenData, type: problemType };
+            
+            document.getElementById('exampleProblem').innerHTML = `<p class="font-semibold">${problemText}</p>`;
+            document.getElementById('exampleSolution').style.display = 'none';
+            document.getElementById('showSolutionBtn').textContent = '👁️ Tampilkan Penyelesaian';
+        }
+
+        // Show example solution
+        function showExampleSolution() {
+            if (!currentExampleData) {
+                generateExample();
+                return;
+            }
+            
+            const solutionDiv = document.getElementById('exampleSolution');
+            const btn = document.getElementById('showSolutionBtn');
+            
+            if (solutionDiv.style.display === 'none') {
+                const { radius, height, slantHeight, pi, piValue, type, surfaceArea, volume } = currentExampleData;
+                
+                let solution = '';
+                if (type === 'surface') {
+                    const result = piValue * radius * (radius + slantHeight);
+                    const useSpecialPi = pi === "22/7";
+                    
+                    if (useSpecialPi) {
+                        const finalResult = Math.round(result);
+                        solution = `
+                            <h4 class="font-bold mb-2">Penyelesaian Luas Permukaan:</h4>
+                            <p><strong>Diketahui:</strong> r = ${radius} cm, t = ${height} cm, s = ${slantHeight} cm, π = ${pi}</p>
+                            <p><strong>Rumus:</strong> L = πr(r + s)</p>
+                            <p><strong>Penyelesaian:</strong></p>
+                            <p>L = ${pi} × ${radius} × (${radius} + ${slantHeight})</p>
+                            <p>L = ${pi} × ${radius} × ${radius + slantHeight}</p>
+                            <p>L = (22/7) × ${radius} × ${radius + slantHeight}</p>
+                            <p>L = ${finalResult} cm²</p>
+                            <p class="font-bold text-green-600">Jadi, luas permukaan kerucut adalah ${finalResult} cm²</p>
+                        `;
+                    } else {
+                        const finalResult = result % 1 === 0 ? Math.round(result) : result.toFixed(2);
+                        solution = `
+                            <h4 class="font-bold mb-2">Penyelesaian Luas Permukaan:</h4>
+                            <p><strong>Diketahui:</strong> r = ${radius} cm, t = ${height} cm, s = ${slantHeight} cm, π = ${pi}</p>
+                            <p><strong>Rumus:</strong> L = πr(r + s)</p>
+                            <p><strong>Penyelesaian:</strong></p>
+                            <p>L = ${pi} × ${radius} × (${radius} + ${slantHeight})</p>
+                            <p>L = ${pi} × ${radius} × ${radius + slantHeight}</p>
+                            <p>L = ${finalResult} cm²</p>
+                            <p class="font-bold text-green-600">Jadi, luas permukaan kerucut adalah ${finalResult} cm²</p>
+                        `;
+                    }
+                } else if (type === 'volume') {
+                    const result = (1/3) * piValue * radius * radius * height;
+                    const useSpecialPi = pi === "22/7";
+                    
+                    if (useSpecialPi) {
+                        const finalResult = Math.round(result);
+                        solution = `
+                            <h4 class="font-bold mb-2">Penyelesaian Volume:</h4>
+                            <p><strong>Diketahui:</strong> r = ${radius} cm, t = ${height} cm, π = ${pi}</p>
+                            <p><strong>Rumus:</strong> V = (1/3)πr²t</p>
+                            <p><strong>Penyelesaian:</strong></p>
+                            <p>V = (1/3) × ${pi} × ${radius}² × ${height}</p>
+                            <p>V = (1/3) × (22/7) × ${radius * radius} × ${height}</p>
+                            <p>V = ${finalResult} cm³</p>
+                            <p class="font-bold text-green-600">Jadi, volume kerucut adalah ${finalResult} cm³</p>
+                        `;
+                    } else {
+                        const finalResult = result % 1 === 0 ? Math.round(result) : result.toFixed(2);
+                        solution = `
+                            <h4 class="font-bold mb-2">Penyelesaian Volume:</h4>
+                            <p><strong>Diketahui:</strong> r = ${radius} cm, t = ${height} cm, π = ${pi}</p>
+                            <p><strong>Rumus:</strong> V = (1/3)πr²t</p>
+                            <p><strong>Penyelesaian:</strong></p>
+                            <p>V = (1/3) × ${pi} × ${radius}² × ${height}</p>
+                            <p>V = (1/3) × ${pi} × ${radius * radius} × ${height}</p>
+                            <p>V = ${finalResult} cm³</p>
+                            <p class="font-bold text-green-600">Jadi, volume kerucut adalah ${finalResult} cm³</p>
+                        `;
+                    }
+                } else if (type === 'slant_height') {
+                    const finalResult = slantHeight % 1 === 0 ? Math.round(slantHeight) : slantHeight.toFixed(2);
+                    solution = `
+                        <h4 class="font-bold mb-2">Penyelesaian Garis Pelukis:</h4>
+                        <p><strong>Diketahui:</strong> r = ${radius} cm, t = ${height} cm</p>
+                        <p><strong>Rumus:</strong> s = √(r² + t²)</p>
+                        <p><strong>Penyelesaian:</strong></p>
+                        <p>s = √(${radius}² + ${height}²)</p>
+                        <p>s = √(${radius * radius} + ${height * height})</p>
+                        <p>s = √${radius * radius + height * height}</p>
+                        <p>s = ${finalResult} cm</p>
+                        <p class="font-bold text-green-600">Jadi, garis pelukis kerucut adalah ${finalResult} cm</p>
+                    `;
+                } else if (type === 'height_from_surface') {
+                    const finalResult = height % 1 === 0 ? Math.round(height) : height.toFixed(2);
+                    solution = `
+                        <h4 class="font-bold mb-2">Penyelesaian Mencari Tinggi dari Luas Permukaan:</h4>
+                        <p><strong>Diketahui:</strong> L = ${Math.round(surfaceArea)} cm², r = ${radius} cm, s = ${slantHeight} cm, π = ${pi}</p>
+                        <p><strong>Rumus:</strong> L = πr(r + s)</p>
+                        <p><strong>Penyelesaian:</strong></p>
+                        <p>Karena s = √(r² + t²), maka s² = r² + t²</p>
+                        <p>t² = s² - r²</p>
+                        <p>t² = ${slantHeight}² - ${radius}²</p>
+                        <p>t² = ${slantHeight * slantHeight} - ${radius * radius}</p>
+                        <p>t² = ${slantHeight * slantHeight - radius * radius}</p>
+                        <p>t = √${slantHeight * slantHeight - radius * radius} = ${finalResult} cm</p>
+                        <p class="font-bold text-green-600">Jadi, tinggi kerucut adalah ${finalResult} cm</p>
+                    `;
+                } else if (type === 'radius_from_surface') {
+                    const finalResult = radius % 1 === 0 ? Math.round(radius) : radius.toFixed(2);
+                    solution = `
+                        <h4 class="font-bold mb-2">Penyelesaian Mencari Jari-jari dari Luas Permukaan:</h4>
+                        <p><strong>Diketahui:</strong> L = ${Math.round(surfaceArea)} cm², t = ${height} cm, s = ${slantHeight} cm, π = ${pi}</p>
+                        <p><strong>Rumus:</strong> L = πr(r + s)</p>
+                        <p><strong>Penyelesaian:</strong></p>
+                        <p>Karena s = √(r² + t²), maka r² = s² - t²</p>
+                        <p>r² = ${slantHeight}² - ${height}²</p>
+                        <p>r² = ${slantHeight * slantHeight} - ${height * height}</p>
+                        <p>r² = ${slantHeight * slantHeight - height * height}</p>
+                        <p>r = √${slantHeight * slantHeight - height * height} = ${finalResult} cm</p>
+                        <p class="font-bold text-green-600">Jadi, jari-jari kerucut adalah ${finalResult} cm</p>
+                    `;
+                } else if (type === 'slant_from_surface') {
+                    const finalResult = slantHeight % 1 === 0 ? Math.round(slantHeight) : slantHeight.toFixed(2);
+                    solution = `
+                        <h4 class="font-bold mb-2">Penyelesaian Mencari Garis Pelukis dari Luas Permukaan:</h4>
+                        <p><strong>Diketahui:</strong> L = ${Math.round(surfaceArea)} cm², t = ${height} cm, r = ${radius} cm, π = ${pi}</p>
+                        <p><strong>Rumus:</strong> L = πr(r + s)</p>
+                        <p><strong>Penyelesaian:</strong></p>
+                        <p>${Math.round(surfaceArea)} = ${pi} × ${radius} × (${radius} + s)</p>
+                        <p>(${radius} + s) = ${Math.round(surfaceArea)} ÷ (${pi} × ${radius})</p>
+                        <p>s = ${Math.round(surfaceArea)} ÷ ${(piValue * radius).toFixed(2)} - ${radius}</p>
+                        <p>s = ${(surfaceArea / (piValue * radius)).toFixed(2)} - ${radius}</p>
+                        <p>s = ${finalResult} cm</p>
+                        <p><strong>Verifikasi:</strong> s = √(r² + t²) = √(${radius}² + ${height}²) = ${finalResult} cm ✓</p>
+                        <p class="font-bold text-green-600">Jadi, garis pelukis kerucut adalah ${finalResult} cm</p>
+                    `;
+                } else if (type === 'radius_from_volume') {
+                    const finalResult = radius % 1 === 0 ? Math.round(radius) : radius.toFixed(2);
+                    solution = `
+                        <h4 class="font-bold mb-2">Penyelesaian Mencari Jari-jari dari Volume:</h4>
+                        <p><strong>Diketahui:</strong> V = ${Math.round(volume)} cm³, t = ${height} cm, π = ${pi}</p>
+                        <p><strong>Rumus:</strong> V = (1/3)πr²t</p>
+                        <p><strong>Penyelesaian:</strong></p>
+                        <p>${Math.round(volume)} = (1/3) × ${pi} × r² × ${height}</p>
+                        <p>r² = ${Math.round(volume)} × 3 ÷ (${pi} × ${height})</p>
+                        <p>r² = ${Math.round(volume * 3)} ÷ ${(piValue * height).toFixed(2)}</p>
+                        <p>r² = ${(volume * 3 / (piValue * height)).toFixed(0)}</p>
+                        <p>r = √${(volume * 3 / (piValue * height)).toFixed(0)} = ${finalResult} cm</p>
+                        <p class="font-bold text-green-600">Jadi, jari-jari kerucut adalah ${finalResult} cm</p>
+                    `;
+                } else if (type === 'height_from_volume') {
+                    const finalResult = height % 1 === 0 ? Math.round(height) : height.toFixed(2);
+                    solution = `
+                        <h4 class="font-bold mb-2">Penyelesaian Mencari Tinggi dari Volume:</h4>
+                        <p><strong>Diketahui:</strong> V = ${Math.round(volume)} cm³, r = ${radius} cm, π = ${pi}</p>
+                        <p><strong>Rumus:</strong> V = (1/3)πr²t</p>
+                        <p><strong>Penyelesaian:</strong></p>
+                        <p>${Math.round(volume)} = (1/3) × ${pi} × ${radius}² × t</p>
+                        <p>t = ${Math.round(volume)} × 3 ÷ (${pi} × ${radius}²)</p>
+                        <p>t = ${Math.round(volume * 3)} ÷ ${(piValue * radius * radius).toFixed(2)}</p>
+                        <p>t = ${finalResult} cm</p>
+                        <p class="font-bold text-green-600">Jadi, tinggi kerucut adalah ${finalResult} cm</p>
+                    `;
+                }
+                
+                solutionDiv.innerHTML = solution;
+                solutionDiv.style.display = 'block';
+                btn.textContent = '🙈 Sembunyikan Penyelesaian';
+            } else {
+                solutionDiv.style.display = 'none';
+                btn.textContent = '👁️ Tampilkan Penyelesaian';
+            }
+        }
+
+        // Generate guided problem
+        function generateGuidedProblem(topicChoice = 'random') {
+            const data = generateRandomValues();
+            let problemType;
+            
+            const problemTypes = ['surface', 'volume', 'height_from_surface', 'radius_from_volume', 'height_from_volume'];
+            
+            if (problemTypes.includes(topicChoice)) {
+                problemType = topicChoice;
+            } else {
+                problemType = problemTypes[Math.floor(Math.random() * problemTypes.length)];
+            }
+            
+            let problemText = '';
+            let givenData = { ...data };
+            
+            if (problemType === 'surface') {
+                problemText = `Sebuah kerucut memiliki jari-jari ${data.radius} cm dan tinggi ${data.height} cm. Hitunglah luas permukaan kerucut tersebut! (π = ${data.pi})`;
+            } else if (problemType === 'volume') {
+                problemText = `Sebuah kerucut memiliki jari-jari ${data.radius} cm dan tinggi ${data.height} cm. Hitunglah volume kerucut tersebut! (π = ${data.pi})`;
+            } else if (problemType === 'height_from_surface') {
+                const surfaceArea = data.piValue * data.radius * (data.radius + data.slantHeight);
+                givenData.surfaceArea = surfaceArea;
+                problemText = `Sebuah kerucut memiliki luas permukaan ${surfaceArea.toFixed(2)} cm² dan jari-jari ${data.radius} cm. Hitunglah tinggi kerucut tersebut! (π = ${data.pi})`;
+            } else if (problemType === 'radius_from_volume') {
+                const volume = (1/3) * data.piValue * data.radius * data.radius * data.height;
+                givenData.volume = volume;
+                problemText = `Sebuah kerucut memiliki volume ${volume.toFixed(2)} cm³ dan tinggi ${data.height} cm. Hitunglah jari-jari kerucut tersebut! (π = ${data.pi})`;
+            } else if (problemType === 'height_from_volume') {
+                const volume = (1/3) * data.piValue * data.radius * data.radius * data.height;
+                givenData.volume = volume;
+                problemText = `Sebuah kerucut memiliki volume ${volume.toFixed(2)} cm³ dan jari-jari ${data.radius} cm. Hitunglah tinggi kerucut tersebut! (π = ${data.pi})`;
+            }
+            
+            currentGuidedData = { ...givenData, type: problemType };
+            currentStep = 0;
+            
+            document.getElementById('guidedProblem').innerHTML = `<p class="font-semibold">${problemText}</p>`;
+            document.getElementById('guidedSteps').style.display = 'block';
+            
+            // Reset all steps
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`step${i}Content`).style.display = 'none';
+                document.getElementById(`step${i}Btn`).style.display = i === 1 ? 'inline-block' : 'none';
+            }
+        }
+
+        // Show guided steps
+        function showStep(step) {
+            if (!currentGuidedData) return;
+            
+            const { radius, height, pi, piValue, type, surfaceArea, volume } = currentGuidedData;
+            
+            if (step === 1) {
+                let knownData = '';
+                let question = '';
+                
+                if (type === 'surface') {
+                    knownData = `<p>• Jari-jari (r) = ${radius} cm</p><p>• Tinggi (t) = ${height} cm</p><p>• π = ${pi}</p>`;
+                    question = 'Luas permukaan tabung';
+                } else if (type === 'volume') {
+                    knownData = `<p>• Jari-jari (r) = ${radius} cm</p><p>• Tinggi (t) = ${height} cm</p><p>• π = ${pi}</p>`;
+                    question = 'Volume tabung';
+                } else if (type === 'height_from_surface') {
+                    knownData = `<p>• Luas permukaan (L) = ${surfaceArea.toFixed(2)} cm²</p><p>• Jari-jari (r) = ${radius} cm</p><p>• π = ${pi}</p>`;
+                    question = 'Tinggi tabung (t)';
+                } else if (type === 'radius_from_volume') {
+                    knownData = `<p>• Volume (V) = ${volume.toFixed(2)} cm³</p><p>• Tinggi (t) = ${height} cm</p><p>• π = ${pi}</p>`;
+                    question = 'Jari-jari tabung (r)';
+                } else if (type === 'height_from_volume') {
+                    knownData = `<p>• Volume (V) = ${volume.toFixed(2)} cm³</p><p>• Jari-jari (r) = ${radius} cm</p><p>• π = ${pi}</p>`;
+                    question = 'Tinggi tabung (t)';
+                }
+                
+                document.getElementById('step1Content').innerHTML = `
+                    ${knownData}
+                    <p>• Yang ditanya: ${question}</p>
+                `;
+                document.getElementById('step1Content').style.display = 'block';
+                document.getElementById('step1Btn').style.display = 'none';
+                document.getElementById('step2Btn').style.display = 'inline-block';
+            } else if (step === 2) {
+                let formula = '';
+                if (type === 'surface' || type === 'radius_from_surface' || type === 'height_from_surface') {
+                    formula = 'L = πr(r + s), dimana s = √(r² + t²)';
+                } else {
+                    formula = 'V = ⅓πr²t';
+                }
+                
+                document.getElementById('step2Content').innerHTML = `
+                    <p><strong>Rumus yang digunakan:</strong></p>
+                    <p class="text-lg font-bold">${formula}</p>
+                `;
+                document.getElementById('step2Content').style.display = 'block';
+                document.getElementById('step2Btn').style.display = 'none';
+                document.getElementById('step3Btn').style.display = 'inline-block';
+            } else if (step === 3) {
+                let substitution = '';
+                
+                if (type === 'surface') {
+                    const slantHeight = Math.sqrt(radius * radius + height * height);
+                    substitution = `
+                        <p>Langkah 1: Hitung garis pelukis (s)</p>
+                        <p>s = √(r² + t²) = √(${radius}² + ${height}²) = ${slantHeight.toFixed(2)} cm</p>
+                        <p>Langkah 2: Substitusi ke rumus luas permukaan</p>
+                        <p>L = πr(r + s)</p>
+                        <p>L = ${pi} × ${radius} × (${radius} + ${slantHeight.toFixed(2)})</p>
+                    `;
+                } else if (type === 'volume') {
+                    substitution = `
+                        <p>V = ⅓πr²t</p>
+                        <p>V = ⅓ × ${pi} × ${radius}² × ${height}</p>
+                        <p>V = ⅓ × ${pi} × ${radius * radius} × ${height}</p>
+                    `;
+                } else if (type === 'height_from_surface') {
+                    substitution = `
+                        <p>L = πr(r + s)</p>
+                        <p>${surfaceArea.toFixed(2)} = ${pi} × ${radius} × (${radius} + s)</p>
+                        <p>Karena s = √(r² + t²), maka kita perlu mencari t</p>
+                        <p>Dari rumus Pythagoras: s² = r² + t²</p>
+                        <p>t² = s² - r²</p>
+                    `;
+                } else if (type === 'radius_from_volume') {
+                    substitution = `
+                        <p>V = ⅓πr²t</p>
+                        <p>${volume.toFixed(2)} = ⅓ × ${pi} × r² × ${height}</p>
+                        <p>r² = ${volume.toFixed(2)} × 3 ÷ (${pi} × ${height})</p>
+                    `;
+                } else if (type === 'height_from_volume') {
+                    substitution = `
+                        <p>V = ⅓πr²t</p>
+                        <p>${volume.toFixed(2)} = ⅓ × ${pi} × ${radius}² × t</p>
+                        <p>${volume.toFixed(2)} = ⅓ × ${pi} × ${radius * radius} × t</p>
+                    `;
+                }
+                
+                document.getElementById('step3Content').innerHTML = substitution;
+                document.getElementById('step3Content').style.display = 'block';
+                document.getElementById('step3Btn').style.display = 'none';
+                document.getElementById('step4Btn').style.display = 'inline-block';
+            } else if (step === 4) {
+                let calculation = '';
+                
+                if (type === 'surface') {
+                    const slantHeight = Math.sqrt(radius * radius + height * height);
+                    const result = piValue * radius * (radius + slantHeight);
+                    calculation = `
+                        <p>L = ${pi} × ${radius} × (${radius} + ${slantHeight.toFixed(2)})</p>
+                        <p>L = ${pi} × ${radius} × ${(radius + slantHeight).toFixed(2)}</p>
+                        <p>L = ${result.toFixed(2)} cm²</p>
+                        <p class="font-bold text-green-600">Jadi, luas permukaan kerucut adalah ${result.toFixed(2)} cm²</p>
+                    `;
+                } else if (type === 'volume') {
+                    const result = (1/3) * piValue * radius * radius * height;
+                    calculation = `
+                        <p>V = ⅓ × ${pi} × ${radius * radius} × ${height}</p>
+                        <p>V = ⅓ × ${(piValue * radius * radius * height).toFixed(2)}</p>
+                        <p>V = ${result.toFixed(2)} cm³</p>
+                        <p class="font-bold text-green-600">Jadi, volume kerucut adalah ${result.toFixed(2)} cm³</p>
+                    `;
+                } else if (type === 'height_from_surface') {
+                    calculation = `
+                        <p>Dari langkah sebelumnya, kita tahu bahwa s sudah diketahui dari soal</p>
+                        <p>t² = s² - r²</p>
+                        <p>t² = ${Math.sqrt(radius * radius + height * height)}² - ${radius}²</p>
+                        <p>t² = ${radius * radius + height * height} - ${radius * radius}</p>
+                        <p>t² = ${height * height}</p>
+                        <p>t = ${height} cm</p>
+                        <p class="font-bold text-green-600">Jadi, tinggi kerucut adalah ${height} cm</p>
+                    `;
+                } else if (type === 'radius_from_volume') {
+                    calculation = `
+                        <p>r² = ${volume.toFixed(2)} × 3 ÷ (${pi} × ${height})</p>
+                        <p>r² = ${(volume * 3).toFixed(2)} ÷ ${(piValue * height).toFixed(2)}</p>
+                        <p>r² = ${(volume * 3 / (piValue * height)).toFixed(2)}</p>
+                        <p>r = √${(volume * 3 / (piValue * height)).toFixed(2)} = ${radius} cm</p>
+                        <p class="font-bold text-green-600">Jadi, jari-jari kerucut adalah ${radius} cm</p>
+                    `;
+                } else if (type === 'height_from_volume') {
+                    calculation = `
+                        <p>t = ${volume.toFixed(2)} × 3 ÷ (${pi} × ${radius * radius})</p>
+                        <p>t = ${(volume * 3).toFixed(2)} ÷ ${(piValue * radius * radius).toFixed(2)}</p>
+                        <p>t = ${height} cm</p>
+                        <p class="font-bold text-green-600">Jadi, tinggi kerucut adalah ${height} cm</p>
+                    `;
+                }
+                
+                document.getElementById('step4Content').innerHTML = calculation;
+                document.getElementById('step4Content').style.display = 'block';
+                document.getElementById('step4Btn').style.display = 'none';
+            }
+        }
+
+        // Generate all practice problems (10 questions)
+        function generateAllPractice() {
+            const container = document.getElementById('practiceContainer');
+            container.innerHTML = '';
+            
+            // Generate 8 problems: 2 surface, 2 volume, 2 height from surface, 1 radius from volume, 1 height from volume
+            const problemTypes = [
+                'surface', 'surface', 
+                'volume', 'volume',
+                'height_from_surface', 'height_from_surface',
+                'radius_from_volume',
+                'height_from_volume'
+            ];
+            
+            problemTypes.forEach((type, index) => {
+                const data = generateRandomValues();
+                const questionNumber = index + 1;
+                
+                let problemText = '';
+                let unit = '';
+                let correctAnswer = 0;
+                let givenData = { ...data };
+                
+                if (type === 'surface') {
+                    problemText = `Sebuah tabung memiliki jari-jari ${data.radius} cm dan tinggi ${data.height} cm. Hitunglah luas permukaan tabung tersebut! (π = ${data.pi})`;
+                    unit = 'cm²';
+                    correctAnswer = 2 * data.piValue * data.radius * (data.radius + data.height);
+                } else if (type === 'volume') {
+                    problemText = `Sebuah tabung memiliki jari-jari ${data.radius} cm dan tinggi ${data.height} cm. Hitunglah volume tabung tersebut! (π = ${data.pi})`;
+                    unit = 'cm³';
+                    correctAnswer = data.piValue * data.radius * data.radius * data.height;
+                } else if (type === 'height_from_surface') {
+                    const surfaceArea = 2 * data.piValue * data.radius * (data.radius + data.height);
+                    givenData.surfaceArea = surfaceArea;
+                    problemText = `Sebuah tabung memiliki luas permukaan ${surfaceArea.toFixed(2)} cm² dan jari-jari ${data.radius} cm. Hitunglah tinggi tabung tersebut! (π = ${data.pi})`;
+                    unit = 'cm';
+                    correctAnswer = data.height;
+                } else if (type === 'radius_from_volume') {
+                    const volume = data.piValue * data.radius * data.radius * data.height;
+                    givenData.volume = volume;
+                    problemText = `Sebuah tabung memiliki volume ${volume.toFixed(2)} cm³ dan tinggi ${data.height} cm. Hitunglah jari-jari tabung tersebut! (π = ${data.pi})`;
+                    unit = 'cm';
+                    correctAnswer = data.radius;
+                } else if (type === 'height_from_volume') {
+                    const volume = data.piValue * data.radius * data.radius * data.height;
+                    givenData.volume = volume;
+                    problemText = `Sebuah tabung memiliki volume ${volume.toFixed(2)} cm³ dan jari-jari ${data.radius} cm. Hitunglah tinggi tabung tersebut! (π = ${data.pi})`;
+                    unit = 'cm';
+                    correctAnswer = data.height;
+                }
+                
+                const typeLabels = {
+                    'surface': 'Luas Permukaan',
+                    'volume': 'Volume',
+                    'height_from_surface': 'Cari t dari L',
+                    'radius_from_volume': 'Cari r dari V',
+                    'height_from_volume': 'Cari t dari V'
+                };
+                
+                const questionHTML = `
+                    <div class="step-box mb-6" id="question${questionNumber}">
+                        <h4 class="font-bold mb-3">Soal ${questionNumber} - ${typeLabels[type]}</h4>
+                        <p class="font-semibold mb-4">${problemText}</p>
+                        
+                        <div class="mb-4">
+                            <label for="answer${questionNumber}" class="block font-semibold mb-2">Jawaban Anda:</label>
+                            <input type="number" id="answer${questionNumber}" class="input-field" placeholder="0" step="0.01">
+                            <span class="ml-2 font-medium">${unit}</span>
+                            <button class="btn-secondary ml-4" onclick="checkSingleAnswer(${questionNumber}, ${correctAnswer}, '${type}', ${data.radius}, ${data.height}, '${data.pi}', ${data.piValue}, ${givenData.surfaceArea || 0}, ${givenData.volume || 0})">✅ Periksa</button>
+                        </div>
+                        
+                        <div id="result${questionNumber}" style="display: none;" class="answer-box mb-3">
+                            <p id="resultText${questionNumber}" class="font-semibold"></p>
+                        </div>
+                        
+                        <div id="solution${questionNumber}" style="display: none;" class="answer-box">
+                            <h5 class="font-bold mb-2">📝 Penyelesaian Detail:</h5>
+                            <div id="solutionContent${questionNumber}"></div>
+                        </div>
+                        
+                        <button id="toggleBtn${questionNumber}" class="btn-secondary mt-2" onclick="toggleSolution(${questionNumber}, '${type}', ${data.radius}, ${data.height}, '${data.pi}', ${data.piValue}, ${givenData.surfaceArea || 0}, ${givenData.volume || 0})" style="display: none;">👁️ Lihat Penyelesaian</button>
+                        
+
+                    </div>
+                `;
+                
+                container.innerHTML += questionHTML;
+            });
+        }
+
+        // Check single answer
+        function checkSingleAnswer(questionNum, correctAnswer, type, radius, height, pi, piValue, surfaceArea = 0, volume = 0) {
+            const userAnswer = parseFloat(document.getElementById(`answer${questionNum}`).value);
+            const tolerance = correctAnswer * 0.01; // 1% tolerance
+            const isCorrect = Math.abs(userAnswer - correctAnswer) <= tolerance;
+            
+            const resultDiv = document.getElementById(`result${questionNum}`);
+            const resultText = document.getElementById(`resultText${questionNum}`);
+            const toggleBtn = document.getElementById(`toggleBtn${questionNum}`);
+            
+            if (isCorrect) {
+                resultText.innerHTML = `✅ <strong>Benar!</strong> Jawaban Anda: ${userAnswer}, Jawaban yang benar: ${correctAnswer.toFixed(2)}`;
+                resultDiv.style.backgroundColor = '#d4edda';
+                resultDiv.style.borderColor = '#c3e6cb';
+                resultDiv.style.color = '#155724';
+            } else {
+                resultText.innerHTML = `❌ <strong>Kurang tepat.</strong> Jawaban Anda: ${userAnswer}, Jawaban yang benar: ${correctAnswer.toFixed(2)}`;
+                resultDiv.style.backgroundColor = '#f8d7da';
+                resultDiv.style.borderColor = '#f5c6cb';
+                resultDiv.style.color = '#721c24';
+            }
+            
+            resultDiv.style.display = 'block';
+            toggleBtn.style.display = 'inline-block';
+        }
+
+        // Toggle solution for individual question
+        function toggleSolution(questionNum, type, radius, height, pi, piValue, surfaceArea = 0, volume = 0) {
+            const solutionDiv = document.getElementById(`solution${questionNum}`);
+            const toggleBtn = document.getElementById(`toggleBtn${questionNum}`);
+            
+            if (solutionDiv.style.display === 'none') {
+                let solution = '';
+                
+                if (type === 'surface') {
+                    const result = 2 * piValue * radius * (radius + height);
+                    solution = `
+                        <p><strong>Diketahui:</strong> r = ${radius} cm, t = ${height} cm, π = ${pi}</p>
+                        <p><strong>Rumus:</strong> L = 2πr(r + t)</p>
+                        <p><strong>Penyelesaian:</strong></p>
+                        <p>L = 2 × ${pi} × ${radius} × (${radius} + ${height}) = <strong>${result.toFixed(2)} cm²</strong></p>
+                    `;
+                } else if (type === 'volume') {
+                    const result = piValue * radius * radius * height;
+                    solution = `
+                        <p><strong>Diketahui:</strong> r = ${radius} cm, t = ${height} cm, π = ${pi}</p>
+                        <p><strong>Rumus:</strong> V = πr²t</p>
+                        <p><strong>Penyelesaian:</strong></p>
+                        <p>V = ${pi} × ${radius}² × ${height} = <strong>${result.toFixed(2)} cm³</strong></p>
+                    `;
+                } else if (type === 'height_from_surface') {
+                    solution = `
+                        <p><strong>Diketahui:</strong> L = ${surfaceArea.toFixed(2)} cm², r = ${radius} cm, π = ${pi}</p>
+                        <p><strong>Rumus:</strong> L = 2πr(r + t)</p>
+                        <p><strong>Penyelesaian:</strong></p>
+                        <p>${surfaceArea.toFixed(2)} = 2 × ${pi} × ${radius} × (${radius} + t)</p>
+                        <p>(${radius} + t) = ${surfaceArea.toFixed(2)} ÷ ${(2 * piValue * radius).toFixed(2)}</p>
+                        <p><strong>t = ${height} cm</strong></p>
+                    `;
+                } else if (type === 'radius_from_volume') {
+                    solution = `
+                        <p><strong>Diketahui:</strong> V = ${volume.toFixed(2)} cm³, t = ${height} cm, π = ${pi}</p>
+                        <p><strong>Rumus:</strong> V = πr²t</p>
+                        <p><strong>Penyelesaian:</strong></p>
+                        <p>r² = ${volume.toFixed(2)} ÷ (${pi} × ${height})</p>
+                        <p>r = √${(volume / (piValue * height)).toFixed(2)} = <strong>${radius} cm</strong></p>
+                    `;
+                } else if (type === 'height_from_volume') {
+                    solution = `
+                        <p><strong>Diketahui:</strong> V = ${volume.toFixed(2)} cm³, r = ${radius} cm, π = ${pi}</p>
+                        <p><strong>Rumus:</strong> V = πr²t</p>
+                        <p><strong>Penyelesaian:</strong></p>
+                        <p>t = ${volume.toFixed(2)} ÷ (${pi} × ${radius}²)</p>
+                        <p>t = ${volume.toFixed(2)} ÷ ${(piValue * radius * radius).toFixed(2)} = <strong>${height} cm</strong></p>
+                    `;
+                }
+                
+                document.getElementById(`solutionContent${questionNum}`).innerHTML = solution;
+                solutionDiv.style.display = 'block';
+                toggleBtn.textContent = '🙈 Sembunyikan Penyelesaian';
+            } else {
+                solutionDiv.style.display = 'none';
+                toggleBtn.textContent = '👁️ Lihat Penyelesaian';
+            }
+        }
+
+
+
+        // Initialize canvas on page load
+        window.addEventListener('load', () => {
+            drawCone();
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99a1877355f2df0c',t:'MTc2MjQwMDAwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
