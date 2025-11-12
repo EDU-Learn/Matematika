@@ -1,0 +1,1482 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pembelajaran Trigonometri Segitiga</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      height: 100%;
+      overflow-y: auto;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2rem;
+    }
+    
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+    
+    .menu-container {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .menu-card {
+      background: white;
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      min-width: 300px;
+      flex: 1;
+      max-width: 400px;
+    }
+    
+    .menu-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+    
+    .menu-card .icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+    
+    .menu-card h2 {
+      color: #667eea;
+      margin: 1rem 0;
+      font-size: 1.8rem;
+    }
+    
+    .menu-card p {
+      color: #666;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    .content-grid {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .content-grid.active {
+      display: block;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .card h2 {
+      color: #667eea;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      border-bottom: 3px solid #667eea;
+      padding-bottom: 0.5rem;
+    }
+    
+    .problem-box {
+      background: #f0f4ff;
+      border-left: 4px solid #667eea;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    .canvas-container {
+      text-align: center;
+      margin: 1.5rem 0;
+      background: #fafafa;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    
+    .solution-box {
+      background: #fff9e6;
+      border: 2px solid #ffd700;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .solution-box h3 {
+      color: #d4a017;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+    
+    .step {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+    
+    .step-number {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 30px;
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+    
+    .formula {
+      background: #f8f9ff;
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 0.5rem 0;
+      font-family: 'Courier New', monospace;
+      overflow-x: auto;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 1rem;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 1rem;
+    }
+    
+    .btn:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .btn-secondary {
+      background: #764ba2;
+    }
+    
+    .btn-secondary:hover {
+      background: #653a8a;
+    }
+    
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-weight: 600;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    
+    .input-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .feedback {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .feedback.correct {
+      background: #d4edda;
+      color: #155724;
+      border: 2px solid #28a745;
+    }
+    
+    .feedback.incorrect {
+      background: #f8d7da;
+      color: #721c24;
+      border: 2px solid #dc3545;
+    }
+    
+    .highlight {
+      background: #ffffcc;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: white;
+      color: #667eea;
+      border: 2px solid white;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 2rem;
+    }
+    
+    .back-btn:hover {
+      background: rgba(255,255,255,0.9);
+      transform: translateX(-5px);
+    }
+    
+    @media (max-width: 968px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <main>
+   <div class="container">
+    <header class="header">
+     <h1 id="main-title">Trigonometri Segitiga Siku-Siku</h1>
+     <p id="subtitle">Belajar menghitung keliling segitiga menggunakan perbandingan sin, cos, tan dan teorema Pythagoras</p>
+    </header><!-- Menu Utama -->
+    <div class="menu-container" id="main-menu">
+     <div class="menu-card" onclick="showSection('trig-values')">
+      <div class="icon">
+       📐
+      </div>
+      <h2 id="menu-trig-values-title">Nilai Trigonometri</h2>
+      <p>Pelajari nilai sin, cos, tan untuk sudut istimewa dan kuadran trigonometri</p>
+     </div>
+     <div class="menu-card" onclick="showSection('example')">
+      <div class="icon">
+       📚
+      </div>
+      <h2 id="menu-example-title">Contoh Soal</h2>
+      <p>Pelajari cara menyelesaikan soal trigonometri dengan pembahasan lengkap step-by-step</p>
+     </div>
+     <div class="menu-card" onclick="showSection('practice')">
+      <div class="icon">
+       ✏️
+      </div>
+      <h2 id="menu-practice-title">Latihan Soal</h2>
+      <p>Uji kemampuanmu dengan mengerjakan soal-soal latihan secara mandiri</p>
+     </div>
+    </div><!-- Nilai Trigonometri Section -->
+    <div class="content-grid" id="trig-values-section"><button class="back-btn" onclick="showMenu()">← Kembali ke Menu</button>
+     <div class="card">
+      <h2 id="trig-values-title">📐 Nilai Trigonometri Sudut Istimewa</h2>
+      <div class="problem-box"><strong>Tabel Nilai Trigonometri untuk Sudut Istimewa</strong>
+      </div>
+      <div style="overflow-x: auto; margin: 1.5rem 0;">
+       <table style="width: 100%; border-collapse: collapse; background: white;">
+        <thead>
+         <tr style="background: #667eea; color: white;">
+          <th style="padding: 1rem; border: 2px solid #667eea;">Sudut</th>
+          <th style="padding: 1rem; border: 2px solid #667eea;">sin</th>
+          <th style="padding: 1rem; border: 2px solid #667eea;">cos</th>
+          <th style="padding: 1rem; border: 2px solid #667eea;">tan</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center; font-weight: bold;">0°</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">0</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">1</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">0</td>
+         </tr>
+         <tr style="background: #f8f9ff;">
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center; font-weight: bold;">30°</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">½</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">½√3</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">⅓√3</td>
+         </tr>
+         <tr>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center; font-weight: bold;">45°</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">½√2</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">½√2</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">1</td>
+         </tr>
+         <tr style="background: #f8f9ff;">
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center; font-weight: bold;">60°</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">½√3</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">½</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">√3</td>
+         </tr>
+         <tr>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center; font-weight: bold;">90°</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">1</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">0</td>
+          <td style="padding: 1rem; border: 2px solid #e0e0e0; text-align: center;">∞ (tak terdefinisi)</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="solution-box" style="margin-top: 2rem;">
+       <h3>🎯 Kuadran Trigonometri</h3>
+       <div class="canvas-container">
+        <canvas id="quadrant-canvas" width="400" height="400"></canvas>
+       </div>
+       <div class="step"><span class="step-number">1</span> <strong>Kuadran I (0° - 90°)</strong>
+        <p>✅ Semua nilai trigonometri <span class="highlight">POSITIF</span></p>
+        <p>sin (+), cos (+), tan (+)</p>
+       </div>
+       <div class="step"><span class="step-number">2</span> <strong>Kuadran II (90° - 180°)</strong>
+        <p>✅ Hanya <span class="highlight">sin POSITIF</span></p>
+        <p>sin (+), cos (-), tan (-)</p>
+       </div>
+       <div class="step"><span class="step-number">3</span> <strong>Kuadran III (180° - 270°)</strong>
+        <p>✅ Hanya <span class="highlight">tan POSITIF</span></p>
+        <p>sin (-), cos (-), tan (+)</p>
+       </div>
+       <div class="step"><span class="step-number">4</span> <strong>Kuadran IV (270° - 360°)</strong>
+        <p>✅ Hanya <span class="highlight">cos POSITIF</span></p>
+        <p>sin (-), cos (+), tan (-)</p>
+       </div>
+      </div>
+      <div class="solution-box" style="margin-top: 2rem;">
+       <h3>📖 Rumus Relasi Sudut</h3>
+       <div class="step"><strong>Kuadran II (90° - 180°)</strong>
+        <div class="formula">
+         sin(180° - α) = sin α<br>
+          cos(180° - α) = -cos α<br>
+          tan(180° - α) = -tan α
+        </div>
+        <p><strong>Contoh:</strong> sin 150° = sin(180° - 30°) = sin 30° = ½</p>
+       </div>
+       <div class="step"><strong>Kuadran III (180° - 270°)</strong>
+        <div class="formula">
+         sin(180° + α) = -sin α<br>
+          cos(180° + α) = -cos α<br>
+          tan(180° + α) = tan α
+        </div>
+        <p><strong>Contoh:</strong> tan 210° = tan(180° + 30°) = tan 30° = ⅓√3</p>
+       </div>
+       <div class="step"><strong>Kuadran IV (270° - 360°)</strong>
+        <div class="formula">
+         sin(360° - α) = -sin α<br>
+          cos(360° - α) = cos α<br>
+          tan(360° - α) = -tan α
+        </div>
+        <p><strong>Contoh:</strong> cos 330° = cos(360° - 30°) = cos 30° = ½√3</p>
+       </div>
+      </div><button class="btn" onclick="showSection('trig-practice')">✏️ Latihan Nilai Trigonometri</button>
+     </div>
+    </div><!-- Latihan Nilai Trigonometri Section -->
+    <div class="content-grid" id="trig-practice-section"><button class="back-btn" onclick="showSection('trig-values')">← Kembali ke Materi</button>
+     <div class="card">
+      <h2>✏️ Latihan Nilai Trigonometri</h2>
+      <div class="problem-box" id="trig-practice-problem">
+       Klik tombol "Soal Baru" untuk memulai latihan!
+      </div>
+      <div class="input-group"><label for="trig-answer-input">Jawaban (dalam bentuk pecahan atau akar, contoh: 1/2 atau √3/2):</label> <input type="text" id="trig-answer-input" placeholder="Contoh: 1/2, √3/2, -1, 0">
+      </div><button class="btn" id="trig-check-btn" onclick="checkTrigAnswer()">✓ Cek Jawaban</button> <button class="btn btn-secondary" id="trig-new-btn" onclick="generateTrigProblem()">🔄 Soal Baru</button>
+      <div id="trig-practice-feedback"></div>
+     </div>
+    </div><!-- Contoh Soal Section -->
+    <div class="content-grid" id="example-section"><button class="back-btn" onclick="showMenu()">← Kembali ke Menu</button>
+     <div class="card">
+      <h2 id="example-title">📚 Contoh Soal dengan Pembahasan</h2>
+      <div id="example-content"></div><button class="btn" id="next-btn" onclick="nextExample()">➡️ Contoh Berikutnya</button>
+     </div>
+    </div><!-- Latihan Soal Section -->
+    <div class="content-grid" id="practice-section"><button class="back-btn" onclick="showMenu()">← Kembali ke Menu</button>
+     <div class="card">
+      <h2 id="practice-title">✏️ Latihan Soal</h2>
+      <div class="problem-box" id="practice-problem">
+       Klik tombol "Soal Baru" untuk memulai latihan!
+      </div>
+      <div class="canvas-container" id="practice-canvas-container" style="display: none;">
+       <canvas id="practice-canvas" width="300" height="250"></canvas>
+      </div>
+      <div class="input-group"><label for="answer-input">Jawaban Keliling (dalam bentuk akar, contoh: 10 + 5√3):</label> <input type="text" id="answer-input" placeholder="Contoh: 10 + 5√3 atau 24">
+      </div><button class="btn" id="check-btn" onclick="checkAnswer()">✓ Cek Jawaban</button> <button class="btn btn-secondary" id="new-problem-btn" onclick="generateProblem()">🔄 Soal Baru</button>
+      <div id="practice-feedback"></div>
+     </div>
+    </div>
+   </div>
+  </main>
+  <script>
+    const defaultConfig = {
+      main_title: "Trigonometri Segitiga Siku-Siku",
+      subtitle: "Belajar menghitung keliling segitiga menggunakan perbandingan sin, cos, tan dan teorema Pythagoras",
+      menu_trig_values_title: "Nilai Trigonometri",
+      menu_example_title: "Contoh Soal",
+      menu_practice_title: "Latihan Soal",
+      example_title: "📚 Contoh Soal dengan Pembahasan",
+      practice_title: "✏️ Latihan Soal",
+      next_button: "➡️ Contoh Berikutnya",
+      check_button: "✓ Cek Jawaban",
+      new_problem_button: "🔄 Soal Baru",
+      primary_color: "#667eea",
+      secondary_color: "#764ba2",
+      background_gradient_start: "#667eea",
+      background_gradient_end: "#764ba2",
+      text_color: "#333333",
+      font_family: "Segoe UI",
+      font_size: 16
+    };
+
+    let currentExampleIndex = 0;
+    let currentProblem = null;
+    let currentTrigProblem = null;
+    
+    function showSection(section) {
+      document.getElementById('main-menu').style.display = 'none';
+      document.getElementById('trig-values-section').classList.remove('active');
+      document.getElementById('trig-practice-section').classList.remove('active');
+      document.getElementById('example-section').classList.remove('active');
+      document.getElementById('practice-section').classList.remove('active');
+      
+      if (section === 'trig-values') {
+        document.getElementById('trig-values-section').classList.add('active');
+        setTimeout(() => drawQuadrants(), 100);
+      } else if (section === 'trig-practice') {
+        document.getElementById('trig-practice-section').classList.add('active');
+      } else if (section === 'example') {
+        document.getElementById('example-section').classList.add('active');
+        if (document.getElementById('example-content').innerHTML === '') {
+          generateExample(examples[0]);
+        }
+      } else if (section === 'practice') {
+        document.getElementById('practice-section').classList.add('active');
+      }
+    }
+    
+    function drawQuadrants() {
+      const canvas = document.getElementById('quadrant-canvas');
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      const centerX = 200;
+      const centerY = 200;
+      const radius = 150;
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Gambar lingkaran
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+      ctx.strokeStyle = '#667eea';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      
+      // Gambar sumbu X
+      ctx.beginPath();
+      ctx.moveTo(20, centerY);
+      ctx.lineTo(380, centerY);
+      ctx.strokeStyle = '#333';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      
+      // Panah sumbu X
+      ctx.beginPath();
+      ctx.moveTo(380, centerY);
+      ctx.lineTo(370, centerY - 5);
+      ctx.lineTo(370, centerY + 5);
+      ctx.closePath();
+      ctx.fillStyle = '#333';
+      ctx.fill();
+      
+      // Gambar sumbu Y
+      ctx.beginPath();
+      ctx.moveTo(centerX, 20);
+      ctx.lineTo(centerX, 380);
+      ctx.strokeStyle = '#333';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      
+      // Panah sumbu Y
+      ctx.beginPath();
+      ctx.moveTo(centerX, 20);
+      ctx.lineTo(centerX - 5, 30);
+      ctx.lineTo(centerX + 5, 30);
+      ctx.closePath();
+      ctx.fillStyle = '#333';
+      ctx.fill();
+      
+      // Label sumbu
+      ctx.fillStyle = '#333';
+      ctx.font = 'bold 14px Arial';
+      ctx.fillText('X', 365, centerY - 10);
+      ctx.fillText('Y', centerX + 10, 30);
+      
+      // Warna kuadran
+      ctx.globalAlpha = 0.15;
+      
+      // Kuadran I (hijau)
+      ctx.fillStyle = '#28a745';
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, -Math.PI/2, 0);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Kuadran II (biru)
+      ctx.fillStyle = '#007bff';
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, -Math.PI/2, -Math.PI, true);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Kuadran III (merah)
+      ctx.fillStyle = '#dc3545';
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, Math.PI, Math.PI/2, true);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Kuadran IV (kuning)
+      ctx.fillStyle = '#ffc107';
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, 0, Math.PI/2);
+      ctx.closePath();
+      ctx.fill();
+      
+      ctx.globalAlpha = 1.0;
+      
+      // Label kuadran
+      ctx.fillStyle = '#333';
+      ctx.font = 'bold 16px Arial';
+      
+      // Kuadran I
+      ctx.fillText('I', centerX + 80, centerY - 80);
+      ctx.font = '12px Arial';
+      ctx.fillText('0° - 90°', centerX + 60, centerY - 60);
+      ctx.fillText('Semua +', centerX + 60, centerY - 45);
+      
+      // Kuadran II
+      ctx.font = 'bold 16px Arial';
+      ctx.fillText('II', centerX - 90, centerY - 80);
+      ctx.font = '12px Arial';
+      ctx.fillText('90° - 180°', centerX - 110, centerY - 60);
+      ctx.fillText('sin +', centerX - 90, centerY - 45);
+      
+      // Kuadran III
+      ctx.font = 'bold 16px Arial';
+      ctx.fillText('III', centerX - 90, centerY + 90);
+      ctx.font = '12px Arial';
+      ctx.fillText('180° - 270°', centerX - 115, centerY + 70);
+      ctx.fillText('tan +', centerX - 90, centerY + 55);
+      
+      // Kuadran IV
+      ctx.font = 'bold 16px Arial';
+      ctx.fillText('IV', centerX + 80, centerY + 90);
+      ctx.font = '12px Arial';
+      ctx.fillText('270° - 360°', centerX + 55, centerY + 70);
+      ctx.fillText('cos +', centerX + 70, centerY + 55);
+      
+      // Sudut istimewa
+      ctx.fillStyle = '#ff6b6b';
+      ctx.font = 'bold 12px Arial';
+      ctx.fillText('0°', centerX + radius + 10, centerY + 5);
+      ctx.fillText('90°', centerX - 15, centerY - radius - 10);
+      ctx.fillText('180°', centerX - radius - 35, centerY + 5);
+      ctx.fillText('270°', centerX - 20, centerY + radius + 20);
+    }
+    
+    function showMenu() {
+      document.getElementById('main-menu').style.display = 'flex';
+      document.getElementById('example-section').classList.remove('active');
+      document.getElementById('practice-section').classList.remove('active');
+    }
+
+    const examples = [
+      {
+        angle: 30,
+        knownSide: 'depan',
+        length: 6,
+        description: 'sisi depan'
+      },
+      {
+        angle: 60,
+        knownSide: 'miring',
+        length: 12,
+        description: 'sisi miring'
+      },
+      {
+        angle: 45,
+        knownSide: 'samping',
+        length: 8,
+        description: 'sisi samping'
+      },
+      {
+        angle: 30,
+        knownSide: 'miring',
+        length: 10,
+        description: 'sisi miring'
+      },
+      {
+        angle: 60,
+        knownSide: 'depan',
+        length: 6,
+        description: 'sisi depan'
+      }
+    ];
+
+    function drawTriangle(canvasId, angle, labels, highlightAngle = true) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Koordinat segitiga
+      const x1 = 50, y1 = 200;  // Titik kiri bawah (sudut siku-siku)
+      const x2 = 250, y2 = 200; // Titik kanan bawah
+      const x3 = 50, y3 = 50;   // Titik atas
+      
+      // Gambar segitiga
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.lineTo(x3, y3);
+      ctx.closePath();
+      ctx.strokeStyle = '#667eea';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      
+      // Gambar sudut siku-siku
+      ctx.strokeStyle = '#667eea';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x1, y1 - 15, 15, 15);
+      
+      // Gambar sudut yang diketahui
+      if (highlightAngle) {
+        ctx.beginPath();
+        ctx.arc(x2, y2, 30, Math.PI, Math.PI + (angle * Math.PI / 180), false);
+        ctx.strokeStyle = '#ff6b6b';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.fillStyle = '#ff6b6b';
+        ctx.font = 'bold 16px Arial';
+        ctx.fillText(angle + '°', x2 - 45, y2 - 10);
+      }
+      
+      // Label sisi
+      ctx.fillStyle = '#333';
+      ctx.font = 'bold 14px Arial';
+      
+      // Sisi samping (bawah)
+      ctx.fillText(labels.samping, 140, y1 + 25);
+      
+      // Sisi depan (kiri)
+      ctx.fillText(labels.depan, x1 - 45, 130);
+      
+      // Sisi miring (diagonal)
+      ctx.fillText(labels.miring, 160, 110);
+    }
+
+    function getSinCosTanExact(angle) {
+      if (angle === 30) {
+        return {
+          sin: { num: 1, den: 2, decimal: 0.5 },
+          cos: { num: 1, den: 2, sqrt: 3, decimal: Math.sqrt(3)/2 },
+          tan: { num: 1, den: 1, sqrt: 3, decimal: 1/Math.sqrt(3) }
+        };
+      } else if (angle === 45) {
+        return {
+          sin: { num: 1, den: 1, sqrt: 2, decimal: 1/Math.sqrt(2) },
+          cos: { num: 1, den: 1, sqrt: 2, decimal: 1/Math.sqrt(2) },
+          tan: { num: 1, den: 1, decimal: 1 }
+        };
+      } else if (angle === 60) {
+        return {
+          sin: { num: 1, den: 2, sqrt: 3, decimal: Math.sqrt(3)/2 },
+          cos: { num: 1, den: 2, decimal: 0.5 },
+          tan: { num: 1, den: 1, sqrt: 3, decimal: Math.sqrt(3) }
+        };
+      }
+    }
+
+    function formatSqrt(value, sqrt) {
+      if (sqrt) {
+        return `\\frac{${value}\\sqrt{${sqrt}}}{${sqrt === 3 ? 1 : sqrt}}`;
+      }
+      return value;
+    }
+
+    function generateExample(exampleData) {
+      const { angle, knownSide, length, description } = exampleData;
+      const trig = getSinCosTanExact(angle);
+      
+      let miringExact, depanExact, sampingExact;
+      let miringDecimal, depanDecimal, sampingDecimal;
+      let steps = '';
+      
+      const canvasId = 'example-canvas-' + currentExampleIndex;
+      
+      if (knownSide === 'depan') {
+        // Diketahui sisi depan
+        depanExact = length;
+        depanDecimal = length;
+        
+        steps = `
+          <div class="step">
+            <span class="step-number">1</span>
+            <strong>Diketahui dan Ditanya</strong>
+            <p>Diketahui: Sudut = ${angle}°, Sisi depan = ${length} cm</p>
+            <p>Ditanya: Keliling segitiga</p>
+          </div>
+          
+          <div class="step">
+            <span class="step-number">2</span>
+            <strong>Mencari Sisi Miring menggunakan sin</strong>
+            <p>Kita tahu bahwa: \\(\\sin ${angle}° = \\frac{\\text{depan}}{\\text{miring}}\\)</p>
+            <div class="formula">
+              \\(\\sin ${angle}° = \\frac{${angle === 30 ? '1' : angle === 45 ? '1' : '1'}}{${angle === 30 ? '2' : angle === 45 ? '\\sqrt{2}' : '2'}}${angle === 60 ? '\\sqrt{3}' : ''}\\)
+            </div>
+            <p>Maka:</p>
+            <div class="formula">
+              \\(\\frac{${angle === 30 ? '1' : angle === 45 ? '1' : '1'}}{${angle === 30 ? '2' : angle === 45 ? '\\sqrt{2}' : '2'}}${angle === 60 ? '\\sqrt{3}' : ''} = \\frac{${length}}{\\text{miring}}\\)
+            </div>
+            <p>\\(\\text{miring} = \\frac{${length}}{${angle === 30 ? '1/2' : angle === 45 ? '1/\\sqrt{2}' : '\\sqrt{3}/2'}}\\)</p>
+            ${angle === 30 ? `<p>\\(\\text{miring} = ${length} \\times 2 = ${length * 2}\\) cm</p>` : ''}
+            ${angle === 45 ? `<p>\\(\\text{miring} = ${length} \\times \\sqrt{2} = ${length}\\sqrt{2}\\) cm</p>` : ''}
+            ${angle === 60 ? `<p>\\(\\text{miring} = ${length} \\times \\frac{2}{\\sqrt{3}}\\)</p>
+            <p><strong>Merasionalkan penyebut:</strong></p>
+            <p>\\(\\text{miring} = ${length} \\times \\frac{2}{\\sqrt{3}} \\times \\frac{\\sqrt{3}}{\\sqrt{3}} = ${length} \\times \\frac{2\\sqrt{3}}{3} = \\frac{${length * 2}\\sqrt{3}}{3}\\) cm</p>` : ''}
+          </div>
+        `;
+        
+        if (angle === 30) {
+          miringExact = `${length * 2}`;
+          miringDecimal = length * 2;
+        } else if (angle === 45) {
+          miringExact = `${length}\\sqrt{2}`;
+          miringDecimal = length * Math.sqrt(2);
+        } else {
+          miringExact = `\\frac{${length * 2}}{\\sqrt{3}} = \\frac{${length * 2}\\sqrt{3}}{3}`;
+          miringDecimal = (length * 2) / Math.sqrt(3);
+        }
+        
+        // Mencari sisi samping dengan Pythagoras
+        const miringNum = miringDecimal;
+        const sampingNum = Math.sqrt(miringNum * miringNum - length * length);
+        sampingDecimal = sampingNum;
+        
+        if (angle === 30) {
+          sampingExact = `${length}\\sqrt{3}`;
+        } else if (angle === 45) {
+          sampingExact = `${length}`;
+        } else {
+          sampingExact = `\\frac{${length}\\sqrt{3}}{3}`;
+        }
+        
+        steps += `
+          <div class="step">
+            <span class="step-number">3</span>
+            <strong>Mencari Sisi Samping menggunakan Pythagoras</strong>
+            <p>\\(\\text{samping}^2 + \\text{depan}^2 = \\text{miring}^2\\)</p>
+            <div class="formula">
+              \\(\\text{samping}^2 = \\text{miring}^2 - \\text{depan}^2\\)
+            </div>
+            ${angle === 30 ? `<p>\\(\\text{samping}^2 = ${(length*2)}^2 - ${length}^2\\)</p>
+            <p>\\(\\text{samping}^2 = ${(length*2)*(length*2)} - ${length*length} = ${(length*2)*(length*2) - length*length}\\)</p>
+            <p>\\(\\text{samping} = \\sqrt{${(length*2)*(length*2) - length*length}} = \\sqrt{${length*length} \\cdot 3} = ${length}\\sqrt{3}\\) cm</p>` : ''}
+            ${angle === 45 ? `<p>\\(\\text{samping}^2 = (${length}\\sqrt{2})^2 - ${length}^2\\)</p>
+            <p>\\(\\text{samping}^2 = ${length*length} \\cdot 2 - ${length*length} = ${length*length}\\)</p>
+            <p>\\(\\text{samping} = ${length}\\) cm</p>` : ''}
+            ${angle === 60 ? `<p>\\(\\text{samping}^2 = (\\frac{${length * 2}\\sqrt{3}}{3})^2 - ${length}^2\\)</p>
+            <p>\\(\\text{samping}^2 = \\frac{${(length*2)*(length*2)} \\cdot 3}{9} - ${length*length} = \\frac{${(length*2)*(length*2)}}{3} - ${length*length}\\)</p>
+            <p>\\(\\text{samping}^2 = \\frac{${(length*2)*(length*2)} - ${length*length*3}}{3} = \\frac{${(length*2)*(length*2) - length*length*3}}{3}\\)</p>
+            <p>\\(\\text{samping} = \\sqrt{\\frac{${(length*2)*(length*2) - length*length*3}}{3}} = \\frac{${length}}{\\sqrt{3}}\\)</p>
+            <p><strong>Merasionalkan penyebut:</strong></p>
+            <p>\\(\\text{samping} = \\frac{${length}}{\\sqrt{3}} \\times \\frac{\\sqrt{3}}{\\sqrt{3}} = \\frac{${length}\\sqrt{3}}{3}\\) cm</p>` : ''}
+          </div>
+        `;
+        
+      } else if (knownSide === 'miring') {
+        // Diketahui sisi miring
+        miringExact = length;
+        miringDecimal = length;
+        
+        steps = `
+          <div class="step">
+            <span class="step-number">1</span>
+            <strong>Diketahui dan Ditanya</strong>
+            <p>Diketahui: Sudut = ${angle}°, Sisi miring = ${length} cm</p>
+            <p>Ditanya: Keliling segitiga</p>
+          </div>
+          
+          <div class="step">
+            <span class="step-number">2</span>
+            <strong>Mencari Sisi Depan menggunakan sin</strong>
+            <p>\\(\\sin ${angle}° = \\frac{\\text{depan}}{\\text{miring}}\\)</p>
+            <div class="formula">
+              \\(\\sin ${angle}° = ${angle === 30 ? '\\frac{1}{2}' : angle === 45 ? '\\frac{1}{\\sqrt{2}}' : '\\frac{\\sqrt{3}}{2}'}\\)
+            </div>
+            <p>Maka:</p>
+            <div class="formula">
+              \\(\\text{depan} = \\text{miring} \\times \\sin ${angle}°\\)
+            </div>
+            <p>\\(\\text{depan} = ${length} \\times ${angle === 30 ? '\\frac{1}{2}' : angle === 45 ? '\\frac{1}{\\sqrt{2}}' : '\\frac{\\sqrt{3}}{2}'}\\)</p>
+            ${angle === 30 ? `<p>\\(\\text{depan} = ${length/2}\\) cm</p>` : ''}
+            ${angle === 45 ? `<p>\\(\\text{depan} = \\frac{${length}}{\\sqrt{2}}\\)</p>
+            <p><strong>Merasionalkan penyebut:</strong></p>
+            <p>\\(\\text{depan} = \\frac{${length}}{\\sqrt{2}} \\times \\frac{\\sqrt{2}}{\\sqrt{2}} = \\frac{${length}\\sqrt{2}}{2}\\) cm</p>` : ''}
+            ${angle === 60 ? `<p>\\(\\text{depan} = \\frac{${length}\\sqrt{3}}{2}\\) cm</p>` : ''}
+          </div>
+        `;
+        
+        if (angle === 30) {
+          depanExact = `${length / 2}`;
+          depanDecimal = length / 2;
+        } else if (angle === 45) {
+          depanExact = `\\frac{${length}\\sqrt{2}}{2}`;
+          depanDecimal = length / Math.sqrt(2);
+        } else {
+          depanExact = `\\frac{${length}\\sqrt{3}}{2}`;
+          depanDecimal = length * Math.sqrt(3) / 2;
+        }
+        
+        steps += `
+          <div class="step">
+            <span class="step-number">3</span>
+            <strong>Mencari Sisi Samping menggunakan cos</strong>
+            <p>\\(\\cos ${angle}° = \\frac{\\text{samping}}{\\text{miring}}\\)</p>
+            <div class="formula">
+              \\(\\cos ${angle}° = ${angle === 30 ? '\\frac{\\sqrt{3}}{2}' : angle === 45 ? '\\frac{1}{\\sqrt{2}}' : '\\frac{1}{2}'}\\)
+            </div>
+            <p>\\(\\text{samping} = ${length} \\times ${angle === 30 ? '\\frac{\\sqrt{3}}{2}' : angle === 45 ? '\\frac{1}{\\sqrt{2}}' : '\\frac{1}{2}'}\\)</p>
+            ${angle === 30 ? `<p>\\(\\text{samping} = \\frac{${length}\\sqrt{3}}{2}\\) cm</p>` : ''}
+            ${angle === 45 ? `<p>\\(\\text{samping} = \\frac{${length}}{\\sqrt{2}}\\)</p>
+            <p><strong>Merasionalkan penyebut:</strong></p>
+            <p>\\(\\text{samping} = \\frac{${length}}{\\sqrt{2}} \\times \\frac{\\sqrt{2}}{\\sqrt{2}} = \\frac{${length}\\sqrt{2}}{2}\\) cm</p>` : ''}
+            ${angle === 60 ? `<p>\\(\\text{samping} = ${length/2}\\) cm</p>` : ''}
+          </div>
+        `;
+        
+        if (angle === 30) {
+          sampingExact = `\\frac{${length}\\sqrt{3}}{2}`;
+          sampingDecimal = length * Math.sqrt(3) / 2;
+        } else if (angle === 45) {
+          sampingExact = `\\frac{${length}\\sqrt{2}}{2}`;
+          sampingDecimal = length / Math.sqrt(2);
+        } else {
+          sampingExact = `${length / 2}`;
+          sampingDecimal = length / 2;
+        }
+        
+      } else {
+        // Diketahui sisi samping
+        sampingExact = length;
+        sampingDecimal = length;
+        
+        steps = `
+          <div class="step">
+            <span class="step-number">1</span>
+            <strong>Diketahui dan Ditanya</strong>
+            <p>Diketahui: Sudut = ${angle}°, Sisi samping = ${length} cm</p>
+            <p>Ditanya: Keliling segitiga</p>
+          </div>
+          
+          <div class="step">
+            <span class="step-number">2</span>
+            <strong>Mencari Sisi Depan menggunakan tan</strong>
+            <p>\\(\\tan ${angle}° = \\frac{\\text{depan}}{\\text{samping}}\\)</p>
+            <div class="formula">
+              \\(\\tan ${angle}° = ${angle === 30 ? '\\frac{1}{\\sqrt{3}}' : angle === 45 ? '1' : '\\sqrt{3}'}\\)
+            </div>
+            <p>\\(\\text{depan} = \\text{samping} \\times \\tan ${angle}°\\)</p>
+            <p>\\(\\text{depan} = ${length} \\times ${angle === 30 ? '\\frac{1}{\\sqrt{3}}' : angle === 45 ? '1' : '\\sqrt{3}'}\\)</p>
+            ${angle === 30 ? `<p>\\(\\text{depan} = \\frac{${length}}{\\sqrt{3}}\\)</p>
+            <p><strong>Merasionalkan penyebut:</strong></p>
+            <p>\\(\\text{depan} = \\frac{${length}}{\\sqrt{3}} \\times \\frac{\\sqrt{3}}{\\sqrt{3}} = \\frac{${length}\\sqrt{3}}{3}\\) cm</p>` : ''}
+            ${angle === 45 ? `<p>\\(\\text{depan} = ${length}\\) cm</p>` : ''}
+            ${angle === 60 ? `<p>\\(\\text{depan} = ${length}\\sqrt{3}\\) cm</p>` : ''}
+          </div>
+        `;
+        
+        if (angle === 30) {
+          depanExact = `\\frac{${length}\\sqrt{3}}{3}`;
+          depanDecimal = length / Math.sqrt(3);
+        } else if (angle === 45) {
+          depanExact = `${length}`;
+          depanDecimal = length;
+        } else {
+          depanExact = `${length}\\sqrt{3}`;
+          depanDecimal = length * Math.sqrt(3);
+        }
+        
+        steps += `
+          <div class="step">
+            <span class="step-number">3</span>
+            <strong>Mencari Sisi Miring menggunakan Pythagoras</strong>
+            <p>\\(\\text{miring}^2 = \\text{depan}^2 + \\text{samping}^2\\)</p>
+            ${angle === 30 ? `<p>\\(\\text{miring}^2 = (\\frac{${length}\\sqrt{3}}{3})^2 + ${length}^2\\)</p>
+            <p>\\(\\text{miring}^2 = \\frac{${length*length} \\cdot 3}{9} + ${length}^2 = \\frac{${length*length}}{3} + ${length}^2 = \\frac{${length*length} + ${length*length*3}}{3} = \\frac{${length*length*4}}{3}\\)</p>
+            <p>\\(\\text{miring} = \\sqrt{\\frac{${length*length*4}}{3}} = \\frac{${length*2}}{\\sqrt{3}}\\)</p>
+            <p><strong>Merasionalkan penyebut:</strong></p>
+            <p>\\(\\text{miring} = \\frac{${length*2}}{\\sqrt{3}} \\times \\frac{\\sqrt{3}}{\\sqrt{3}} = \\frac{${length*2}\\sqrt{3}}{3}\\) cm</p>` : ''}
+            ${angle === 45 ? `<p>\\(\\text{miring}^2 = ${length}^2 + ${length}^2 = ${2*length*length}\\)</p>
+            <p>\\(\\text{miring} = \\sqrt{${2*length*length}} = ${length}\\sqrt{2}\\) cm</p>` : ''}
+            ${angle === 60 ? `<p>\\(\\text{miring}^2 = (${length}\\sqrt{3})^2 + ${length}^2 = ${3*length*length} + ${length*length} = ${4*length*length}\\)</p>
+            <p>\\(\\text{miring} = \\sqrt{${4*length*length}} = ${2*length}\\) cm</p>` : ''}
+          </div>
+        `;
+        
+        if (angle === 30) {
+          miringExact = `\\frac{2${length}\\sqrt{3}}{3}`;
+          miringDecimal = (2 * length) / Math.sqrt(3);
+        } else if (angle === 45) {
+          miringExact = `${length}\\sqrt{2}`;
+          miringDecimal = length * Math.sqrt(2);
+        } else {
+          miringExact = `${2 * length}`;
+          miringDecimal = 2 * length;
+        }
+      }
+      
+      const kelilingDecimal = miringDecimal + depanDecimal + sampingDecimal;
+      
+      // Format keliling dalam bentuk akar
+      let kelilingExact = '';
+      if (angle === 30) {
+        if (knownSide === 'depan') {
+          kelilingExact = `${length * 2} + ${length} + ${length}\\sqrt{3} = ${length * 3} + ${length}\\sqrt{3}`;
+        } else if (knownSide === 'miring') {
+          kelilingExact = `${length} + ${length/2} + \\frac{${length}\\sqrt{3}}{2} = ${length * 1.5} + \\frac{${length}\\sqrt{3}}{2}`;
+        } else {
+          kelilingExact = `\\frac{2${length}\\sqrt{3}}{3} + \\frac{${length}\\sqrt{3}}{3} + ${length} = ${length} + \\sqrt{3}`;
+        }
+      } else if (angle === 45) {
+        if (knownSide === 'depan') {
+          kelilingExact = `${length}\\sqrt{2} + ${length} + ${length} = ${length * 2} + ${length}\\sqrt{2}`;
+        } else if (knownSide === 'miring') {
+          kelilingExact = `${length} + \\frac{${length}\\sqrt{2}}{2} + \\frac{${length}\\sqrt{2}}{2} = ${length} + ${length}\\sqrt{2}`;
+        } else {
+          kelilingExact = `${length}\\sqrt{2} + ${length} + ${length} = ${length * 2} + ${length}\\sqrt{2}`;
+        }
+      } else { // 60
+        if (knownSide === 'depan') {
+          kelilingExact = `\\frac{2${length}\\sqrt{3}}{3} + ${length} + \\frac{${length}\\sqrt{3}}{3} = ${length} + \\sqrt{3}`;
+        } else if (knownSide === 'miring') {
+          kelilingExact = `${length} + \\frac{${length}\\sqrt{3}}{2} + ${length/2} = ${length * 1.5} + \\frac{${length}\\sqrt{3}}{2}`;
+        } else {
+          kelilingExact = `${length * 2} + ${length}\\sqrt{3} + ${length} = ${length * 3} + ${length}\\sqrt{3}`;
+        }
+      }
+      
+      // Extract final result from kelilingExact (after the = sign)
+      let finalResult = kelilingExact;
+      if (kelilingExact.includes('=')) {
+        finalResult = kelilingExact.split('=').pop().trim();
+      }
+      
+      steps += `
+        <div class="step">
+          <span class="step-number">4</span>
+          <strong>Menghitung Keliling</strong>
+          <p>Keliling = sisi miring + sisi depan + sisi samping</p>
+          <div class="formula">
+            \\(K = ${miringExact} + ${depanExact} + ${sampingExact}\\)
+          </div>
+          <p class="highlight">\\(K = ${finalResult}\\) cm</p>
+        </div>
+      `;
+      
+      const labels = {
+        miring: typeof miringExact === 'string' && miringExact.includes('\\') ? 'miring' : miringExact + ' cm',
+        depan: typeof depanExact === 'string' && depanExact.includes('\\') ? 'depan' : depanExact + ' cm',
+        samping: typeof sampingExact === 'string' && sampingExact.includes('\\') ? 'samping' : sampingExact + ' cm'
+      };
+      
+      const html = `
+        <div class="problem-box">
+          <strong>Soal ${currentExampleIndex + 1}:</strong><br>
+          Sebuah segitiga siku-siku memiliki sudut ${angle}°. Jika ${description} adalah ${length} cm, 
+          hitunglah keliling segitiga tersebut!
+        </div>
+        
+        <div class="canvas-container">
+          <canvas id="${canvasId}" width="300" height="250"></canvas>
+        </div>
+        
+        <div class="solution-box">
+          <h3>💡 Pembahasan Lengkap</h3>
+          ${steps}
+        </div>
+      `;
+      
+      document.getElementById('example-content').innerHTML = html;
+      
+      setTimeout(() => {
+        drawTriangle(canvasId, angle, labels, true);
+        if (window.MathJax) {
+          MathJax.typesetPromise();
+        }
+      }, 100);
+    }
+
+    function nextExample() {
+      currentExampleIndex = (currentExampleIndex + 1) % examples.length;
+      generateExample(examples[currentExampleIndex]);
+    }
+
+    function generateProblem() {
+      const angles = [30, 45, 60];
+      const sides = ['miring', 'depan', 'samping'];
+      const sideNames = {
+        'miring': 'sisi miring',
+        'depan': 'sisi depan',
+        'samping': 'sisi samping'
+      };
+      
+      const angle = angles[Math.floor(Math.random() * angles.length)];
+      const knownSide = sides[Math.floor(Math.random() * sides.length)];
+      const length = (Math.floor(Math.random() * 5) + 2) * 2;
+      
+      const trig = getSinCosTanExact(angle);
+      let miringDecimal, depanDecimal, sampingDecimal;
+      
+      if (knownSide === 'depan') {
+        depanDecimal = length;
+        if (angle === 30) {
+          miringDecimal = length * 2;
+          sampingDecimal = length * Math.sqrt(3);
+        } else if (angle === 45) {
+          miringDecimal = length * Math.sqrt(2);
+          sampingDecimal = length;
+        } else {
+          miringDecimal = (length * 2) / Math.sqrt(3);
+          sampingDecimal = length / Math.sqrt(3);
+        }
+      } else if (knownSide === 'miring') {
+        miringDecimal = length;
+        if (angle === 30) {
+          depanDecimal = length / 2;
+          sampingDecimal = length * Math.sqrt(3) / 2;
+        } else if (angle === 45) {
+          depanDecimal = length / Math.sqrt(2);
+          sampingDecimal = length / Math.sqrt(2);
+        } else {
+          depanDecimal = length * Math.sqrt(3) / 2;
+          sampingDecimal = length / 2;
+        }
+      } else {
+        sampingDecimal = length;
+        if (angle === 30) {
+          depanDecimal = length / Math.sqrt(3);
+          miringDecimal = (2 * length) / Math.sqrt(3);
+        } else if (angle === 45) {
+          depanDecimal = length;
+          miringDecimal = length * Math.sqrt(2);
+        } else {
+          depanDecimal = length * Math.sqrt(3);
+          miringDecimal = 2 * length;
+        }
+      }
+      
+      const keliling = miringDecimal + depanDecimal + sampingDecimal;
+      
+      currentProblem = {
+        angle: angle,
+        knownSide: knownSide,
+        length: length,
+        answer: keliling
+      };
+      
+      document.getElementById('practice-problem').innerHTML = `
+        <strong>Soal:</strong><br>
+        Sebuah segitiga siku-siku memiliki sudut ${angle}°. Jika ${sideNames[knownSide]} adalah ${length} cm, 
+        hitunglah keliling segitiga tersebut!<br><br>
+        <em>Petunjuk: Gunakan perbandingan trigonometri dan teorema Pythagoras. Tuliskan jawaban dalam bentuk akar jika diperlukan.</em>
+      `;
+      
+      const labels = {
+        miring: knownSide === 'miring' ? length + ' cm' : '?',
+        depan: knownSide === 'depan' ? length + ' cm' : '?',
+        samping: knownSide === 'samping' ? length + ' cm' : '?'
+      };
+      
+      document.getElementById('practice-canvas-container').style.display = 'block';
+      drawTriangle('practice-canvas', angle, labels, true);
+      
+      document.getElementById('answer-input').value = '';
+      document.getElementById('practice-feedback').innerHTML = '';
+      
+      if (window.MathJax) {
+        MathJax.typesetPromise();
+      }
+    }
+
+    function checkAnswer() {
+      if (!currentProblem) {
+        document.getElementById('practice-feedback').innerHTML = '<div class="feedback incorrect">Silakan klik "Soal Baru" terlebih dahulu!</div>';
+        return;
+      }
+      
+      const userAnswer = document.getElementById('answer-input').value.trim();
+      
+      if (!userAnswer) {
+        document.getElementById('practice-feedback').innerHTML = '<div class="feedback incorrect">Masukkan jawaban Anda!</div>';
+        return;
+      }
+      
+      // Parse jawaban user (sederhana)
+      let userValue = 0;
+      try {
+        // Ganti √ dengan sqrt untuk evaluasi
+        let processed = userAnswer.replace(/√/g, 'Math.sqrt');
+        processed = processed.replace(/(\d+)\s*\*/g, '$1*');
+        userValue = eval(processed);
+      } catch (e) {
+        // Jika gagal parse, coba bandingkan langsung
+        userValue = parseFloat(userAnswer);
+      }
+      
+      const tolerance = 0.5;
+      const isCorrect = Math.abs(userValue - currentProblem.answer) < tolerance;
+      
+      if (isCorrect) {
+        document.getElementById('practice-feedback').innerHTML = `
+          <div class="feedback correct">
+            🎉 Benar! Keliling segitiga adalah ${currentProblem.answer.toFixed(2)} cm<br>
+            Jawaban Anda: ${userAnswer}
+          </div>
+        `;
+      } else {
+        document.getElementById('practice-feedback').innerHTML = `
+          <div class="feedback incorrect">
+            ❌ Belum tepat. Coba periksa perhitungan Anda lagi!<br>
+            Keliling yang benar ≈ ${currentProblem.answer.toFixed(2)} cm<br>
+            Jawaban Anda: ${userAnswer}
+          </div>
+        `;
+      }
+    }
+    
+    function generateTrigProblem() {
+      const angles = [
+        { deg: 0, sin: 0, cos: 1, tan: 0, sinStr: '0', cosStr: '1', tanStr: '0' },
+        { deg: 30, sin: 0.5, cos: Math.sqrt(3)/2, tan: 1/Math.sqrt(3), sinStr: '1/2', cosStr: '√3/2', tanStr: '√3/3' },
+        { deg: 45, sin: Math.sqrt(2)/2, cos: Math.sqrt(2)/2, tan: 1, sinStr: '√2/2', cosStr: '√2/2', tanStr: '1' },
+        { deg: 60, sin: Math.sqrt(3)/2, cos: 0.5, tan: Math.sqrt(3), sinStr: '√3/2', cosStr: '1/2', tanStr: '√3' },
+        { deg: 90, sin: 1, cos: 0, tan: Infinity, sinStr: '1', cosStr: '0', tanStr: 'tak terdefinisi' },
+        { deg: 120, sin: Math.sqrt(3)/2, cos: -0.5, tan: -Math.sqrt(3), sinStr: '√3/2', cosStr: '-1/2', tanStr: '-√3', formula: '180° - 60°' },
+        { deg: 135, sin: Math.sqrt(2)/2, cos: -Math.sqrt(2)/2, tan: -1, sinStr: '√2/2', cosStr: '-√2/2', tanStr: '-1', formula: '180° - 45°' },
+        { deg: 150, sin: 0.5, cos: -Math.sqrt(3)/2, tan: -1/Math.sqrt(3), sinStr: '1/2', cosStr: '-√3/2', tanStr: '-√3/3', formula: '180° - 30°' },
+        { deg: 210, sin: -0.5, cos: -Math.sqrt(3)/2, tan: 1/Math.sqrt(3), sinStr: '-1/2', cosStr: '-√3/2', tanStr: '√3/3', formula: '180° + 30°' },
+        { deg: 225, sin: -Math.sqrt(2)/2, cos: -Math.sqrt(2)/2, tan: 1, sinStr: '-√2/2', cosStr: '-√2/2', tanStr: '1', formula: '180° + 45°' },
+        { deg: 240, sin: -Math.sqrt(3)/2, cos: -0.5, tan: Math.sqrt(3), sinStr: '-√3/2', cosStr: '-1/2', tanStr: '√3', formula: '180° + 60°' },
+        { deg: 300, sin: -Math.sqrt(3)/2, cos: 0.5, tan: -Math.sqrt(3), sinStr: '-√3/2', cosStr: '1/2', tanStr: '-√3', formula: '360° - 60°' },
+        { deg: 315, sin: -Math.sqrt(2)/2, cos: Math.sqrt(2)/2, tan: -1, sinStr: '-√2/2', cosStr: '√2/2', tanStr: '-1', formula: '360° - 45°' },
+        { deg: 330, sin: -0.5, cos: Math.sqrt(3)/2, tan: -1/Math.sqrt(3), sinStr: '-1/2', cosStr: '√3/2', tanStr: '-√3/3', formula: '360° - 30°' }
+      ];
+      
+      const trigFuncs = ['sin', 'cos', 'tan'];
+      
+      const angle = angles[Math.floor(Math.random() * angles.length)];
+      const func = trigFuncs[Math.floor(Math.random() * trigFuncs.length)];
+      
+      let answer, answerStr;
+      if (func === 'sin') {
+        answer = angle.sin;
+        answerStr = angle.sinStr;
+      } else if (func === 'cos') {
+        answer = angle.cos;
+        answerStr = angle.cosStr;
+      } else {
+        answer = angle.tan;
+        answerStr = angle.tanStr;
+      }
+      
+      currentTrigProblem = {
+        angle: angle.deg,
+        func: func,
+        answer: answer,
+        answerStr: answerStr,
+        formula: angle.formula
+      };
+      
+      let problemText = `<strong>Soal:</strong><br>Tentukan nilai dari <strong>${func} ${angle.deg}°</strong>`;
+      
+      if (angle.formula) {
+        problemText += `<br><br><em>Petunjuk: Gunakan relasi sudut ${angle.formula}</em>`;
+      }
+      
+      document.getElementById('trig-practice-problem').innerHTML = problemText;
+      document.getElementById('trig-answer-input').value = '';
+      document.getElementById('trig-practice-feedback').innerHTML = '';
+    }
+    
+    function checkTrigAnswer() {
+      if (!currentTrigProblem) {
+        document.getElementById('trig-practice-feedback').innerHTML = '<div class="feedback incorrect">Silakan klik "Soal Baru" terlebih dahulu!</div>';
+        return;
+      }
+      
+      const userAnswer = document.getElementById('trig-answer-input').value.trim().toLowerCase();
+      
+      if (!userAnswer) {
+        document.getElementById('trig-practice-feedback').innerHTML = '<div class="feedback incorrect">Masukkan jawaban Anda!</div>';
+        return;
+      }
+      
+      // Normalisasi jawaban
+      let userValue = 0;
+      let isCorrect = false;
+      
+      // Cek untuk tak terdefinisi
+      if (currentTrigProblem.answerStr === 'tak terdefinisi') {
+        if (userAnswer.includes('tak') || userAnswer.includes('tidak') || userAnswer.includes('undefined') || userAnswer === '∞') {
+          isCorrect = true;
+        }
+      } else {
+        try {
+          // Ganti simbol
+          let processed = userAnswer.replace(/√/g, 'Math.sqrt');
+          processed = processed.replace(/\s/g, '');
+          
+          // Evaluasi
+          userValue = eval(processed);
+          
+          const tolerance = 0.01;
+          isCorrect = Math.abs(userValue - currentTrigProblem.answer) < tolerance;
+        } catch (e) {
+          // Coba bandingkan string
+          const normalizedAnswer = currentTrigProblem.answerStr.toLowerCase().replace(/\s/g, '');
+          const normalizedUser = userAnswer.replace(/\s/g, '');
+          isCorrect = normalizedAnswer === normalizedUser;
+        }
+      }
+      
+      if (isCorrect) {
+        let explanation = '';
+        if (currentTrigProblem.formula) {
+          explanation = `<br><br>📖 Penjelasan: ${currentTrigProblem.func} ${currentTrigProblem.angle}° = ${currentTrigProblem.func}(${currentTrigProblem.formula})`;
+        }
+        
+        document.getElementById('trig-practice-feedback').innerHTML = `
+          <div class="feedback correct">
+            🎉 Benar! ${currentTrigProblem.func} ${currentTrigProblem.angle}° = ${currentTrigProblem.answerStr}${explanation}
+          </div>
+        `;
+      } else {
+        document.getElementById('trig-practice-feedback').innerHTML = `
+          <div class="feedback incorrect">
+            ❌ Belum tepat. Coba periksa perhitungan Anda lagi!<br>
+            Jawaban yang benar: ${currentTrigProblem.answerStr}<br>
+            Jawaban Anda: ${userAnswer}
+          </div>
+        `;
+      }
+    }
+
+    async function onConfigChange(config) {
+      const mainTitle = document.getElementById('main-title');
+      const subtitle = document.getElementById('subtitle');
+      const menuTrigValuesTitle = document.getElementById('menu-trig-values-title');
+      const menuExampleTitle = document.getElementById('menu-example-title');
+      const menuPracticeTitle = document.getElementById('menu-practice-title');
+      const exampleTitle = document.getElementById('example-title');
+      const practiceTitle = document.getElementById('practice-title');
+      const nextBtn = document.getElementById('next-btn');
+      const checkBtn = document.getElementById('check-btn');
+      const newProblemBtn = document.getElementById('new-problem-btn');
+      
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'Tahoma, Geneva, Verdana, sans-serif';
+      const fontFamily = `${customFont}, ${baseFontStack}`;
+      const baseSize = config.font_size || defaultConfig.font_size;
+      
+      document.body.style.fontFamily = fontFamily;
+      
+      mainTitle.textContent = config.main_title || defaultConfig.main_title;
+      mainTitle.style.fontSize = `${baseSize * 2.5}px`;
+      
+      subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+      subtitle.style.fontSize = `${baseSize * 1.1}px`;
+      
+      menuTrigValuesTitle.textContent = config.menu_trig_values_title || defaultConfig.menu_trig_values_title;
+      menuTrigValuesTitle.style.fontSize = `${baseSize * 1.8}px`;
+      
+      menuExampleTitle.textContent = config.menu_example_title || defaultConfig.menu_example_title;
+      menuExampleTitle.style.fontSize = `${baseSize * 1.8}px`;
+      
+      menuPracticeTitle.textContent = config.menu_practice_title || defaultConfig.menu_practice_title;
+      menuPracticeTitle.style.fontSize = `${baseSize * 1.8}px`;
+      
+      exampleTitle.textContent = config.example_title || defaultConfig.example_title;
+      exampleTitle.style.fontSize = `${baseSize * 1.5}px`;
+      exampleTitle.style.color = config.primary_color || defaultConfig.primary_color;
+      exampleTitle.style.borderBottomColor = config.primary_color || defaultConfig.primary_color;
+      
+      practiceTitle.textContent = config.practice_title || defaultConfig.practice_title;
+      practiceTitle.style.fontSize = `${baseSize * 1.5}px`;
+      practiceTitle.style.color = config.primary_color || defaultConfig.primary_color;
+      practiceTitle.style.borderBottomColor = config.primary_color || defaultConfig.primary_color;
+      
+      nextBtn.textContent = config.next_button || defaultConfig.next_button;
+      nextBtn.style.fontSize = `${baseSize * 1.1}px`;
+      nextBtn.style.backgroundColor = config.primary_color || defaultConfig.primary_color;
+      
+      checkBtn.textContent = config.check_button || defaultConfig.check_button;
+      checkBtn.style.fontSize = `${baseSize * 1.1}px`;
+      checkBtn.style.backgroundColor = config.primary_color || defaultConfig.primary_color;
+      
+      newProblemBtn.textContent = config.new_problem_button || defaultConfig.new_problem_button;
+      newProblemBtn.style.fontSize = `${baseSize * 1.1}px`;
+      newProblemBtn.style.backgroundColor = config.secondary_color || defaultConfig.secondary_color;
+      
+      const bgStart = config.background_gradient_start || defaultConfig.background_gradient_start;
+      const bgEnd = config.background_gradient_end || defaultConfig.background_gradient_end;
+      document.body.style.background = `linear-gradient(135deg, ${bgStart} 0%, ${bgEnd} 100%)`;
+      
+      const textColor = config.text_color || defaultConfig.text_color;
+      const allText = document.querySelectorAll('p, label, .result-item, .problem-box, .step');
+      allText.forEach(el => {
+        el.style.color = textColor;
+        el.style.fontSize = `${baseSize}px`;
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig: defaultConfig,
+        onConfigChange: onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_gradient_start || defaultConfig.background_gradient_start,
+              set: (value) => {
+                config.background_gradient_start = value;
+                window.elementSdk.setConfig({ background_gradient_start: value });
+              }
+            },
+            {
+              get: () => config.background_gradient_end || defaultConfig.background_gradient_end,
+              set: (value) => {
+                config.background_gradient_end = value;
+                window.elementSdk.setConfig({ background_gradient_end: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                config.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["subtitle", config.subtitle || defaultConfig.subtitle],
+          ["menu_trig_values_title", config.menu_trig_values_title || defaultConfig.menu_trig_values_title],
+          ["menu_example_title", config.menu_example_title || defaultConfig.menu_example_title],
+          ["menu_practice_title", config.menu_practice_title || defaultConfig.menu_practice_title],
+          ["example_title", config.example_title || defaultConfig.example_title],
+          ["practice_title", config.practice_title || defaultConfig.practice_title],
+          ["next_button", config.next_button || defaultConfig.next_button],
+          ["check_button", config.check_button || defaultConfig.check_button],
+          ["new_problem_button", config.new_problem_button || defaultConfig.new_problem_button]
+        ])
+      });
+    }
+
+    // Mulai dengan menu utama
+    showMenu();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99d717ec45a9a19c',t:'MTc2Mjk2MTY2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
