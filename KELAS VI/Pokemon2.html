@@ -396,7 +396,6 @@
         useLocalStorageMode = true;
         loadPokemonFromLocalStorage();
         dataInitialized = true;
-        showToast("Mode Browser: Data disimpan di localStorage", "info");
         return true;
       }
       if (dataInitialized) {
@@ -410,19 +409,16 @@
           useLocalStorageMode = true;
           loadPokemonFromLocalStorage();
           dataInitialized = true;
-          showToast("Mode Browser: Data disimpan di localStorage", "info");
           return true;
         }
         dataInitialized = true;
         useLocalStorageMode = false;
-        showToast("Mode Canva: Data disimpan di Canva Sheet", "success");
         return true;
       } catch(e) {
         // Fallback to localStorage
         useLocalStorageMode = true;
         loadPokemonFromLocalStorage();
         dataInitialized = true;
-        showToast("Mode Browser: Data disimpan di localStorage", "info");
         return true;
       }
     }
@@ -791,7 +787,7 @@
           const a = randomInt(2, 4);
           const b = randomInt(2, 4);
           const c = randomInt(2, 4);
-          const persenA = randomInt(20, 40);
+          const persenA = [20, 25, 40, 50][randomInt(0, 3)]; // Pilih persen yang menghasilkan bilangan bulat
           const kelipatan = randomInt(5, 10) * 10;
           const total = (a + b + c) * kelipatan;
           questionText = `Rasio A:B:C = ${a}:${b}:${c} dengan total ${total}. Jika A dikurangi ${persenA}%, berapa jumlah B dan C harus ditambah agar total tetap?`;
@@ -812,15 +808,31 @@
           correctAnswer = String(totalUang);
           explanation = `Jika B = Rp${targetB}, maka per bagian = ${targetB}/${b} = Rp${perBagian}. Total = ${a+b+c}×${perBagian} = Rp${totalUang}`;
         } else {
-          // Multi-step proportion problem
-          const kecepatan1 = randomInt(40, 60);
+          // Multi-step proportion problem - pastikan menghasilkan bilangan bulat atau pecahan sederhana
           const waktu1 = randomInt(2, 4);
+          const kecepatan1 = randomInt(8, 12) * 5; // Kelipatan 5 untuk hasil lebih bersih
           const jarak = kecepatan1 * waktu1;
-          const kecepatan2 = randomInt(30, 50);
+          
+          // Pilih kecepatan2 yang membuat jarak habis dibagi atau menghasilkan pecahan sederhana
+          const pembagi = [2, 3, 4, 5, 6][randomInt(0, 4)];
+          const kecepatan2 = jarak / pembagi;
+          
           questionText = `Mobil A berkecepatan ${kecepatan1} km/jam menempuh ${jarak} km dalam ${waktu1} jam. Jika Mobil B berkecepatan ${kecepatan2} km/jam, berapa jam untuk jarak yang sama?`;
           const waktu2 = jarak / kecepatan2;
-          correctAnswer = String(waktu2);
-          explanation = `Jarak = ${jarak} km. Waktu Mobil B = ${jarak}/${kecepatan2} = ${waktu2} jam`;
+          
+          // Format jawaban sebagai pecahan jika bukan bilangan bulat
+          if (Number.isInteger(waktu2)) {
+            correctAnswer = String(waktu2);
+            explanation = `Jarak = ${jarak} km. Waktu Mobil B = ${jarak}/${kecepatan2} = ${waktu2} jam`;
+          } else {
+            // Konversi ke pecahan sederhana
+            const g = gcd(jarak, kecepatan2);
+            const pembilang = jarak / g;
+            const penyebut = kecepatan2 / g;
+            correctAnswer = `${pembilang}/${penyebut}`;
+            explanation = `Jarak = ${jarak} km. Waktu Mobil B = ${jarak}/${kecepatan2} = ${pembilang}/${penyebut} jam`;
+            answerType = "fraction";
+          }
         }
       }
 
@@ -975,7 +987,7 @@
       
       const answerKeyTitle = document.createElement("p");
       answerKeyTitle.className = "font-semibold label-text mb-2";
-      answerKeyTitle.textContent = "🔑 Kunci Jawaban (Ctrl+M untuk tutup)";
+      answerKeyTitle.textContent = "������ Kunci Jawaban (Ctrl+M untuk tutup)";
       
       const answerKeyContent = document.createElement("p");
       answerKeyContent.id = "answer-key-content";
@@ -1080,7 +1092,7 @@
         const normalizedCorrect = correctAnsRaw.replace(/\s+/g, "");
         const normalizedUser = userAns.replace(/\s+/g, "");
 
-        // Check if answer is correct (support equivalent ratios)
+        // Check if answer is correct (support equivalent ratios and fractions)
         let isCorrect = false;
         if (currentQuestion.answerType === "ratio") {
           // Parse ratio format "a:b"
@@ -1102,8 +1114,33 @@
             // Allow small floating point tolerance
             isCorrect = Math.abs(correctValue - userValue) < 0.0001;
           }
+        } else if (currentQuestion.answerType === "fraction") {
+          // Parse fraction format "a/b"
+          const parseFraction = (str) => {
+            const parts = str.split("/").map(p => parseFloat(p.trim()));
+            if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1]) && parts[1] !== 0) {
+              return parts;
+            }
+            // Also try parsing as decimal
+            const decimal = parseFloat(str);
+            if (!isNaN(decimal)) {
+              return [decimal, 1];
+            }
+            return null;
+          };
+          
+          const correctFrac = parseFraction(normalizedCorrect);
+          const userFrac = parseFraction(normalizedUser);
+          
+          if (correctFrac && userFrac) {
+            // Check if fractions are equivalent: a/b = c/d
+            const correctValue = correctFrac[0] / correctFrac[1];
+            const userValue = userFrac[0] / userFrac[1];
+            // Allow small floating point tolerance
+            isCorrect = Math.abs(correctValue - userValue) < 0.0001;
+          }
         } else {
-          // For non-ratio answers, exact match
+          // For non-ratio/fraction answers, exact match
           isCorrect = normalizedCorrect === normalizedUser;
         }
         if (isCorrect) {
@@ -1370,6 +1407,49 @@
       });
 
       btnRow.appendChild(closeBtn);
+
+      // Add release button only if not a capture modal
+      if (!isCapture) {
+        const releaseBtn = document.createElement("button");
+        releaseBtn.type = "button";
+        releaseBtn.className = "btn-secondary border-2 rounded px-4 py-2 label-text";
+        releaseBtn.textContent = "Lepas Pokemon";
+        releaseBtn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          
+          // Confirmation step
+          if (releaseBtn.textContent === "Lepas Pokemon") {
+            releaseBtn.textContent = "Klik lagi untuk konfirmasi";
+            releaseBtn.style.backgroundColor = "#ef4444";
+            releaseBtn.style.color = "#ffffff";
+            setTimeout(() => {
+              releaseBtn.textContent = "Lepas Pokemon";
+              releaseBtn.style.backgroundColor = "";
+              releaseBtn.style.color = "";
+            }, 2500);
+            return;
+          }
+
+          // Proceed with release
+          let result;
+          if (useLocalStorageMode) {
+            result = deletePokemonLocalStorage(rec);
+          } else {
+            result = await window.dataSdk.delete(rec);
+          }
+
+          if (result.isOk) {
+            appStats.totalReleased += 1;
+            saveLocalStats();
+            showToast(`Pokemon ${rec.name} (${rec.code}) berhasil dilepas.`, "success");
+            overlay.remove();
+            updateStatsText();
+          } else {
+            showToast("Gagal melepas Pokemon.", "error");
+          }
+        });
+        btnRow.appendChild(releaseBtn);
+      }
 
       dialog.appendChild(title);
       dialog.appendChild(rarityP);
@@ -2090,10 +2170,10 @@
       resetBtn.textContent = "Reset Statistik & Pengaturan";
       const resetInfo = document.createElement("p");
       resetInfo.className = "caption-text mt-1";
-      resetInfo.textContent = "Reset tidak menghapus koleksi Pokemon.";
+      resetInfo.textContent = "Reset akan menghapus semua data termasuk koleksi Pokemon.";
 
       let resetConfirm = false;
-      resetBtn.addEventListener("click", (e) => {
+      resetBtn.addEventListener("click", async (e) => {
         e.preventDefault();
         if (!resetConfirm) {
           resetConfirm = true;
@@ -2104,13 +2184,28 @@
           }, 2500);
           return;
         }
+        
+        // Reset stats and settings
         appStats = { ...defaultStats };
         appSettings = { ...defaultSettings };
         saveLocalStats();
         saveLocalSettings();
+        
+        // Delete all Pokemon
+        if (useLocalStorageMode) {
+          // Clear localStorage Pokemon
+          allPokemonRecords = [];
+          savePokemonToLocalStorage();
+        } else {
+          // Delete all Pokemon from Data SDK
+          const deletePromises = allPokemonRecords.map(rec => window.dataSdk.delete(rec));
+          await Promise.all(deletePromises);
+        }
+        
         offlineInput.checked = appSettings.offlineMode;
         updateStatsText();
-        showToast("Statistik dan pengaturan berhasil direset.", "success");
+        updateCollectionUI();
+        showToast("Semua data berhasil direset (termasuk koleksi Pokemon).", "success");
         resetConfirm = false;
         resetBtn.textContent = "Reset Statistik & Pengaturan";
       });
@@ -2264,5 +2359,5 @@
       }
     })();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d726da164aa81',t:'MTc2MzUzMTYwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d7c909010aa81',t:'MTc2MzUzMjAxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
