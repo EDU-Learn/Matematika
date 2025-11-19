@@ -432,8 +432,7 @@
       const el = document.getElementById("stats-text");
       if (!el) return;
       const pokemonCount = allPokemonRecords.length;
-      const modeText = useLocalStorageMode ? " [Browser Mode]" : " [Canva Mode]";
-      el.textContent = `Soal Dijawab: ${appStats.questionsAnswered} | Benar: ${appStats.correctAnswers} | Pokemon: ${pokemonCount}${modeText}`;
+      el.textContent = `Soal Dijawab: ${appStats.questionsAnswered} | Benar: ${appStats.correctAnswers} | Pokemon: ${pokemonCount}`;
     }
 
     // -------- MAIN APP RENDERING --------
@@ -699,10 +698,10 @@
           const b = randomInt(2, 4);
           const kelipatan = randomInt(5, 10) * 100;
           const totalUang = (a + b) * kelipatan;
-          questionText = `Uang Rp${totalUang} dibagi dengan rasio ${a}:${b}. Berapa rupiah bagian pertama?\n\nContoh: Rp1000 dibagi rasio 2:3, bagian pertama = 2/(2+3) × 1000 = Rp400`;
+          questionText = `Ani dan Budi membagi uang Rp${totalUang} dengan perbandingan ${a}:${b}. Berapa rupiah yang diterima Ani?\n\nContoh: Jika Rp1000 dibagi dengan rasio 2:3, maka:\n- Total bagian = 2 + 3 = 5 bagian\n- Bagian pertama = 2/5 × 1000 = Rp400`;
           const bagian1 = (a * totalUang) / (a + b);
           correctAnswer = String(bagian1);
-          explanation = `Langkah penyelesaian:\n1. Total bagian = ${a} + ${b} = ${a+b}\n2. Bagian pertama = ${a}/${a+b} dari total\n3. Uang bagian pertama = ${a}/${a+b} × ${totalUang} = Rp${bagian1}`;
+          explanation = `Langkah penyelesaian:\n1. Total bagian = ${a} + ${b} = ${a+b} bagian\n2. Bagian Ani = ${a}/${a+b} dari total uang\n3. Uang yang diterima Ani = ${a}/${a+b} × Rp${totalUang} = Rp${bagian1}\n4. (Budi menerima ${b}/${a+b} × Rp${totalUang} = Rp${totalUang - bagian1})`;
         }
       }
       
@@ -2234,5 +2233,5 @@
       }
     })();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d5d451135fe18',t:'MTc2MzUzMDczNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d6ac6344baa81',t:'MTc2MzUzMTI5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
