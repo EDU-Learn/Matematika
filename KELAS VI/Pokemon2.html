@@ -1000,6 +1000,7 @@
       let currentQuestion = null;
       let isProcessing = false;
       let answerKeyVisible = false;
+      let hasAnswered = false;
 
       function generateAndShowQuestion() {
         const diff = diffSelect.value || "very_easy";
@@ -1008,9 +1009,12 @@
         qText.textContent = currentQuestion.text;
         qText.style.whiteSpace = "pre-wrap";
         ansInput.value = "";
+        ansInput.disabled = false;
+        submitBtn.disabled = false;
         feedbackP.textContent = "";
         answerKeySection.style.display = "none";
         answerKeyVisible = false;
+        hasAnswered = false;
       }
 
       function toggleAnswerKey() {
@@ -1018,11 +1022,19 @@
           showToast("Silakan buat soal terlebih dahulu.", "info");
           return;
         }
+        if (hasAnswered) {
+          showToast("Kamu sudah menjawab soal ini. Buat soal baru untuk melanjutkan.", "error");
+          return;
+        }
         answerKeyVisible = !answerKeyVisible;
         if (answerKeyVisible) {
           answerKeySection.style.display = "block";
           answerKeyContent.textContent = `Jawaban: ${currentQuestion.answer}\n\n${currentQuestion.explanation}`;
           showToast("Kunci jawaban ditampilkan", "info");
+          // Disable input and submit after viewing answer key
+          ansInput.disabled = true;
+          submitBtn.disabled = true;
+          hasAnswered = true;
         } else {
           answerKeySection.style.display = "none";
           showToast("Kunci jawaban disembunyikan", "info");
@@ -1046,6 +1058,10 @@
         e.preventDefault();
         if (!currentQuestion) {
           showToast("Silakan klik \"Soal Baru\" terlebih dahulu.", "info");
+          return;
+        }
+        if (hasAnswered) {
+          showToast("Kamu sudah menjawab soal ini. Buat soal baru untuk melanjutkan.", "error");
           return;
         }
         if (isProcessing) return;
@@ -1097,14 +1113,29 @@
           feedbackP.style.color = "#10b981";
           showToast("Jawaban benar! Kamu berpeluang menangkap Pokemon.", "success");
 
+          // Disable input and submit after correct answer
+          ansInput.disabled = true;
+          submitBtn.disabled = true;
+          hasAnswered = true;
+
           // Capture Pokemon based on difficulty
           const rarity = getRarityByDifficulty(currentQuestion.difficulty);
           await handleCapturePokemon(rarity);
         } else {
           appStats.currentWrongStreak += 1;
-          feedbackP.textContent = `❌ Jawaban Belum Tepat. Tekan Ctrl+M untuk melihat kunci jawaban.`;
+          feedbackP.textContent = `❌ Jawaban Belum Tepat. Lihat kunci jawaban di bawah.`;
           feedbackP.style.color = "#ef4444";
-          showToast("Jawaban salah, coba lagi!", "error");
+          showToast("Jawaban salah, lihat pembahasan!", "error");
+
+          // Disable input and submit after wrong answer
+          ansInput.disabled = true;
+          submitBtn.disabled = true;
+          hasAnswered = true;
+
+          // Auto-show answer key when wrong
+          answerKeySection.style.display = "block";
+          answerKeyContent.textContent = `Jawaban: ${currentQuestion.answer}\n\n${currentQuestion.explanation}`;
+          answerKeyVisible = true;
 
           // 3x salah berturut-turut => release random pokemon
           if (appStats.currentWrongStreak >= 3) {
@@ -2233,5 +2264,5 @@
       }
     })();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d6ac6344baa81',t:'MTc2MzUzMTI5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d726da164aa81',t:'MTc2MzUzMTYwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
