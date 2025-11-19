@@ -2,87 +2,83 @@
 <html lang="id">
  <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pokemon Learning Quest v3.0</title>
-  <script src="/_sdk/data_sdk.js"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
-  <script src="https://unpkg.com/html5-qrcode"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script><!-- Canva SDKs (optional, will fallback to localStorage if not available) -->
+  <script src="/_sdk/element_sdk.js" onerror="console.log('Element SDK not available, using defaults')"></script>
+  <script src="/_sdk/data_sdk.js" onerror="console.log('Data SDK not available, using localStorage')"></script><!-- External Libraries --> <!-- LZ-String for compression -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script><!-- html5-qrcode for QR scan -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script><!-- qrcode.js for QR generate -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script><!-- SheetJS / XLSX -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     body {
       box-sizing: border-box;
-      font-family: 'Arial', sans-serif;
-      background-color: #ffffff;
-      min-height: 100%;
     }
-    
+
+    html, body {
+      height: 100%;
+    }
+
+    /* Pokeball button base */
     .pokeball-btn {
-      position: relative;
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      border: 5px solid #000;
-      background: linear-gradient(180deg, #ef4444 0%, #ef4444 48%, #000 48%, #000 52%, #fff 52%, #fff 100%);
+      border: 5px solid #000000;
+      position: relative;
       cursor: pointer;
-      transition: transform 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+      background: linear-gradient(
+        180deg,
+        #ef4444 0%,
+        #ef4444 48%,
+        #000000 48%,
+        #000000 52%,
+        #ffffff 52%,
+        #ffffff 100%
+      );
     }
-    
-    .pokeball-btn:hover {
-      transform: scale(1.1);
-    }
-    
     .pokeball-btn::before {
-      content: '';
+      content: "";
       position: absolute;
       width: 25px;
       height: 25px;
-      background: #fff;
-      border: 4px solid #000;
       border-radius: 50%;
+      background-color: #ffffff;
+      border: 4px solid #000000;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       z-index: 2;
     }
-    
     .pokeball-btn::after {
-      content: '';
+      content: "";
       position: absolute;
+      height: 5px;
+      width: 100%;
+      background-color: #000000;
       top: 50%;
       left: 0;
-      right: 0;
-      height: 5px;
-      background: #000;
       transform: translateY(-50%);
       z-index: 1;
     }
-    
-    .pokemon-card {
-      transition: transform 0.3s, box-shadow 0.3s;
+    .pokeball-btn:hover {
+      transform: scale(1.1);
     }
-    
+
+    /* Pokemon card hover */
+    .pokemon-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
     .pokemon-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
     }
-    
-    .toast {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 16px 24px;
-      border-radius: 8px;
-      color: white;
-      font-weight: bold;
-      z-index: 1000;
-      animation: slideIn 0.3s ease-out;
-    }
-    
-    @keyframes slideIn {
+
+    /* Toast animation */
+    @keyframes slideInToast {
       from {
         transform: translateX(400px);
         opacity: 0;
@@ -92,2070 +88,2151 @@
         opacity: 1;
       }
     }
-    
-    .capture-animation {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation: captureAnim 1s ease-out;
-      z-index: 999;
+    .toast {
+      animation: slideInToast 0.3s ease-out;
     }
-    
-    @keyframes captureAnim {
-      0% {
-        transform: translate(-50%, -50%) scale(0);
-        opacity: 1;
-      }
-      50% {
-        transform: translate(-50%, -50%) scale(1.2);
-      }
-      100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0;
-      }
+
+    /* Capture animation: simple scale + glow */
+    @keyframes capturePulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+      50% { transform: scale(1.1); box-shadow: 0 0 20px 8px rgba(239,68,68,0.7); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239,68,68,0.0); }
     }
-    
-    .rarity-common { border-color: #9ca3af; }
-    .rarity-uncommon { border-color: #10b981; }
-    .rarity-rare { border-color: #3b82f6; }
-    .rarity-legendary { border-color: #a855f7; }
-    .rarity-mythical { border-color: #f59e0b; }
+    .capture-anim {
+      animation: capturePulse 0.6s ease-out;
+    }
   </style>
   <style>@view-transition { navigation: auto; }</style>
  </head>
- <body class="min-h-full">
-  <div id="app" class="min-h-full p-4"></div>
+ <body class="h-full">
+  <div id="app-root" class="h-full flex flex-col"></div>
   <script>
+    // -------- CONFIG & ELEMENT SDK --------
     const defaultConfig = {
+      background_color: "#f0f9ff",
+      surface_color: "#ffffff",
+      text_color: "#1f2937",
+      primary_color: "#ef4444",
+      secondary_color: "#3b82f6",
       game_title: "Pokemon Learning Quest v3.0",
-      welcome_message: "Selamat datang di Pokemon Learning Quest!",
+      welcome_message: "Latih kemampuan rasio dengan Pokemon!",
       menu_quiz: "Soal",
       menu_collection: "Koleksi",
       menu_duel: "Duel",
-      menu_backup: "Backup",
-      primary_color: "#ef4444",
-      secondary_color: "#3b82f6",
-      text_color: "#1f2937",
-      background_color: "#ffffff",
-      surface_color: "#ffffff"
+      menu_backup: "Backup"
     };
 
-    let allPokemonData = [];
-    let questions = [];
-    let stats = {
-      totalAnswered: 0,
+    // Globals from config-refreshed values
+    let currentConfig = { ...defaultConfig };
+
+    // DOM refs for config-driven elements
+    const domRefs = {
+      root: null,
+      title: null,
+      subtitle: null,
+      menuLabels: {},
+      mainWrapper: null
+    };
+
+    // -------- DATA STORAGE (SDK or localStorage fallback) --------
+    let dataInitialized = false;
+    let allPokemonRecords = []; // latest data from sheet or localStorage
+    let currentRecordCount = 0;
+    let useLocalStorageMode = false; // true when SDK not available
+
+    const LS_POKEMON_KEY = "plq_pokemon_v3";
+
+    const rarityOrder = ["common", "uncommon", "rare", "legendary", "mythical"];
+
+    // Rarity border colors (fixed, not recolorables)
+    const rarityColors = {
+      common: "#9ca3af",
+      uncommon: "#10b981",
+      rare: "#3b82f6",
+      legendary: "#a855f7",
+      mythical: "#f59e0b"
+    };
+
+    // -------- LOCAL STORAGE KEYS (for quiz & stats) --------
+    const LS_KEYS = {
+      STATS: "plq_stats_v3",
+      SETTINGS: "plq_settings_v3",
+      BACKUP_TEXT: "plq_backup_text_v3"
+    };
+
+    const defaultStats = {
+      questionsAnswered: 0,
       correctAnswers: 0,
-      wrongStreak: 0,
-      totalCaptured: 0
-    };
-    let currentView = 'home';
-    let secretKeyPressed = false;
-
-    const dataHandler = {
-      onDataChanged(data) {
-        allPokemonData = data;
-        if (currentView === 'collection') {
-          renderCollectionView();
-        }
-        updateStats();
-      }
+      currentWrongStreak: 0,
+      totalReleased: 0
     };
 
-    let useOfflineMode = false;
+    let appStats = { ...defaultStats };
 
-    async function init() {
-      loadLocalData();
-      
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      if (window.dataSdk) {
-        const initResult = await window.dataSdk.init(dataHandler);
-        if (!initResult.isOk) {
-          console.error("Failed to initialize data SDK");
-          useOfflineMode = true;
-          loadOfflineData();
-          showToast('Mode Offline: Data disimpan di browser', 'info');
-        }
-      } else {
-        console.error("Data SDK not available - using offline mode");
-        useOfflineMode = true;
-        loadOfflineData();
-        showToast('Mode Offline: Data disimpan di browser', 'info');
-      }
+    const defaultSettings = {
+      offlineMode: false
+    };
+    let appSettings = { ...defaultSettings };
 
-      renderHome();
-      
-      document.addEventListener('keydown', (e) => {
-        if (e.key.toLowerCase() === 'm') {
-          secretKeyPressed = true;
+    function loadLocalStats() {
+      try {
+        const s = window.localStorage.getItem(LS_KEYS.STATS);
+        if (s) {
+          appStats = { ...defaultStats, ...JSON.parse(s) };
         }
-      });
-      
-      document.addEventListener('keyup', (e) => {
-        if (e.key.toLowerCase() === 'm') {
-          secretKeyPressed = false;
+      } catch(e){}
+    }
+    function saveLocalStats() {
+      try {
+        window.localStorage.setItem(LS_KEYS.STATS, JSON.stringify(appStats));
+      } catch(e){}
+    }
+    function loadLocalSettings() {
+      try {
+        const s = window.localStorage.getItem(LS_KEYS.SETTINGS);
+        if (s) {
+          appSettings = { ...defaultSettings, ...JSON.parse(s) };
         }
-      });
-      
-      document.addEventListener('click', (e) => {
-        if (secretKeyPressed) {
-          openQuestionEditor();
-        }
-      });
-      
-      let longPressTimer;
-      document.addEventListener('touchstart', (e) => {
-        longPressTimer = setTimeout(() => {
-          openQuestionEditor();
-        }, 1000);
-      });
-      
-      document.addEventListener('touchend', () => {
-        clearTimeout(longPressTimer);
-      });
-      
-      document.addEventListener('touchmove', () => {
-        clearTimeout(longPressTimer);
-      });
+      } catch(e){}
+    }
+    function saveLocalSettings() {
+      try {
+        window.localStorage.setItem(LS_KEYS.SETTINGS, JSON.stringify(appSettings));
+      } catch(e){}
     }
 
-    function loadLocalData() {
-      const savedQuestions = localStorage.getItem('pokemon_questions');
-      if (savedQuestions) {
-        questions = JSON.parse(savedQuestions);
-      } else {
-        questions = [
-          {
-            id: '1',
-            question: 'Berapa hasil dari 2 + 2?',
-            answer: '4',
-            topic: 'Matematika',
-            difficulty: 'very_easy',
-            rarity: 'common'
-          },
-          {
-            id: '2',
-            question: 'Berapa hasil dari 5 + 3?',
-            answer: '8',
-            topic: 'Matematika',
-            difficulty: 'easy',
-            rarity: 'uncommon'
-          },
-          {
-            id: '3',
-            question: 'Apa ibu kota Indonesia?',
-            answer: 'Jakarta',
-            topic: 'Geografi',
-            difficulty: 'easy',
-            rarity: 'uncommon'
-          }
-        ];
-      }
-      
-      const savedStats = localStorage.getItem('pokemon_stats');
-      if (savedStats) {
-        stats = JSON.parse(savedStats);
+    // -------- LOCALSTORAGE POKEMON MANAGEMENT --------
+    function loadPokemonFromLocalStorage() {
+      try {
+        const data = window.localStorage.getItem(LS_POKEMON_KEY);
+        if (data) {
+          allPokemonRecords = JSON.parse(data);
+          currentRecordCount = allPokemonRecords.length;
+        }
+      } catch(e) {
+        allPokemonRecords = [];
+        currentRecordCount = 0;
       }
     }
 
-    function loadOfflineData() {
-      const savedPokemon = localStorage.getItem('pokemon_offline_data');
-      if (savedPokemon) {
-        allPokemonData = JSON.parse(savedPokemon);
+    function savePokemonToLocalStorage() {
+      try {
+        window.localStorage.setItem(LS_POKEMON_KEY, JSON.stringify(allPokemonRecords));
+        currentRecordCount = allPokemonRecords.length;
+      } catch(e) {}
+    }
+
+    function createPokemonLocalStorage(record) {
+      if (currentRecordCount >= 999) {
+        return { isOk: false, error: new Error("Limit reached") };
       }
+      // Add unique ID for localStorage mode
+      record.__backendId = `local_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      allPokemonRecords.push(record);
+      savePokemonToLocalStorage();
+      updateCollectionUI();
+      return { isOk: true };
     }
 
-    function saveOfflineData() {
-      localStorage.setItem('pokemon_offline_data', JSON.stringify(allPokemonData));
-      updateStats();
+    function deletePokemonLocalStorage(record) {
+      const index = allPokemonRecords.findIndex(r => r.__backendId === record.__backendId);
+      if (index !== -1) {
+        allPokemonRecords.splice(index, 1);
+        savePokemonToLocalStorage();
+        updateCollectionUI();
+        return { isOk: true };
+      }
+      return { isOk: false, error: new Error("Not found") };
     }
 
-    function saveLocalData() {
-      localStorage.setItem('pokemon_questions', JSON.stringify(questions));
-      localStorage.setItem('pokemon_stats', JSON.stringify(stats));
+    function updateCollectionUI() {
+      const collectionContainer = document.getElementById("collection-list");
+      if (collectionContainer) {
+        renderCollectionListInto(collectionContainer);
+      }
+      updateStatsText();
     }
 
-    function capitalizeFirst(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+    // -------- TOAST SYSTEM --------
+    function showToast(message, type = "info") {
+      // type: success | error | info
+      const containerId = "toast-container";
+      let container = document.getElementById(containerId);
+      if (!container) {
+        container = document.createElement("div");
+        container.id = containerId;
+        container.className = "fixed top-20 right-20 z-50 space-y-2";
+        document.body.appendChild(container);
+      }
 
-    function showToast(message, type = 'success') {
-      const toast = document.createElement('div');
-      toast.className = `toast ${type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'}`;
+      const toast = document.createElement("div");
+      let bgColor = "bg-blue-500";
+      if (type === "success") bgColor = "bg-green-500";
+      if (type === "error") bgColor = "bg-red-500";
+      toast.className = `toast text-white font-bold px-6 py-4 rounded-lg shadow-lg ${bgColor}`;
       toast.textContent = message;
-      document.body.appendChild(toast);
-      
+      container.appendChild(toast);
+
       setTimeout(() => {
         toast.remove();
+        if (!container.hasChildNodes()) container.remove();
       }, 3000);
     }
 
-    function updateStats() {
-      stats.totalCaptured = allPokemonData.length;
-      saveLocalData();
-      
-      const statsEl = document.getElementById('stats-display');
-      if (statsEl) {
-        statsEl.innerHTML = `
-          <div class="text-sm">
-            <span class="font-bold">Soal Dijawab:</span> ${stats.totalAnswered} | 
-            <span class="font-bold">Benar:</span> ${stats.correctAnswers} | 
-            <span class="font-bold">Pokemon:</span> ${stats.totalCaptured}
-          </div>
-        `;
+    // -------- HELPER: Unique Pokemon Code --------
+    function generatePokemonCode() {
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const digits = "0123456789";
+      let prefix = "";
+      for (let i = 0; i < 3; i++) {
+        prefix += letters[Math.floor(Math.random() * letters.length)];
+      }
+      let suffix = "";
+      for (let i = 0; i < 6; i++) {
+        suffix += digits[Math.floor(Math.random() * digits.length)];
+      }
+      return `PKM-${prefix}-${suffix}`;
+    }
+
+    // -------- HELPER: Rarity & Stats Scaling --------
+    function getRarityByDifficulty(diff) {
+      switch(diff) {
+        case "very_easy": return "common";
+        case "easy": return "uncommon";
+        case "medium": return "rare";
+        case "hard": return "legendary";
+        case "very_hard": return "mythical";
+        default: return "common";
       }
     }
 
-    async function capturePokemon(rarity = 'common') {
-      const rarityRanges = {
-        common: { hp: [20, 45], atk: [15, 40], speed: [15, 35], totalMin: 0, totalMax: 299 },
-        uncommon: { hp: [40, 65], atk: [35, 60], speed: [30, 55], totalMin: 300, totalMax: 399 },
-        rare: { hp: [60, 90], atk: [55, 80], speed: [50, 75], totalMin: 400, totalMax: 499 },
-        legendary: { hp: [85, 120], atk: [75, 110], speed: [70, 100], totalMin: 500, totalMax: 579 },
-        mythical: { hp: [100, 150], atk: [95, 135], speed: [85, 120], totalMin: 580, totalMax: 999 }
-      };
-      
-      function randomStat(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
-      
-      // Validasi rarity
-      if (!rarityRanges[rarity]) {
-        console.error('Invalid rarity:', rarity);
-        rarity = 'common';
-      }
-      
-      const targetRange = rarityRanges[rarity];
-      let attempts = 0;
-      let data = null;
-      
-      while (attempts < 20) {
-        const randomId = Math.floor(Math.random() * 1010) + 1;
-        
-        try {
-          const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
-          if (!response.ok) throw new Error('Network error');
-          data = await response.json();
-          
-          // Validasi data.stats ada
-          if (!data.stats || !Array.isArray(data.stats)) {
-            throw new Error('Invalid stats data');
-          }
-          
-          const totalStats = data.stats.reduce((sum, stat) => sum + stat.base_stat, 0);
-          
-          if (totalStats >= targetRange.totalMin && totalStats <= targetRange.totalMax) {
-            break;
-          }
-        } catch (error) {
-          console.log('Fetch attempt failed:', error);
-        }
-        
-        attempts++;
-      }
-      
-      if (!data || !data.sprites || !data.id) {
-        showToast('Gagal menangkap Pokemon, coba lagi!', 'error');
-        return;
-      }
-      
-      const finalRarity = rarity;
-      
-      const code = `PKM-${String(data.id).padStart(3, '0')}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
-      
-      const ranges = rarityRanges[finalRarity];
-      
-      const imageUrl = data.sprites.front_default || 
-                       (data.sprites.other && data.sprites.other['official-artwork'] && data.sprites.other['official-artwork'].front_default) ||
-                       `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${data.id}.png`;
-      
-      const newPokemon = {
-        pokemon_id: data.id,
-        name: capitalizeFirst(data.name || 'Unknown'),
-        image: imageUrl,
-        code: code,
-        hp: randomStat(ranges.hp[0], ranges.hp[1]),
-        atk: randomStat(ranges.atk[0], ranges.atk[1]),
-        speed: randomStat(ranges.speed[0], ranges.speed[1]),
-        rarity: finalRarity,
-        captured_at: new Date().toISOString()
-      };
-      
-      const duplicates = allPokemonData.filter(p => p.pokemon_id === newPokemon.pokemon_id);
-      
-      if (duplicates.length >= 1) {
-        showDuplicateModal(newPokemon, duplicates[0]);
-      } else {
-        if (useOfflineMode) {
-          newPokemon.__backendId = `offline_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-          allPokemonData.push(newPokemon);
-          saveOfflineData();
-          showCaptureAnimation(newPokemon);
-          showCaptureSuccessModal(newPokemon);
-        } else {
-          const result = await window.dataSdk.create(newPokemon);
-          if (result.isOk) {
-            showCaptureAnimation(newPokemon);
-            showCaptureSuccessModal(newPokemon);
-          } else {
-            showToast(`Gagal menyimpan ${newPokemon.name}: ${result.error.message}`, 'error');
-          }
-        }
-      }
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    function showCaptureAnimation(pokemon) {
-      const anim = document.createElement('div');
-      anim.className = 'capture-animation';
-      anim.innerHTML = `
-        <div class="text-center">
-          <img src="${pokemon.image}" alt="${pokemon.name}" class="w-32 h-32 mx-auto">
-          <div class="text-2xl font-bold mt-2" style="color: ${window.elementSdk?.config?.text_color || defaultConfig.text_color}">${pokemon.name}</div>
-        </div>
-      `;
-      document.body.appendChild(anim);
-      
-      setTimeout(() => {
-        anim.remove();
-      }, 1000);
+    function scaleStats(base, rarity) {
+      const multipliers = {
+        common: 1.0,
+        uncommon: 1.1,
+        rare: 1.25,
+        legendary: 1.5,
+        mythical: 1.8
+      };
+      const m = multipliers[rarity] || 1.0;
+      return Math.round(base * m);
     }
 
-    function showCaptureSuccessModal(pokemon) {
-      const config = window.elementSdk?.config || defaultConfig;
-      const modal = document.createElement('div');
-      modal.className = 'fixed inset-0 flex items-center justify-center z-50 p-4';
-      modal.style.backgroundColor = 'rgba(0,0,0,0.8)';
-      
-      const rarityColors = {
-        common: '#9ca3af',
-        uncommon: '#10b981',
-        rare: '#3b82f6',
-        legendary: '#a855f7',
-        mythical: '#f59e0b'
-      };
-      
-      modal.innerHTML = `
-        <div class="rounded-lg p-6 max-w-md w-full" style="background-color: ${config.surface_color}">
-          <div class="text-center mb-4">
-            <div class="text-3xl font-bold mb-2" style="color: ${config.primary_color}">🎉 Pokemon Tertangkap! 🎉</div>
-          </div>
-          
-          <img src="${pokemon.image}" alt="${pokemon.name}" class="w-48 h-48 mx-auto mb-4">
-          
-          <div class="text-center mb-4">
-            <div class="text-2xl font-bold mb-2" style="color: ${config.text_color}">${pokemon.name}</div>
-            <div class="inline-block px-4 py-2 rounded-full text-white font-bold mb-3" style="background-color: ${rarityColors[pokemon.rarity]}">${pokemon.rarity.toUpperCase()}</div>
-            
-            <div class="bg-gray-100 p-4 rounded-lg mb-3">
-              <div class="grid grid-cols-3 gap-2 text-center">
-                <div>
-                  <div class="text-2xl font-bold" style="color: ${config.primary_color}">${pokemon.hp}</div>
-                  <div class="text-sm" style="color: ${config.text_color}">HP</div>
-                </div>
-                <div>
-                  <div class="text-2xl font-bold" style="color: ${config.primary_color}">${pokemon.atk}</div>
-                  <div class="text-sm" style="color: ${config.text_color}">ATK</div>
-                </div>
-                <div>
-                  <div class="text-2xl font-bold" style="color: ${config.primary_color}">${pokemon.speed}</div>
-                  <div class="text-sm" style="color: ${config.text_color}">SPEED</div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="bg-gray-100 p-3 rounded mb-2 flex items-center justify-between">
-              <div class="font-mono text-sm" style="color: ${config.text_color}">${pokemon.code}</div>
-              <button id="copy-code-btn" class="px-3 py-1 rounded text-sm font-bold text-white" style="background-color: ${config.secondary_color}">Salin</button>
-            </div>
-          </div>
-          
-          <button id="close-capture-modal" class="w-full py-3 rounded-lg font-bold text-white" style="background-color: ${config.primary_color}">Tutup</button>
-        </div>
-      `;
-      
-      document.body.appendChild(modal);
-      
-      document.getElementById('copy-code-btn').onclick = () => {
-        navigator.clipboard.writeText(pokemon.code);
-        showToast('Kode Pokemon disalin!', 'success');
-      };
-      
-      document.getElementById('close-capture-modal').onclick = () => {
-        modal.remove();
-      };
-    }
-
-    function showDuplicateModal(newPokemon, existingPokemon) {
-      const modal = document.createElement('div');
-      modal.className = 'fixed inset-0 flex items-center justify-center z-50';
-      modal.style.backgroundColor = 'rgba(0,0,0,0.7)';
-      
-      modal.innerHTML = `
-        <div class="rounded-lg p-6 max-w-2xl w-full mx-4" style="background-color: ${window.elementSdk?.config?.surface_color || defaultConfig.surface_color}">
-          <h3 class="text-xl font-bold mb-4" style="color: ${window.elementSdk?.config?.text_color || defaultConfig.text_color}">Pokemon Duplikat!</h3>
-          <p class="mb-4" style="color: ${window.elementSdk?.config?.text_color || defaultConfig.text_color}">Kamu sudah memiliki ${newPokemon.name}. Pilih yang ingin disimpan:</p>
-          
-          <div class="grid grid-cols-2 gap-4 mb-4">
-            <div class="border-2 p-4 rounded cursor-pointer hover:shadow-lg" id="keep-new">
-              <img src="${newPokemon.image}" alt="${newPokemon.name}" class="w-24 h-24 mx-auto">
-              <div class="text-center mt-2">
-                <div class="font-bold" style="color: ${window.elementSdk?.config?.text_color || defaultConfig.text_color}">${newPokemon.name} (Baru)</div>
-                <div class="text-sm" style="color: ${window.elementSdk?.config?.text_color || defaultConfig.text_color}">HP: ${newPokemon.hp} | ATK: ${newPokemon.atk} | SPD: ${newPokemon.speed}</div>
-              </div>
-            </div>
-            
-            <div class="border-2 p-4 rounded cursor-pointer hover:shadow-lg" id="keep-old">
-              <img src="${existingPokemon.image}" alt="${existingPokemon.name}" class="w-24 h-24 mx-auto">
-              <div class="text-center mt-2">
-                <div class="font-bold" style="color: ${window.elementSdk?.config?.text_color || defaultConfig.text_color}">${existingPokemon.name} (Lama)</div>
-                <div class="text-sm" style="color: ${window.elementSdk?.config?.text_color || defaultConfig.text_color}">HP: ${existingPokemon.hp} | ATK: ${existingPokemon.atk} | SPD: ${existingPokemon.speed}</div>
-              </div>
-            </div>
-          </div>
-          
-          <button id="cancel-duplicate" class="w-full py-2 rounded font-bold" style="background-color: ${window.elementSdk?.config?.secondary_color || defaultConfig.secondary_color}; color: white">Batal</button>
-        </div>
-      `;
-      
-      document.body.appendChild(modal);
-      
-      document.getElementById('keep-new').onclick = async () => {
-        if (useOfflineMode) {
-          const index = allPokemonData.findIndex(p => p.__backendId === existingPokemon.__backendId);
-          if (index !== -1) {
-            allPokemonData.splice(index, 1);
-          }
-          newPokemon.__backendId = `offline_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-          allPokemonData.push(newPokemon);
-          saveOfflineData();
-        } else {
-          await window.dataSdk.delete(existingPokemon);
-          await window.dataSdk.create(newPokemon);
-        }
-        showToast(`Menyimpan ${newPokemon.name} yang baru`, 'success');
-        modal.remove();
-      };
-      
-      document.getElementById('keep-old').onclick = () => {
-        showToast(`Mempertahankan ${existingPokemon.name} yang lama`, 'info');
-        modal.remove();
-      };
-      
-      document.getElementById('cancel-duplicate').onclick = () => {
-        modal.remove();
-      };
-    }
-
-    async function releasePokemon() {
-      if (allPokemonData.length === 0) return;
-      
-      const randomIndex = Math.floor(Math.random() * allPokemonData.length);
-      const pokemon = allPokemonData[randomIndex];
-      
-      if (useOfflineMode) {
-        allPokemonData.splice(randomIndex, 1);
-        saveOfflineData();
-        showToast(`${pokemon.name} telah dilepas`, 'error');
-      } else {
-        const result = await window.dataSdk.delete(pokemon);
-        if (result.isOk) {
-          showToast(`${pokemon.name} telah dilepas`, 'error');
-        }
-      }
-    }
-
-    function renderHome() {
-      currentView = 'home';
-      const config = window.elementSdk?.config || defaultConfig;
-      
-      document.getElementById('app').innerHTML = `
-        <div class="max-w-4xl mx-auto">
-          <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold mb-2" style="color: ${config.text_color}">${config.game_title}</h1>
-            <p class="text-lg" style="color: ${config.text_color}">${config.welcome_message}</p>
-          </div>
-          
-          <div id="stats-display" class="text-center mb-8 p-4 rounded" style="background-color: ${config.surface_color}"></div>
-          
-          <div class="grid grid-cols-2 md:grid-cols-5 gap-6 mb-8">
-            <div class="text-center">
-              <button class="pokeball-btn mx-auto mb-2" id="btn-quiz"></button>
-              <div class="font-bold" style="color: ${config.text_color}">${config.menu_quiz}</div>
-            </div>
-            
-            <div class="text-center">
-              <button class="pokeball-btn mx-auto mb-2" id="btn-collection"></button>
-              <div class="font-bold" style="color: ${config.text_color}">${config.menu_collection}</div>
-            </div>
-            
-            <div class="text-center">
-              <button class="pokeball-btn mx-auto mb-2" id="btn-duel"></button>
-              <div class="font-bold" style="color: ${config.text_color}">${config.menu_duel}</div>
-            </div>
-            
-            <div class="text-center">
-              <button class="pokeball-btn mx-auto mb-2" id="btn-backup"></button>
-              <div class="font-bold" style="color: ${config.text_color}">${config.menu_backup}</div>
-            </div>
-            
-            <div class="text-center">
-              <button class="pokeball-btn mx-auto mb-2" id="btn-settings"></button>
-              <div class="font-bold" style="color: ${config.text_color}">Settings</div>
-            </div>
-          </div>
-        </div>
-      `;
-      
-      updateStats();
-      
-      document.getElementById('btn-quiz').onclick = renderQuizView;
-      document.getElementById('btn-collection').onclick = renderCollectionView;
-      document.getElementById('btn-duel').onclick = renderDuelView;
-      document.getElementById('btn-backup').onclick = renderBackupView;
-      document.getElementById('btn-settings').onclick = renderSettingsView;
-    }
-
-    let selectedTopic = 'all';
-    let selectedDifficulty = 'all';
-
-    function renderQuizView() {
-      currentView = 'quiz';
-      const config = window.elementSdk?.config || defaultConfig;
-      
-      if (questions.length === 0) {
-        showToast('Belum ada soal. Tambahkan soal melalui Editor Soal.', 'error');
-        return;
-      }
-      
-      const topics = ['all', ...new Set(questions.map(q => q.topic))];
-      const difficulties = ['all', 'very_easy', 'easy', 'medium', 'hard', 'very_hard'];
-      const difficultyLabels = {
-        all: 'Semua Tingkat',
-        very_easy: 'Sangat Mudah',
-        easy: 'Mudah',
-        medium: 'Sedang',
-        hard: 'Sulit',
-        very_hard: 'Sangat Sulit'
-      };
-      
-      let filteredQuestions = questions;
-      if (selectedTopic !== 'all') {
-        filteredQuestions = filteredQuestions.filter(q => q.topic === selectedTopic);
-      }
-      if (selectedDifficulty !== 'all') {
-        filteredQuestions = filteredQuestions.filter(q => q.difficulty === selectedDifficulty);
-      }
-      
-      if (filteredQuestions.length === 0) {
-        showToast('Tidak ada soal dengan filter ini', 'error');
-        selectedTopic = 'all';
-        selectedDifficulty = 'all';
-        filteredQuestions = questions;
-      }
-      
-      const randomQuestion = filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
-      
-      document.getElementById('app').innerHTML = `
-        <div class="max-w-2xl mx-auto">
-          <button id="btn-back" class="mb-4 px-4 py-2 rounded font-bold" style="background-color: ${config.secondary_color}; color: white">← Kembali</button>
-          
-          <div id="stats-display" class="mb-4 p-4 rounded" style="background-color: ${config.surface_color}"></div>
-          
-          <div class="mb-4 p-4 rounded-lg shadow-lg" style="background-color: ${config.surface_color}">
-            <div class="font-bold mb-2" style="color: ${config.text_color}">Filter Soal:</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <label class="block text-sm mb-1" style="color: ${config.text_color}">Topik:</label>
-                <select id="topic-filter" class="w-full p-2 border-2 rounded" style="border-color: ${config.secondary_color}">
-                  ${topics.map(t => `<option value="${t}" ${t === selectedTopic ? 'selected' : ''}>${t === 'all' ? 'Semua Topik' : t}</option>`).join('')}
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm mb-1" style="color: ${config.text_color}">Kesulitan:</label>
-                <select id="difficulty-filter" class="w-full p-2 border-2 rounded" style="border-color: ${config.secondary_color}">
-                  ${difficulties.map(d => `<option value="${d}" ${d === selectedDifficulty ? 'selected' : ''}>${difficultyLabels[d]}</option>`).join('')}
-                </select>
-              </div>
-            </div>
-          </div>
-          
-          <div class="p-6 rounded-lg shadow-lg" style="background-color: ${config.surface_color}">
-            <div class="mb-4">
-              <span class="px-3 py-1 rounded text-sm font-bold" style="background-color: ${config.primary_color}; color: white">${randomQuestion.topic}</span>
-              <span class="ml-2 px-3 py-1 rounded text-sm font-bold" style="background-color: ${config.secondary_color}; color: white">${randomQuestion.difficulty}</span>
-            </div>
-            
-            <h2 class="text-2xl font-bold mb-4" style="color: ${config.text_color}">${randomQuestion.question}</h2>
-            
-            <input type="text" id="answer-input" placeholder="Ketik jawabanmu..." class="w-full p-3 border-2 rounded mb-4" style="border-color: ${config.secondary_color}">
-            
-            <button id="btn-submit" class="w-full py-3 rounded-lg font-bold text-white" style="background-color: ${config.primary_color}">Kirim Jawaban</button>
-          </div>
-        </div>
-      `;
-      
-      updateStats();
-      
-      document.getElementById('btn-back').onclick = renderHome;
-      
-      document.getElementById('topic-filter').onchange = (e) => {
-        selectedTopic = e.target.value;
-        renderQuizView();
-      };
-      
-      document.getElementById('difficulty-filter').onchange = (e) => {
-        selectedDifficulty = e.target.value;
-        renderQuizView();
-      };
-      
-      const answerInput = document.getElementById('answer-input');
-      const submitBtn = document.getElementById('btn-submit');
-      
-      answerInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          submitBtn.click();
-        }
-      });
-      
-      submitBtn.onclick = () => {
-        const userAnswer = answerInput.value.trim().toLowerCase();
-        const correctAnswer = randomQuestion.answer.toLowerCase();
-        
-        stats.totalAnswered++;
-        
-        if (userAnswer === correctAnswer) {
-          stats.correctAnswers++;
-          stats.wrongStreak = 0;
-          showToast('Jawaban Benar! 🎉', 'success');
-          capturePokemon(randomQuestion.rarity);
-          setTimeout(() => renderQuizView(), 1500);
-        } else {
-          stats.wrongStreak++;
-          showToast('Jawaban Salah! ❌', 'error');
-          
-          if (stats.wrongStreak >= 3) {
-            stats.wrongStreak = 0;
-            if (allPokemonData.length > 0) {
-              releasePokemon();
-              showToast('⚠️ 3x Salah! 1 Pokemon dilepas!', 'error');
-            }
-          }
-          
-          setTimeout(() => renderQuizView(), 2000);
-        }
-        
-        saveLocalData();
-      };
-      
-      answerInput.focus();
-    }
-
-    function renderCollectionView() {
-      currentView = 'collection';
-      const config = window.elementSdk?.config || defaultConfig;
-      
-      document.getElementById('app').innerHTML = `
-        <div class="max-w-6xl mx-auto">
-          <button id="btn-back" class="mb-4 px-4 py-2 rounded font-bold" style="background-color: ${config.secondary_color}; color: white">← Kembali</button>
-          
-          <h2 class="text-3xl font-bold mb-6" style="color: ${config.text_color}">Koleksi Pokemon (${allPokemonData.length})</h2>
-          
-          <div id="pokemon-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-        </div>
-      `;
-      
-      document.getElementById('btn-back').onclick = renderHome;
-      
-      const grid = document.getElementById('pokemon-grid');
-      
-      if (allPokemonData.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-12" style="color: ${config.text_color}">Belum ada Pokemon. Jawab soal untuk menangkap Pokemon!</div>`;
-        return;
-      }
-      
-      allPokemonData.forEach(pokemon => {
-        const card = document.createElement('div');
-        card.className = `pokemon-card p-4 rounded-lg shadow-lg cursor-pointer border-4 rarity-${pokemon.rarity}`;
-        card.style.backgroundColor = config.surface_color;
-        
-        card.innerHTML = `
-          <img src="${pokemon.image}" alt="${pokemon.name}" class="w-full h-32 object-contain mb-2">
-          <div class="text-center">
-            <div class="font-bold text-lg" style="color: ${config.text_color}">${pokemon.name}</div>
-            <div class="flex items-center justify-center gap-1 mb-2">
-              <div class="text-xs font-mono" style="color: ${config.text_color}">${pokemon.code}</div>
-              <button class="copy-code-btn px-2 py-1 rounded text-xs font-bold text-white" style="background-color: ${config.secondary_color}" data-code="${pokemon.code}">📋</button>
-            </div>
-            <div class="text-sm" style="color: ${config.text_color}">HP: ${pokemon.hp} | ATK: ${pokemon.atk} | SPD: ${pokemon.speed}</div>
-            <div class="text-xs mt-1 font-bold" style="color: ${config.text_color}">${pokemon.rarity.toUpperCase()}</div>
-          </div>
-        `;
-        
-        card.onclick = (e) => {
-          if (!e.target.classList.contains('copy-code-btn')) {
-            showPokemonDetail(pokemon);
-          }
+    // -------- PokeAPI Fetch (with offline fallback) --------
+    async function fetchRandomPokemon(rarity) {
+      // If offline mode, generate dummy
+      if (appSettings.offlineMode) {
+        const id = randomInt(1, 898);
+        const baseHp = randomInt(35, 110);
+        const baseAtk = randomInt(40, 130);
+        const baseSpd = randomInt(30, 130);
+        return {
+          name: `offline-mon-${id}`,
+          sprite: "",
+          rarity,
+          hp: scaleStats(baseHp, rarity),
+          atk: scaleStats(baseAtk, rarity),
+          speed: scaleStats(baseSpd, rarity)
         };
-        
-        const copyBtn = card.querySelector('.copy-code-btn');
-        copyBtn.onclick = (e) => {
-          e.stopPropagation();
-          navigator.clipboard.writeText(pokemon.code);
-          showToast('Kode Pokemon disalin!', 'success');
+      }
+
+      try {
+        const id = randomInt(1, 898);
+        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        if (!res.ok) throw new Error("PokeAPI error");
+        const data = await res.json();
+        const hp = data.stats.find(s => s.stat.name === "hp")?.base_stat || 50;
+        const atk = data.stats.find(s => s.stat.name === "attack")?.base_stat || 50;
+        const spd = data.stats.find(s => s.stat.name === "speed")?.base_stat || 50;
+        return {
+          name: data.name,
+          sprite: data.sprites?.front_default || "",
+          rarity,
+          hp: scaleStats(hp, rarity),
+          atk: scaleStats(atk, rarity),
+          speed: scaleStats(spd, rarity)
         };
-        
-        grid.appendChild(card);
-      });
-    }
-
-    function showPokemonDetail(pokemon) {
-      const config = window.elementSdk?.config || defaultConfig;
-      const modal = document.createElement('div');
-      modal.className = 'fixed inset-0 flex items-center justify-center z-50';
-      modal.style.backgroundColor = 'rgba(0,0,0,0.7)';
-      
-      modal.innerHTML = `
-        <div class="rounded-lg p-6 max-w-md w-full mx-4" style="background-color: ${config.surface_color}">
-          <img src="${pokemon.image}" alt="${pokemon.name}" class="w-48 h-48 mx-auto mb-4">
-          <h3 class="text-2xl font-bold text-center mb-2" style="color: ${config.text_color}">${pokemon.name}</h3>
-          <div class="text-center mb-4" style="color: ${config.text_color}">
-            <div class="font-mono text-sm mb-2">${pokemon.code}</div>
-            <div class="mb-2">HP: ${pokemon.hp} | ATK: ${pokemon.atk} | SPEED: ${pokemon.speed}</div>
-            <div class="font-bold">${pokemon.rarity.toUpperCase()}</div>
-          </div>
-          
-          <div class="flex gap-2">
-            <button id="btn-release" class="flex-1 py-2 rounded font-bold text-white" style="background-color: ${config.primary_color}">Lepas Pokemon</button>
-            <button id="btn-close" class="flex-1 py-2 rounded font-bold text-white" style="background-color: ${config.secondary_color}">Tutup</button>
-          </div>
-        </div>
-      `;
-      
-      document.body.appendChild(modal);
-      
-      document.getElementById('btn-release').onclick = async () => {
-        if (useOfflineMode) {
-          const index = allPokemonData.findIndex(p => p.__backendId === pokemon.__backendId);
-          if (index !== -1) {
-            allPokemonData.splice(index, 1);
-            saveOfflineData();
-            showToast(`${pokemon.name} telah dilepas`, 'info');
-            modal.remove();
-          }
-        } else {
-          const result = await window.dataSdk.delete(pokemon);
-          if (result.isOk) {
-            showToast(`${pokemon.name} telah dilepas`, 'info');
-            modal.remove();
-          }
-        }
-      };
-      
-      document.getElementById('btn-close').onclick = () => {
-        modal.remove();
-      };
-    }
-
-    let duelStoryStreak = 0;
-
-    function renderDuelView() {
-      currentView = 'duel';
-      const config = window.elementSdk?.config || defaultConfig;
-      
-      document.getElementById('app').innerHTML = `
-        <div class="max-w-2xl mx-auto">
-          <button id="btn-back" class="mb-4 px-4 py-2 rounded font-bold" style="background-color: ${config.secondary_color}; color: white">← Kembali</button>
-          
-          <h2 class="text-3xl font-bold mb-6 text-center" style="color: ${config.text_color}">Mode Duel</h2>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button id="btn-pvp-duel" class="p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition" style="background-color: ${config.surface_color}">
-              <div class="text-4xl mb-2">⚔️</div>
-              <div class="text-xl font-bold mb-2" style="color: ${config.text_color}">Duel Pemain</div>
-              <div class="text-sm" style="color: ${config.text_color}">Lawan teman dengan Pokemon koleksimu</div>
-            </button>
-            
-            <button id="btn-story-duel" class="p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition" style="background-color: ${config.surface_color}">
-              <div class="text-4xl mb-2">🎮</div>
-              <div class="text-xl font-bold mb-2" style="color: ${config.text_color}">Duel Story</div>
-              <div class="text-sm" style="color: ${config.text_color}">Lawan Pokemon acak, menang beruntun dapat hadiah!</div>
-              <div class="mt-2 font-bold" style="color: ${config.primary_color}">Streak: ${duelStoryStreak}</div>
-            </button>
-          </div>
-        </div>
-      `;
-      
-      document.getElementById('btn-back').onclick = renderHome;
-      document.getElementById('btn-pvp-duel').onclick = renderPvPDuel;
-      document.getElementById('btn-story-duel').onclick = renderStoryDuel;
-    }
-
-    function renderPvPDuel() {
-      const config = window.elementSdk?.config || defaultConfig;
-      
-      document.getElementById('app').innerHTML = `
-        <div class="max-w-2xl mx-auto">
-          <button id="btn-back" class="mb-4 px-4 py-2 rounded font-bold" style="background-color: ${config.secondary_color}; color: white">← Kembali</button>
-          
-          <h2 class="text-3xl font-bold mb-6 text-center" style="color: ${config.text_color}">Duel Pemain</h2>
-          
-          <div class="p-6 rounded-lg shadow-lg mb-4" style="background-color: ${config.surface_color}">
-            <label class="block mb-2 font-bold" style="color: ${config.text_color}">Kode Pokemon Kamu:</label>
-            <input type="text" id="code1" placeholder="PKM-025-ABC123" class="w-full p-3 border-2 rounded mb-4" style="border-color: ${config.secondary_color}">
-            
-            <label class="block mb-2 font-bold" style="color: ${config.text_color}">Kode Pokemon Teman:</label>
-            <input type="text" id="code2" placeholder="PKM-006-XYZ789" class="w-full p-3 border-2 rounded mb-4" style="border-color: ${config.secondary_color}">
-            
-            <button id="btn-duel" class="w-full py-3 rounded-lg font-bold text-white" style="background-color: ${config.primary_color}">Mulai Duel!</button>
-          </div>
-          
-          <div id="duel-result" class="p-6 rounded-lg shadow-lg hidden" style="background-color: ${config.surface_color}"></div>
-        </div>
-      `;
-      
-      document.getElementById('btn-back').onclick = renderDuelView;
-      
-      document.getElementById('btn-duel').onclick = () => {
-        const code1 = document.getElementById('code1').value.trim();
-        const code2 = document.getElementById('code2').value.trim();
-        
-        const pokemon1 = allPokemonData.find(p => p.code === code1);
-        
-        if (!pokemon1) {
-          showToast('Kode Pokemon kamu tidak ditemukan di koleksi!', 'error');
-          return;
-        }
-        
-        if (!code2) {
-          showToast('Masukkan kode Pokemon teman!', 'error');
-          return;
-        }
-        
-        const codePattern = /^PKM-(\d{3})-([A-Z0-9]{6})$/;
-        const match = code2.match(codePattern);
-        
-        if (!match) {
-          showToast('Format kode Pokemon teman tidak valid!', 'error');
-          return;
-        }
-        
-        const pokemonId = parseInt(match[1]);
-        
-        fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
-          .then(response => response.json())
-          .then(data => {
-            const pokemon2 = {
-              name: capitalizeFirst(data.name),
-              image: data.sprites.front_default || data.sprites.other['official-artwork'].front_default,
-              hp: data.stats[0].base_stat,
-              atk: data.stats[1].base_stat,
-              speed: data.stats[5].base_stat
-            };
-            
-            const resultDiv = document.getElementById('duel-result');
-            resultDiv.classList.remove('hidden');
-            
-            let winner, loser, isPlayer1Winner;
-            
-            if (pokemon1.speed > pokemon2.speed) {
-              winner = pokemon1;
-              loser = pokemon2;
-              isPlayer1Winner = true;
-            } else if (pokemon2.speed > pokemon1.speed) {
-              winner = pokemon2;
-              loser = pokemon1;
-              isPlayer1Winner = false;
-            } else {
-              if (pokemon1.atk > pokemon2.atk) {
-                winner = pokemon1;
-                loser = pokemon2;
-                isPlayer1Winner = true;
-              } else {
-                winner = pokemon2;
-                loser = pokemon1;
-                isPlayer1Winner = false;
-              }
-            }
-            
-            resultDiv.innerHTML = `
-              <h3 class="text-2xl font-bold mb-4 text-center" style="color: ${config.text_color}">Hasil Duel</h3>
-              
-              <div class="grid grid-cols-2 gap-4 mb-4">
-                <div class="text-center ${isPlayer1Winner ? 'ring-4 ring-yellow-400 rounded-lg p-2' : ''}">
-                  <div class="text-sm font-bold mb-1" style="color: ${config.text_color}">Kamu</div>
-                  <img src="${pokemon1.image}" alt="${pokemon1.name}" class="w-32 h-32 mx-auto mb-2">
-                  <div class="font-bold" style="color: ${config.text_color}">${pokemon1.name}</div>
-                  <div class="text-sm" style="color: ${config.text_color}">HP: ${pokemon1.hp} | ATK: ${pokemon1.atk} | SPD: ${pokemon1.speed}</div>
-                </div>
-                
-                <div class="text-center ${!isPlayer1Winner ? 'ring-4 ring-yellow-400 rounded-lg p-2' : ''}">
-                  <div class="text-sm font-bold mb-1" style="color: ${config.text_color}">Teman</div>
-                  <img src="${pokemon2.image}" alt="${pokemon2.name}" class="w-32 h-32 mx-auto mb-2">
-                  <div class="font-bold" style="color: ${config.text_color}">${pokemon2.name}</div>
-                  <div class="text-sm" style="color: ${config.text_color}">HP: ${pokemon2.hp} | ATK: ${pokemon2.atk} | SPD: ${pokemon2.speed}</div>
-                </div>
-              </div>
-              
-              <div class="text-center p-4 rounded font-bold text-xl" style="background-color: ${config.primary_color}; color: white">
-                🏆 ${isPlayer1Winner ? 'KAMU MENANG!' : 'TEMAN MENANG!'} 🏆
-              </div>
-            `;
-          })
-          .catch(error => {
-            showToast('Gagal memuat data Pokemon teman!', 'error');
-          });
-      };
-    }
-
-    let selectedPokemonForDuel = null;
-
-    function renderPokemonSelection() {
-      const config = window.elementSdk?.config || defaultConfig;
-      
-      document.getElementById('app').innerHTML = `
-        <div class="max-w-4xl mx-auto">
-          <button id="btn-back" class="mb-4 px-4 py-2 rounded font-bold" style="background-color: ${config.secondary_color}; color: white">← Kembali</button>
-          
-          <div class="text-center mb-6">
-            <h2 class="text-3xl font-bold mb-2" style="color: ${config.text_color}">Pilih Pokemon untuk Duel</h2>
-            <p style="color: ${config.text_color}">Klik Pokemon yang ingin kamu gunakan untuk bertarung</p>
-          </div>
-          
-          <div id="pokemon-selection-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-        </div>
-      `;
-      
-      document.getElementById('btn-back').onclick = () => {
-        selectedPokemonForDuel = null;
-        renderDuelView();
-      };
-      
-      const grid = document.getElementById('pokemon-selection-grid');
-      
-      allPokemonData.forEach(pokemon => {
-        const card = document.createElement('div');
-        card.className = 'pokemon-card p-4 rounded-lg shadow-lg cursor-pointer border-4 rarity-' + pokemon.rarity + ' hover:ring-4 hover:ring-yellow-400';
-        card.style.backgroundColor = config.surface_color;
-        
-        card.innerHTML = `
-          <img src="${pokemon.image}" alt="${pokemon.name}" class="w-full h-32 object-contain mb-2">
-          <div class="text-center">
-            <div class="font-bold text-lg" style="color: ${config.text_color}">${pokemon.name}</div>
-            <div class="text-sm" style="color: ${config.text_color}">HP: ${pokemon.hp} | ATK: ${pokemon.atk} | SPD: ${pokemon.speed}</div>
-            <div class="text-xs mt-1 font-bold" style="color: ${config.text_color}">${pokemon.rarity.toUpperCase()}</div>
-          </div>
-        `;
-        
-        card.onclick = () => {
-          selectedPokemonForDuel = pokemon;
-          showToast(`${pokemon.name} dipilih untuk bertarung!`, 'success');
-          setTimeout(() => renderStoryDuel(), 500);
+      } catch(e) {
+        // fallback dummy
+        const baseHp = randomInt(35, 110);
+        const baseAtk = randomInt(40, 130);
+        const baseSpd = randomInt(30, 130);
+        return {
+          name: "fallback-mon",
+          sprite: "",
+          rarity,
+          hp: scaleStats(baseHp, rarity),
+          atk: scaleStats(baseAtk, rarity),
+          speed: scaleStats(baseSpd, rarity)
         };
-        
-        grid.appendChild(card);
-      });
+      }
     }
 
-    async function renderStoryDuel() {
-      const config = window.elementSdk?.config || defaultConfig;
-      
-      if (allPokemonData.length === 0) {
-        showToast('Kamu belum punya Pokemon! Jawab soal dulu.', 'error');
-        renderDuelView();
-        return;
+    // -------- DATA SDK HANDLER --------
+    const dataHandler = {
+      onDataChanged(data) {
+        // Keep local cache and update UI selectively
+        allPokemonRecords = data;
+        currentRecordCount = data.length;
+
+        // Update collection view if active
+        const collectionContainer = document.getElementById("collection-list");
+        if (collectionContainer) {
+          renderCollectionListInto(collectionContainer);
+        }
+
+        // Update header stats if visible
+        updateStatsText();
       }
-      
-      // Jika belum memilih Pokemon, tampilkan layar pemilihan
-      if (!selectedPokemonForDuel) {
-        renderPokemonSelection();
-        return;
+    };
+
+    async function initDataSdk() {
+      if (!window.dataSdk) {
+        // Fallback to localStorage mode
+        useLocalStorageMode = true;
+        loadPokemonFromLocalStorage();
+        dataInitialized = true;
+        showToast("Mode Browser: Data disimpan di localStorage", "info");
+        return true;
       }
-      
-      const rarityByStreak = duelStoryStreak < 10 ? 'uncommon' :
-                             duelStoryStreak < 20 ? 'common' :
-                             duelStoryStreak < 30 ? 'rare' :
-                             duelStoryStreak < 40 ? 'legendary' : 'mythical';
-      
-      const rarityRanges = {
-        common: { hp: [20, 45], atk: [15, 40], speed: [15, 35] },
-        uncommon: { hp: [40, 65], atk: [35, 60], speed: [30, 55] },
-        rare: { hp: [60, 90], atk: [55, 80], speed: [50, 75] },
-        legendary: { hp: [85, 120], atk: [75, 110], speed: [70, 100] },
-        mythical: { hp: [100, 150], atk: [95, 135], speed: [85, 120] }
-      };
-      
-      function randomStat(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+      if (dataInitialized) {
+        return true;
       }
-      
-      const randomId = Math.floor(Math.random() * 1010) + 1;
       
       try {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
-        const data = await response.json();
-        
-        const ranges = rarityRanges[rarityByStreak];
-        const enemyPokemon = {
-          name: capitalizeFirst(data.name),
-          image: data.sprites.front_default || data.sprites.other['official-artwork'].front_default,
-          hp: randomStat(ranges.hp[0], ranges.hp[1]),
-          atk: randomStat(ranges.atk[0], ranges.atk[1]),
-          speed: randomStat(ranges.speed[0], ranges.speed[1]),
-          rarity: rarityByStreak
-        };
-        
-        const myPokemon = selectedPokemonForDuel;
-        
-        document.getElementById('app').innerHTML = `
-          <div class="max-w-2xl mx-auto">
-            <div class="flex gap-2 mb-4">
-              <button id="btn-back" class="px-4 py-2 rounded font-bold" style="background-color: ${config.secondary_color}; color: white">← Kembali</button>
-              <button id="btn-change-pokemon" class="px-4 py-2 rounded font-bold" style="background-color: ${config.primary_color}; color: white">🔄 Ganti Pokemon</button>
-            </div>
-            
-            <div class="text-center mb-4">
-              <h2 class="text-3xl font-bold mb-2" style="color: ${config.text_color}">Duel Story</h2>
-              <div class="text-xl font-bold" style="color: ${config.primary_color}">Streak: ${duelStoryStreak}</div>
-              <div class="text-sm" style="color: ${config.text_color}">
-                ${duelStoryStreak < 10 ? 'Menang 10x → Uncommon Pokemon' :
-                  duelStoryStreak < 20 ? 'Menang 20x → Common Pokemon' :
-                  duelStoryStreak < 30 ? 'Menang 30x → Rare Pokemon' :
-                  duelStoryStreak < 40 ? 'Menang 40x → Legendary Pokemon' :
-                  duelStoryStreak < 50 ? 'Menang 50x → Mythical Pokemon' : 'MAX STREAK!'}
-              </div>
-            </div>
-            
-            <div class="p-6 rounded-lg shadow-lg mb-4" style="background-color: ${config.surface_color}">
-              <h3 class="text-xl font-bold mb-4 text-center" style="color: ${config.text_color}">Pertarungan Dimulai!</h3>
-              
-              <div class="grid grid-cols-2 gap-4 mb-4">
-                <div class="text-center">
-                  <div class="text-sm font-bold mb-1" style="color: ${config.text_color}">Pokemon Kamu</div>
-                  <img src="${myPokemon.image}" alt="${myPokemon.name}" class="w-32 h-32 mx-auto mb-2">
-                  <div class="font-bold" style="color: ${config.text_color}">${myPokemon.name}</div>
-                  <div class="text-sm" style="color: ${config.text_color}">HP: ${myPokemon.hp} | ATK: ${myPokemon.atk} | SPD: ${myPokemon.speed}</div>
-                </div>
-                
-                <div class="text-center">
-                  <div class="text-sm font-bold mb-1" style="color: ${config.text_color}">Musuh (${rarityByStreak.toUpperCase()})</div>
-                  <img src="${enemyPokemon.image}" alt="${enemyPokemon.name}" class="w-32 h-32 mx-auto mb-2">
-                  <div class="font-bold" style="color: ${config.text_color}">${enemyPokemon.name}</div>
-                  <div class="text-sm" style="color: ${config.text_color}">HP: ${enemyPokemon.hp} | ATK: ${enemyPokemon.atk} | SPD: ${enemyPokemon.speed}</div>
-                </div>
-              </div>
-              
-              <button id="btn-fight" class="w-full py-3 rounded-lg font-bold text-white" style="background-color: ${config.primary_color}">⚔️ SERANG!</button>
-            </div>
-          </div>
-        `;
-        
-        document.getElementById('btn-back').onclick = () => {
-          duelStoryStreak = 0;
-          selectedPokemonForDuel = null;
-          renderDuelView();
-        };
-        
-        document.getElementById('btn-change-pokemon').onclick = () => {
-          selectedPokemonForDuel = null;
-          renderStoryDuel();
-        };
-        
-        document.getElementById('btn-fight').onclick = () => {
-          let winner, isPlayerWinner;
-          
-          if (myPokemon.speed > enemyPokemon.speed) {
-            winner = myPokemon;
-            isPlayerWinner = true;
-          } else if (enemyPokemon.speed > myPokemon.speed) {
-            winner = enemyPokemon;
-            isPlayerWinner = false;
-          } else {
-            if (myPokemon.atk > enemyPokemon.atk) {
-              winner = myPokemon;
-              isPlayerWinner = true;
-            } else {
-              winner = enemyPokemon;
-              isPlayerWinner = false;
-            }
-          }
-          
-          if (isPlayerWinner) {
-            duelStoryStreak++;
-            
-            let reward = null;
-            if (duelStoryStreak === 10) reward = 'uncommon';
-            else if (duelStoryStreak === 20) reward = 'common';
-            else if (duelStoryStreak === 30) reward = 'rare';
-            else if (duelStoryStreak === 40) reward = 'legendary';
-            else if (duelStoryStreak === 50) reward = 'mythical';
-            
-            showToast(`🎉 MENANG! Streak: ${duelStoryStreak}`, 'success');
-            
-            if (reward) {
-              setTimeout(() => {
-                capturePokemon(reward);
-                showToast(`🎁 Hadiah ${reward.toUpperCase()} Pokemon!`, 'success');
-              }, 1000);
-            }
-            
-            setTimeout(() => renderStoryDuel(), 2000);
-          } else {
-            duelStoryStreak = 0;
-            showToast('💔 KALAH! Streak direset ke 0', 'error');
-            setTimeout(() => renderDuelView(), 2000);
-          }
-        };
-        
-      } catch (error) {
-        showToast('Gagal memuat Pokemon musuh!', 'error');
-        renderDuelView();
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          // Fallback to localStorage
+          useLocalStorageMode = true;
+          loadPokemonFromLocalStorage();
+          dataInitialized = true;
+          showToast("Mode Browser: Data disimpan di localStorage", "info");
+          return true;
+        }
+        dataInitialized = true;
+        useLocalStorageMode = false;
+        showToast("Mode Canva: Data disimpan di Canva Sheet", "success");
+        return true;
+      } catch(e) {
+        // Fallback to localStorage
+        useLocalStorageMode = true;
+        loadPokemonFromLocalStorage();
+        dataInitialized = true;
+        showToast("Mode Browser: Data disimpan di localStorage", "info");
+        return true;
       }
     }
 
-    function renderBackupView() {
-      currentView = 'backup';
-      const config = window.elementSdk?.config || defaultConfig;
-      
-      document.getElementById('app').innerHTML = `
-        <div class="max-w-2xl mx-auto">
-          <button id="btn-back" class="mb-4 px-4 py-2 rounded font-bold" style="background-color: ${config.secondary_color}; color: white">← Kembali</button>
-          
-          <h2 class="text-3xl font-bold mb-6" style="color: ${config.text_color}">Backup & Restore</h2>
-          
-          <div class="p-6 rounded-lg shadow-lg mb-4" style="background-color: ${config.surface_color}">
-            <h3 class="text-xl font-bold mb-4" style="color: ${config.text_color}">Backup Data</h3>
-            <button id="btn-backup-text" class="w-full mb-2 py-3 rounded-lg font-bold text-white" style="background-color: ${config.primary_color}">Buat Kode Backup</button>
-            <button id="btn-backup-qr" class="w-full py-3 rounded-lg font-bold text-white" style="background-color: ${config.secondary_color}">Buat QR Code</button>
-            <div id="backup-output" class="mt-4"></div>
-          </div>
-          
-          <div class="p-6 rounded-lg shadow-lg" style="background-color: ${config.surface_color}">
-            <h3 class="text-xl font-bold mb-4" style="color: ${config.text_color}">Restore Data</h3>
-            <textarea id="restore-input" placeholder="Paste kode backup di sini..." class="w-full p-3 border-2 rounded mb-2 h-32" style="border-color: ${config.secondary_color}"></textarea>
-            <button id="btn-restore" class="w-full mb-2 py-3 rounded-lg font-bold text-white" style="background-color: ${config.primary_color}">Restore dari Kode</button>
-            <button id="btn-scan-qr" class="w-full py-3 rounded-lg font-bold text-white" style="background-color: ${config.secondary_color}">Scan QR Code</button>
-            <div id="qr-reader" class="mt-4 hidden"></div>
-          </div>
-        </div>
-      `;
-      
-      document.getElementById('btn-back').onclick = renderHome;
-      
-      document.getElementById('btn-backup-text').onclick = async () => {
-        const backupData = {
-          pokemon: allPokemonData,
-          questions: questions,
-          stats: stats
-        };
-        
-        const compressed = LZString.compressToBase64(JSON.stringify(backupData));
-        
-        const output = document.getElementById('backup-output');
-        output.innerHTML = `
-          <textarea class="w-full p-3 border-2 rounded h-32" style="border-color: ${config.secondary_color}" readonly>${compressed}</textarea>
-          <button id="btn-copy" class="w-full mt-2 py-2 rounded font-bold text-white" style="background-color: ${config.secondary_color}">Salin Kode</button>
-        `;
-        
-        document.getElementById('btn-copy').onclick = () => {
-          navigator.clipboard.writeText(compressed);
-          showToast('Kode backup disalin!', 'success');
-        };
-      };
-      
-      document.getElementById('btn-backup-qr').onclick = async () => {
-        const backupData = {
-          pokemon: allPokemonData,
-          questions: questions,
-          stats: stats
-        };
-        
-        const compressed = LZString.compressToBase64(JSON.stringify(backupData));
-        
-        const output = document.getElementById('backup-output');
-        output.innerHTML = '<div class="flex justify-center"><canvas id="qr-canvas"></canvas></div>';
-        
-        try {
-          await QRCode.toCanvas(document.getElementById('qr-canvas'), compressed, {
-            width: 300,
-            margin: 2,
-            errorCorrectionLevel: 'L'
-          });
-          showToast('QR Code berhasil dibuat!', 'success');
-        } catch (error) {
-          showToast('Gagal membuat QR Code: Data terlalu besar', 'error');
+    // -------- STATS LABEL UPDATE --------
+    function updateStatsText() {
+      const el = document.getElementById("stats-text");
+      if (!el) return;
+      const pokemonCount = allPokemonRecords.length;
+      const modeText = useLocalStorageMode ? " [Browser Mode]" : " [Canva Mode]";
+      el.textContent = `Soal Dijawab: ${appStats.questionsAnswered} | Benar: ${appStats.correctAnswers} | Pokemon: ${pokemonCount}${modeText}`;
+    }
+
+    // -------- MAIN APP RENDERING --------
+    function createBaseLayout() {
+      const root = document.getElementById("app-root");
+      root.innerHTML = "";
+      domRefs.root = root;
+
+      const mainWrapper = document.createElement("div");
+      mainWrapper.id = "main-wrapper";
+      mainWrapper.className = "flex-1 flex flex-col items-center";
+      domRefs.mainWrapper = mainWrapper;
+
+      root.appendChild(mainWrapper);
+      renderHomeScreen();
+    }
+
+    function applyTheme(config) {
+      const bg = config.background_color || defaultConfig.background_color;
+      const surface = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primary = config.primary_color || defaultConfig.primary_color;
+      const secondary = config.secondary_color || defaultConfig.secondary_color;
+
+      // Body background
+      document.body.style.backgroundColor = bg;
+      document.body.style.color = textColor;
+
+      // Surface elements
+      const surfaces = document.querySelectorAll(".surface-card");
+      surfaces.forEach(el => {
+        el.style.backgroundColor = surface;
+      });
+
+      // Text elements
+      const textEls = document.querySelectorAll(".text-main");
+      textEls.forEach(el => {
+        el.style.color = textColor;
+      });
+
+      // Primary buttons
+      const primaryEls = document.querySelectorAll(".btn-primary");
+      primaryEls.forEach(el => {
+        el.style.backgroundColor = primary;
+        el.style.borderColor = primary;
+        el.style.color = "#ffffff";
+      });
+
+      // Secondary buttons / accents
+      const secondaryEls = document.querySelectorAll(".btn-secondary, .accent-secondary-border");
+      secondaryEls.forEach(el => {
+        el.style.borderColor = secondary;
+        if (el.classList.contains("btn-secondary")) {
+          el.style.color = secondary;
         }
-      };
-      
-      document.getElementById('btn-restore').onclick = async () => {
-        const input = document.getElementById('restore-input').value.trim();
-        
-        if (!input) {
-          showToast('Masukkan kode backup!', 'error');
-          return;
+      });
+    }
+
+    function applyTypography(config) {
+      const baseSize = (config.font_size || defaultConfig.font_size || 16);
+      const fontFamily = (config.font_family || defaultConfig.font_family || "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif");
+
+      const titleEl = document.getElementById("app-title");
+      const subtitleEl = document.getElementById("app-subtitle");
+      if (titleEl) {
+        titleEl.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
+        titleEl.style.fontSize = (baseSize * 2) + "px";
+      }
+      if (subtitleEl) {
+        subtitleEl.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
+        subtitleEl.style.fontSize = (baseSize * 1.1) + "px";
+      }
+
+      const bodyTextEls = document.querySelectorAll(".body-text");
+      bodyTextEls.forEach(el => {
+        el.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
+        el.style.fontSize = baseSize + "px";
+      });
+
+      const labelEls = document.querySelectorAll(".label-text");
+      labelEls.forEach(el => {
+        el.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
+        el.style.fontSize = (baseSize * 0.9) + "px";
+      });
+
+      const smallEls = document.querySelectorAll(".caption-text");
+      smallEls.forEach(el => {
+        el.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
+        el.style.fontSize = (baseSize * 0.8) + "px";
+      });
+    }
+
+    function renderHomeScreen() {
+      const main = domRefs.mainWrapper;
+      if (!main) return;
+      main.innerHTML = "";
+
+      const container = document.createElement("main");
+      container.className = "flex-1 w-full flex flex-col items-center";
+      container.setAttribute("role", "main");
+
+      const inner = document.createElement("div");
+      inner.className = "max-w-4xl w-full mx-auto px-4 py-6";
+
+      // Header
+      const header = document.createElement("header");
+      header.className = "mb-6";
+      header.setAttribute("role", "banner");
+
+      const h1 = document.createElement("h1");
+      h1.id = "app-title";
+      h1.className = "text-4xl font-bold mb-2 text-main body-text";
+      h1.textContent = currentConfig.game_title || defaultConfig.game_title;
+      domRefs.title = h1;
+
+      const p = document.createElement("p");
+      p.id = "app-subtitle";
+      p.className = "text-lg text-main body-text";
+      p.textContent = currentConfig.welcome_message || defaultConfig.welcome_message;
+      domRefs.subtitle = p;
+
+      header.appendChild(h1);
+      header.appendChild(p);
+
+      // Stats
+      const statsCard = document.createElement("section");
+      statsCard.className = "surface-card rounded-lg p-4 mb-6 shadow body-text";
+      statsCard.setAttribute("aria-label", "Statistik");
+      const statsP = document.createElement("p");
+      statsP.id = "stats-text";
+      statsP.className = "text-main";
+      statsCard.appendChild(statsP);
+
+      // Menu grid
+      const nav = document.createElement("nav");
+      nav.className = "mt-4";
+      nav.setAttribute("aria-label", "Menu utama");
+      const grid = document.createElement("div");
+      grid.className = "grid grid-cols-2 md:grid-cols-5 gap-6";
+
+      const menus = [
+        { key: "quiz", labelKey: "menu_quiz", defaultLabel: "Soal", handler: () => openQuizScreen() },
+        { key: "collection", labelKey: "menu_collection", defaultLabel: "Koleksi", handler: () => openCollectionScreen() },
+        { key: "duel", labelKey: "menu_duel", defaultLabel: "Duel", handler: () => openDuelScreen() },
+        { key: "backup", labelKey: "menu_backup", defaultLabel: "Backup", handler: () => openBackupScreen() },
+        { key: "settings", labelKey: null, defaultLabel: "Settings", handler: () => openSettingsScreen() }
+      ];
+
+      menus.forEach(m => {
+        const wrapper = document.createElement("button");
+        wrapper.type = "button";
+        wrapper.className = "flex flex-col items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500";
+        wrapper.addEventListener("click", (e) => {
+          e.preventDefault();
+          m.handler();
+        });
+
+        const ball = document.createElement("div");
+        ball.className = "pokeball-btn mb-3";
+
+        const label = document.createElement("span");
+        label.className = "mt-1 text-center text-main body-text";
+        const text = m.labelKey ? (currentConfig[m.labelKey] || defaultConfig[m.labelKey]) : m.defaultLabel;
+        label.textContent = text;
+        domRefs.menuLabels[m.key] = label;
+
+        wrapper.appendChild(ball);
+        wrapper.appendChild(label);
+        grid.appendChild(wrapper);
+      });
+
+      nav.appendChild(grid);
+
+      inner.appendChild(header);
+      inner.appendChild(statsCard);
+      inner.appendChild(nav);
+      container.appendChild(inner);
+      main.appendChild(container);
+
+      updateStatsText();
+      applyTheme(currentConfig);
+      applyTypography(currentConfig);
+    }
+
+    // -------- QUIZ SYSTEM (RATIO QUESTIONS) --------
+    const ratioTopics = [
+      "konsep_rasio",
+      "kesamaan_rasio",
+      "rasio_bagian_keseluruhan",
+      "rasio_durasi_waktu",
+      "perkalian_proporsi",
+      "pembagian_proporsi"
+    ];
+
+    function generateRatioQuestion(difficulty, topic) {
+      // difficulty: very_easy (C2), easy (C3), medium (C4), hard (C5), very_hard (C6)
+      // C2 = Memahami, C3 = Menerapkan, C4 = Menganalisis, C5 = Mengevaluasi, C6 = Mencipta
+      const allTopics = ratioTopics;
+      const chosenTopic = topic && allTopics.includes(topic) ? topic : allTopics[randomInt(0, allTopics.length - 1)];
+
+      let questionText = "";
+      let correctAnswer = "";
+      let explanation = "";
+      let answerType = "exact"; // "exact" or "ratio"
+
+      // Helper untuk GCD
+      const gcd = (x,y) => y===0 ? x : gcd(y, x%y);
+
+      // C2 - MEMAHAMI: Identifikasi dan sederhanakan rasio sederhana
+      if (difficulty === "very_easy") {
+        if (chosenTopic === "konsep_rasio") {
+          const factor = randomInt(2, 4);
+          const base1 = randomInt(2, 5);
+          const base2 = randomInt(2, 5);
+          const a = base1 * factor;
+          const b = base2 * factor;
+          questionText = `Sederhanakan rasio ${a}:${b} ke bentuk paling sederhana.\n\nContoh: Rasio 6:9 dapat disederhanakan menjadi 2:3 (dibagi 3)`;
+          const g = gcd(a, b);
+          correctAnswer = `${a/g}:${b/g}`;
+          explanation = `Langkah penyelesaian:\n1. Cari FPB dari ${a} dan ${b} = ${g}\n2. Bagi kedua bilangan dengan FPB:\n   ${a} ÷ ${g} = ${a/g}\n   ${b} ÷ ${g} = ${b/g}\n3. Jadi rasio sederhananya adalah ${a/g}:${b/g}`;
+          answerType = "ratio";
+        } else if (chosenTopic === "kesamaan_rasio") {
+          const a = randomInt(2, 6);
+          const b = randomInt(2, 6);
+          const factor = randomInt(2, 4);
+          questionText = `Rasio ${a}:${b} setara dengan rasio berapa jika dikalikan ${factor}?\n\nContoh: Rasio 2:3 jika dikalikan 2 menjadi 4:6`;
+          correctAnswer = `${a*factor}:${b*factor}`;
+          explanation = `Langkah penyelesaian:\n1. Kalikan bilangan pertama: ${a} × ${factor} = ${a*factor}\n2. Kalikan bilangan kedua: ${b} × ${factor} = ${b*factor}\n3. Jadi rasio yang setara adalah ${a*factor}:${b*factor}`;
+          answerType = "ratio";
+        } else {
+          // rasio_bagian_keseluruhan sederhana
+          const bagian = randomInt(2, 5);
+          const kelipatan = randomInt(3, 6);
+          const total = bagian * kelipatan;
+          questionText = `Dari ${total} buah apel, dibagi menjadi ${kelipatan} bagian yang sama. Berapa jumlah apel per bagian?\n\nContoh: 12 apel dibagi 3 bagian = 4 apel per bagian`;
+          correctAnswer = String(bagian);
+          explanation = `Langkah penyelesaian:\n1. Total apel = ${total}\n2. Jumlah bagian = ${kelipatan}\n3. Apel per bagian = ${total} ÷ ${kelipatan} = ${bagian} buah`;
         }
-        
-        try {
-          const decompressed = LZString.decompressFromBase64(input);
-          const backupData = JSON.parse(decompressed);
-          
-          if (useOfflineMode) {
-            allPokemonData = backupData.pokemon;
-            saveOfflineData();
-          } else {
-            for (const pokemon of allPokemonData) {
-              await window.dataSdk.delete(pokemon);
-            }
-            
-            for (const pokemon of backupData.pokemon) {
-              await window.dataSdk.create(pokemon);
-            }
-          }
-          
-          questions = backupData.questions;
-          stats = backupData.stats;
-          saveLocalData();
-          
-          showToast('Data berhasil dipulihkan!', 'success');
-          setTimeout(() => renderHome(), 1500);
-        } catch (error) {
-          showToast('Kode backup tidak valid!', 'error');
-        }
-      };
+      }
       
-      document.getElementById('btn-scan-qr').onclick = () => {
-        const readerDiv = document.getElementById('qr-reader');
-        readerDiv.classList.remove('hidden');
-        
-        const html5QrCode = new Html5Qrcode("qr-reader");
-        
-        html5QrCode.start(
-          { facingMode: "environment" },
-          { fps: 10, qrbox: 250 },
-          async (decodedText) => {
-            html5QrCode.stop();
-            
-            try {
-              const decompressed = LZString.decompressFromBase64(decodedText);
-              const backupData = JSON.parse(decompressed);
-              
-              if (useOfflineMode) {
-                allPokemonData = backupData.pokemon;
-                saveOfflineData();
-              } else {
-                for (const pokemon of allPokemonData) {
-                  await window.dataSdk.delete(pokemon);
-                }
-                
-                for (const pokemon of backupData.pokemon) {
-                  await window.dataSdk.create(pokemon);
-                }
-              }
-              
-              questions = backupData.questions;
-              stats = backupData.stats;
-              saveLocalData();
-              
-              showToast('Data berhasil dipulihkan dari QR!', 'success');
-              setTimeout(() => renderHome(), 1500);
-            } catch (error) {
-              showToast('QR Code tidak valid!', 'error');
-            }
-          }
-        );
+      // C3 - MENERAPKAN: Gunakan rasio untuk menyelesaikan masalah langsung
+      else if (difficulty === "easy") {
+        if (chosenTopic === "rasio_bagian_keseluruhan") {
+          const a = randomInt(2, 5);
+          const b = randomInt(2, 5);
+          const kelipatan = randomInt(2, 4);
+          const total = (a + b) * kelipatan;
+          questionText = `Perbandingan buku Matematika dan IPA adalah ${a}:${b}. Jika total ada ${total} buku, berapa buku Matematika?\n\nContoh: Jika rasio 2:3 dengan total 10, maka bagian pertama = 2/(2+3) × 10 = 4`;
+          const matematika = (a * total) / (a + b);
+          correctAnswer = String(matematika);
+          explanation = `Langkah penyelesaian:\n1. Total bagian = ${a} + ${b} = ${a+b}\n2. Bagian Matematika = ${a}/${a+b} dari total\n3. Buku Matematika = ${a}/${a+b} × ${total} = ${matematika} buku`;
+        } else if (chosenTopic === "perkalian_proporsi") {
+          const orang1 = randomInt(2, 5);
+          const perOrang = randomInt(2, 5) * 10;
+          const orang2 = orang1 * randomInt(2, 3);
+          questionText = `${orang1} orang membutuhkan ${orang1 * perOrang} ml air. Berapa ml air untuk ${orang2} orang?\n\nContoh: Jika 2 orang butuh 40 ml, maka 4 orang butuh 80 ml`;
+          const needed = orang2 * perOrang;
+          correctAnswer = String(needed);
+          explanation = `Langkah penyelesaian:\n1. Kebutuhan per orang = ${orang1 * perOrang} ÷ ${orang1} = ${perOrang} ml\n2. Untuk ${orang2} orang = ${orang2} × ${perOrang} = ${needed} ml`;
+        } else {
+          // pembagian_proporsi sederhana
+          const a = randomInt(2, 4);
+          const b = randomInt(2, 4);
+          const kelipatan = randomInt(5, 10) * 100;
+          const totalUang = (a + b) * kelipatan;
+          questionText = `Uang Rp${totalUang} dibagi dengan rasio ${a}:${b}. Berapa rupiah bagian pertama?\n\nContoh: Rp1000 dibagi rasio 2:3, bagian pertama = 2/(2+3) × 1000 = Rp400`;
+          const bagian1 = (a * totalUang) / (a + b);
+          correctAnswer = String(bagian1);
+          explanation = `Langkah penyelesaian:\n1. Total bagian = ${a} + ${b} = ${a+b}\n2. Bagian pertama = ${a}/${a+b} dari total\n3. Uang bagian pertama = ${a}/${a+b} × ${totalUang} = Rp${bagian1}`;
+        }
+      }
+      
+      // C4 - MENGANALISIS: Analisis hubungan antar rasio dan temukan pola
+      else if (difficulty === "medium") {
+        if (chosenTopic === "konsep_rasio") {
+          const a = randomInt(3, 8);
+          const b = randomInt(3, 8);
+          const c = randomInt(2, 6);
+          const total = (a + b + c) * randomInt(2, 4);
+          questionText = `Rasio A:B:C adalah ${a}:${b}:${c}. Jika total ${total}, berapa selisih antara bagian terbesar dan terkecil?`;
+          const parts = [a, b, c].sort((x,y) => x-y);
+          const perBagian = total / (a + b + c);
+          const terbesar = parts[2] * perBagian;
+          const terkecil = parts[0] * perBagian;
+          const selisih = terbesar - terkecil;
+          correctAnswer = String(selisih);
+          explanation = `Per bagian = ${total}/${a+b+c} = ${perBagian}. Terbesar = ${parts[2]}×${perBagian} = ${terbesar}, Terkecil = ${parts[0]}×${perBagian} = ${terkecil}. Selisih = ${selisih}`;
+        } else if (chosenTopic === "rasio_durasi_waktu") {
+          const a = randomInt(2, 5);
+          const b = randomInt(2, 5);
+          const waktu1 = a * randomInt(3, 6) * 10;
+          questionText = `Rasio waktu kerja Ani dan Budi adalah ${a}:${b}. Jika Ani bekerja ${waktu1} menit, berapa total waktu keduanya?`;
+          const perBagian = waktu1 / a;
+          const waktiBudi = b * perBagian;
+          const totalWaktu = waktu1 + waktiBudi;
+          correctAnswer = String(totalWaktu);
+          explanation = `Per bagian = ${waktu1}/${a} = ${perBagian} menit. Budi = ${b}×${perBagian} = ${waktiBudi} menit. Total = ${totalWaktu} menit`;
+        } else {
+          // kesamaan_rasio dengan analisis
+          const a = randomInt(3, 7);
+          const b = randomInt(3, 7);
+          const hasil1 = a * randomInt(4, 8);
+          questionText = `Jika ${a}:${b} = ${hasil1}:x, maka nilai x adalah...`;
+          const x = (hasil1 * b) / a;
+          correctAnswer = String(x);
+          explanation = `Gunakan perkalian silang: ${a}×x = ${b}×${hasil1}, maka x = ${hasil1}×${b}/${a} = ${x}`;
+        }
+      }
+      
+      // C5 - MENGEVALUASI: Evaluasi dan bandingkan beberapa rasio
+      else if (difficulty === "hard") {
+        if (chosenTopic === "pembagian_proporsi") {
+          const a = randomInt(2, 5);
+          const b = randomInt(2, 5);
+          const c = randomInt(2, 5);
+          const kelipatan = randomInt(10, 20) * 100;
+          const total = (a + b + c) * kelipatan;
+          questionText = `Uang Rp${total} dibagi untuk A, B, C dengan rasio ${a}:${b}:${c}. Jika B dan C digabung, berapa selisihnya dengan A?`;
+          const perBagian = total / (a + b + c);
+          const bagianA = a * perBagian;
+          const bagianBC = (b + c) * perBagian;
+          const selisih = Math.abs(bagianBC - bagianA);
+          correctAnswer = String(selisih);
+          explanation = `A = ${a}×${perBagian} = Rp${bagianA}. B+C = ${b+c}×${perBagian} = Rp${bagianBC}. Selisih = Rp${selisih}`;
+        } else if (chosenTopic === "perkalian_proporsi") {
+          const hari1 = randomInt(2, 5);
+          const orang1 = randomInt(3, 6);
+          const hari2 = randomInt(2, 5);
+          const total = hari1 * orang1 * randomInt(4, 8);
+          questionText = `${orang1} pekerja menyelesaikan pekerjaan dalam ${hari1} hari (total ${total} unit). Berapa pekerja dibutuhkan untuk ${hari2} hari dengan hasil sama?`;
+          const perHariPerOrang = total / (hari1 * orang1);
+          const orang2 = total / (hari2 * perHariPerOrang);
+          correctAnswer = String(orang2);
+          explanation = `Produktivitas per orang per hari = ${total}/(${hari1}×${orang1}) = ${perHariPerOrang}. Pekerja = ${total}/(${hari2}×${perHariPerOrang}) = ${orang2} orang`;
+        } else {
+          // rasio_bagian_keseluruhan kompleks
+          const a = randomInt(3, 6);
+          const b = randomInt(3, 6);
+          const tambahan = randomInt(10, 20);
+          const kelipatan = randomInt(3, 6);
+          const total1 = (a + b) * kelipatan;
+          questionText = `Rasio siswa laki-laki dan perempuan ${a}:${b} dengan total ${total1}. Jika ditambah ${tambahan} perempuan, berapa rasio baru laki-laki?`;
+          const perBagian = total1 / (a + b);
+          const lakiLaki = a * perBagian;
+          const perempuanBaru = b * perBagian + tambahan;
+          const g = gcd(lakiLaki, perempuanBaru);
+          correctAnswer = `${lakiLaki/g}:${perempuanBaru/g}`;
+          explanation = `Laki-laki = ${lakiLaki}, Perempuan baru = ${perempuanBaru}. Rasio = ${lakiLaki/g}:${perempuanBaru/g}`;
+          answerType = "ratio";
+        }
+      }
+      
+      // C6 - MENCIPTA: Rancang solusi untuk masalah kompleks multi-langkah
+      else if (difficulty === "very_hard") {
+        if (chosenTopic === "konsep_rasio") {
+          const a = randomInt(2, 4);
+          const b = randomInt(2, 4);
+          const c = randomInt(2, 4);
+          const persenA = randomInt(20, 40);
+          const kelipatan = randomInt(5, 10) * 10;
+          const total = (a + b + c) * kelipatan;
+          questionText = `Rasio A:B:C = ${a}:${b}:${c} dengan total ${total}. Jika A dikurangi ${persenA}%, berapa jumlah B dan C harus ditambah agar total tetap?`;
+          const perBagian = total / (a + b + c);
+          const nilaiA = a * perBagian;
+          const penguranganA = (persenA / 100) * nilaiA;
+          const tambahBC = penguranganA;
+          correctAnswer = String(tambahBC);
+          explanation = `A = ${nilaiA}, dikurangi ${persenA}% = ${penguranganA}. B dan C harus ditambah total ${tambahBC} agar total tetap ${total}`;
+        } else if (chosenTopic === "pembagian_proporsi") {
+          const a = randomInt(2, 4);
+          const b = randomInt(2, 4);
+          const c = randomInt(2, 4);
+          const targetB = randomInt(200, 400) * 10;
+          questionText = `Uang dibagi A:B:C = ${a}:${b}:${c}. Jika B harus menerima Rp${targetB}, berapa total uang minimum yang dibutuhkan?`;
+          const perBagian = targetB / b;
+          const totalUang = (a + b + c) * perBagian;
+          correctAnswer = String(totalUang);
+          explanation = `Jika B = Rp${targetB}, maka per bagian = ${targetB}/${b} = Rp${perBagian}. Total = ${a+b+c}×${perBagian} = Rp${totalUang}`;
+        } else {
+          // Multi-step proportion problem
+          const kecepatan1 = randomInt(40, 60);
+          const waktu1 = randomInt(2, 4);
+          const jarak = kecepatan1 * waktu1;
+          const kecepatan2 = randomInt(30, 50);
+          questionText = `Mobil A berkecepatan ${kecepatan1} km/jam menempuh ${jarak} km dalam ${waktu1} jam. Jika Mobil B berkecepatan ${kecepatan2} km/jam, berapa jam untuk jarak yang sama?`;
+          const waktu2 = jarak / kecepatan2;
+          correctAnswer = String(waktu2);
+          explanation = `Jarak = ${jarak} km. Waktu Mobil B = ${jarak}/${kecepatan2} = ${waktu2} jam`;
+        }
+      }
+
+      return {
+        text: questionText,
+        answer: correctAnswer,
+        explanation,
+        topic: chosenTopic,
+        difficulty,
+        answerType
       };
     }
 
-    function renderSettingsView() {
-      currentView = 'settings';
-      const config = window.elementSdk?.config || defaultConfig;
+    function openQuizScreen() {
+      const main = domRefs.mainWrapper;
+      if (!main) return;
+      main.innerHTML = "";
+
+      const container = document.createElement("main");
+      container.className = "flex-1 w-full flex flex-col items-center";
+      container.setAttribute("role", "main");
+
+      const inner = document.createElement("div");
+      inner.className = "max-w-4xl w-full mx-auto px-4 py-6";
+
+      const header = document.createElement("header");
+      header.className = "mb-4 flex items-center justify-between";
+      const h2 = document.createElement("h2");
+      h2.className = "text-2xl font-bold text-main body-text";
+      h2.textContent = "Mode Quiz Rasio";
+      const backBtn = document.createElement("button");
+      backBtn.type = "button";
+      backBtn.className = "btn-secondary border-2 rounded px-3 py-1 label-text";
+      backBtn.textContent = "Kembali";
+      backBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        renderHomeScreen();
+      });
+      header.appendChild(h2);
+      header.appendChild(backBtn);
+
+      // Filters
+      const filterSection = document.createElement("section");
+      filterSection.className = "surface-card rounded-lg p-4 mb-4 shadow body-text";
+      const filterTitle = document.createElement("h3");
+      filterTitle.className = "font-semibold mb-3";
+      filterTitle.textContent = "Filter Soal";
+
+      const filterForm = document.createElement("form");
+      filterForm.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
+      filterForm.addEventListener("submit", (e) => e.preventDefault());
+
+      // Difficulty select
+      const diffWrap = document.createElement("div");
+      const diffLabel = document.createElement("label");
+      diffLabel.className = "block mb-1 label-text";
+      diffLabel.setAttribute("for", "select-diff");
+      diffLabel.textContent = "Tingkat Kesulitan";
+      const diffSelect = document.createElement("select");
+      diffSelect.id = "select-diff";
+      diffSelect.className = "w-full border rounded px-2 py-1 body-text";
+      const diffOptions = [
+        { value: "very_easy", label: "C2 - Memahami (Common)" },
+        { value: "easy", label: "C3 - Menerapkan (Uncommon)" },
+        { value: "medium", label: "C4 - Menganalisis (Rare)" },
+        { value: "hard", label: "C5 - Mengevaluasi (Legendary)" },
+        { value: "very_hard", label: "C6 - Mencipta (Mythical)" }
+      ];
+      diffOptions.forEach(o => {
+        const opt = document.createElement("option");
+        opt.value = o.value;
+        opt.textContent = o.label;
+        diffSelect.appendChild(opt);
+      });
+      diffWrap.appendChild(diffLabel);
+      diffWrap.appendChild(diffSelect);
+
+      // Topic select
+      const topicWrap = document.createElement("div");
+      const topicLabel = document.createElement("label");
+      topicLabel.className = "block mb-1 label-text";
+      topicLabel.setAttribute("for", "select-topic");
+      topicLabel.textContent = "Topik Rasio";
+      const topicSelect = document.createElement("select");
+      topicSelect.id = "select-topic";
+      topicSelect.className = "w-full border rounded px-2 py-1 body-text";
+      const topicOptions = [
+        { value: "", label: "Acak" },
+        { value: "konsep_rasio", label: "Konsep Rasio" },
+        { value: "kesamaan_rasio", label: "Kesamaan Rasio" },
+        { value: "rasio_bagian_keseluruhan", label: "Rasio Bagian : Keseluruhan" },
+        { value: "rasio_durasi_waktu", label: "Rasio Durasi Waktu" },
+        { value: "perkalian_proporsi", label: "Proporsi (Perkalian)" },
+        { value: "pembagian_proporsi", label: "Proporsi (Pembagian)" }
+      ];
+      topicOptions.forEach(o => {
+        const opt = document.createElement("option");
+        opt.value = o.value;
+        opt.textContent = o.label;
+        topicSelect.appendChild(opt);
+      });
+
+      topicWrap.appendChild(topicLabel);
+      topicWrap.appendChild(topicSelect);
+
+      filterForm.appendChild(diffWrap);
+      filterForm.appendChild(topicWrap);
+
+      filterSection.appendChild(filterTitle);
+      filterSection.appendChild(filterForm);
+
+      // Question area
+      const questionSection = document.createElement("section");
+      questionSection.className = "surface-card rounded-lg p-4 mb-4 shadow body-text";
+      const qText = document.createElement("p");
+      qText.id = "quiz-question-text";
+      qText.className = "mb-3";
+      qText.textContent = "Klik \"Soal Baru\" untuk mulai.";
+      const answerForm = document.createElement("form");
+      answerForm.className = "mt-2 flex flex-col md:flex-row gap-3 items-start md:items-center";
+      const ansWrap = document.createElement("div");
+      ansWrap.className = "flex-1";
+      const ansLabel = document.createElement("label");
+      ansLabel.className = "block mb-1 label-text";
+      ansLabel.setAttribute("for", "quiz-answer");
+      ansLabel.textContent = "Jawabanmu";
+      const ansInput = document.createElement("input");
+      ansInput.id = "quiz-answer";
+      ansInput.type = "text";
+      ansInput.className = "w-full border rounded px-2 py-1 body-text";
+      ansWrap.appendChild(ansLabel);
+      ansWrap.appendChild(ansInput);
+
+      const submitBtn = document.createElement("button");
+      submitBtn.type = "submit";
+      submitBtn.className = "btn-primary rounded px-4 py-2 font-semibold label-text";
+      submitBtn.textContent = "Kirim Jawaban";
+
+      answerForm.appendChild(ansWrap);
+      answerForm.appendChild(submitBtn);
+
+      const feedbackP = document.createElement("p");
+      feedbackP.id = "quiz-feedback";
+      feedbackP.className = "mt-3 caption-text";
+
+      const answerKeySection = document.createElement("div");
+      answerKeySection.id = "answer-key-section";
+      answerKeySection.className = "mt-3 p-3 border-2 rounded";
+      answerKeySection.style.display = "none";
+      answerKeySection.style.borderColor = currentConfig.secondary_color || defaultConfig.secondary_color;
+      answerKeySection.style.backgroundColor = "rgba(59, 130, 246, 0.1)";
       
-      document.getElementById('app').innerHTML = `
-        <div class="max-w-2xl mx-auto">
-          <button id="btn-back" class="mb-4 px-4 py-2 rounded font-bold" style="background-color: ${config.secondary_color}; color: white">← Kembali</button>
-          
-          <h2 class="text-3xl font-bold mb-6" style="color: ${config.text_color}">Settings</h2>
-          
-          <div class="p-6 rounded-lg shadow-lg mb-4" style="background-color: ${config.surface_color}">
-            <h3 class="text-xl font-bold mb-4" style="color: ${config.text_color}">Reset Data</h3>
-            <p class="mb-4" style="color: ${config.text_color}">Hapus semua Pokemon dan reset statistik ke 0. Soal tidak akan terhapus.</p>
-            
-            <div class="bg-yellow-100 border-2 border-yellow-500 rounded p-4 mb-4">
-              <p class="font-bold text-yellow-800">⚠️ Peringatan!</p>
-              <p class="text-yellow-800">Tindakan ini tidak dapat dibatalkan. Semua Pokemon yang sudah ditangkap akan hilang.</p>
-            </div>
-            
-            <button id="btn-reset" class="w-full py-3 rounded-lg font-bold text-white" style="background-color: ${config.primary_color}">Reset Semua Data</button>
-          </div>
-          
-          <div class="p-6 rounded-lg shadow-lg" style="background-color: ${config.surface_color}">
-            <h3 class="text-xl font-bold mb-4" style="color: ${config.text_color}">Informasi</h3>
-            <div class="space-y-2" style="color: ${config.text_color}">
-              <p><span class="font-bold">Total Pokemon Tersedia:</span> 1010 Pokemon</p>
-              <p><span class="font-bold">Pokemon Tertangkap:</span> ${allPokemonData.length}</p>
-              <p><span class="font-bold">Total Soal:</span> ${questions.length}</p>
-              <p><span class="font-bold">Soal Dijawab:</span> ${stats.totalAnswered}</p>
-              <p><span class="font-bold">Jawaban Benar:</span> ${stats.correctAnswers}</p>
-            </div>
-          </div>
-        </div>
-      `;
+      const answerKeyTitle = document.createElement("p");
+      answerKeyTitle.className = "font-semibold label-text mb-2";
+      answerKeyTitle.textContent = "🔑 Kunci Jawaban (Ctrl+M untuk tutup)";
       
-      document.getElementById('btn-back').onclick = renderHome;
+      const answerKeyContent = document.createElement("p");
+      answerKeyContent.id = "answer-key-content";
+      answerKeyContent.className = "caption-text";
+      answerKeyContent.style.whiteSpace = "pre-wrap";
       
-      document.getElementById('btn-reset').onclick = () => {
-        const confirmModal = document.createElement('div');
-        confirmModal.className = 'fixed inset-0 flex items-center justify-center z-50';
-        confirmModal.style.backgroundColor = 'rgba(0,0,0,0.8)';
-        
-        confirmModal.innerHTML = `
-          <div class="rounded-lg p-6 max-w-md w-full mx-4" style="background-color: ${config.surface_color}">
-            <h3 class="text-xl font-bold mb-4" style="color: ${config.text_color}">Konfirmasi Reset</h3>
-            <p class="mb-6" style="color: ${config.text_color}">Apakah Anda yakin ingin menghapus semua Pokemon dan mereset statistik?</p>
-            
-            <div class="flex gap-2">
-              <button id="confirm-reset" class="flex-1 py-2 rounded font-bold text-white" style="background-color: ${config.primary_color}">Ya, Reset</button>
-              <button id="cancel-reset" class="flex-1 py-2 rounded font-bold text-white" style="background-color: ${config.secondary_color}">Batal</button>
-            </div>
-          </div>
-        `;
-        
-        document.body.appendChild(confirmModal);
-        
-        document.getElementById('confirm-reset').onclick = async () => {
-          if (useOfflineMode) {
-            allPokemonData = [];
-            saveOfflineData();
-          } else {
-            for (const pokemon of allPokemonData) {
-              await window.dataSdk.delete(pokemon);
+      answerKeySection.appendChild(answerKeyTitle);
+      answerKeySection.appendChild(answerKeyContent);
+
+      const newQuestionBtn = document.createElement("button");
+      newQuestionBtn.type = "button";
+      newQuestionBtn.className = "btn-secondary border-2 rounded px-4 py-2 mt-3 label-text";
+      newQuestionBtn.textContent = "Soal Baru";
+
+      questionSection.appendChild(qText);
+      questionSection.appendChild(answerForm);
+      questionSection.appendChild(feedbackP);
+      questionSection.appendChild(answerKeySection);
+      questionSection.appendChild(newQuestionBtn);
+
+      // Current question state
+      let currentQuestion = null;
+      let isProcessing = false;
+      let answerKeyVisible = false;
+
+      function generateAndShowQuestion() {
+        const diff = diffSelect.value || "very_easy";
+        const topicVal = topicSelect.value || "";
+        currentQuestion = generateRatioQuestion(diff, topicVal || null);
+        qText.textContent = currentQuestion.text;
+        qText.style.whiteSpace = "pre-wrap";
+        ansInput.value = "";
+        feedbackP.textContent = "";
+        answerKeySection.style.display = "none";
+        answerKeyVisible = false;
+      }
+
+      function toggleAnswerKey() {
+        if (!currentQuestion) {
+          showToast("Silakan buat soal terlebih dahulu.", "info");
+          return;
+        }
+        answerKeyVisible = !answerKeyVisible;
+        if (answerKeyVisible) {
+          answerKeySection.style.display = "block";
+          answerKeyContent.textContent = `Jawaban: ${currentQuestion.answer}\n\n${currentQuestion.explanation}`;
+          showToast("Kunci jawaban ditampilkan", "info");
+        } else {
+          answerKeySection.style.display = "none";
+          showToast("Kunci jawaban disembunyikan", "info");
+        }
+      }
+
+      // Keyboard shortcut Ctrl+M
+      document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.key === "m") {
+          e.preventDefault();
+          toggleAnswerKey();
+        }
+      });
+
+      newQuestionBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        generateAndShowQuestion();
+      });
+
+      answerForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!currentQuestion) {
+          showToast("Silakan klik \"Soal Baru\" terlebih dahulu.", "info");
+          return;
+        }
+        if (isProcessing) return;
+        isProcessing = true;
+
+        const userAns = ansInput.value.trim();
+        if (!userAns) {
+          showToast("Jawaban tidak boleh kosong.", "error");
+          isProcessing = false;
+          return;
+        }
+
+        appStats.questionsAnswered += 1;
+
+        const correctAnsRaw = currentQuestion.answer.trim();
+        const normalizedCorrect = correctAnsRaw.replace(/\s+/g, "");
+        const normalizedUser = userAns.replace(/\s+/g, "");
+
+        // Check if answer is correct (support equivalent ratios)
+        let isCorrect = false;
+        if (currentQuestion.answerType === "ratio") {
+          // Parse ratio format "a:b"
+          const parseRatio = (str) => {
+            const parts = str.split(":").map(p => parseFloat(p.trim()));
+            if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+              return parts;
             }
-          }
-          
-          stats = {
-            totalAnswered: 0,
-            correctAnswers: 0,
-            wrongStreak: 0,
-            totalCaptured: 0
+            return null;
           };
-          saveLocalData();
           
-          confirmModal.remove();
-          showToast('Semua data berhasil direset!', 'success');
-          setTimeout(() => renderHome(), 1500);
-        };
-        
-        document.getElementById('cancel-reset').onclick = () => {
-          confirmModal.remove();
-        };
-      };
-    }
-
-    function openQuestionEditor() {
-      const config = window.elementSdk?.config || defaultConfig;
-      const modal = document.createElement('div');
-      modal.className = 'fixed inset-0 overflow-y-auto z-50';
-      modal.style.backgroundColor = 'rgba(0,0,0,0.8)';
-      
-      modal.innerHTML = `
-        <div class="min-h-full p-4">
-          <div class="max-w-4xl mx-auto rounded-lg p-6" style="background-color: ${config.surface_color}">
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-2xl font-bold" style="color: ${config.text_color}">Editor Soal</h2>
-              <button id="close-editor" class="px-4 py-2 rounded font-bold text-white" style="background-color: ${config.primary_color}">Tutup</button>
-            </div>
-            
-            <div class="mb-6 p-4 rounded" style="background-color: ${config.background_color}">
-              <h3 class="font-bold mb-2" style="color: ${config.text_color}">Tambah Soal Baru</h3>
-              <input type="text" id="new-question" placeholder="Pertanyaan" class="w-full p-2 border rounded mb-2">
-              <input type="text" id="new-answer" placeholder="Jawaban" class="w-full p-2 border rounded mb-2">
-              <input type="text" id="new-topic" placeholder="Topik" class="w-full p-2 border rounded mb-2">
-              <select id="new-difficulty" class="w-full p-2 border rounded mb-2">
-                <option value="very_easy">Sangat Mudah (Common)</option>
-                <option value="easy">Mudah (Uncommon)</option>
-                <option value="medium">Sedang (Rare)</option>
-                <option value="hard">Sulit (Legendary)</option>
-                <option value="very_hard">Sangat Sulit (Mythical)</option>
-              </select>
-              <button id="add-question" class="w-full py-2 rounded font-bold text-white" style="background-color: ${config.primary_color}">Tambah Soal</button>
-            </div>
-            
-            <div class="mb-4 space-y-2">
-              <div class="flex gap-2">
-                <button id="download-template" class="flex-1 py-2 rounded font-bold text-white" style="background-color: ${config.secondary_color}">📥 Download Template Excel</button>
-                <button id="show-guide" class="flex-1 py-2 rounded font-bold text-white" style="background-color: ${config.primary_color}">📖 Panduan</button>
-              </div>
-              <div class="flex gap-2">
-                <label class="flex-1 py-2 rounded font-bold text-white text-center cursor-pointer" style="background-color: ${config.secondary_color}">
-                  📤 Import Excel/CSV
-                  <input type="file" id="import-excel" accept=".xlsx,.xls,.csv" class="hidden">
-                </label>
-                <button id="export-excel" class="flex-1 py-2 rounded font-bold text-white" style="background-color: ${config.secondary_color}">💾 Export Excel</button>
-              </div>
-              <button id="export-qr" class="w-full py-2 rounded font-bold text-white" style="background-color: ${config.secondary_color}">📱 Export QR Code</button>
-            </div>
-            
-            <div id="questions-list" class="space-y-2"></div>
-          </div>
-        </div>
-      `;
-      
-      document.body.appendChild(modal);
-      
-      renderQuestionsList();
-      
-      document.getElementById('close-editor').onclick = () => {
-        modal.remove();
-      };
-      
-      document.getElementById('show-guide').onclick = () => {
-        const guideModal = document.createElement('div');
-        guideModal.className = 'fixed inset-0 overflow-y-auto z-50 p-4';
-        guideModal.style.backgroundColor = 'rgba(0,0,0,0.9)';
-        
-        guideModal.innerHTML = `
-          <div class="max-w-4xl mx-auto rounded-lg p-6" style="background-color: ${config.surface_color}">
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-2xl font-bold" style="color: ${config.text_color}">📖 Panduan Lengkap Import/Export Excel</h2>
-              <button id="close-guide" class="px-4 py-2 rounded font-bold text-white" style="background-color: ${config.primary_color}">Tutup</button>
-            </div>
-            
-            <div class="space-y-6" style="color: ${config.text_color}">
-              <div class="p-4 rounded" style="background-color: ${config.background_color}">
-                <h3 class="text-xl font-bold mb-3">🎯 Cara Menggunakan Template Excel</h3>
-                <ol class="list-decimal list-inside space-y-2">
-                  <li><strong>Download Template</strong>: Klik tombol "📥 Download Template Excel"</li>
-                  <li><strong>Buka File</strong>: Buka file Excel yang terdownload (Template_Soal_Pokemon.xlsx)</li>
-                  <li><strong>Pilih Sheet</strong>: Gunakan sheet "Soal" (sudah ada contoh) atau "Template Kosong"</li>
-                  <li><strong>Isi Data</strong>: Masukkan soal sesuai format kolom yang tersedia</li>
-                  <li><strong>Simpan File</strong>: Save file Excel Anda</li>
-                  <li><strong>Import</strong>: Klik "📤 Import Excel/CSV" dan pilih file yang sudah diisi</li>
-                </ol>
-              </div>
-              
-              <div class="p-4 rounded" style="background-color: ${config.background_color}">
-                <h3 class="text-xl font-bold mb-3">📋 Format Kolom Excel</h3>
-                <table class="w-full border-collapse">
-                  <thead>
-                    <tr class="border-b-2" style="border-color: ${config.secondary_color}">
-                      <th class="text-left p-2">Kolom</th>
-                      <th class="text-left p-2">Deskripsi</th>
-                      <th class="text-left p-2">Contoh</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="border-b">
-                      <td class="p-2 font-bold">Pertanyaan</td>
-                      <td class="p-2">Teks soal yang akan ditampilkan</td>
-                      <td class="p-2">Berapa hasil dari 2 + 2?</td>
-                    </tr>
-                    <tr class="border-b">
-                      <td class="p-2 font-bold">Jawaban</td>
-                      <td class="p-2">Jawaban yang benar (case insensitive)</td>
-                      <td class="p-2">4</td>
-                    </tr>
-                    <tr class="border-b">
-                      <td class="p-2 font-bold">Topik</td>
-                      <td class="p-2">Kategori/mata pelajaran soal</td>
-                      <td class="p-2">Matematika</td>
-                    </tr>
-                    <tr>
-                      <td class="p-2 font-bold">Kesulitan</td>
-                      <td class="p-2">Tingkat kesulitan (lihat tabel di bawah)</td>
-                      <td class="p-2">very_easy</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              
-              <div class="p-4 rounded" style="background-color: ${config.background_color}">
-                <h3 class="text-xl font-bold mb-3">⭐ Tingkat Kesulitan & Rarity Pokemon</h3>
-                <table class="w-full border-collapse">
-                  <thead>
-                    <tr class="border-b-2" style="border-color: ${config.secondary_color}">
-                      <th class="text-left p-2">Kode</th>
-                      <th class="text-left p-2">Nama</th>
-                      <th class="text-left p-2">Rarity Pokemon</th>
-                      <th class="text-left p-2">Deskripsi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="border-b">
-                      <td class="p-2 font-mono">very_easy</td>
-                      <td class="p-2">Sangat Mudah</td>
-                      <td class="p-2">🔵 Common</td>
-                      <td class="p-2">Soal dasar, mudah dijawab</td>
-                    </tr>
-                    <tr class="border-b">
-                      <td class="p-2 font-mono">easy</td>
-                      <td class="p-2">Mudah</td>
-                      <td class="p-2">🟢 Uncommon</td>
-                      <td class="p-2">Soal sederhana dengan sedikit pemikiran</td>
-                    </tr>
-                    <tr class="border-b">
-                      <td class="p-2 font-mono">medium</td>
-                      <td class="p-2">Sedang</td>
-                      <td class="p-2">🔷 Rare</td>
-                      <td class="p-2">Soal memerlukan pemahaman konsep</td>
-                    </tr>
-                    <tr class="border-b">
-                      <td class="p-2 font-mono">hard</td>
-                      <td class="p-2">Sulit</td>
-                      <td class="p-2">🟣 Legendary</td>
-                      <td class="p-2">Soal kompleks, butuh analisis</td>
-                    </tr>
-                    <tr>
-                      <td class="p-2 font-mono">very_hard</td>
-                      <td class="p-2">Sangat Sulit</td>
-                      <td class="p-2">🟠 Mythical</td>
-                      <td class="p-2">Soal sangat menantang</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              
-              <div class="p-4 rounded" style="background-color: ${config.background_color}">
-                <h3 class="text-xl font-bold mb-3">💾 Fitur Export Excel</h3>
-                <p class="mb-2">Saat Anda export soal, file Excel akan berisi multiple sheets:</p>
-                <ul class="list-disc list-inside space-y-1 ml-4">
-                  <li><strong>Semua Soal</strong>: Berisi semua soal dengan lengkap</li>
-                  <li><strong>Sangat Mudah - Sangat Sulit</strong>: Soal dikelompokkan per tingkat kesulitan</li>
-                  <li><strong>Statistik</strong>: Ringkasan jumlah soal per topik dan kesulitan</li>
-                </ul>
-              </div>
-              
-              <div class="p-4 rounded" style="background-color: ${config.background_color}">
-                <h3 class="text-xl font-bold mb-3">💡 Tips & Trik</h3>
-                <ul class="list-disc list-inside space-y-1 ml-4">
-                  <li>Gunakan topik yang konsisten untuk memudahkan filter soal</li>
-                  <li>Buat variasi kesulitan agar gameplay lebih menarik</li>
-                  <li>Jawaban tidak case-sensitive (huruf besar/kecil diabaikan)</li>
-                  <li>Bisa import file CSV atau Excel (.xlsx, .xls)</li>
-                  <li>Template sudah berisi contoh soal untuk referensi</li>
-                  <li>Sheet "Referensi" berisi panduan lengkap tingkat kesulitan</li>
-                </ul>
-              </div>
-              
-              <div class="p-4 rounded bg-yellow-100 border-2 border-yellow-500">
-                <h3 class="text-xl font-bold mb-2 text-yellow-800">⚠️ Perhatian</h3>
-                <ul class="list-disc list-inside space-y-1 ml-4 text-yellow-800">
-                  <li>Pastikan kolom "Kesulitan" diisi dengan kode yang benar (very_easy, easy, medium, hard, very_hard)</li>
-                  <li>Jangan ubah nama kolom header (Pertanyaan, Jawaban, Topik, Kesulitan)</li>
-                  <li>Baris kosong akan otomatis dilewati saat import</li>
-                  <li>Import akan menambahkan soal baru, tidak menghapus soal lama</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        document.body.appendChild(guideModal);
-        
-        document.getElementById('close-guide').onclick = () => {
-          guideModal.remove();
-        };
-      };
-      
-      document.getElementById('add-question').onclick = () => {
-        const question = document.getElementById('new-question').value.trim();
-        const answer = document.getElementById('new-answer').value.trim();
-        const topic = document.getElementById('new-topic').value.trim();
-        const difficulty = document.getElementById('new-difficulty').value;
-        
-        const difficultyToRarity = {
-          very_easy: 'common',
-          easy: 'uncommon',
-          medium: 'rare',
-          hard: 'legendary',
-          very_hard: 'mythical'
-        };
-        
-        const rarity = difficultyToRarity[difficulty];
-        
-        if (!question || !answer || !topic) {
-          showToast('Lengkapi semua field!', 'error');
-          return;
-        }
-        
-        questions.push({
-          id: Date.now().toString(),
-          question,
-          answer,
-          topic,
-          difficulty,
-          rarity
-        });
-        
-        saveLocalData();
-        renderQuestionsList();
-        
-        document.getElementById('new-question').value = '';
-        document.getElementById('new-answer').value = '';
-        document.getElementById('new-topic').value = '';
-        
-        showToast('Soal berhasil ditambahkan!', 'success');
-      };
-      
-      document.getElementById('download-template').onclick = () => {
-        const wb = XLSX.utils.book_new();
-        
-        // Sheet 1: Panduan
-        const guideData = [
-          ['PANDUAN PENGGUNAAN TEMPLATE SOAL POKEMON LEARNING QUEST'],
-          [''],
-          ['CARA MENGISI:'],
-          ['1. Isi soal di sheet "Soal" dengan format yang sudah disediakan'],
-          ['2. Kolom Kesulitan harus diisi dengan salah satu: very_easy, easy, medium, hard, very_hard'],
-          ['3. Kesulitan menentukan rarity Pokemon yang didapat:'],
-          ['   - very_easy = Common Pokemon'],
-          ['   - easy = Uncommon Pokemon'],
-          ['   - medium = Rare Pokemon'],
-          ['   - hard = Legendary Pokemon'],
-          ['   - very_hard = Mythical Pokemon'],
-          ['4. Setelah selesai, simpan file dan import ke aplikasi'],
-          [''],
-          ['TIPS:'],
-          ['- Gunakan topik yang sama untuk mengelompokkan soal'],
-          ['- Buat variasi kesulitan agar lebih menantang'],
-          ['- Jawaban harus exact match (huruf besar/kecil diabaikan)'],
-          [''],
-          ['CONTOH TOPIK:'],
-          ['Matematika, IPA, IPS, Bahasa Indonesia, Bahasa Inggris, Sejarah, dll']
-        ];
-        const wsGuide = XLSX.utils.aoa_to_sheet(guideData);
-        wsGuide['!cols'] = [{ wch: 80 }];
-        XLSX.utils.book_append_sheet(wb, wsGuide, 'Panduan');
-        
-        // Sheet 2: Soal (dengan contoh)
-        const soalData = [
-          ['Pertanyaan', 'Jawaban', 'Topik', 'Kesulitan'],
-          ['Berapa hasil dari 2 + 2?', '4', 'Matematika', 'very_easy'],
-          ['Berapa hasil dari 5 + 3?', '8', 'Matematika', 'easy'],
-          ['Berapa hasil dari 12 x 5?', '60', 'Matematika', 'medium'],
-          ['Berapa akar kuadrat dari 144?', '12', 'Matematika', 'hard'],
-          ['Selesaikan persamaan: 2x² + 5x - 3 = 0', 'x=0.5 atau x=-3', 'Matematika', 'very_hard'],
-          ['Apa ibu kota Indonesia?', 'Jakarta', 'Geografi', 'very_easy'],
-          ['Siapa presiden pertama Indonesia?', 'Soekarno', 'Sejarah', 'easy'],
-          ['Apa rumus kimia air?', 'H2O', 'IPA', 'easy'],
-          ['Berapa jumlah planet di tata surya?', '8', 'IPA', 'medium'],
-          ['Apa nama proses fotosintesis pada tumbuhan?', 'Fotosintesis', 'IPA', 'medium']
-        ];
-        const wsSoal = XLSX.utils.aoa_to_sheet(soalData);
-        wsSoal['!cols'] = [{ wch: 50 }, { wch: 20 }, { wch: 20 }, { wch: 15 }];
-        XLSX.utils.book_append_sheet(wb, wsSoal, 'Soal');
-        
-        // Sheet 3: Referensi Kesulitan
-        const refData = [
-          ['Tingkat Kesulitan', 'Kode', 'Rarity Pokemon', 'Deskripsi'],
-          ['Sangat Mudah', 'very_easy', 'Common', 'Soal dasar, mudah dijawab'],
-          ['Mudah', 'easy', 'Uncommon', 'Soal sederhana dengan sedikit pemikiran'],
-          ['Sedang', 'medium', 'Rare', 'Soal memerlukan pemahaman konsep'],
-          ['Sulit', 'hard', 'Legendary', 'Soal kompleks, butuh analisis'],
-          ['Sangat Sulit', 'very_hard', 'Mythical', 'Soal sangat menantang']
-        ];
-        const wsRef = XLSX.utils.aoa_to_sheet(refData);
-        wsRef['!cols'] = [{ wch: 20 }, { wch: 15 }, { wch: 20 }, { wch: 40 }];
-        XLSX.utils.book_append_sheet(wb, wsRef, 'Referensi');
-        
-        // Sheet 4: Template Kosong
-        const templateData = [
-          ['Pertanyaan', 'Jawaban', 'Topik', 'Kesulitan'],
-          ['', '', '', 'very_easy'],
-          ['', '', '', 'easy'],
-          ['', '', '', 'medium'],
-          ['', '', '', 'hard'],
-          ['', '', '', 'very_hard']
-        ];
-        const wsTemplate = XLSX.utils.aoa_to_sheet(templateData);
-        wsTemplate['!cols'] = [{ wch: 50 }, { wch: 20 }, { wch: 20 }, { wch: 15 }];
-        XLSX.utils.book_append_sheet(wb, wsTemplate, 'Template Kosong');
-        
-        XLSX.writeFile(wb, 'Template_Soal_Pokemon.xlsx');
-        showToast('Template Excel berhasil diunduh!', 'success');
-      };
-      
-      document.getElementById('import-excel').onchange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          try {
-            const data = new Uint8Array(event.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            
-            const difficultyToRarity = {
-              very_easy: 'common',
-              easy: 'uncommon',
-              medium: 'rare',
-              hard: 'legendary',
-              very_hard: 'mythical'
-            };
-            
-            let importedCount = 0;
-            let sheetName = '';
-            
-            // Cari sheet yang berisi soal (prioritas: Soal, Template Kosong, atau sheet pertama)
-            if (workbook.SheetNames.includes('Soal')) {
-              sheetName = 'Soal';
-            } else if (workbook.SheetNames.includes('Template Kosong')) {
-              sheetName = 'Template Kosong';
-            } else {
-              sheetName = workbook.SheetNames[0];
-            }
-            
-            const worksheet = workbook.Sheets[sheetName];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-            
-            // Skip header row (index 0)
-            for (let i = 1; i < jsonData.length; i++) {
-              const row = jsonData[i];
-              
-              // Skip empty rows
-              if (!row || row.length === 0 || !row[0]) continue;
-              
-              const question = String(row[0] || '').trim();
-              const answer = String(row[1] || '').trim();
-              const topic = String(row[2] || '').trim();
-              const difficulty = String(row[3] || 'very_easy').trim();
-              
-              if (question && answer && topic) {
-                const rarity = difficultyToRarity[difficulty] || 'common';
-                
-                questions.push({
-                  id: Date.now().toString() + '_' + i + '_' + Math.random().toString(36).substr(2, 5),
-                  question: question,
-                  answer: answer,
-                  topic: topic,
-                  difficulty: difficulty,
-                  rarity: rarity
-                });
-                
-                importedCount++;
-              }
-            }
-            
-            saveLocalData();
-            renderQuestionsList();
-            showToast(`Berhasil import ${importedCount} soal dari sheet "${sheetName}"!`, 'success');
-          } catch (error) {
-            console.error('Import error:', error);
-            showToast('Gagal import file: ' + error.message, 'error');
-          }
-        };
-        
-        reader.readAsArrayBuffer(file);
-      };
-      
-      document.getElementById('export-excel').onclick = () => {
-        if (questions.length === 0) {
-          showToast('Belum ada soal untuk di-export!', 'error');
-          return;
-        }
-        
-        const wb = XLSX.utils.book_new();
-        
-        // Sheet 1: Semua Soal
-        const allQuestionsData = [
-          ['Pertanyaan', 'Jawaban', 'Topik', 'Kesulitan', 'Rarity']
-        ];
-        
-        questions.forEach(q => {
-          allQuestionsData.push([
-            q.question,
-            q.answer,
-            q.topic,
-            q.difficulty,
-            q.rarity
-          ]);
-        });
-        
-        const wsAll = XLSX.utils.aoa_to_sheet(allQuestionsData);
-        wsAll['!cols'] = [{ wch: 50 }, { wch: 20 }, { wch: 20 }, { wch: 15 }, { wch: 15 }];
-        XLSX.utils.book_append_sheet(wb, wsAll, 'Semua Soal');
-        
-        // Sheet 2-6: Soal per Kesulitan
-        const difficulties = ['very_easy', 'easy', 'medium', 'hard', 'very_hard'];
-        const difficultyNames = {
-          very_easy: 'Sangat Mudah',
-          easy: 'Mudah',
-          medium: 'Sedang',
-          hard: 'Sulit',
-          very_hard: 'Sangat Sulit'
-        };
-        
-        difficulties.forEach(diff => {
-          const filteredQuestions = questions.filter(q => q.difficulty === diff);
+          const correctRatio = parseRatio(normalizedCorrect);
+          const userRatio = parseRatio(normalizedUser);
           
-          if (filteredQuestions.length > 0) {
-            const diffData = [
-              ['Pertanyaan', 'Jawaban', 'Topik']
-            ];
-            
-            filteredQuestions.forEach(q => {
-              diffData.push([q.question, q.answer, q.topic]);
-            });
-            
-            const wsDiff = XLSX.utils.aoa_to_sheet(diffData);
-            wsDiff['!cols'] = [{ wch: 50 }, { wch: 20 }, { wch: 20 }];
-            XLSX.utils.book_append_sheet(wb, wsDiff, difficultyNames[diff]);
-          }
-        });
-        
-        // Sheet 7: Statistik per Topik
-        const topicStats = {};
-        questions.forEach(q => {
-          if (!topicStats[q.topic]) {
-            topicStats[q.topic] = {
-              very_easy: 0,
-              easy: 0,
-              medium: 0,
-              hard: 0,
-              very_hard: 0,
-              total: 0
-            };
-          }
-          topicStats[q.topic][q.difficulty]++;
-          topicStats[q.topic].total++;
-        });
-        
-        const statsData = [
-          ['Topik', 'Sangat Mudah', 'Mudah', 'Sedang', 'Sulit', 'Sangat Sulit', 'Total']
-        ];
-        
-        Object.keys(topicStats).forEach(topic => {
-          const stats = topicStats[topic];
-          statsData.push([
-            topic,
-            stats.very_easy,
-            stats.easy,
-            stats.medium,
-            stats.hard,
-            stats.very_hard,
-            stats.total
-          ]);
-        });
-        
-        const wsStats = XLSX.utils.aoa_to_sheet(statsData);
-        wsStats['!cols'] = [{ wch: 20 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 }];
-        XLSX.utils.book_append_sheet(wb, wsStats, 'Statistik');
-        
-        const timestamp = new Date().toISOString().slice(0, 10);
-        XLSX.writeFile(wb, `Soal_Pokemon_${timestamp}.xlsx`);
-        showToast(`Berhasil export ${questions.length} soal ke Excel!`, 'success');
-      };
-      
-      document.getElementById('export-qr').onclick = async () => {
-        const compressed = LZString.compressToBase64(JSON.stringify(questions));
-        
-        const qrModal = document.createElement('div');
-        qrModal.className = 'fixed inset-0 flex items-center justify-center z-50 p-4 overflow-y-auto';
-        qrModal.style.backgroundColor = 'rgba(0,0,0,0.9)';
-        
-        const maxQRSize = 2000;
-        
-        if (compressed.length > maxQRSize) {
-          const chunkSize = Math.ceil(compressed.length / Math.ceil(compressed.length / maxQRSize));
-          const totalChunks = Math.ceil(compressed.length / chunkSize);
-          
-          let qrHTML = `
-            <div class="p-6 rounded max-w-4xl w-full" style="background-color: ${config.surface_color}">
-              <h3 class="text-xl font-bold mb-4 text-center" style="color: ${config.text_color}">QR Code Soal (${totalChunks} bagian)</h3>
-              <p class="text-center mb-4" style="color: ${config.text_color}">Scan semua QR code secara berurutan</p>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          `;
-          
-          for (let i = 0; i < totalChunks; i++) {
-            const chunk = compressed.slice(i * chunkSize, (i + 1) * chunkSize);
-            const chunkData = JSON.stringify({
-              part: i + 1,
-              total: totalChunks,
-              data: chunk
-            });
-            
-            qrHTML += `
-              <div class="text-center p-4 border-2 rounded" style="border-color: ${config.secondary_color}">
-                <div class="font-bold mb-2" style="color: ${config.text_color}">Bagian ${i + 1}/${totalChunks}</div>
-                <canvas id="qr-canvas-${i}" class="mx-auto"></canvas>
-              </div>
-            `;
-          }
-          
-          qrHTML += `
-              </div>
-              <button id="close-qr" class="w-full py-2 rounded font-bold text-white" style="background-color: ${config.primary_color}">Tutup</button>
-            </div>
-          `;
-          
-          qrModal.innerHTML = qrHTML;
-          document.body.appendChild(qrModal);
-          
-          for (let i = 0; i < totalChunks; i++) {
-            const chunk = compressed.slice(i * chunkSize, (i + 1) * chunkSize);
-            const chunkData = JSON.stringify({
-              part: i + 1,
-              total: totalChunks,
-              data: chunk
-            });
-            
-            try {
-              await QRCode.toCanvas(document.getElementById(`qr-canvas-${i}`), chunkData, {
-                width: 200,
-                margin: 1,
-                errorCorrectionLevel: 'L'
-              });
-            } catch (error) {
-              console.error(`Failed to generate QR ${i + 1}:`, error);
-            }
+          if (correctRatio && userRatio) {
+            // Check if ratios are equivalent: a/b = c/d
+            const correctValue = correctRatio[0] / correctRatio[1];
+            const userValue = userRatio[0] / userRatio[1];
+            // Allow small floating point tolerance
+            isCorrect = Math.abs(correctValue - userValue) < 0.0001;
           }
         } else {
-          qrModal.innerHTML = `
-            <div class="p-6 rounded max-w-md w-full" style="background-color: ${config.surface_color}">
-              <h3 class="text-xl font-bold mb-4 text-center" style="color: ${config.text_color}">QR Code Soal</h3>
-              <div class="flex justify-center mb-4">
-                <canvas id="export-qr-canvas"></canvas>
-              </div>
-              <div class="text-center mb-4">
-                <button id="copy-code-btn" class="px-4 py-2 rounded font-bold text-white" style="background-color: ${config.secondary_color}">Salin Kode</button>
-              </div>
-              <button id="close-qr" class="w-full py-2 rounded font-bold text-white" style="background-color: ${config.primary_color}">Tutup</button>
-            </div>
-          `;
-          
-          document.body.appendChild(qrModal);
-          
-          try {
-            await QRCode.toCanvas(document.getElementById('export-qr-canvas'), compressed, {
-              width: 300,
-              margin: 2,
-              errorCorrectionLevel: 'L'
-            });
-            
-            document.getElementById('copy-code-btn').onclick = () => {
-              navigator.clipboard.writeText(compressed);
-              showToast('Kode berhasil disalin!', 'success');
-            };
-          } catch (error) {
-            showToast('Gagal membuat QR Code', 'error');
+          // For non-ratio answers, exact match
+          isCorrect = normalizedCorrect === normalizedUser;
+        }
+        if (isCorrect) {
+          appStats.correctAnswers += 1;
+          appStats.currentWrongStreak = 0;
+          feedbackP.textContent = "✅ Jawaban Benar!";
+          feedbackP.style.color = "#10b981";
+          showToast("Jawaban benar! Kamu berpeluang menangkap Pokemon.", "success");
+
+          // Capture Pokemon based on difficulty
+          const rarity = getRarityByDifficulty(currentQuestion.difficulty);
+          await handleCapturePokemon(rarity);
+        } else {
+          appStats.currentWrongStreak += 1;
+          feedbackP.textContent = `❌ Jawaban Belum Tepat. Tekan Ctrl+M untuk melihat kunci jawaban.`;
+          feedbackP.style.color = "#ef4444";
+          showToast("Jawaban salah, coba lagi!", "error");
+
+          // 3x salah berturut-turut => release random pokemon
+          if (appStats.currentWrongStreak >= 3) {
+            appStats.currentWrongStreak = 0;
+            await handleReleaseRandomPokemon();
           }
         }
-        
-        document.getElementById('close-qr').onclick = () => {
-          qrModal.remove();
-        };
-      };
+
+        saveLocalStats();
+        updateStatsText();
+        isProcessing = false;
+      });
+
+      inner.appendChild(header);
+      inner.appendChild(filterSection);
+      inner.appendChild(questionSection);
+      container.appendChild(inner);
+      main.appendChild(container);
+
+      applyTheme(currentConfig);
+      applyTypography(currentConfig);
+    }
+
+    async function handleCapturePokemon(rarity) {
+      // Try to initialize SDK if not already done
+      if (!dataInitialized) {
+        await initDataSdk();
+      }
       
-      function renderQuestionsList() {
-        const list = document.getElementById('questions-list');
-        list.innerHTML = '';
-        
-        questions.forEach((q, index) => {
-          const item = document.createElement('div');
-          item.className = 'p-3 rounded border-2';
-          item.style.borderColor = config.secondary_color;
-          
-          item.innerHTML = `
-            <div class="flex justify-between items-start">
-              <div class="flex-1">
-                <div class="font-bold" style="color: ${config.text_color}">${q.question}</div>
-                <div class="text-sm" style="color: ${config.text_color}">Jawaban: ${q.answer} | ${q.topic} | ${q.difficulty} | ${q.rarity}</div>
-              </div>
-              <button class="ml-2 px-3 py-1 rounded font-bold text-white" style="background-color: ${config.primary_color}" onclick="deleteQuestion(${index})">Hapus</button>
-            </div>
-          `;
-          
-          list.appendChild(item);
+      // Check limit
+      if (currentRecordCount >= 999) {
+        showToast("Koleksi Pokemon sudah mencapai batas 999.", "error");
+        return;
+      }
+
+      const captureButton = document.querySelector(".pokeball-btn");
+      if (captureButton) {
+        captureButton.classList.add("capture-anim");
+        setTimeout(() => captureButton.classList.remove("capture-anim"), 700);
+      }
+
+      showToast("Menangkap Pokemon...", "info");
+
+      const pokemonData = await fetchRandomPokemon(rarity);
+      const code = generatePokemonCode();
+      const record = {
+        code,
+        name: pokemonData.name,
+        sprite: pokemonData.sprite,
+        rarity: pokemonData.rarity,
+        hp: pokemonData.hp,
+        atk: pokemonData.atk,
+        speed: pokemonData.speed,
+        captured_at: new Date().toISOString()
+      };
+
+      let result;
+      if (useLocalStorageMode) {
+        result = createPokemonLocalStorage(record);
+      } else {
+        result = await window.dataSdk.create(record);
+      }
+
+      if (result.isOk) {
+        showToast(`Berhasil menangkap ${pokemonData.name} [${rarity}]!`, "success");
+        // Show capture popup with Pokemon details
+        openPokemonDetailModal(record, true);
+      } else {
+        showToast("Gagal menyimpan Pokemon yang ditangkap.", "error");
+      }
+    }
+
+    async function handleReleaseRandomPokemon() {
+      if (!dataInitialized) {
+        await initDataSdk();
+      }
+      if (!allPokemonRecords.length) {
+        showToast("Kamu tidak punya Pokemon untuk dilepas.", "info");
+        return;
+      }
+      const idx = randomInt(0, allPokemonRecords.length - 1);
+      const target = allPokemonRecords[idx];
+      
+      let result;
+      if (useLocalStorageMode) {
+        result = deletePokemonLocalStorage(target);
+      } else {
+        result = await window.dataSdk.delete(target);
+      }
+
+      if (result.isOk) {
+        appStats.totalReleased += 1;
+        saveLocalStats();
+        showToast(`Karena tiga kali salah, Pokemon ${target.name} (${target.code}) dilepas.`, "info");
+      } else {
+        showToast("Gagal melepas Pokemon.", "error");
+      }
+    }
+
+    // -------- COLLECTION SCREEN --------
+    function renderCollectionListInto(container) {
+      container.innerHTML = "";
+      if (!allPokemonRecords.length) {
+        const empty = document.createElement("p");
+        empty.className = "caption-text text-main";
+        empty.textContent = "Koleksi Pokemon masih kosong.";
+        container.appendChild(empty);
+        return;
+      }
+
+      const grid = document.createElement("div");
+      grid.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4";
+
+      allPokemonRecords.forEach(rec => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "pokemon-card surface-card rounded-lg p-3 shadow flex flex-col items-center text-left focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500";
+        card.style.border = `2px solid ${rarityColors[rec.rarity] || "#9ca3af"}`;
+        card.dataset.code = rec.code;
+
+        // Pokemon image
+        if (rec.sprite) {
+          const img = document.createElement("img");
+          img.src = rec.sprite;
+          img.alt = rec.name;
+          img.className = "w-20 h-20 object-contain mb-2";
+          img.onerror = function() {
+            this.style.display = 'none';
+          };
+          card.appendChild(img);
+        }
+
+        const name = document.createElement("p");
+        name.className = "font-semibold text-main body-text mb-1 capitalize text-center";
+        name.textContent = `${rec.name}`;
+
+        const rarityBadge = document.createElement("span");
+        rarityBadge.className = "caption-text mb-1 px-2 py-1 rounded";
+        rarityBadge.textContent = rec.rarity;
+        rarityBadge.style.backgroundColor = rarityColors[rec.rarity] || "#9ca3af";
+        rarityBadge.style.color = "#ffffff";
+        rarityBadge.style.fontSize = "0.7rem";
+
+        const code = document.createElement("p");
+        code.className = "caption-text text-main mb-1";
+        code.textContent = rec.code;
+
+        const stats = document.createElement("p");
+        stats.className = "caption-text text-main text-center";
+        stats.textContent = `HP: ${rec.hp} | ATK: ${rec.atk} | SPD: ${rec.speed}`;
+
+        card.appendChild(name);
+        card.appendChild(rarityBadge);
+        card.appendChild(code);
+        card.appendChild(stats);
+
+        card.addEventListener("click", (e) => {
+          e.preventDefault();
+          openPokemonDetailModal(rec);
         });
-      }
-      
-      window.deleteQuestion = (index) => {
-        questions.splice(index, 1);
-        saveLocalData();
-        renderQuestionsList();
-        showToast('Soal dihapus', 'info');
-      };
+
+        grid.appendChild(card);
+      });
+
+      container.appendChild(grid);
     }
 
-    async function onConfigChange(config) {
-      document.documentElement.style.setProperty('--primary-color', config.primary_color || defaultConfig.primary_color);
-      document.documentElement.style.setProperty('--secondary-color', config.secondary_color || defaultConfig.secondary_color);
-      document.documentElement.style.setProperty('--text-color', config.text_color || defaultConfig.text_color);
-      document.documentElement.style.setProperty('--background-color', config.background_color || defaultConfig.background_color);
-      document.documentElement.style.setProperty('--surface-color', config.surface_color || defaultConfig.surface_color);
-      
-      if (currentView === 'home') {
-        renderHome();
-      } else if (currentView === 'quiz') {
-        renderQuizView();
-      } else if (currentView === 'collection') {
-        renderCollectionView();
-      } else if (currentView === 'duel') {
-        renderDuelView();
-      } else if (currentView === 'backup') {
-        renderBackupView();
-      } else if (currentView === 'settings') {
-        renderSettingsView();
+    function openPokemonDetailModal(rec, isCapture = false) {
+      const existing = document.getElementById("modal-overlay");
+      if (existing) existing.remove();
+
+      const overlay = document.createElement("div");
+      overlay.id = "modal-overlay";
+      overlay.className = "fixed inset-0 z-50 flex items-center justify-center p-4";
+      overlay.style.backgroundColor = "rgba(0,0,0,0.7)";
+
+      const dialog = document.createElement("div");
+      dialog.className = "surface-card rounded-lg p-6 max-w-md w-full shadow-lg body-text";
+      dialog.setAttribute("role", "dialog");
+      dialog.setAttribute("aria-modal", "true");
+
+      if (isCapture) {
+        const captureTitle = document.createElement("h2");
+        captureTitle.className = "text-2xl font-bold mb-3 text-center text-main";
+        captureTitle.textContent = "🎉 Pokemon Tertangkap! 🎉";
+        dialog.appendChild(captureTitle);
       }
+
+      // Pokemon image
+      if (rec.sprite) {
+        const imgContainer = document.createElement("div");
+        imgContainer.className = "flex justify-center mb-3";
+        const img = document.createElement("img");
+        img.src = rec.sprite;
+        img.alt = rec.name;
+        img.className = "w-32 h-32 object-contain";
+        img.onerror = function() {
+          this.style.display = 'none';
+        };
+        imgContainer.appendChild(img);
+        dialog.appendChild(imgContainer);
+      }
+
+      const title = document.createElement("h3");
+      title.className = "text-xl font-bold mb-2 text-main capitalize text-center";
+      title.textContent = rec.name;
+
+      const rarityP = document.createElement("p");
+      rarityP.className = "caption-text text-main mb-1 text-center";
+      rarityP.textContent = `Rarity: ${rec.rarity}`;
+      rarityP.style.color = rarityColors[rec.rarity] || "#9ca3af";
+      rarityP.style.fontWeight = "bold";
+
+      const codeP = document.createElement("p");
+      codeP.className = "caption-text text-main mb-1 text-center";
+      codeP.textContent = `Kode: ${rec.code}`;
+
+      const statsP = document.createElement("p");
+      statsP.className = "caption-text text-main mb-3 text-center";
+      statsP.textContent = `HP: ${rec.hp} | ATK: ${rec.atk} | SPD: ${rec.speed}`;
+
+      const btnRow = document.createElement("div");
+      btnRow.className = "flex justify-center gap-2 mt-4";
+
+      const closeBtn = document.createElement("button");
+      closeBtn.type = "button";
+      closeBtn.className = "btn-primary rounded px-4 py-2 label-text";
+      closeBtn.textContent = isCapture ? "Lanjutkan" : "Tutup";
+      closeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        overlay.remove();
+      });
+
+      btnRow.appendChild(closeBtn);
+
+      dialog.appendChild(title);
+      dialog.appendChild(rarityP);
+      dialog.appendChild(codeP);
+      dialog.appendChild(statsP);
+      dialog.appendChild(btnRow);
+
+      overlay.appendChild(dialog);
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay && !isCapture) overlay.remove();
+      });
+
+      document.body.appendChild(overlay);
+      applyTheme(currentConfig);
+      applyTypography(currentConfig);
     }
 
-    if (window.elementSdk) {
+    function openCollectionScreen() {
+      const main = domRefs.mainWrapper;
+      if (!main) return;
+      main.innerHTML = "";
+
+      const container = document.createElement("main");
+      container.className = "flex-1 w-full flex flex-col items-center";
+      container.setAttribute("role", "main");
+
+      const inner = document.createElement("div");
+      inner.className = "max-w-4xl w-full mx-auto px-4 py-6";
+
+      const header = document.createElement("header");
+      header.className = "mb-4 flex items-center justify-between";
+      const h2 = document.createElement("h2");
+      h2.className = "text-2xl font-bold text-main body-text";
+      h2.textContent = "Koleksi Pokemon";
+      const backBtn = document.createElement("button");
+      backBtn.type = "button";
+      backBtn.className = "btn-secondary border-2 rounded px-3 py-1 label-text";
+      backBtn.textContent = "Kembali";
+      backBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        renderHomeScreen();
+      });
+      header.appendChild(h2);
+      header.appendChild(backBtn);
+
+      const section = document.createElement("section");
+      section.className = "surface-card rounded-lg p-4 shadow body-text";
+      const listContainer = document.createElement("div");
+      listContainer.id = "collection-list";
+
+      section.appendChild(listContainer);
+
+      inner.appendChild(header);
+      inner.appendChild(section);
+      container.appendChild(inner);
+      main.appendChild(container);
+
+      renderCollectionListInto(listContainer);
+      applyTheme(currentConfig);
+      applyTypography(currentConfig);
+    }
+
+    // -------- DUEL MODE --------
+    function openDuelScreen() {
+      const main = domRefs.mainWrapper;
+      if (!main) return;
+      main.innerHTML = "";
+
+      const container = document.createElement("main");
+      container.className = "flex-1 w-full flex flex-col items-center";
+      container.setAttribute("role", "main");
+
+      const inner = document.createElement("div");
+      inner.className = "max-w-4xl w-full mx-auto px-4 py-6";
+
+      const header = document.createElement("header");
+      header.className = "mb-4 flex items-center justify-between";
+      const h2 = document.createElement("h2");
+      h2.className = "text-2xl font-bold text-main body-text";
+      h2.textContent = "Mode Duel";
+      const backBtn = document.createElement("button");
+      backBtn.type = "button";
+      backBtn.className = "btn-secondary border-2 rounded px-3 py-1 label-text";
+      backBtn.textContent = "Kembali";
+      backBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        renderHomeScreen();
+      });
+      header.appendChild(h2);
+      header.appendChild(backBtn);
+
+      const tabs = document.createElement("div");
+      tabs.className = "flex gap-2 mb-4";
+      const tabPlayer = document.createElement("button");
+      tabPlayer.type = "button";
+      tabPlayer.className = "btn-primary rounded px-3 py-1 label-text";
+      tabPlayer.textContent = "Duel Pemain";
+      const tabStory = document.createElement("button");
+      tabStory.type = "button";
+      tabStory.className = "btn-secondary border-2 rounded px-3 py-1 label-text";
+      tabStory.textContent = "Duel Story";
+
+      tabs.appendChild(tabPlayer);
+      tabs.appendChild(tabStory);
+
+      const content = document.createElement("div");
+      content.id = "duel-content";
+
+      inner.appendChild(header);
+      inner.appendChild(tabs);
+      inner.appendChild(content);
+      container.appendChild(inner);
+      main.appendChild(container);
+
+      function setActiveTab(name) {
+        if (name === "player") {
+          tabPlayer.className = "btn-primary rounded px-3 py-1 label-text";
+          tabStory.className = "btn-secondary border-2 rounded px-3 py-1 label-text";
+          renderDuelPlayer(content);
+        } else {
+          tabStory.className = "btn-primary rounded px-3 py-1 label-text";
+          tabPlayer.className = "btn-secondary border-2 rounded px-3 py-1 label-text";
+          renderDuelStory(content);
+        }
+        applyTheme(currentConfig);
+        applyTypography(currentConfig);
+      }
+
+      tabPlayer.addEventListener("click", (e) => { e.preventDefault(); setActiveTab("player"); });
+      tabStory.addEventListener("click", (e) => { e.preventDefault(); setActiveTab("story"); });
+
+      setActiveTab("player");
+      applyTheme(currentConfig);
+      applyTypography(currentConfig);
+    }
+
+    function findPokemonByCode(code) {
+      return allPokemonRecords.find(r => r.code.toUpperCase() === code.toUpperCase());
+    }
+
+    function renderDuelPlayer(container) {
+      container.innerHTML = "";
+      const wrapper = document.createElement("section");
+      wrapper.className = "surface-card rounded-lg p-4 shadow body-text";
+
+      const title = document.createElement("h3");
+      title.className = "font-semibold mb-3";
+      title.textContent = "Duel Pemain (Berdasarkan SPEED, jika sama → ATK)";
+
+      const form = document.createElement("form");
+      form.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
+      form.addEventListener("submit", (e) => e.preventDefault());
+
+      const p1Wrap = document.createElement("div");
+      const p1Label = document.createElement("label");
+      p1Label.className = "block mb-1 label-text";
+      p1Label.setAttribute("for", "duel-code-1");
+      p1Label.textContent = "Kode Pokemon 1";
+      const p1Input = document.createElement("input");
+      p1Input.id = "duel-code-1";
+      p1Input.type = "text";
+      p1Input.className = "w-full border rounded px-2 py-1 body-text";
+      p1Wrap.appendChild(p1Label);
+      p1Wrap.appendChild(p1Input);
+
+      const p2Wrap = document.createElement("div");
+      const p2Label = document.createElement("label");
+      p2Label.className = "block mb-1 label-text";
+      p2Label.setAttribute("for", "duel-code-2");
+      p2Label.textContent = "Kode Pokemon 2";
+      const p2Input = document.createElement("input");
+      p2Input.id = "duel-code-2";
+      p2Input.type = "text";
+      p2Input.className = "w-full border rounded px-2 py-1 body-text";
+      p2Wrap.appendChild(p2Label);
+      p2Wrap.appendChild(p2Input);
+
+      form.appendChild(p1Wrap);
+      form.appendChild(p2Wrap);
+
+      const fightBtn = document.createElement("button");
+      fightBtn.type = "button";
+      fightBtn.className = "btn-primary rounded px-4 py-2 mt-3 label-text";
+      fightBtn.textContent = "Mulai Duel";
+
+      const resultP = document.createElement("p");
+      resultP.className = "mt-3 caption-text";
+
+      fightBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const code1 = p1Input.value.trim();
+        const code2 = p2Input.value.trim();
+        if (!code1 || !code2) {
+          showToast("Masukkan kedua kode Pokemon.", "error");
+          return;
+        }
+        const p1 = findPokemonByCode(code1);
+        const p2 = findPokemonByCode(code2);
+        if (!p1 || !p2) {
+          showToast("Kode Pokemon tidak ditemukan di koleksi.", "error");
+          return;
+        }
+
+        if (p1.speed > p2.speed) {
+          resultP.textContent = `${p1.name} (${p1.code}) MENANG dengan SPEED ${p1.speed} melawan ${p2.speed}.`;
+        } else if (p2.speed > p1.speed) {
+          resultP.textContent = `${p2.name} (${p2.code}) MENANG dengan SPEED ${p2.speed} melawan ${p1.speed}.`;
+        } else {
+          // tie in speed -> compare atk
+          if (p1.atk > p2.atk) {
+            resultP.textContent = `${p1.name} (${p1.code}) MENANG (SPEED sama, ATK ${p1.atk} > ${p2.atk}).`;
+          } else if (p2.atk > p1.atk) {
+            resultP.textContent = `${p2.name} (${p2.code}) MENANG (SPEED sama, ATK ${p2.atk} > ${p1.atk}).`;
+          } else {
+            resultP.textContent = "Duel imbang! SPEED dan ATK sama.";
+          }
+        }
+      });
+
+      wrapper.appendChild(title);
+      wrapper.appendChild(form);
+      wrapper.appendChild(fightBtn);
+      wrapper.appendChild(resultP);
+
+      container.appendChild(wrapper);
+    }
+
+    function getEnemyRarityForStreak(streak) {
+      if (streak < 10) return "uncommon";
+      if (streak < 20) return "common";
+      if (streak < 30) return "rare";
+      if (streak < 40) return "legendary";
+      return "mythical";
+    }
+
+    function getRewardForStreak(streak) {
+      if (streak === 10) return "uncommon";
+      if (streak === 20) return "common";
+      if (streak === 30) return "rare";
+      if (streak === 40) return "legendary";
+      if (streak === 50) return "mythical";
+      return null;
+    }
+
+    function renderDuelStory(container) {
+      container.innerHTML = "";
+      const wrapper = document.createElement("section");
+      wrapper.className = "surface-card rounded-lg p-4 shadow body-text";
+
+      const title = document.createElement("h3");
+      title.className = "font-semibold mb-3";
+      title.textContent = "Duel Story";
+
+      const selectedInfo = document.createElement("p");
+      selectedInfo.className = "caption-text mb-2";
+      selectedInfo.textContent = "Pilih Pokemon dari koleksi sebagai petarungmu.";
+
+      const streakP = document.createElement("p");
+      streakP.className = "caption-text mb-3";
+      streakP.textContent = "Streak Menang: 0";
+
+      const chooseBtn = document.createElement("button");
+      chooseBtn.type = "button";
+      chooseBtn.className = "btn-secondary border-2 rounded px-3 py-1 label-text mr-2";
+      chooseBtn.textContent = "Pilih / Ganti Pokemon";
+
+      const fightBtn = document.createElement("button");
+      fightBtn.type = "button";
+      fightBtn.className = "btn-primary rounded px-3 py-1 label-text";
+      fightBtn.textContent = "Battle!";
+
+      const resultP = document.createElement("p");
+      resultP.className = "mt-3 caption-text";
+
+      wrapper.appendChild(title);
+      wrapper.appendChild(selectedInfo);
+      wrapper.appendChild(streakP);
+      wrapper.appendChild(chooseBtn);
+      wrapper.appendChild(fightBtn);
+      wrapper.appendChild(resultP);
+
+      container.appendChild(wrapper);
+
+      let currentFighter = null;
+      let currentStreak = 0;
+
+      function updateStreakDisplay() {
+        streakP.textContent = `Streak Menang: ${currentStreak}`;
+      }
+
+      function openSelectModal() {
+        if (!allPokemonRecords.length) {
+          showToast("Koleksi kosong. Menangkan Pokemon dari quiz dulu.", "info");
+          return;
+        }
+        const existing = document.getElementById("modal-overlay");
+        if (existing) existing.remove();
+
+        const overlay = document.createElement("div");
+        overlay.id = "modal-overlay";
+        overlay.className = "fixed inset-0 z-50 flex items-center justify-center p-4";
+        overlay.style.backgroundColor = "rgba(0,0,0,0.8)";
+
+        const dialog = document.createElement("div");
+        dialog.className = "surface-card rounded-lg p-6 max-w-2xl w-full shadow-lg body-text";
+        dialog.setAttribute("role", "dialog");
+        dialog.setAttribute("aria-modal", "true");
+
+        const h = document.createElement("h3");
+        h.className = "text-xl font-bold mb-3 text-main";
+        h.textContent = "Pilih Pokemon";
+
+        const grid = document.createElement("div");
+        grid.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[70%] overflow-y-auto";
+
+        allPokemonRecords.forEach(rec => {
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = "pokemon-card surface-card rounded-lg p-3 shadow flex flex-col items-center text-left focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500";
+          card.style.border = `2px solid ${rarityColors[rec.rarity] || "#9ca3af"}`;
+          
+          // Pokemon image
+          if (rec.sprite) {
+            const img = document.createElement("img");
+            img.src = rec.sprite;
+            img.alt = rec.name;
+            img.className = "w-16 h-16 object-contain mb-2";
+            img.onerror = function() {
+              this.style.display = 'none';
+            };
+            card.appendChild(img);
+          }
+          
+          const name = document.createElement("p");
+          name.className = "font-semibold text-main body-text mb-1 capitalize text-center";
+          name.textContent = rec.name;
+          const code = document.createElement("p");
+          code.className = "caption-text text-main mb-1 text-center";
+          code.textContent = rec.code;
+          const stats = document.createElement("p");
+          stats.className = "caption-text text-main text-center";
+          stats.textContent = `HP: ${rec.hp} | ATK: ${rec.atk} | SPD: ${rec.speed}`;
+          card.appendChild(name);
+          card.appendChild(code);
+          card.appendChild(stats);
+          card.addEventListener("click", (e) => {
+            e.preventDefault();
+            currentFighter = rec;
+            selectedInfo.textContent = `Pokemon Terpilih: ${rec.name} (${rec.code})`;
+            overlay.remove();
+          });
+          grid.appendChild(card);
+        });
+
+        const closeRow = document.createElement("div");
+        closeRow.className = "flex justify-end mt-3";
+        const closeBtn = document.createElement("button");
+        closeBtn.type = "button";
+        closeBtn.className = "btn-secondary border-2 rounded px-3 py-1 label-text";
+        closeBtn.textContent = "Tutup";
+        closeBtn.addEventListener("click", (e) => { e.preventDefault(); overlay.remove(); });
+        closeRow.appendChild(closeBtn);
+
+        dialog.appendChild(h);
+        dialog.appendChild(grid);
+        dialog.appendChild(closeRow);
+
+        overlay.appendChild(dialog);
+        overlay.addEventListener("click", (e) => {
+          if (e.target === overlay) overlay.remove();
+        });
+
+        document.body.appendChild(overlay);
+        applyTheme(currentConfig);
+        applyTypography(currentConfig);
+      }
+
+      chooseBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        openSelectModal();
+      });
+
+      fightBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        if (!currentFighter) {
+          showToast("Pilih Pokemon terlebih dahulu.", "error");
+          return;
+        }
+
+        // Determine enemy rarity by streak
+        const enemyRarity = getEnemyRarityForStreak(currentStreak);
+        const enemy = await fetchRandomPokemon(enemyRarity);
+
+        // Compare SPEED then ATK
+        let resultText = "";
+        if (currentFighter.speed > enemy.speed) {
+          resultText = `Kamu MENANG! ${currentFighter.name} (SPD ${currentFighter.speed}) mengalahkan ${enemy.name} (SPD ${enemy.speed}).`;
+          currentStreak += 1;
+
+          const rewardRarity = getRewardForStreak(currentStreak);
+          if (rewardRarity) {
+            await handleCapturePokemon(rewardRarity);
+            showToast(`Hadiah streak ${currentStreak}: Pokemon ${rewardRarity}!`, "success");
+          } else {
+            showToast("Kamu menang! Lanjutkan streak untuk hadiah.", "success");
+          }
+        } else if (enemy.speed > currentFighter.speed) {
+          resultText = `Kamu KALAH. ${enemy.name} (SPD ${enemy.speed}) mengalahkan ${currentFighter.name} (SPD ${currentFighter.speed}). Streak direset.`;
+          currentStreak = 0;
+          showToast("Streak berakhir. Coba lagi!", "error");
+        } else {
+          // speed same -> atk
+          if (currentFighter.atk > enemy.atk) {
+            resultText = `Kamu MENANG tipis! SPEED sama, tetapi ATK ${currentFighter.atk} > ${enemy.atk}.`;
+            currentStreak += 1;
+          } else if (enemy.atk > currentFighter.atk) {
+            resultText = `Kamu KALAH tipis. SPEED sama, tetapi ATK musuh ${enemy.atk} > ${currentFighter.atk}.`;
+            currentStreak = 0;
+          } else {
+            resultText = "Seri! SPEED dan ATK sama.";
+          }
+        }
+
+        resultP.textContent = resultText;
+        updateStreakDisplay();
+      });
+
+      updateStreakDisplay();
+    }
+
+    // -------- BACKUP / RESTORE (TEXT + QR + XLSX) --------
+    function openBackupScreen() {
+      const main = domRefs.mainWrapper;
+      if (!main) return;
+      main.innerHTML = "";
+
+      const container = document.createElement("main");
+      container.className = "flex-1 w-full flex flex-col items-center";
+      container.setAttribute("role", "main");
+
+      const inner = document.createElement("div");
+      inner.className = "max-w-4xl w-full mx-auto px-4 py-6";
+
+      const header = document.createElement("header");
+      header.className = "mb-4 flex items-center justify-between";
+      const h2 = document.createElement("h2");
+      h2.className = "text-2xl font-bold text-main body-text";
+      h2.textContent = "Backup & Restore";
+      const backBtn = document.createElement("button");
+      backBtn.type = "button";
+      backBtn.className = "btn-secondary border-2 rounded px-3 py-1 label-text";
+      backBtn.textContent = "Kembali";
+      backBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        renderHomeScreen();
+      });
+      header.appendChild(h2);
+      header.appendChild(backBtn);
+
+      const section = document.createElement("section");
+      section.className = "surface-card rounded-lg p-4 shadow body-text";
+
+      const desc = document.createElement("p");
+      desc.className = "mb-3 caption-text";
+      desc.textContent = "Backup mencakup koleksi Pokemon, statistik quiz, dan pengaturan.";
+
+      // Text backup area
+      const textAreaLabel = document.createElement("label");
+      textAreaLabel.className = "block mb-1 label-text";
+      textAreaLabel.setAttribute("for", "backup-text");
+      textAreaLabel.textContent = "Data Backup (teks terkompresi)";
+
+      const textArea = document.createElement("textarea");
+      textArea.id = "backup-text";
+      textArea.className = "w-full border rounded px-2 py-1 h-32 body-text mb-2";
+      textArea.setAttribute("aria-label", "Data backup teks");
+
+      const btnRow = document.createElement("div");
+      btnRow.className = "flex flex-wrap gap-2 mb-3";
+
+      const btnGenerate = document.createElement("button");
+      btnGenerate.type = "button";
+      btnGenerate.className = "btn-primary rounded px-3 py-1 label-text";
+      btnGenerate.textContent = "Generate Backup";
+
+      const btnRestore = document.createElement("button");
+      btnRestore.type = "button";
+      btnRestore.className = "btn-secondary border-2 rounded px-3 py-1 label-text";
+      btnRestore.textContent = "Restore dari Teks";
+
+      const btnXlsx = document.createElement("button");
+      btnXlsx.type = "button";
+      btnXlsx.className = "btn-secondary border-2 rounded px-3 py-1 label-text";
+      btnXlsx.textContent = "Export Koleksi ke XLSX";
+
+      btnRow.appendChild(btnGenerate);
+      btnRow.appendChild(btnRestore);
+      btnRow.appendChild(btnXlsx);
+
+      // QR generate
+      const qrTitle = document.createElement("p");
+      qrTitle.className = "font-semibold mt-2 mb-1 label-text";
+      qrTitle.textContent = "QR Backup";
+      const qrContainer = document.createElement("div");
+      qrContainer.id = "backup-qr";
+      qrContainer.className = "border rounded p-2 inline-block";
+
+      // QR scan
+      const scanTitle = document.createElement("p");
+      scanTitle.className = "font-semibold mt-4 mb-1 label-text";
+      scanTitle.textContent = "Scan QR untuk Restore";
+      const scanContainer = document.createElement("div");
+      scanContainer.id = "qr-reader";
+      scanContainer.className = "border rounded p-2";
+      const scanResultP = document.createElement("p");
+      scanResultP.className = "caption-text mt-1";
+
+      section.appendChild(desc);
+      section.appendChild(textAreaLabel);
+      section.appendChild(textArea);
+      section.appendChild(btnRow);
+      section.appendChild(qrTitle);
+      section.appendChild(qrContainer);
+      section.appendChild(scanTitle);
+      section.appendChild(scanContainer);
+      section.appendChild(scanResultP);
+
+      inner.appendChild(header);
+      inner.appendChild(section);
+      container.appendChild(inner);
+      main.appendChild(container);
+
+      // Load last backup if exist
+      try {
+        const savedBackup = window.localStorage.getItem(LS_KEYS.BACKUP_TEXT);
+        if (savedBackup) textArea.value = savedBackup;
+      } catch(e){}
+
+      function buildBackupObject() {
+        return {
+          stats: appStats,
+          settings: appSettings,
+          pokemon: allPokemonRecords
+        };
+      }
+
+      function applyBackupObject(obj) {
+        if (obj.stats) {
+          appStats = { ...defaultStats, ...obj.stats };
+          saveLocalStats();
+        }
+        if (obj.settings) {
+          appSettings = { ...defaultSettings, ...obj.settings };
+          saveLocalSettings();
+        }
+        if (obj.pokemon && useLocalStorageMode) {
+          // Only restore pokemon in localStorage mode
+          allPokemonRecords = obj.pokemon;
+          savePokemonToLocalStorage();
+        }
+        showToast("Backup berhasil diterapkan!", "success");
+        updateStatsText();
+        updateCollectionUI();
+      }
+
+      btnGenerate.addEventListener("click", (e) => {
+        e.preventDefault();
+        const obj = buildBackupObject();
+        const json = JSON.stringify(obj);
+        const compressed = LZString.compressToEncodedURIComponent(json);
+        textArea.value = compressed;
+        try {
+          window.localStorage.setItem(LS_KEYS.BACKUP_TEXT, compressed);
+        } catch(e){}
+        // Generate QR
+        qrContainer.innerHTML = "";
+        new QRCode(qrContainer, {
+          text: compressed,
+          width: 160,
+          height: 160
+        });
+        showToast("Backup teks dan QR berhasil dibuat.", "success");
+      });
+
+      btnRestore.addEventListener("click", (e) => {
+        e.preventDefault();
+        const text = textArea.value.trim();
+        if (!text) {
+          showToast("Masukkan data backup terlebih dahulu.", "error");
+          return;
+        }
+        try {
+          const json = LZString.decompressFromEncodedURIComponent(text);
+          const obj = JSON.parse(json);
+          applyBackupObject(obj);
+          showToast("Restore dari teks berhasil.", "success");
+        } catch(err) {
+          showToast("Format backup tidak valid.", "error");
+        }
+      });
+
+      btnXlsx.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!allPokemonRecords.length) {
+          showToast("Koleksi kosong, tidak ada yang diexport.", "info");
+          return;
+        }
+        const wsData = [
+          ["Code", "Name", "Rarity", "HP", "ATK", "SPD", "Captured At"]
+        ];
+        allPokemonRecords.forEach(r => {
+          wsData.push([r.code, r.name, r.rarity, r.hp, r.atk, r.speed, r.captured_at]);
+        });
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Pokemon");
+        XLSX.writeFile(wb, "pokemon_collection.xlsx");
+      });
+
+      // Initialize QR reader
+      if (window.Html5Qrcode) {
+        const html5QrCode = new Html5Qrcode("qr-reader");
+        Html5Qrcode.getCameras().then(devices => {
+          if (devices && devices.length) {
+            const cameraId = devices[0].id;
+            html5QrCode.start(
+              cameraId,
+              { fps: 10, qrbox: 200 },
+              (decodedText, decodedResult) => {
+                scanResultP.textContent = "QR terbaca, mencoba restore...";
+                try {
+                  const json = LZString.decompressFromEncodedURIComponent(decodedText);
+                  const obj = JSON.parse(json);
+                  applyBackupObject(obj);
+                  showToast("Restore dari QR berhasil.", "success");
+                } catch(err) {
+                  showToast("QR tidak berisi backup yang valid.", "error");
+                }
+              },
+              (errorMsg) => {
+                // ignore scanning errors
+              }
+            ).catch(err => {
+              scanResultP.textContent = "Tidak dapat mengakses kamera.";
+            });
+          } else {
+            scanResultP.textContent = "Kamera tidak tersedia.";
+          }
+        }).catch(err => {
+          scanResultP.textContent = "Gagal menginisialisasi kamera.";
+        });
+      } else {
+        scanResultP.textContent = "html5-qrcode tidak tersedia.";
+      }
+
+      applyTheme(currentConfig);
+      applyTypography(currentConfig);
+    }
+
+    // -------- SETTINGS --------
+    function openSettingsScreen() {
+      const main = domRefs.mainWrapper;
+      if (!main) return;
+      main.innerHTML = "";
+
+      const container = document.createElement("main");
+      container.className = "flex-1 w-full flex flex-col items-center";
+      container.setAttribute("role", "main");
+
+      const inner = document.createElement("div");
+      inner.className = "max-w-4xl w-full mx-auto px-4 py-6";
+
+      const header = document.createElement("header");
+      header.className = "mb-4 flex items-center justify-between";
+      const h2 = document.createElement("h2");
+      h2.className = "text-2xl font-bold text-main body-text";
+      h2.textContent = "Settings";
+      const backBtn = document.createElement("button");
+      backBtn.type = "button";
+      backBtn.className = "btn-secondary border-2 rounded px-3 py-1 label-text";
+      backBtn.textContent = "Kembali";
+      backBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        renderHomeScreen();
+      });
+      header.appendChild(h2);
+      header.appendChild(backBtn);
+
+      const section = document.createElement("section");
+      section.className = "surface-card rounded-lg p-4 shadow body-text";
+
+      const modeInfo = document.createElement("p");
+      modeInfo.className = "mb-3 caption-text";
+      modeInfo.textContent = useLocalStorageMode ? "Mode: Browser (localStorage)" : "Mode: Canva (Canva Sheet)";
+
+      const offlineWrap = document.createElement("div");
+      offlineWrap.className = "flex items-center mb-3";
+      const offlineLabel = document.createElement("label");
+      offlineLabel.className = "label-text ml-2";
+      offlineLabel.setAttribute("for", "offline-mode");
+      offlineLabel.textContent = "Offline Mode (gunakan Pokemon dummy tanpa PokeAPI)";
+      const offlineInput = document.createElement("input");
+      offlineInput.id = "offline-mode";
+      offlineInput.type = "checkbox";
+      offlineInput.checked = !!appSettings.offlineMode;
+      offlineInput.addEventListener("change", () => {
+        appSettings.offlineMode = !!offlineInput.checked;
+        saveLocalSettings();
+        showToast("Pengaturan offline disimpan.", "success");
+      });
+
+      offlineWrap.appendChild(offlineInput);
+      offlineWrap.appendChild(offlineLabel);
+
+      const resetBtn = document.createElement("button");
+      resetBtn.type = "button";
+      resetBtn.className = "btn-secondary border-2 rounded px-3 py-1 label-text mt-2";
+      resetBtn.textContent = "Reset Statistik & Pengaturan";
+      const resetInfo = document.createElement("p");
+      resetInfo.className = "caption-text mt-1";
+      resetInfo.textContent = "Reset tidak menghapus koleksi Pokemon.";
+
+      let resetConfirm = false;
+      resetBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!resetConfirm) {
+          resetConfirm = true;
+          resetBtn.textContent = "Klik sekali lagi untuk konfirmasi";
+          setTimeout(() => {
+            resetConfirm = false;
+            resetBtn.textContent = "Reset Statistik & Pengaturan";
+          }, 2500);
+          return;
+        }
+        appStats = { ...defaultStats };
+        appSettings = { ...defaultSettings };
+        saveLocalStats();
+        saveLocalSettings();
+        offlineInput.checked = appSettings.offlineMode;
+        updateStatsText();
+        showToast("Statistik dan pengaturan berhasil direset.", "success");
+        resetConfirm = false;
+        resetBtn.textContent = "Reset Statistik & Pengaturan";
+      });
+
+      section.appendChild(modeInfo);
+      section.appendChild(offlineWrap);
+      section.appendChild(resetBtn);
+      section.appendChild(resetInfo);
+
+      inner.appendChild(header);
+      inner.appendChild(section);
+      container.appendChild(inner);
+      main.appendChild(container);
+
+      applyTheme(currentConfig);
+      applyTypography(currentConfig);
+    }
+
+    // -------- ELEMENT SDK INIT --------
+    function initElementSdk() {
+      if (!window.elementSdk) {
+        // Render with default config when SDK not available
+        currentConfig = { ...defaultConfig };
+        loadLocalStats();
+        loadLocalSettings();
+        createBaseLayout();
+        return;
+      }
+
       window.elementSdk.init({
         defaultConfig,
-        onConfigChange,
-        mapToCapabilities: (config) => ({
-          recolorables: [
-            {
-              get: () => config.primary_color || defaultConfig.primary_color,
-              set: (value) => {
-                config.primary_color = value;
-                window.elementSdk.setConfig({ primary_color: value });
+        onConfigChange: async (config) => {
+          currentConfig = { ...defaultConfig, ...config };
+          // If app not yet rendered, do it now
+          if (!domRefs.root) {
+            loadLocalStats();
+            loadLocalSettings();
+            await initDataSdk();
+            createBaseLayout();
+          } else {
+            // Update texts
+            const titleEl = document.getElementById("app-title");
+            if (titleEl) {
+              titleEl.textContent = currentConfig.game_title || defaultConfig.game_title;
+            }
+            const subtitleEl = document.getElementById("app-subtitle");
+            if (subtitleEl) {
+              subtitleEl.textContent = currentConfig.welcome_message || defaultConfig.welcome_message;
+            }
+            const menuMap = {
+              quiz: "menu_quiz",
+              collection: "menu_collection",
+              duel: "menu_duel",
+              backup: "menu_backup"
+            };
+            Object.keys(menuMap).forEach(key => {
+              const labelEl = domRefs.menuLabels[key];
+              if (labelEl) {
+                const cfgKey = menuMap[key];
+                labelEl.textContent = currentConfig[cfgKey] || defaultConfig[cfgKey];
               }
-            },
+            });
+          }
+
+          applyTheme(currentConfig);
+          applyTypography(currentConfig);
+        },
+        mapToCapabilities: (config) => {
+          const recolorables = [
             {
-              get: () => config.secondary_color || defaultConfig.secondary_color,
+              get: () => window.elementSdk.config.background_color || defaultConfig.background_color,
               set: (value) => {
-                config.secondary_color = value;
-                window.elementSdk.setConfig({ secondary_color: value });
-              }
-            },
-            {
-              get: () => config.text_color || defaultConfig.text_color,
-              set: (value) => {
-                config.text_color = value;
-                window.elementSdk.setConfig({ text_color: value });
-              }
-            },
-            {
-              get: () => config.background_color || defaultConfig.background_color,
-              set: (value) => {
-                config.background_color = value;
                 window.elementSdk.setConfig({ background_color: value });
               }
             },
             {
-              get: () => config.surface_color || defaultConfig.surface_color,
+              get: () => window.elementSdk.config.surface_color || defaultConfig.surface_color,
               set: (value) => {
-                config.surface_color = value;
                 window.elementSdk.setConfig({ surface_color: value });
               }
+            },
+            {
+              get: () => window.elementSdk.config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => window.elementSdk.config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => window.elementSdk.config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
             }
-          ],
-          borderables: [],
-          fontEditable: undefined,
-          fontSizeable: undefined
-        }),
-        mapToEditPanelValues: (config) => new Map([
-          ["game_title", config.game_title || defaultConfig.game_title],
-          ["welcome_message", config.welcome_message || defaultConfig.welcome_message],
-          ["menu_quiz", config.menu_quiz || defaultConfig.menu_quiz],
-          ["menu_collection", config.menu_collection || defaultConfig.menu_collection],
-          ["menu_duel", config.menu_duel || defaultConfig.menu_duel],
-          ["menu_backup", config.menu_backup || defaultConfig.menu_backup]
-        ])
+          ];
+
+          const fontEditable = {
+            get: () => window.elementSdk.config.font_family || "system-ui",
+            set: (value) => {
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          };
+
+          const fontSizeable = {
+            get: () => window.elementSdk.config.font_size || 16,
+            set: (value) => {
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          };
+
+          return {
+            recolorables,
+            borderables: [],
+            fontEditable,
+            fontSizeable
+          };
+        },
+        mapToEditPanelValues: (config) => {
+          const cfg = { ...defaultConfig, ...config };
+          return new Map([
+            ["game_title", cfg.game_title],
+            ["welcome_message", cfg.welcome_message],
+            ["menu_quiz", cfg.menu_quiz],
+            ["menu_collection", cfg.menu_collection],
+            ["menu_duel", cfg.menu_duel],
+            ["menu_backup", cfg.menu_backup]
+          ]);
+        }
       });
     }
 
-    init();
+    // -------- APP INIT --------
+    (async function initApp() {
+      loadLocalStats();
+      loadLocalSettings();
+      
+      // Initialize Element SDK first
+      initElementSdk();
+      
+      // Try to initialize Data SDK (will fallback to localStorage if not available)
+      await initDataSdk();
+      
+      // Create layout if not already done by Element SDK
+      if (!domRefs.root) {
+        createBaseLayout();
+      }
+    })();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0805fef474a3d9',t:'MTc2MzQ3NDczNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d5d451135fe18',t:'MTc2MzUzMDczNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
