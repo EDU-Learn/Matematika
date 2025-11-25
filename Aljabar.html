@@ -1,1 +1,820 @@
-aljabar
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <title>Kuis Aljabar Kelas 7</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    .app-wrapper {
+      width: 100%;
+      height: 100%;
+    }
+    .focus-ring:focus-visible {
+      outline: 3px solid rgba(139, 92, 246, 0.5);
+      outline-offset: 2px;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+      50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.6); }
+    }
+    
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    .level-badge {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .score-display {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+    }
+    
+    .streak-display {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body>
+  <div id="app" class="app-wrapper overflow-y-auto">
+   <div class="w-full max-w-3xl mx-auto px-4 py-8 min-h-full"><!-- Header -->
+    <header class="text-center mb-8">
+     <div class="float-animation inline-block mb-3">
+      <div class="text-6xl">
+       🎓
+      </div>
+     </div>
+     <h1 id="main-title" class="text-4xl font-bold mb-2">Petualangan Aljabar</h1>
+     <p id="subtitle-text" class="text-lg opacity-90">Selesaikan soal dan naik level secara otomatis!</p>
+    </header><!-- Stats Cards -->
+    <section class="grid grid-cols-3 gap-4 mb-6">
+     <div class="score-display rounded-2xl p-4 text-center text-white">
+      <div class="text-sm font-medium opacity-90 mb-1">
+       Skor
+      </div>
+      <div id="score-display" class="text-3xl font-bold">
+       0
+      </div>
+     </div>
+     <div class="level-badge rounded-2xl p-4 text-center text-white">
+      <div class="text-sm font-medium opacity-90 mb-1">
+       Level
+      </div>
+      <div id="level-display" class="text-3xl font-bold">
+       1
+      </div>
+     </div>
+     <div class="streak-display rounded-2xl p-4 text-center text-white">
+      <div class="text-sm font-medium opacity-90 mb-1">
+       Streak
+      </div>
+      <div id="streak-display" class="text-3xl font-bold">
+       0
+      </div>
+     </div>
+    </section><!-- Progress Bar -->
+    <section class="mb-6">
+     <div class="flex justify-between items-center mb-2"><span id="current-topic" class="text-sm font-semibold">Penjumlahan</span> <span id="difficulty-label" class="text-sm font-semibold px-3 py-1 rounded-full">Mudah</span>
+     </div>
+     <div class="w-full h-3 rounded-full overflow-hidden">
+      <div id="progress-bar" class="h-full transition-all duration-500 rounded-full" style="width: 0%;"></div>
+     </div>
+     <div class="text-xs text-center mt-1 opacity-75"><span id="progress-text">Skor 0 / 30 untuk level berikutnya</span>
+     </div>
+    </section><!-- Question Card -->
+    <main class="rounded-3xl shadow-2xl p-8 mb-6">
+     <div class="text-center mb-6">
+      <div id="question-icon" class="text-5xl mb-4">
+       🤔
+      </div>
+      <h2 class="text-xl font-semibold mb-4">Soal</h2>
+      <p id="question-text" class="text-2xl font-bold mb-2">Tekan tombol untuk memulai petualangan!</p>
+     </div><!-- Answer Form -->
+     <form id="answer-form" class="space-y-4" autocomplete="off">
+      <div><label for="answer-input" class="block text-sm font-medium mb-2"> Jawaban Kamu </label> <input id="answer-input" name="answer-input" type="text" class="w-full text-center text-2xl font-bold rounded-2xl border-2 px-6 py-4 focus-ring transition-all" placeholder="Tulis jawabanmu...">
+      </div>
+      <div class="flex gap-3"><button id="check-button" type="submit" class="flex-1 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all focus-ring"> ✓ Cek Jawaban </button> <button id="next-button" type="button" class="flex-1 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all focus-ring"> → Soal Berikutnya </button>
+      </div>
+     </form><!-- Feedback -->
+     <div id="feedback-area" class="mt-6 p-4 rounded-2xl text-center font-medium hidden">
+      <p id="feedback-text" class="text-lg"></p>
+      <p id="points-earned" class="text-2xl font-bold mt-2"></p>
+     </div>
+    </main><!-- Topic Selection -->
+    <section id="topic-selection" class="rounded-2xl p-6 mb-6">
+     <h3 class="font-bold text-lg mb-4 text-center">Pilih Fokus Materi</h3>
+     <div class="grid grid-cols-2 gap-3 mb-4"><button type="button" class="topic-select-btn focus-ring p-4 rounded-xl font-semibold transition-all border-2" data-topic="all"> 🎯 Semua Materi </button> <button type="button" class="topic-select-btn focus-ring p-4 rounded-xl font-semibold transition-all border-2" data-topic="addition"> ➕ Penjumlahan </button> <button type="button" class="topic-select-btn focus-ring p-4 rounded-xl font-semibold transition-all border-2" data-topic="subtraction"> ➖ Pengurangan </button> <button type="button" class="topic-select-btn focus-ring p-4 rounded-xl font-semibold transition-all border-2" data-topic="multiplication"> ✖️ Perkalian </button> <button type="button" class="topic-select-btn focus-ring p-4 rounded-xl font-semibold transition-all border-2" data-topic="division"> ➗ Pembagian </button> <button type="button" class="topic-select-btn focus-ring p-4 rounded-xl font-semibold transition-all border-2" data-topic="mixed"> 🎲 Soal Campuran </button>
+     </div>
+    </section><!-- Start/Reset Button -->
+    <div class="text-center mb-6"><button id="start-button" type="button" class="pulse-glow px-12 py-5 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all focus-ring"> 🚀 Mulai Petualangan </button>
+    </div><!-- Info Panel -->
+    <aside class="rounded-2xl p-6 mb-6">
+     <h3 class="font-bold text-lg mb-3 flex items-center gap-2"><span>📊</span> <span>Sistem Level</span></h3>
+     <div class="space-y-2 text-sm">
+      <div class="flex justify-between items-center p-3 rounded-xl"><span class="font-medium">Level 1-2: Mudah</span> <span class="opacity-75">0-60 poin</span>
+      </div>
+      <div class="flex justify-between items-center p-3 rounded-xl"><span class="font-medium">Level 3-4: Sedang</span> <span class="opacity-75">60-140 poin</span>
+      </div>
+      <div class="flex justify-between items-center p-3 rounded-xl"><span class="font-medium">Level 5+: Sulit</span> <span class="opacity-75">140+ poin</span>
+      </div>
+     </div>
+     <div class="mt-4 p-3 rounded-xl text-sm">
+      <p class="opacity-90">💡 <strong>Tips:</strong> Jawaban benar berturut-turut akan meningkatkan streak dan bonus poin!</p>
+     </div>
+    </aside><!-- Example Questions -->
+    <aside class="rounded-2xl p-6 mb-6">
+     <h3 class="font-bold text-lg mb-3 flex items-center gap-2"><span>📝</span> <span>Contoh Soal yang Muncul</span></h3>
+     <div class="space-y-4 text-sm">
+      <div>
+       <h4 class="font-semibold mb-2 flex items-center gap-2"><span>➕</span> <span>Penjumlahan</span></h4>
+       <ul class="space-y-1 opacity-90 ml-6">
+        <li>• Mudah: 3x + 2x = ?</li>
+        <li>• Sedang: (2x + 3y) + (4x + y) = ?</li>
+        <li>• Sulit: (5x - 2x + 3) + (2x - 4) = ?</li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-semibold mb-2 flex items-center gap-2"><span>➖</span> <span>Pengurangan</span></h4>
+       <ul class="space-y-1 opacity-90 ml-6">
+        <li>• Mudah: 7x - 3x = ?</li>
+        <li>• Sedang: (5x + 4y) - (2x + 3y) = ?</li>
+        <li>• Sulit: (8x + 2) - (3x - 4) = ?</li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-semibold mb-2 flex items-center gap-2"><span>✖️</span> <span>Perkalian</span></h4>
+       <ul class="space-y-1 opacity-90 ml-6">
+        <li>• Mudah: 5 × x = ?</li>
+        <li>• Sedang: 3 × (4x) = ?</li>
+        <li>• Sulit: (x+2)(x+3) = ?</li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-semibold mb-2 flex items-center gap-2"><span>➗</span> <span>Pembagian</span></h4>
+       <ul class="space-y-1 opacity-90 ml-6">
+        <li>• Mudah: 6x ÷ 6 = ?</li>
+        <li>�� Sedang: 12x ÷ 3 = ?</li>
+        <li>• Sulit: 7x² ÷ x = ?</li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-semibold mb-2 flex items-center gap-2"><span>🎲</span> <span>Soal Campuran</span></h4>
+       <ul class="space-y-1 opacity-90 ml-6">
+        <li>• Mudah: 2x + 3x - x = ?</li>
+        <li>• Sedang: 2(3x) + 4x = ?</li>
+        <li>• Sulit: (x+1)(x+2) - x = ?</li>
+       </ul>
+      </div>
+     </div>
+     <div class="mt-4 p-3 rounded-xl text-xs opacity-75">
+      <p><strong>Format Jawaban:</strong></p>
+      <p>• Untuk x saja, tulis: x</p>
+      <p>• Untuk 3x + 2y, tulis: 3x+2y</p>
+      <p>• Untuk 5x - 3, tulis: 5x-3</p>
+      <p>• Untuk x², tulis: x^2</p>
+      <p>• Untuk x² + 3x + 2, tulis: x^2+3x+2</p>
+     </div>
+    </aside>
+    <footer class="text-center text-sm opacity-60"><span id="footer-text">Kuis Aljabar Kelas 7 - Belajar Sambil Bermain</span>
+    </footer>
+   </div>
+  </div>
+  <script>
+    // ===== CONFIG & SDK =====
+    const defaultConfig = {
+      main_title: "Petualangan Aljabar",
+      subtitle: "Selesaikan soal dan naik level secara otomatis!",
+      start_button_text: "🚀 Mulai Petualangan",
+      check_button_text: "✓ Cek Jawaban",
+      next_button_text: "→ Soal Berikutnya",
+      footer_text: "Kuis Aljabar Kelas 7 - Belajar Sambil Bermain",
+      
+      background_color: "#0f0f23",
+      card_color: "#1a1a2e",
+      text_color: "#e0e0e0",
+      primary_color: "#8b5cf6",
+      accent_color: "#ec4899",
+      
+      font_family: "system-ui",
+      font_size: 16
+    };
+
+    function applyConfigToUI(config) {
+      const cfg = { ...defaultConfig, ...config };
+      
+      // Background
+      document.getElementById("app").style.backgroundColor = cfg.background_color;
+      
+      // Cards
+      document.querySelector("main").style.backgroundColor = cfg.card_color;
+      const asides = document.querySelectorAll("aside");
+      asides.forEach(aside => aside.style.backgroundColor = cfg.card_color);
+      document.getElementById("topic-selection").style.backgroundColor = cfg.card_color;
+      
+      // Text colors
+      document.body.style.color = cfg.text_color;
+      
+      // Primary button
+      const startBtn = document.getElementById("start-button");
+      startBtn.style.backgroundColor = cfg.primary_color;
+      startBtn.style.color = "#ffffff";
+      
+      const checkBtn = document.getElementById("check-button");
+      checkBtn.style.backgroundColor = cfg.primary_color;
+      checkBtn.style.color = "#ffffff";
+      
+      // Accent button
+      const nextBtn = document.getElementById("next-button");
+      nextBtn.style.backgroundColor = cfg.accent_color;
+      nextBtn.style.color = "#ffffff";
+      
+      // Progress bar
+      document.getElementById("progress-bar").style.backgroundColor = cfg.primary_color;
+      
+      // Input
+      const input = document.getElementById("answer-input");
+      input.style.backgroundColor = cfg.card_color;
+      input.style.color = cfg.text_color;
+      input.style.borderColor = cfg.primary_color;
+      
+      // Difficulty label
+      const diffLabel = document.getElementById("difficulty-label");
+      diffLabel.style.backgroundColor = cfg.primary_color;
+      diffLabel.style.color = "#ffffff";
+      
+      // Font
+      const baseFont = `${cfg.font_family}, system-ui, sans-serif`;
+      const baseSize = Number(cfg.font_size) || 16;
+      
+      document.body.style.fontFamily = baseFont;
+      document.body.style.fontSize = `${baseSize}px`;
+      
+      document.getElementById("main-title").style.fontSize = `${baseSize * 2}px`;
+      document.getElementById("subtitle-text").style.fontSize = `${baseSize * 1.1}px`;
+      document.getElementById("question-text").style.fontSize = `${baseSize * 1.5}px`;
+      
+      // Text content
+      document.getElementById("main-title").textContent = cfg.main_title;
+      document.getElementById("subtitle-text").textContent = cfg.subtitle;
+      document.getElementById("start-button").textContent = cfg.start_button_text;
+      document.getElementById("check-button").textContent = cfg.check_button_text;
+      document.getElementById("next-button").textContent = cfg.next_button_text;
+      document.getElementById("footer-text").textContent = cfg.footer_text;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          applyConfigToUI(config);
+        },
+        mapToCapabilities: (config) => {
+          const cfg = { ...defaultConfig, ...config };
+          return {
+            recolorables: [
+              {
+                get: () => cfg.background_color,
+                set: (v) => {
+                  cfg.background_color = v;
+                  window.elementSdk.setConfig({ background_color: v });
+                }
+              },
+              {
+                get: () => cfg.card_color,
+                set: (v) => {
+                  cfg.card_color = v;
+                  window.elementSdk.setConfig({ card_color: v });
+                }
+              },
+              {
+                get: () => cfg.text_color,
+                set: (v) => {
+                  cfg.text_color = v;
+                  window.elementSdk.setConfig({ text_color: v });
+                }
+              },
+              {
+                get: () => cfg.primary_color,
+                set: (v) => {
+                  cfg.primary_color = v;
+                  window.elementSdk.setConfig({ primary_color: v });
+                }
+              },
+              {
+                get: () => cfg.accent_color,
+                set: (v) => {
+                  cfg.accent_color = v;
+                  window.elementSdk.setConfig({ accent_color: v });
+                }
+              }
+            ],
+            borderables: [],
+            fontEditable: {
+              get: () => cfg.font_family,
+              set: (v) => {
+                cfg.font_family = v;
+                window.elementSdk.setConfig({ font_family: v });
+              }
+            },
+            fontSizeable: {
+              get: () => cfg.font_size,
+              set: (v) => {
+                cfg.font_size = v;
+                window.elementSdk.setConfig({ font_size: v });
+              }
+            }
+          };
+        },
+        mapToEditPanelValues: (config) => {
+          const cfg = { ...defaultConfig, ...config };
+          return new Map([
+            ["main_title", cfg.main_title],
+            ["subtitle", cfg.subtitle],
+            ["start_button_text", cfg.start_button_text],
+            ["check_button_text", cfg.check_button_text],
+            ["next_button_text", cfg.next_button_text],
+            ["footer_text", cfg.footer_text]
+          ]);
+        }
+      });
+      applyConfigToUI(window.elementSdk.config || defaultConfig);
+    } else {
+      applyConfigToUI(defaultConfig);
+    }
+
+    // ===== GAME LOGIC =====
+    const topics = ["addition", "subtraction", "multiplication", "division", "mixed"];
+    const topicNames = {
+      addition: "Penjumlahan",
+      subtraction: "Pengurangan",
+      multiplication: "Perkalian",
+      division: "Pembagian",
+      mixed: "Soal Campuran"
+    };
+
+    let score = 0;
+    let level = 1;
+    let streak = 0;
+    let currentTopic = "addition";
+    let currentDifficulty = "easy";
+    let currentQuestion = null;
+    let topicIndex = 0;
+    let selectedTopicMode = "all"; // "all" or specific topic
+
+    const scoreDisplay = document.getElementById("score-display");
+    const levelDisplay = document.getElementById("level-display");
+    const streakDisplay = document.getElementById("streak-display");
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+    const currentTopicEl = document.getElementById("current-topic");
+    const difficultyLabel = document.getElementById("difficulty-label");
+    const questionText = document.getElementById("question-text");
+    const questionHint = document.getElementById("question-hint");
+    const questionIcon = document.getElementById("question-icon");
+    const answerInput = document.getElementById("answer-input");
+    const answerForm = document.getElementById("answer-form");
+    const feedbackArea = document.getElementById("feedback-area");
+    const feedbackText = document.getElementById("feedback-text");
+    const startButton = document.getElementById("start-button");
+    const checkButton = document.getElementById("check-button");
+    const nextButton = document.getElementById("next-button");
+
+    function updateLevel() {
+      // Level progression based on score
+      if (score >= 140) {
+        level = 5 + Math.floor((score - 140) / 40);
+        currentDifficulty = "hard";
+      } else if (score >= 60) {
+        level = 3 + Math.floor((score - 60) / 40);
+        currentDifficulty = "medium";
+      } else {
+        level = 1 + Math.floor(score / 30);
+        currentDifficulty = "easy";
+      }
+      
+      levelDisplay.textContent = level;
+      
+      // Update difficulty label
+      const diffMap = { easy: "Mudah", medium: "Sedang", hard: "Sulit" };
+      difficultyLabel.textContent = diffMap[currentDifficulty];
+      
+      // Update progress bar
+      let nextLevelScore;
+      if (score < 60) {
+        nextLevelScore = Math.ceil((score + 1) / 30) * 30;
+      } else if (score < 140) {
+        nextLevelScore = 60 + Math.ceil((score - 59) / 40) * 40;
+      } else {
+        nextLevelScore = 140 + Math.ceil((score - 139) / 40) * 40;
+      }
+      
+      const prevLevelScore = nextLevelScore - (score < 60 ? 30 : 40);
+      const progress = ((score - prevLevelScore) / (nextLevelScore - prevLevelScore)) * 100;
+      progressBar.style.width = `${Math.min(100, progress)}%`;
+      progressText.textContent = `Skor ${score} / ${nextLevelScore} untuk level berikutnya`;
+    }
+
+    function formatCoef(coef, variable) {
+      // Format koefisien: 1x menjadi x, -1x menjadi -x
+      if (coef === 1) return variable;
+      if (coef === -1) return "-" + variable;
+      return coef + variable;
+    }
+
+    function generateQuestion(topic, difficulty) {
+      let a, b, c, d;
+      
+      if (topic === "addition") {
+        if (difficulty === "easy") {
+          a = rand(1, 5);
+          b = rand(1, 5);
+          const sum = a + b;
+          return {
+            text: `${formatCoef(a, "x")} + ${formatCoef(b, "x")}`,
+            answer: formatCoef(sum, "x"),
+            hint: "Jumlahkan koefisien x"
+          };
+        } else if (difficulty === "medium") {
+          a = rand(1, 5);
+          b = rand(1, 5);
+          c = rand(1, 5);
+          d = rand(1, 5);
+          const xSum = a + c;
+          const ySum = b + d;
+          return {
+            text: `(${formatCoef(a, "x")} + ${formatCoef(b, "y")}) + (${formatCoef(c, "x")} + ${formatCoef(d, "y")})`,
+            answer: `${formatCoef(xSum, "x")}+${formatCoef(ySum, "y")}`,
+            hint: "Gabungkan suku sejenis"
+          };
+        } else {
+          a = rand(2, 8);
+          b = rand(1, a - 1);
+          c = rand(-5, 5);
+          d = rand(1, 6);
+          const e = rand(-5, 5);
+          const xCoef = a - b + d;
+          const constTerm = c + e;
+          return {
+            text: `(${formatCoef(a, "x")} - ${formatCoef(b, "x")} ${c >= 0 ? "+ " + c : c}) + (${formatCoef(d, "x")} ${e >= 0 ? "+ " + e : e})`,
+            answer: `${formatCoef(xCoef, "x")}${constTerm >= 0 ? "+" + constTerm : constTerm}`,
+            hint: "Hitung suku x dan konstanta terpisah"
+          };
+        }
+      }
+      
+      if (topic === "subtraction") {
+        if (difficulty === "easy") {
+          a = rand(3, 9);
+          b = rand(1, a - 1);
+          const diff = a - b;
+          return {
+            text: `${formatCoef(a, "x")} - ${formatCoef(b, "x")}`,
+            answer: formatCoef(diff, "x"),
+            hint: "Kurangkan koefisien x"
+          };
+        } else if (difficulty === "medium") {
+          a = rand(3, 9);
+          b = rand(1, 6);
+          c = rand(1, a - 1);
+          d = rand(1, 6);
+          const xDiff = a - c;
+          const yDiff = b - d;
+          return {
+            text: `(${formatCoef(a, "x")} + ${formatCoef(b, "y")}) - (${formatCoef(c, "x")} + ${formatCoef(d, "y")})`,
+            answer: `${formatCoef(xDiff, "x")}${yDiff >= 0 ? "+" + formatCoef(yDiff, "y") : formatCoef(yDiff, "y")}`,
+            hint: "Kurangkan suku sejenis"
+          };
+        } else {
+          a = rand(4, 10);
+          b = rand(1, a - 1);
+          c = rand(-5, 5);
+          d = rand(-5, 5);
+          const xDiff = a - b;
+          const constTerm = c - d;
+          return {
+            text: `(${formatCoef(a, "x")} ${c >= 0 ? "+ " + c : c}) - (${formatCoef(b, "x")} ${d >= 0 ? "+ " + d : d})`,
+            answer: `${formatCoef(xDiff, "x")}${constTerm >= 0 ? "+" + constTerm : constTerm}`,
+            hint: "Perhatikan tanda saat mengurangi"
+          };
+        }
+      }
+      
+      if (topic === "multiplication") {
+        if (difficulty === "easy") {
+          a = rand(2, 9);
+          return {
+            text: `${a} × x`,
+            answer: formatCoef(a, "x"),
+            hint: "Kalikan angka dengan variabel"
+          };
+        } else if (difficulty === "medium") {
+          a = rand(2, 6);
+          b = rand(2, 6);
+          const prod = a * b;
+          return {
+            text: `${a} × (${formatCoef(b, "x")})`,
+            answer: formatCoef(prod, "x"),
+            hint: "Kalikan koefisien"
+          };
+        } else {
+          // Perkalian bentuk (x±a)(x±b)
+          a = rand(1, 5);
+          b = rand(1, 5);
+          const signA = Math.random() > 0.5 ? 1 : -1;
+          const signB = Math.random() > 0.5 ? 1 : -1;
+          const aVal = a * signA;
+          const bVal = b * signB;
+          
+          // (x+a)(x+b) = x² + (a+b)x + ab
+          const xCoef = aVal + bVal;
+          const constant = aVal * bVal;
+          
+          const aStr = aVal >= 0 ? `+${aVal}` : `${aVal}`;
+          const bStr = bVal >= 0 ? `+${bVal}` : `${bVal}`;
+          
+          let answer = "x^2";
+          if (xCoef !== 0) {
+            answer += xCoef >= 0 ? `+${formatCoef(xCoef, "x")}` : formatCoef(xCoef, "x");
+          }
+          if (constant !== 0) {
+            answer += constant >= 0 ? `+${constant}` : `${constant}`;
+          }
+          
+          return {
+            text: `(x${aStr})(x${bStr})`,
+            answer: answer,
+            hint: "Gunakan rumus (x+a)(x+b) = x² + (a+b)x + ab"
+          };
+        }
+      }
+      
+      if (topic === "division") {
+        if (difficulty === "easy") {
+          a = rand(2, 9);
+          return {
+            text: `${formatCoef(a, "x")} ÷ ${a}`,
+            answer: "x",
+            hint: "Bagi koefisien dengan angka"
+          };
+        } else if (difficulty === "medium") {
+          b = rand(2, 6);
+          a = b * rand(1, 6);
+          const quot = a / b;
+          return {
+            text: `${formatCoef(a, "x")} ÷ ${b}`,
+            answer: formatCoef(quot, "x"),
+            hint: "Sederhanakan pembagian"
+          };
+        } else {
+          a = rand(2, 9);
+          return {
+            text: `${formatCoef(a, "x²")} ÷ x`,
+            answer: formatCoef(a, "x"),
+            hint: "Kurangi pangkat x"
+          };
+        }
+      }
+      
+      if (topic === "mixed") {
+        if (difficulty === "easy") {
+          // Campuran penjumlahan dan pengurangan sederhana
+          a = rand(2, 5);
+          b = rand(1, 4);
+          c = rand(1, 3);
+          const result = a + b - c;
+          return {
+            text: `${formatCoef(a, "x")} + ${formatCoef(b, "x")} - ${formatCoef(c, "x")}`,
+            answer: formatCoef(result, "x"),
+            hint: "Hitung dari kiri ke kanan"
+          };
+        } else if (difficulty === "medium") {
+          // Campuran perkalian dan penjumlahan
+          a = rand(2, 4);
+          b = rand(2, 5);
+          c = rand(2, 6);
+          const result = a * b + c;
+          return {
+            text: `${a}(${formatCoef(b, "x")}) + ${formatCoef(c, "x")}`,
+            answer: formatCoef(result, "x"),
+            hint: "Kalikan dulu, baru tambahkan"
+          };
+        } else {
+          // Campuran perkalian aljabar dan pengurangan
+          a = rand(1, 3);
+          b = rand(1, 3);
+          const signA = Math.random() > 0.5 ? 1 : -1;
+          const signB = Math.random() > 0.5 ? 1 : -1;
+          const aVal = a * signA;
+          const bVal = b * signB;
+          
+          const xCoef = aVal + bVal;
+          const constant = aVal * bVal;
+          
+          const aStr = aVal >= 0 ? `+${aVal}` : `${aVal}`;
+          const bStr = bVal >= 0 ? `+${bVal}` : `${bVal}`;
+          
+          // Kurangi dengan x
+          const finalXCoef = xCoef - 1;
+          
+          let answer = "x^2";
+          if (finalXCoef !== 0) {
+            answer += finalXCoef >= 0 ? `+${formatCoef(finalXCoef, "x")}` : formatCoef(finalXCoef, "x");
+          }
+          if (constant !== 0) {
+            answer += constant >= 0 ? `+${constant}` : `${constant}`;
+          }
+          
+          return {
+            text: `(x${aStr})(x${bStr}) - x`,
+            answer: answer,
+            hint: "Kalikan dulu, lalu kurangi x"
+          };
+        }
+      }
+      
+      return { text: "Error", answer: "", hint: "" };
+    }
+
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function normalize(expr) {
+      if (!expr) return "";
+      return expr.toLowerCase().replace(/\s+/g, "").replace(/\*/g, "").replace(/,/g, ".");
+    }
+
+    function showFeedback(message, type) {
+      feedbackArea.classList.remove("hidden");
+      feedbackText.textContent = message;
+      
+      if (type === "success") {
+        feedbackArea.style.backgroundColor = "rgba(34, 197, 94, 0.2)";
+        feedbackArea.style.color = "#4ade80";
+        questionIcon.textContent = "🎉";
+      } else if (type === "error") {
+        feedbackArea.style.backgroundColor = "rgba(239, 68, 68, 0.2)";
+        feedbackArea.style.color = "#f87171";
+        questionIcon.textContent = "😅";
+      } else {
+        feedbackArea.style.backgroundColor = "rgba(59, 130, 246, 0.2)";
+        feedbackArea.style.color = "#60a5fa";
+        questionIcon.textContent = "💡";
+      }
+    }
+
+    function loadQuestion() {
+      // Select topic based on mode
+      if (selectedTopicMode === "all") {
+        currentTopic = topics[topicIndex % topics.length];
+        topicIndex++;
+      } else {
+        currentTopic = selectedTopicMode;
+      }
+      
+      currentQuestion = generateQuestion(currentTopic, currentDifficulty);
+      questionText.textContent = currentQuestion.text + " = ?";
+      currentTopicEl.textContent = topicNames[currentTopic];
+      questionIcon.textContent = "🤔";
+      answerInput.value = "";
+      answerInput.disabled = false;
+      checkButton.disabled = false;
+      answerInput.focus();
+      feedbackArea.classList.add("hidden");
+    }
+
+    function startQuiz() {
+      score = 0;
+      level = 1;
+      streak = 0;
+      topicIndex = 0;
+      currentDifficulty = "easy";
+      
+      scoreDisplay.textContent = "0";
+      levelDisplay.textContent = "1";
+      streakDisplay.textContent = "0";
+      
+      updateLevel();
+      loadQuestion();
+      
+      startButton.style.display = "none";
+    }
+
+    answerForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      
+      if (!currentQuestion) {
+        showFeedback("Mulai kuis terlebih dahulu!", "info");
+        return;
+      }
+      
+      const userAnswer = normalize(answerInput.value);
+      const correctAnswer = normalize(currentQuestion.answer);
+      
+      if (!userAnswer) {
+        showFeedback("Isi jawaban dulu ya!", "info");
+        return;
+      }
+      
+      if (userAnswer === correctAnswer) {
+        streak++;
+        const basePoints = 10;
+        const streakBonus = Math.min(streak - 1, 5) * 2;
+        const points = basePoints + streakBonus;
+        
+        score += points;
+        scoreDisplay.textContent = score;
+        streakDisplay.textContent = streak;
+        
+        const oldLevel = level;
+        updateLevel();
+        
+        // Disable input and button after answering
+        answerInput.disabled = true;
+        checkButton.disabled = true;
+        
+        const pointsEarned = document.getElementById("points-earned");
+        pointsEarned.textContent = `+${points} poin`;
+        
+        if (level > oldLevel) {
+          showFeedback(`🎊 LEVEL UP! Sekarang Level ${level}!`, "success");
+        } else if (streakBonus > 0) {
+          showFeedback(`Benar! Streak bonus +${streakBonus} 🔥`, "success");
+        } else {
+          showFeedback(`Benar! 🎯`, "success");
+        }
+      } else {
+        streak = 0;
+        streakDisplay.textContent = "0";
+        
+        // Disable input and button after answering
+        answerInput.disabled = true;
+        checkButton.disabled = true;
+        
+        const pointsEarned = document.getElementById("points-earned");
+        pointsEarned.textContent = `Jawaban: ${currentQuestion.answer}`;
+        
+        showFeedback(`Belum tepat 😅`, "error");
+      }
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (!currentQuestion) {
+        showFeedback("Mulai kuis terlebih dahulu!", "info");
+        return;
+      }
+      loadQuestion();
+    });
+
+    startButton.addEventListener("click", startQuiz);
+
+    // Topic selection buttons
+    const topicSelectBtns = document.querySelectorAll(".topic-select-btn");
+    const topicSelectionSection = document.getElementById("topic-selection");
+    
+    topicSelectBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const topic = btn.getAttribute("data-topic");
+        selectedTopicMode = topic;
+        
+        // Update button styles
+        topicSelectBtns.forEach(b => {
+          b.style.borderColor = "#374151";
+          b.style.backgroundColor = "transparent";
+        });
+        btn.style.borderColor = "#8b5cf6";
+        btn.style.backgroundColor = "rgba(139, 92, 246, 0.1)";
+      });
+    });
+    
+    // Set default selection to "all"
+    topicSelectBtns[0].style.borderColor = "#8b5cf6";
+    topicSelectBtns[0].style.backgroundColor = "rgba(139, 92, 246, 0.1)";
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a3e6a61200f7d66',t:'MTc2NDA0NTA3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
