@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soal Digital Marketing</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 20px;
+      font-family: 'Times New Roman', Times, serif;
+      background: #ffffff;
+      line-height: 1.6;
+      color: #000;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 210mm;
+      margin: 0 auto;
+      background: white;
+      padding: 20mm;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #000;
+      padding-bottom: 15px;
+    }
+
+    .header h1 {
+      margin: 0 0 5px 0;
+      font-size: 18pt;
+      font-weight: bold;
+    }
+
+    .header p {
+      margin: 3px 0;
+      font-size: 12pt;
+    }
+
+    .student-info {
+      margin: 20px 0 30px 0;
+      border: 1px solid #000;
+      padding: 15px;
+    }
+
+    .student-info table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .student-info td {
+      padding: 8px;
+      font-size: 11pt;
+    }
+
+    .student-info td:first-child {
+      width: 120px;
+      font-weight: bold;
+    }
+
+    .student-info input {
+      width: 100%;
+      border: none;
+      border-bottom: 1px dotted #000;
+      padding: 4px;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 11pt;
+    }
+
+    .instructions {
+      background: #f5f5f5;
+      border: 1px solid #000;
+      padding: 15px;
+      margin-bottom: 25px;
+    }
+
+    .instructions h3 {
+      margin-top: 0;
+      font-size: 12pt;
+    }
+
+    .instructions ol {
+      margin: 10px 0 0 20px;
+      padding: 0;
+    }
+
+    .instructions li {
+      margin: 5px 0;
+      font-size: 11pt;
+    }
+
+    .section-title {
+      font-size: 14pt;
+      font-weight: bold;
+      margin: 30px 0 15px 0;
+      padding: 8px;
+      background: #000;
+      color: #fff;
+      text-align: center;
+    }
+
+    .question {
+      margin-bottom: 25px;
+      page-break-inside: avoid;
+    }
+
+    .question-number {
+      font-weight: bold;
+      font-size: 11pt;
+      margin-bottom: 8px;
+    }
+
+    .reading-box {
+      border: 1px solid #000;
+      padding: 12px;
+      margin: 10px 0;
+      background: #fafafa;
+      font-size: 10pt;
+    }
+
+    .reading-box h4 {
+      margin: 0 0 8px 0;
+      font-size: 11pt;
+      font-weight: bold;
+    }
+
+    .reading-box p {
+      margin: 8px 0;
+      text-align: justify;
+    }
+
+    .reading-box ul {
+      margin: 8px 0;
+      padding-left: 25px;
+    }
+
+    .reading-box li {
+      margin: 4px 0;
+    }
+
+    .question-text {
+      font-weight: bold;
+      margin: 12px 0 10px 0;
+      font-size: 11pt;
+    }
+
+    .options {
+      margin: 10px 0 10px 20px;
+    }
+
+    .option {
+      margin: 8px 0;
+      font-size: 11pt;
+    }
+
+    .option input[type="radio"] {
+      margin-right: 8px;
+    }
+
+    .answer-line {
+      margin-top: 10px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      min-height: 40px;
+    }
+
+    .essay-answer {
+      width: 100%;
+      min-height: 150px;
+      border: 1px solid #000;
+      padding: 10px;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 11pt;
+      resize: vertical;
+      margin-top: 10px;
+    }
+
+    .print-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 14pt;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      font-family: Arial, sans-serif;
+      z-index: 1000;
+    }
+
+    .print-button:hover {
+      background: #45a049;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+      }
+      
+      .container {
+        max-width: 100%;
+        padding: 15mm;
+      }
+      
+      .print-button {
+        display: none;
+      }
+      
+      .question {
+        page-break-inside: avoid;
+      }
+      
+      input[type="radio"] {
+        -webkit-appearance: radio;
+        appearance: radio;
+      }
+      
+      input[type="text"],
+      textarea {
+        border: none;
+        border-bottom: 1px solid #000;
+      }
+    }
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container"><!-- HEADER -->
+   <div class="header">
+    <h1>SOAL UJIAN DIGITAL MARKETING</h1>
+   </div><!-- IDENTITAS SISWA -->
+   <div class="student-info">
+    <table>
+     <tbody>
+      <tr>
+       <td>Nama</td>
+       <td>: <input type="text" id="studentName" placeholder="Tulis nama lengkap Anda"></td>
+      </tr>
+      <tr>
+       <td>Kelas</td>
+       <td>: <input type="text" id="studentClass" placeholder="Contoh: XII"></td>
+      </tr>
+      <tr>
+       <td>Tanggal</td>
+       <td>: <input type="text" id="examDate" readonly></td>
+      </tr>
+     </tbody>
+    </table>
+   </div><!-- PETUNJUK -->
+   <div class="instructions">
+    <h3>PETUNJUK PENGERJAAN:</h3>
+    <ol>
+     <li>Isilah identitas Anda dengan lengkap pada kolom yang tersedia</li>
+     <li>Bacalah setiap teks bacaan dengan seksama sebelum menjawab</li>
+     <li>Untuk soal pilihan ganda, pilihlah jawaban yang benar dengan memilih salah satu opsi yang tersedia</li>
+     <li>Untuk soal uraian, tulislah jawaban dengan jelas pada kolom yang tersedia</li>
+     <li>Klik tombol "CETAK/SIMPAN PDF" untuk mencetak atau menyimpan jawaban Anda</li>
+    </ol>
+   </div><!-- BAGIAN A: PILIHAN GANDA -->
+   <div class="section-title">
+    BAGIAN A: PILIHAN GANDA (20 Soal)
+   </div><!-- SOAL 1 -->
+   <div class="question">
+    <div class="question-number">
+     1. Bacalah teks berikut dengan seksama!
+    </div>
+    <div class="reading-box">
+     <h4>Transformasi UMKM Keripik Pisang Lampung</h4>
+     <p>Pak Budi adalah pemilik usaha keripik pisang di Lampung yang sudah berjalan selama 10 tahun. Selama ini, ia hanya menjual produknya melalui toko kecil di pinggir jalan dan menitipkan ke beberapa warung di sekitar kampung. Penjualan cukup stabil dengan omzet sekitar Rp 3 juta per bulan, namun tidak pernah berkembang.</p>
+     <p>Pada awal tahun 2023, anak Pak Budi yang baru lulus kuliah menyarankan untuk mencoba berjualan secara online. Awalnya Pak Budi ragu karena tidak paham teknologi dan merasa pelanggannya hanya orang sekitar. Namun, sang anak membuatkan akun Instagram @KeripikPisangPakBudi dan mulai mengunggah foto produk dengan pencahayaan yang bagus, video proses pembuatan keripik, serta testimoni pelanggan lama.</p>
+     <p>Mereka juga membuka toko online di Tokopedia dan Shopee dengan harga Rp 25.000 per bungkus (250 gram). Untuk menarik pembeli, mereka memberikan promo "Beli 3 Gratis 1" dan voucher diskon 20% untuk pembeli pertama. Dalam waktu satu bulan, pesanan mulai berdatangan tidak hanya dari Lampung, tetapi juga dari Jakarta, Tangerang, Bekasi, Bogor, dan Bandung. Omzet meningkat menjadi Rp 12 juta per bulan. Pak Budi sangat terkejut karena ternyata dengan internet, produknya bisa dikenal oleh orang-orang di seluruh Jabodetabek dan Jawa Barat tanpa harus membuka cabang toko.</p>
+    </div>
+    <div class="question-text">
+     Berdasarkan teks di atas, keunggulan utama digital marketing yang paling terlihat dalam kasus Pak Budi adalah….
+    </div>
+    <div class="options">
+     <div class="option"><input type="radio" name="q1" value="A" id="q1a"> <label for="q1a">A. Biaya produksi keripik pisang menjadi lebih murah</label>
+     </div>
+     <div class="option"><input type="radio" name="q1" value="B" id="q1b"> <label for="q1b">B. Kualitas keripik pisang meningkat secara otomatis</label>
+     </div>
+     <div class="option"><input type="radio" name="q1" value="C" id="q1c"> <label for="q1c">C. Jangkauan pasar yang lebih luas tanpa batasan geografis</label>
+     </div>
+     <div class="option"><input type="radio" name="q1" value="D" id="q1d"> <label for="q1d">D. Tidak perlu lagi melayani pelanggan secara langsung</label>
+     </div>
+     <div class="option"><input type="radio" name="q1" value="E" id="q1e"> <label for="q1e">E. Menghilangkan persaingan dengan produk keripik lain</label>
+     </div>
+    </div>
+   </div><!-- SOAL 2 -->
+   <div class="question">
+    <div class="question-number">
+     2. Bacalah teks berikut dengan seksama!
+    </div>
+    <div class="reading-box">
+     <h4>Memulai Bisnis Dessert Box dari Kamar Kos</h4>
+     <p>Siti adalah mahasiswi semester 5 yang tinggal di kamar kos berukuran 3x4 meter. Ia memiliki hobi membuat kue dan ingin mencoba berbisnis dessert box untuk menambah uang saku. Modal yang dimiliki Siti sangat terbatas, hanya sekitar Rp 500.000 untuk bahan baku awal.</p>
+     <p>Siti tidak punya uang untuk menyewa toko atau membuat website profesional. Yang ia miliki hanya smartphone Samsung A-series dengan kamera 48MP, paket internet unlimited Rp 50.000 per bulan, dan akun Instagram serta WhatsApp yang sudah ada. Untuk membuat desain poster promosi, ia mengunduh aplikasi Canva versi gratis. Untuk mengedit video singkat proses pembuatan dessert box, ia menggunakan CapCut yang juga gratis.</p>
+     <p>Siti mulai memotret dessert box buatannya dengan pencahayaan alami dari jendela kamar, mengedit foto di Canva dengan tambahan teks harga dan deskripsi, lalu mengunggahnya ke Instagram. Ia juga membuat video 15 detik proses dekorasi dessert box dengan musik trending di CapCut dan mengunggahnya sebagai Reels. Dalam seminggu pertama, ia sudah mendapat 8 pesanan dari teman kuliah dan followers Instagram yang tertarik.</p>
+    </div>
+    <div class="question-text">
+     Berdasarkan pengalaman Siti, peralatan minimal yang benar-benar diperlukan untuk memulai digital marketing adalah….
+    </div>
+    <div class="options">
+     <div class="option"><input type="radio" name="q2" value="A" id="q2a"> <label for="q2a">A. Kamera DSLR profesional, laptop gaming, dan studio foto mini</label>
+     </div>
+     <div class="option"><input type="radio" name="q2" value="B" id="q2b"> <label for="q2b">B. Smartphone dengan internet, akun media sosial, dan aplikasi editing gratis</label>
+     </div>
+     <div class="option"><input type="radio" name="q2" value="C" id="q2c"> <label for="q2c">C. Komputer desktop, printer, dan mesin cetak brosur warna</label>
+     </div>
+     <div class="option"><input type="radio" name="q2" value="D" id="q2d"> <label for="q2d">D. Toko fisik, papan reklame, dan kartu nama cetak</label>
+     </div>
+     <div class="option"><input type="radio" name="q2" value="E" id="q2e"> <label for="q2e">E. Televisi, radio, dan iklan di koran lokal</label>
+     </div>
+    </div>
+   </div><!-- SOAL 3 -->
+   <div class="question">
+    <div class="question-number">
+     3. Bacalah teks berikut dengan seksama!
+    </div>
+    <div class="reading-box">
+     <h4>Strategi Promosi Brand Pakaian "Nusantara Wear"</h4>
+     <p>"Nusantara Wear" adalah brand pakaian lokal dari Yogyakarta yang menjual kemeja batik modern untuk anak muda. Dalam satu bulan terakhir, tim marketing mereka melakukan berbagai aktivitas promosi sebagai berikut:</p>
+     <p><strong>Aktivitas 1:</strong> Mengirim katalog produk terbaru beserta daftar harga melalui WhatsApp Broadcast ke 500 kontak pelanggan lama dan calon pelanggan yang pernah bertanya.</p>
+     <p><strong>Aktivitas 2:</strong> Membuat video pendek 30 detik yang menampilkan model memakai kemeja batik dengan musik trending, lalu mengunggahnya di TikTok dengan hashtag #BatikModern #OOTD. Video tersebut ditonton 50.000 kali dalam 3 hari.</p>
+     <p><strong>Aktivitas 3:</strong> Memasang iklan full-color ukuran 1/4 halaman di koran Kedaulatan Rakyat (koran lokal Yogyakarta) edisi Minggu dengan biaya Rp 3 juta.</p>
+     <p><strong>Aktivitas 4:</strong> Mencetak 2.000 lembar brosur dan membagikannya di area kampus UGM, UNY, dan Malioboro dengan bantuan 5 orang SPG.</p>
+     <p><strong>Aktivitas 5:</strong> Mengoptimalkan foto produk di Shopee dan Tokopedia dengan background putih bersih, deskripsi detail bahan dan ukuran, serta menambahkan video unboxing di galeri produk.</p>
+    </div>
+    <div class="question-text">
+     Dari kelima aktivitas promosi "Nusantara Wear" di atas, yang termasuk kategori digital marketing ditunjukkan oleh nomor….
+    </div>
+    <div class="options">
+     <div class="option"><input type="radio" name="q3" value="A" id="q3a"> <label for="q3a">A. 1, 2, dan 5</label>
+     </div>
+     <div class="option"><input type="radio" name="q3" value="B" id="q3b"> <label for="q3b">B. 1, 3, dan 4</label>
+     </div>
+     <div class="option"><input type="radio" name="q3" value="C" id="q3c"> <label for="q3c">C. 2, 3, dan 4</label>
+     </div>
+     <div class="option"><input type="radio" name="q3" value="D" id="q3d"> <label for="q3d">D. 3, 4, dan 5</label>
+     </div>
+     <div class="option"><input type="radio" name="q3" value="E" id="q3e"> <label for="q3e">E. 1, 2, dan 3</label>
+     </div>
+    </div>
+   </div><!-- SOAL 4 -->
+   <div class="question">
+    <div class="question-number">
+     4. Bacalah teks berikut dengan seksama!
+    </div>
+    <div class="reading-box">
+     <h4>Perjalanan Rani Membeli Skincare</h4>
+     <p>Rani adalah siswi kelas 12 yang aktif menggunakan Instagram. Setiap hari ia menghabiskan waktu sekitar 2 jam scrolling feed dan menonton Instagram Reels. Dalam beberapa minggu terakhir, ia sering melihat konten dari beauty influencer @GlowingSkinID yang mereview berbagai produk skincare.</p>
+     <p>Awalnya Rani tidak berniat membeli skincare karena merasa kulitnya biasa saja. Namun, setelah melihat puluhan video testimoni dari influencer dan pengguna lain yang menunjukkan perubahan kulit mereka menjadi lebih cerah dan glowing, Rani mulai merasa bahwa kulitnya "kurang cerah" dan "perlu perawatan". Ia mulai membandingkan kulitnya dengan foto-foto di Instagram dan merasa tidak percaya diri.</p>
+     <p>Motivasi untuk memiliki kulit lebih cerah semakin kuat ketika ia melihat teman-teman sekelasnya juga mulai memakai skincare. Persepsi Rani tentang "kulit cantik" pun berubah setelah terus-menerus terpapar konten serupa. Akhirnya, setelah menabung uang saku selama dua minggu, Rani memutuskan membeli paket skincare seharga Rp 250.000 yang direkomendasikan oleh influencer favoritnya.</p>
+    </div>
+    <div class="question-text">
+     Berdasarkan cerita Rani, faktor utama yang paling memengaruhi keputusan pembeliannya adalah….
+    </div>
+    <div class="options">
+     <div class="option"><input type="radio" name="q4" value="A" id="q4a"> <label for="q4a">A. Faktor sosial dan budaya</label>
+     </div>
+     <div class="option"><input type="radio" name="q4" value="B" id="q4b"> <label for="q4b">B. Faktor teknologi dan ekonomi</label>
+     </div>
+     <div class="option"><input type="radio" name="q4" value="C" id="q4c"> <label for="q4c">C. Faktor psikologis</label>
+     </div>
+     <div class="option"><input type="radio" name="q4" value="D" id="q4d"> <label for="q4d">D. Faktor personal</label>
+     </div>
+     <div class="option"><input type="radio" name="q4" value="E" id="q4e"> <label for="q4e">E. Faktor situasional</label>
+     </div>
+    </div>
+   </div><!-- SOAL 5 -->
+   <div class="question">
+    <div class="question-number">
+     5. Bacalah teks berikut dengan seksama!
+    </div>
+    <div class="reading-box">
+     <h4>Proses Budi Membeli Sepatu Baru</h4>
+     <p><strong>Minggu 1:</strong> Budi menyadari bahwa sepatu sekolahnya sudah rusak di bagian sol dan sering membuat kakinya sakit saat berjalan ke sekolah. Ia merasa perlu membeli sepatu baru secepatnya.</p>
+     <p><strong>Minggu 2:</strong> Budi mulai mencari informasi tentang sepatu yang bagus dan nyaman. Ia mengetik "sepatu sekolah paling nyaman" di Google, menonton review di YouTube dari channel @SepatuReview, dan membaca komentar pembeli di Tokopedia dan Shopee. Ia juga bertanya kepada teman-temannya tentang merek sepatu yang mereka pakai.</p>
+     <p><strong>Minggu 3:</strong> Setelah mengumpulkan informasi, Budi membandingkan 4 merek sepatu: Merek A (Rp 250.000, rating 4.8, garansi 6 bulan), Merek B (Rp 200.000, rating 4.5, tanpa garansi), Merek C (Rp 350.000, rating 4.9, garansi 1 tahun), dan Merek D (Rp 180.000, rating 4.2, garansi 3 bulan). Ia mempertimbangkan harga, kualitas berdasarkan rating, dan garansi.</p>
+     <p><strong>Minggu 4:</strong> Budi memutuskan membeli Merek A karena harganya pas dengan budget dan memiliki rating tinggi serta garansi yang cukup. Ia memesan melalui Shopee dengan pembayaran COD.</p>
+     <p><strong>Minggu 5:</strong> Setelah memakai sepatu selama dua minggu, Budi merasa sangat puas karena sepatunya nyaman dan tidak membuat kaki sakit. Ia memberikan ulasan bintang 5 di Shopee dan merekomendasikan sepatu tersebut kepada teman-temannya.</p>
+    </div>
+    <div class="question-text">
+     Urutan tahapan proses keputusan pembelian yang benar sesuai pengalaman Budi adalah….
+    </div>
+    <div class="options">
+     <div class="option"><input type="radio" name="q5" value="A" id="q5a"> <label for="q5a">A. Pencarian informasi → Pengenalan masalah → Evaluasi pasca pembelian → Keputusan pembelian → Evaluasi alternatif</label>
+     </div>
+     <div class="option"><input type="radio" name="q5" value="B" id="q5b"> <label for="q5b">B. Pengenalan masalah → Pencarian informasi → Evaluasi alternatif → Keputusan pembelian → Evaluasi pasca pembelian</label>
+     </div>
+     <div class="option"><input type="radio" name="q5" value="C" id="q5c"> <label for="q5c">C. Pengenalan masalah → Evaluasi pasca pembelian → Keputusan pembelian → Pencarian informasi → Evaluasi alternatif</label>
+     </div>
+     <div class="option"><input type="radio" name="q5" value="D" id="q5d"> <label for="q5d">D. Keputusan pembelian → Pencarian informasi → Pengenalan masalah → Evaluasi alternatif → Evaluasi pasca pembelian</label>
+     </div>
+     <div class="option"><input type="radio" name="q5" value="E" id="q5e"> <label for="q5e">E. Evaluasi alternatif → Pengenalan masalah → Pencarian informasi → Keputusan pembelian → Evaluasi pasca pembelian</label>
+     </div>
+    </div>
+   </div><!-- SOAL 6-10 (Format sama, saya ringkas untuk menghemat space) -->
+   <div class="question">
+    <div class="question-number">
+     6. Kebiasaan Belanja Dimas
+    </div>
+    <div class="reading-box">
+     <p>Dimas adalah karyawan kantoran yang setiap hari membeli Teh Botol Sosro di Indomaret tanpa berpikir panjang. Ia hampir tidak pernah mempertimbangkan merek lain. Proses pengambilan keputusan berlangsung sangat cepat, hanya sekitar 10 detik. Keputusan ini berulang setiap hari kerja tanpa variasi.</p>
+    </div>
+    <div class="question-text">
+     Jenis perilaku konsumen yang paling tepat adalah….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q6" value="A" id="q6a"><label for="q6a">A. Perilaku pembelian kompleks</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q6" value="B" id="q6b"><label for="q6b">B. Perilaku mengurangi disonansi</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q6" value="C" id="q6c"><label for="q6c">C. Perilaku mencari variasi</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q6" value="D" id="q6d"><label for="q6d">D. Perilaku kebiasaan</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q6" value="E" id="q6e"><label for="q6e">E. Perilaku pembelian impulsif</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     7. Inovasi Aplikasi "BelajarYuk"
+    </div>
+    <div class="reading-box">
+     <p>"BelajarYuk" melakukan perbaikan: menambahkan Dark Mode, memperbaiki tampilan antarmuka, menambahkan bank soal UTBK, fitur "Tanya Tutor", dan "Progress Tracker". Semua perbaikan berdasarkan feedback pengguna.</p>
+    </div>
+    <div class="question-text">
+     Fokus utama strategi mereka berkaitan dengan unsur 4P Marketing yaitu….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q7" value="A" id="q7a"><label for="q7a">A. Price</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q7" value="B" id="q7b"><label for="q7b">B. Product</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q7" value="C" id="q7c"><label for="q7c">C. Place</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q7" value="D" id="q7d"><label for="q7d">D. Promotion</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q7" value="E" id="q7e"><label for="q7e">E. People</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     8. Kampanye Promosi Gojek
+    </div>
+    <div class="reading-box">
+     <p>Gojek meluncurkan kampanye: voucher diskon 50%, iklan video di YouTube, kolaborasi dengan 50 influencer, dan push notification. Hasilnya menambah 2 juta pengguna baru.</p>
+    </div>
+    <div class="question-text">
+     Aktivitas Gojek terutama merupakan implementasi dari unsur 4P Marketing berupa….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q8" value="A" id="q8a"><label for="q8a">A. Product</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q8" value="B" id="q8b"><label for="q8b">B. Price</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q8" value="C" id="q8c"><label for="q8c">C. Place</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q8" value="D" id="q8d"><label for="q8d">D. Promotion</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q8" value="E" id="q8e"><label for="q8e">E. Process</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     9. Kesuksesan Kafe "Kopi Kenangan"
+    </div>
+    <div class="reading-box">
+     <p>Kopi Kenangan viral karena kualitas pelayanan barista: menyapa ramah, menjelaskan menu dengan sabar, menuliskan nama di cup dengan rapi, dan mengucapkan terima kasih dengan tulus. Banyak konten viral di TikTok tentang interaksi hangat barista dan pelanggan.</p>
+    </div>
+    <div class="question-text">
+     Dalam 7P Marketing, aspek yang paling menonjol adalah….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q9" value="A" id="q9a"><label for="q9a">A. Physical evidence</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q9" value="B" id="q9b"><label for="q9b">B. Process</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q9" value="C" id="q9c"><label for="q9c">C. People</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q9" value="D" id="q9d"><label for="q9d">D. Place</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q9" value="E" id="q9e"><label for="q9e">E. Price</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     10. Strategi Klinik Kecantikan "Glow Clinic"
+    </div>
+    <div class="reading-box">
+     <p>Glow Clinic memperhatikan: desain interior minimalis modern, kebersihan maksimal, display testimoni before-after, dan konten Instagram berkualitas tinggi yang menampilkan interior dan alat treatment.</p>
+    </div>
+    <div class="question-text">
+     Aspek utama dari 7P Marketing yang paling diperkuat adalah….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q10" value="A" id="q10a"><label for="q10a">A. People</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q10" value="B" id="q10b"><label for="q10b">B. Process</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q10" value="C" id="q10c"><label for="q10c">C. Physical evidence</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q10" value="D" id="q10d"><label for="q10d">D. Promotion</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q10" value="E" id="q10e"><label for="q10e">E. Product</label>
+     </div>
+    </div>
+   </div><!-- Soal 11-20 dengan format serupa -->
+   <div class="question">
+    <div class="question-number">
+     11. Fenomena Kopi Susu Kekinian di Indonesia
+    </div>
+    <div class="reading-box">
+     <p>Sejak tahun 2019, bisnis kopi susu kekinian di Indonesia mengalami pertumbuhan pesat, terutama di kota-kota besar seperti Jakarta, Bandung, Surabaya, Medan, dan Makassar. Dalam 3 tahun, muncul ratusan brand baru seperti Kopi Kenangan, Janji Jiwa, Fore Coffee, dan Kopi Soe.</p>
+     <p><strong>Mengapa mudah masuk?</strong> Modal relatif terjangkau (Rp 50-100 juta untuk booth kecil), bahan baku mudah didapat dari supplier lokal, tidak perlu keahlian khusus (training 1-2 minggu cukup), permintaan pasar tinggi dari anak muda, dan sistem franchise tersedia. Akibatnya, dalam satu mall bisa ada 5-7 brand kopi susu berbeda. Persaingan sangat ketat.</p>
+    </div>
+    <div class="question-text">
+     Dalam Porter's Five Forces, kondisi ini menunjukkan….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q11" value="A" id="q11a"><label for="q11a">A. Kekuatan tawar-menawar pemasok yang tinggi</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q11" value="B" id="q11b"><label for="q11b">B. Ancaman produk substitusi yang rendah</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q11" value="C" id="q11c"><label for="q11c">C. Ancaman pendatang baru yang tinggi</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q11" value="D" id="q11d"><label for="q11d">D. Kekuatan tawar-menawar pembeli yang rendah</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q11" value="E" id="q11e"><label for="q11e">E. Intensitas persaingan yang rendah</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     12. Tantangan Netflix
+    </div>
+    <div class="reading-box">
+     <p>Netflix menghadapi tantangan dari TikTok, Instagram Reels, dan YouTube Shorts. Banyak pengguna beralih menghabiskan waktu di platform konten pendek. Rata-rata waktu menonton Netflix menurun 15% di tahun 2023.</p>
+    </div>
+    <div class="question-text">
+     Dalam Porter's Five Forces, kondisi ini termasuk kekuatan….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q12" value="A" id="q12a"><label for="q12a">A. Ancaman produk substitusi</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q12" value="B" id="q12b"><label for="q12b">B. Ancaman pendatang baru</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q12" value="C" id="q12c"><label for="q12c">C. Kekuatan tawar-menawar pemasok</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q12" value="D" id="q12d"><label for="q12d">D. Kekuatan tawar-menawar pembeli</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q12" value="E" id="q12e"><label for="q12e">E. Intensitas persaingan internal</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     13. Keunggulan Sepatu "Brodo"
+    </div>
+    <div class="reading-box">
+     <p>Brodo memiliki: kualitas jahitan kuat, desain mengikuti tren, harga terjangkau (Rp 400.000-800.000), rating 4.8/5.0, dan customer service responsif.</p>
+    </div>
+    <div class="question-text">
+     Dalam analisis SWOT, faktor-faktor tersebut termasuk kategori….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q13" value="A" id="q13a"><label for="q13a">A. Strength</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q13" value="B" id="q13b"><label for="q13b">B. Weakness</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q13" value="C" id="q13c"><label for="q13c">C. Opportunity</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q13" value="D" id="q13d"><label for="q13d">D. Threat</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q13" value="E" id="q13e"><label for="q13e">E. Barrier</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     14. Persaingan Tokopedia vs Shopee
+    </div>
+    <div class="reading-box">
+     <p>Shopee masuk dengan modal besar, gratis ongkir masif, cashback, gamifikasi, dan iklan intensif. Market share Shopee meningkat dari 20% menjadi 35%, sementara Tokopedia turun dari 45% menjadi 32%.</p>
+    </div>
+    <div class="question-text">
+     Dari perspektif Tokopedia, kondisi ini termasuk kategori….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q14" value="A" id="q14a"><label for="q14a">A. Strength</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q14" value="B" id="q14b"><label for="q14b">B. Weakness</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q14" value="C" id="q14c"><label for="q14c">C. Opportunity</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q14" value="D" id="q14d"><label for="q14d">D. Threat</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q14" value="E" id="q14e"><label for="q14e">E. Process</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     15. Strategi Jasa Fotografi "Moment Studio"
+    </div>
+    <div class="reading-box">
+     <p>"Moment Studio" adalah jasa fotografi pernikahan di Bandung yang didirikan tahun 2022. Mereka memiliki 500+ foto pernikahan berkualitas tinggi dengan gaya candid dan sinematik, 50+ video highlight berdurasi 3-5 menit, dan testimoni dari 30+ pasangan klien. Target pasar: pasangan muda usia 23-35 tahun di Bandung, Jakarta, dan Surabaya yang aktif di Instagram dan TikTok, suka konten visual, dan memiliki budget pernikahan Rp 50-200 juta.</p>
+    </div>
+    <div class="question-text">
+     Platform media sosial yang paling sesuai adalah….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q15" value="A" id="q15a"><label for="q15a">A. LinkedIn dan Twitter</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q15" value="B" id="q15b"><label for="q15b">B. Instagram dan TikTok</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q15" value="C" id="q15c"><label for="q15c">C. Telegram dan WhatsApp</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q15" value="D" id="q15d"><label for="q15d">D. Blog WordPress dan Medium</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q15" value="E" id="q15e"><label for="q15e">E. Podcast Spotify</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     16. Strategi Konten Konsultan Bisnis
+    </div>
+    <div class="reading-box">
+     <p>Pak Andi ingin membagikan artikel panjang tentang strategi marketing, studi kasus detail, tips karier, dan analisis tren. Tujuannya: membangun kredibilitas sebagai thought leader dan terhubung dengan profesional dan decision maker.</p>
+    </div>
+    <div class="question-text">
+     Platform yang paling sesuai adalah….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q16" value="A" id="q16a"><label for="q16a">A. TikTok</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q16" value="B" id="q16b"><label for="q16b">B. Instagram</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q16" value="C" id="q16c"><label for="q16c">C. LinkedIn</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q16" value="D" id="q16d"><label for="q16d">D. Pinterest</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q16" value="E" id="q16e"><label for="q16e">E. Snapchat</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     17. Tren Live Shopping di Indonesia
+    </div>
+    <div class="reading-box">
+     <p>Sejak 2020, fenomena "live shopping" menjadi tren besar di Indonesia. Platform seperti TikTok Shop, Shopee Live, Tokopedia Play, dan Instagram Live Shopping memungkinkan seller melakukan siaran langsung sambil menjual produk.</p>
+     <p><strong>Mengapa efektif?</strong> Interaksi real-time (penonton bisa bertanya langsung), demonstrasi produk secara detail, promo eksklusif selama live, social proof (melihat berapa orang membeli), dan entertainment (games, kuis, giveaway). Data Shopee menunjukkan transaksi via Shopee Live meningkat 300% di tahun 2023. Conversion rate live shopping mencapai 15-20%, jauh lebih tinggi dari postingan biasa (1-3%).</p>
+    </div>
+    <div class="question-text">
+     Tren ini menunjukkan bahwa dalam digital marketing modern, yang paling penting adalah….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q17" value="A" id="q17a"><label for="q17a">A. Komunikasi satu arah tanpa feedback</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q17" value="B" id="q17b"><label for="q17b">B. Interaksi real-time dan pengalaman langsung</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q17" value="C" id="q17c"><label for="q17c">C. Promosi hanya melalui teks panjang</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q17" value="D" id="q17d"><label for="q17d">D. Menghindari komentar pelanggan</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q17" value="E" id="q17e"><label for="q17e">E. Mengurangi transparansi produk</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     18. Transformasi dari Ojek Pangkalan ke Gojek
+    </div>
+    <div class="reading-box">
+     <p><strong>Era Ojek Pangkalan (sebelum 2015):</strong> Harus jalan kaki ke pangkalan ojek, menunggu jika semua ojek sedang mengantarkan penumpang, tawar-menawar harga (tidak ada harga pasti), tidak tahu identitas pengemudi atau kondisi motor, pembayaran hanya tunai, tidak ada sistem komplain.</p>
+     <p><strong>Era Gojek (sejak 2015):</strong> Pesan via aplikasi dari mana saja, aplikasi otomatis menampilkan estimasi harga yang pasti, bisa lihat foto, nama, rating, dan plat nomor pengemudi, melacak lokasi pengemudi secara real-time di peta, pembayaran tunai atau non-tunai (GoPay, kartu kredit), ada sistem rating dan review. Gojek tidak memiliki motor, hanya menyediakan platform yang menghubungkan pengemudi (mitra) dengan penumpang, mengambil komisi sekitar 20% per transaksi.</p>
+    </div>
+    <div class="question-text">
+     Perbedaan paling mendasar adalah….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q18" value="A" id="q18a"><label for="q18a">A. Model digital tidak perlu SDM</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q18" value="B" id="q18b"><label for="q18b">B. Model digital mengandalkan platform sebagai penghubung</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q18" value="C" id="q18c"><label for="q18c">C. Model digital tidak butuh regulasi</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q18" value="D" id="q18d"><label for="q18d">D. Model digital hanya jam kerja</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q18" value="E" id="q18e"><label for="q18e">E. Model digital tanpa layanan pelanggan</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     19. Transformasi Toko Buku "Literasi"
+    </div>
+    <div class="reading-box">
+     <p>Toko Buku "Literasi" di Yogyakarta berdiri sejak 2005, hanya melayani pembeli yang datang langsung. Sejak 2020, penjualan menurun karena banyak orang beralih belanja online dan pandemi COVID-19.</p>
+     <p><strong>Transformasi Digital (2021):</strong> Membuka toko di Tokopedia dan Shopee (mengunggah 5.000+ judul buku), membuat website www.tokobuku-literasi.com, sekarang bisa menerima pesanan dari seluruh Indonesia (tidak hanya Yogyakarta), menggunakan software inventory untuk memantau stok real-time, analisis data penjualan (kategori buku terlaris, jam pembelian tertinggi, kota pembeli terbanyak), membuat iklan Facebook dan Instagram yang menargetkan pecinta buku. <strong>Hasil:</strong> Omzet meningkat dari Rp 50 juta menjadi Rp 150 juta per bulan. 70% penjualan dari online, 30% dari toko fisik.</p>
+    </div>
+    <div class="question-text">
+     Kelebihan utama model bisnis digital yang paling menonjol adalah….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q19" value="A" id="q19a"><label for="q19a">A. Tidak ada persaingan</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q19" value="B" id="q19b"><label for="q19b">B. Bisa jual tanpa stok</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q19" value="C" id="q19c"><label for="q19c">C. Jangkauan lebih luas dan analisis data</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q19" value="D" id="q19d"><label for="q19d">D. Menghilangkan customer service</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q19" value="E" id="q19e"><label for="q19e">E. Penjualan hanya jam 09.00-17.00</label>
+     </div>
+    </div>
+   </div>
+   <div class="question">
+    <div class="question-number">
+     20. Strategi Terintegrasi "Hijab Ayu"
+    </div>
+    <div class="reading-box">
+     <p>"Hijab Ayu" adalah UMKM fashion muslimah di Bandung yang didirikan tahun 2021. Dalam 2 tahun berkembang pesat dengan strategi terintegrasi:</p>
+     <p><strong>1. Promosi Instagram:</strong> Posting foto katalog setiap hari, testimoni di Story, konten edukasi "Tips Mix and Match Hijab" di Reels, giveaway bulanan. <strong>2. Iklan Berbayar:</strong> Facebook Ads dan Instagram Ads menargetkan wanita muslimah 20-40 tahun, budget Rp 3 juta/bulan menghasilkan 500+ klik. <strong>3. Penjualan Multi-Channel:</strong> Shopee, Tokopedia, dan website sendiri. <strong>4. Analisis Feedback:</strong> Membaca review pelanggan, mengidentifikasi kebutuhan bahan lebih adem, mengembangkan "Hijab Ayu Cool" dengan katun rayon (1000+ pcs terjual dalam 3 bulan). <strong>5. Layanan WhatsApp Business:</strong> Konsultasi ukuran, warna, cara perawatan, respon maksimal 2 jam. <strong>Hasil:</strong> Omzet dari Rp 10 juta (bulan pertama) menjadi Rp 80 juta per bulan (bulan ke-24). Followers Instagram dari 500 menjadi 50.000.</p>
+    </div>
+    <div class="question-text">
+     Strategi ini menunjukkan bahwa digital marketing yang efektif adalah….
+    </div>
+    <div class="options">
+     <div class="option">
+      <input type="radio" name="q20" value="A" id="q20a"><label for="q20a">A. Hanya untuk promosi</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q20" value="B" id="q20b"><label for="q20b">B. Digunakan secara terintegrasi</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q20" value="C" id="q20c"><label for="q20c">C. Dapat menggantikan kualitas produk</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q20" value="D" id="q20d"><label for="q20d">D. Mengabaikan feedback konsumen</label>
+     </div>
+     <div class="option">
+      <input type="radio" name="q20" value="E" id="q20e"><label for="q20e">E. Hanya fokus tampilan visual</label>
+     </div>
+    </div>
+   </div><!-- BAGIAN B: URAIAN -->
+   <div class="section-title">
+    BAGIAN B: SOAL URAIAN (10 Soal)
+   </div><!-- URAIAN 1 -->
+   <div class="question">
+    <div class="question-number">
+     1. Keraguan Ibu Sari Memulai Digital Marketing
+    </div>
+    <div class="reading-box">
+     <p>Ibu Sari (52 tahun) memiliki usaha kue tradisional yang sudah 8 tahun. Anaknya menyarankan promosi via Instagram, tapi Ibu Sari ragu karena tidak terbiasa dengan smartphone, takut ribet, tidak yakin orang tertarik beli kue tradisional online, dan khawatir tidak bisa bersaing dengan toko besar.</p>
+    </div>
+    <div class="question-text"><strong>Pertanyaan:</strong><br>
+      a) Jelaskan minimal DUA keunggulan digital marketing yang bisa meyakinkan Ibu Sari!<br>
+      b) Berikan DUA contoh konten spesifik untuk Instagram!
+    </div><textarea class="essay-answer" placeholder="Tulis jawaban Anda di sini..."></textarea>
+   </div><!-- URAIAN 2 -->
+   <div class="question">
+    <div class="question-number">
+     2. Proses Keputusan Pembelian Budi
+    </div>
+    <div class="reading-box">
+     <p>Budi membeli headset gaming melalui 5 tahap: (1) Menyadari headset rusak, (2) Riset di Google, YouTube, marketplace, dan tanya teman, (3) Membandingkan 4 merek berdasarkan harga, rating, dan garansi, (4) Memutuskan beli Merek A via Shopee COD, (5) Puas dan memberi review bintang 5.</p>
+    </div>
+    <div class="question-text"><strong>Pertanyaan:</strong><br>
+      a) Jelaskan kelima tahapan proses keputusan pembelian Budi!<br>
+      b) Identifikasi SATU faktor psikologis dan SATU faktor teknologi yang memengaruhi keputusannya!
+    </div><textarea class="essay-answer" placeholder="Tulis jawaban Anda di sini..."></textarea>
+   </div><!-- URAIAN 3 -->
+   <div class="question">
+    <div class="question-number">
+     3. Perbedaan Perilaku Konsumen Ika
+    </div>
+    <div class="reading-box">
+     <p><strong>Situasi 1:</strong> Ika membeli sabun Lifebuoy setiap minggu tanpa berpikir (5 detik), tidak membandingkan merek lain. <strong>Situasi 2:</strong> Ika membeli smartphone dengan riset 7 minggu: riset intensif, bandingkan 6 merek, kunjungi toko, baca ratusan review, masih bimbang antara 2 pilihan terakhir.</p>
+    </div>
+    <div class="question-text"><strong>Pertanyaan:</strong><br>
+      a) Identifikasi jenis perilaku konsumen saat beli sabun!<br>
+      b) Identifikasi jenis perilaku konsumen saat beli smartphone!<br>
+      c) Mengapa prosesnya sangat berbeda? Jelaskan DUA alasan!
+    </div><textarea class="essay-answer" placeholder="Tulis jawaban Anda di sini..."></textarea>
+   </div><!-- URAIAN 4 -->
+   <div class="question">
+    <div class="question-number">
+     4. Strategi 4P Marketing "FreshTea"
+    </div>
+    <div class="reading-box">
+     <p>"FreshTea" menerapkan: (1) Product: 5 varian rasa, pilihan topping dan level gula, bahan berkualitas, (2) Price: Rp 15.000-25.000, paket hemat pelajar, paket berdua, member card, (3) Place: 3 booth strategis, online delivery, pre-order WhatsApp, (4) Promotion: Instagram, TikTok, voucher digital, kolaborasi influencer, sampling.</p>
+    </div>
+    <div class="question-text"><strong>Pertanyaan:</strong><br>
+      a) Jelaskan masing-masing strategi berdasarkan 4P Marketing!<br>
+      b) Unsur 4P mana yang paling penting untuk menarik konsumen pelajar? Jelaskan!
+    </div><textarea class="essay-answer" placeholder="Tulis jawaban Anda di sini..."></textarea>
+   </div><!-- URAIAN 5 -->
+   <div class="question">
+    <div class="question-number">
+     5. Strategi 7P Marketing "EnglishPro"
+    </div>
+    <div class="reading-box">
+     <p>"EnglishPro" adalah kursus bahasa Inggris online dengan: Product (modul interaktif, live class, sertifikat), Price (Rp 500.000-2.100.000), Place (100% online), Promotion (iklan, webinar gratis, testimoni), Physical Evidence (website profesional, dashboard user-friendly, sertifikat digital), Process (pendaftaran mudah, placement test, pembayaran fleksibel), People (15 tutor bersertifikat, CS responsif, student success manager).</p>
+    </div>
+    <div class="question-text"><strong>Pertanyaan:</strong><br>
+      a) Jelaskan bagaimana People dan Process memengaruhi kepuasan peserta!<br>
+      b) Berikan SATU contoh perbaikan Physical Evidence untuk meningkatkan kepercayaan!
+    </div><textarea class="essay-answer" placeholder="Tulis jawaban Anda di sini..."></textarea>
+   </div><!-- URAIAN 6 -->
+   <div class="question">
+    <div class="question-number">
+     6. Tantangan Startup "MakanYuk"
+    </div>
+    <div class="reading-box">
+     <p>"MakanYuk" adalah startup aplikasi pesan makanan yang diluncurkan di Bandung tahun 2022, ingin menjadi alternatif GoFood dan GrabFood dengan fokus UMKM kuliner lokal.</p>
+     <p><strong>Tantangan:</strong> (1) <strong>Persaingan dengan pemain besar:</strong> GoFood dan GrabFood beroperasi sejak 2015, punya jutaan pengguna, modal besar untuk promo gratis ongkir dan cashback, teknologi canggih, 500.000+ restoran mitra (MakanYuk baru 500 restoran). (2) <strong>Kekuatan tawar restoran:</strong> Restoran bisa kerja sama dengan beberapa aplikasi sekaligus, cenderung prioritaskan aplikasi dengan order terbanyak. (3) <strong>Kekuatan tawar konsumen:</strong> Konsumen mudah berpindah aplikasi tanpa biaya, cenderung pilih aplikasi dengan promo terbanyak, loyalitas rendah. (4) <strong>Ancaman substitusi:</strong> Konsumen bisa datang langsung ke restoran, pesan via WhatsApp restoran, atau masak sendiri. (5) <strong>Pendatang baru:</strong> Barrier to entry rendah, Tokopedia dan Shopee juga masuk ke food delivery. (6) <strong>Kekuatan tawar kurir:</strong> Kurir bisa kerja untuk beberapa aplikasi, jika insentif tidak menarik akan prioritaskan aplikasi lain.</p>
+    </div>
+    <div class="question-text"><strong>Pertanyaan:</strong><br>
+      a) Pilih DUA kekuatan Porter's Five Forces yang paling berpengaruh. Jelaskan!<br>
+      b) Berikan SATU strategi konkret untuk mengurangi ancaman kompetitor besar!
+    </div><textarea class="essay-answer" placeholder="Tulis jawaban Anda di sini..."></textarea>
+   </div><!-- URAIAN 7 -->
+   <div class="question">
+    <div class="question-number">
+     7. Analisis SWOT "Kopi Nusantara"
+    </div>
+    <div class="reading-box">
+     <p>"Kopi Nusantara" adalah brand kopi lokal dari Aceh yang menjual biji kopi arabika dan robusta premium. Beroperasi 5 tahun, ingin ekspansi ke seluruh Indonesia via digital marketing.</p>
+     <p><strong>STRENGTHS (Kekuatan Internal):</strong> Kualitas unggul (biji kopi dari petani Gayo, Aceh, rasa khas notes cokelat dan karamel), harga kompetitif (Rp 80.000/200 gram, lebih murah 30% dari kompetitor), komunitas loyal (5.000+ pelanggan setia, banyak repeat order), testimoni positif (rating 4.9/5.0 di Tokopedia dan Shopee dengan 3.000+ ulasan), storytelling kuat (cerita kemitraan dengan petani dan fair trade).</p>
+     <p><strong>WEAKNESSES (Kelemahan Internal):</strong> Kapasitas produksi terbatas (hanya 2 ton/bulan, tidak bisa penuhi demand tinggi), kemasan belum premium (standing pouch plastik dengan label stiker, kurang mewah dibanding kompetitor dengan kaleng/box), tim marketing kecil (hanya 2 orang handle semua digital marketing, sering kewalahan), website belum optimal (loading lambat, belum ada e-commerce terintegrasi).</p>
+     <p><strong>OPPORTUNITIES (Peluang Eksternal):</strong> Tren kopi spesialti meningkat (anak muda Indonesia mau bayar lebih untuk kualitas), pertumbuhan e-commerce (penjualan online terus naik), dukungan pemerintah (program untuk UMKM lokal), kolaborasi dengan kafe (banyak kafe lokal cari supplier berkualitas harga terjangkau).</p>
+     <p><strong>THREATS (Ancaman Eksternal):</strong> Kompetitor lokal banyak (puluhan brand kopi baru muncul tiap tahun dengan marketing agresif), brand internasional masuk (Starbucks Reserve dan Blue Bottle mulai jual biji kopi retail), fluktuasi harga bahan baku (harga biji kopi mentah naik-turun tergantung musim dan cuaca), perubahan tren (konsumen bisa beralih dari kopi ke minuman lain seperti matcha atau kombucha).</p>
+    </div>
+    <div class="question-text"><strong>Pertanyaan:</strong><br>
+      a) Identifikasi SATU Strength, SATU Weakness, SATU Opportunity, SATU Threat yang paling penting!<br>
+      b) Usulkan SATU strategi promosi digital untuk memanfaatkan Strength dan Opportunity!
+    </div><textarea class="essay-answer" placeholder="Tulis jawaban Anda di sini..."></textarea>
+   </div><!-- URAIAN 8 -->
+   <div class="question">
+    <div class="question-number">
+     8. Strategi Media Sosial "TeenStyle"
+    </div>
+    <div class="reading-box">
+     <p>"TeenStyle" memiliki kelemahan: posting hanya 1x seminggu, foto produk tidak menarik (difoto di kasur), caption singkat tanpa deskripsi, tidak pakai hashtag, tidak posting Story/Reels, jarang balas komentar dan DM, tidak ada variasi konten. Dampak: engagement rendah (1-1.5%), pertumbuhan followers lambat, penjualan sedikit (5-10 transaksi/bulan).</p>
+    </div>
+    <div class="question-text"><strong>Pertanyaan:</strong><br>
+      a) Jelaskan DUA kelemahan utama yang paling berdampak pada rendahnya penjualan!<br>
+      b) Berikan DUA saran perbaikan strategi konten yang sesuai target remaja!
+    </div><textarea class="essay-answer" placeholder="Tulis jawaban Anda di sini..."></textarea>
+   </div><!-- URAIAN 9 -->
+   <div class="question">
+    <div class="question-number">
+     9. Fenomena Konten Video Pendek
+    </div>
+    <div class="reading-box">
+     <p>Dalam 3 tahun terakhir (2021-2024), konten video pendek menjadi tren dominan di Indonesia. TikTok, Instagram Reels, dan YouTube Shorts mengalami pertumbuhan pesat.</p>
+     <p><strong>Data:</strong> TikTok Indonesia memiliki 109 juta pengguna (terbanyak ke-2 di dunia setelah AS), rata-rata 95 menit/hari. 70% pengguna Instagram Indonesia menonton Reels setiap hari. Engagement rate video pendek 2-3x lebih tinggi dari foto statis.</p>
+     <p><strong>Mengapa efektif?</strong> (1) Attention span pendek (Generasi Z dan Milenial hanya 8 detik, video 15-60 detik lebih mudah dikonsumsi), (2) Algoritma mendukung (TikTok dan Reels punya "For You Page" yang akurat, konten bisa viral menjangkau jutaan orang bahkan dari akun followers sedikit), (3) Mudah dibuat (cukup smartphone, aplikasi editing gratis seperti CapCut, InShot, VN), (4) Autentik dan relatable (konten "raw" lebih disukai karena terasa jujur, behind the scene dan daily vlog lebih menarik dari iklan terlalu dipoles).</p>
+     <p><strong>Contoh sukses:</strong> (1) UMKM Keripik "Maicih" membuat #MaicihPedasChallenge di TikTok (mengajak pengguna rekam reaksi makan keripik pedas), menghasilkan 50 juta views dan penjualan naik 400% dalam 2 bulan. (2) Brand Skincare "Somethinc" membuat konten edukasi skincare 30-60 detik dengan musik trending, penjualan online naik 300%. (3) Warung "Ayam Geprek Bensu" membuat video proses pembuatan dengan close-up menggugah selera dan mukbang customer, sering viral dan banyak orang datang langsung.</p>
+    </div>
+    <div class="question-text"><strong>Pertanyaan:</strong><br>
+      a) Mengapa video pendek sangat efektif? Jelaskan DUA alasan!<br>
+      b) Berikan SATU contoh ide konten video pendek untuk bisnis makanan ringan lokal!
+    </div><textarea class="essay-answer" placeholder="Tulis jawaban Anda di sini..."></textarea>
+   </div><!-- URAIAN 10 -->
+   <div class="question">
+    <div class="question-number">
+     10. Transformasi Toko Alat Tulis "Sejahtera"
+    </div>
+    <div class="reading-box">
+     <p><strong>Era Tradisional:</strong> Toko fisik 4x6m, pelanggan radius 2km, datang langsung, bayar tunai, pencatatan manual, promosi spanduk, jam terbatas, omzet Rp 15 juta/bulan. <strong>Era Digital:</strong> Toko online di Tokopedia dan Shopee, pesanan via WhatsApp, sistem POS digital, analisis data pelanggan, promosi Instagram, omzet Rp 45 juta/bulan (70% online). <strong>Tantangan:</strong> Persaingan ketat, ongkir mahal, komplain online, butuh waktu ekstra.</p>
+    </div>
+    <div class="question-text"><strong>Pertanyaan:</strong><br>
+      a) Jelaskan perbedaan utama model bisnis tradisional dan digital Toko "Sejahtera"!<br>
+      b) Sebutkan SATU kelebihan dan SATU kekurangan model bisnis digital!
+    </div><textarea class="essay-answer" placeholder="Tulis jawaban Anda di sini..."></textarea>
+   </div>
+  </div><button class="print-button" onclick="window.print()">🖨️ CETAK / SIMPAN PDF</button>
+  <script>
+    // Set tanggal otomatis ke hari ini
+    window.addEventListener('DOMContentLoaded', function() {
+      const today = new Date();
+      const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      const dateString = today.getDate() + ' ' + months[today.getMonth()] + ' ' + today.getFullYear();
+      document.getElementById('examDate').value = dateString;
+    });
+
+    // Script untuk memastikan semua input dan textarea terisi saat print
+    window.addEventListener('beforeprint', function() {
+      // Simpan semua nilai input dan textarea
+      const inputs = document.querySelectorAll('input[type="text"]');
+      inputs.forEach(input => {
+        if (input.value) {
+          input.setAttribute('value', input.value);
+        }
+      });
+
+      const textareas = document.querySelectorAll('textarea');
+      textareas.forEach(textarea => {
+        textarea.innerHTML = textarea.value;
+      });
+
+      const radios = document.querySelectorAll('input[type="radio"]:checked');
+      radios.forEach(radio => {
+        radio.setAttribute('checked', 'checked');
+      });
+    });
+  </script>
+</html>
